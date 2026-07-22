@@ -1,0 +1,275 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maintain Media — Design System</title>
+<meta name="description" content="The single source of truth for the Maintain Media brand: logos, colour, typography, iconography, and graphics — every asset shown and linked.">
+<style>@font-face{font-family:'Albert Sans';font-weight:400;font-style:normal;font-display:swap;src:url('../media/complete-toolkit/01%20Visual%20Identity/Typography/Albert%20Sans/static/AlbertSans-Regular.ttf') format('truetype');}@font-face{font-family:'Albert Sans';font-weight:500;font-style:normal;font-display:swap;src:url('../media/complete-toolkit/01%20Visual%20Identity/Typography/Albert%20Sans/static/AlbertSans-Medium.ttf') format('truetype');}@font-face{font-family:'Albert Sans';font-weight:600;font-style:normal;font-display:swap;src:url('../media/complete-toolkit/01%20Visual%20Identity/Typography/Albert%20Sans/static/AlbertSans-SemiBold.ttf') format('truetype');}@font-face{font-family:'Albert Sans';font-weight:700;font-style:normal;font-display:swap;src:url('../media/complete-toolkit/01%20Visual%20Identity/Typography/Albert%20Sans/static/AlbertSans-Bold.ttf') format('truetype');}@font-face{font-family:'Albert Sans';font-weight:800;font-style:normal;font-display:swap;src:url('../media/complete-toolkit/01%20Visual%20Identity/Typography/Albert%20Sans/static/AlbertSans-ExtraBold.ttf') format('truetype');}@font-face{font-family:'Vela Sans';font-weight:700;font-style:normal;font-display:swap;src:url('../media/complete-toolkit/01%20Visual%20Identity/Typography/Vela%20Sans/VelaSans-Bold.otf') format('opentype');}@font-face{font-family:'Vela Sans';font-weight:800;font-style:normal;font-display:swap;src:url('../media/complete-toolkit/01%20Visual%20Identity/Typography/Vela%20Sans/VelaSans-ExtraBold.otf') format('opentype');}@font-face{font-family:'Aptos';font-weight:400;font-style:normal;font-display:swap;src:url('../media/complete-toolkit/01%20Visual%20Identity/Typography/Microsoft%20Aptos%20Fonts/Aptos.ttf') format('truetype');}@font-face{font-family:'Aptos';font-weight:700;font-style:normal;font-display:swap;src:url('../media/complete-toolkit/01%20Visual%20Identity/Typography/Microsoft%20Aptos%20Fonts/Aptos-Bold.ttf') format('truetype');}
+:root{
+  --bg:#061518; --surface:#0c2a30; --surface-2:#123a42; --border:rgba(255,255,255,.10);
+  --ink:#fff; --ink-2:#cdd9db; --muted:#93a7aa;
+  --purple:#a04dff; --purple-300:#c79bff; --purple-600:#8a34f0; --brand-dark:#08282d;
+  --r-sm:8px; --r-md:14px; --r-lg:20px; --r-pill:999px;
+  --maxw:1180px; --ease:cubic-bezier(.16,1,.3,1);
+  --font:'Albert Sans',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+  --display:'Vela Sans','Albert Sans',system-ui,sans-serif;
+}
+*{box-sizing:border-box}
+figure{margin:0}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink-2);font-family:var(--font);line-height:1.6;
+  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:radial-gradient(1100px 620px at 78% -8%,rgba(160,77,255,.26),transparent 60%),
+             radial-gradient(900px 520px at 6% 2%,rgba(160,77,255,.10),transparent 55%)}
+a{color:var(--purple-300);text-decoration:none}
+a:hover{color:#fff}
+img{max-width:100%;display:block}
+h1,h2,h3{color:var(--ink);text-wrap:balance;letter-spacing:-.02em;line-height:1.05;margin:0}
+:focus-visible{outline:2.5px solid var(--purple-300);outline-offset:3px;border-radius:6px}
+
+.nav{position:sticky;top:0;z-index:100;display:flex;align-items:center;gap:24px;
+  padding:14px clamp(16px,4vw,40px);background:rgba(6,21,24,.72);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--border)}
+.nav__logo{height:26px;width:auto}
+.nav__links{display:flex;gap:6px;margin-left:auto;flex-wrap:wrap}
+.nav__links a{color:var(--ink-2);font-size:.86rem;font-weight:500;padding:7px 12px;border-radius:var(--r-pill);
+  transition:background .2s,color .2s}
+.nav__links a:hover{background:var(--surface);color:#fff}
+@media(max-width:720px){.nav__links{display:none}}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 clamp(16px,4vw,40px)}
+section{padding:clamp(56px,8vw,104px) 0;border-top:1px solid var(--border)}
+.sec-head{max-width:70ch;margin-bottom:clamp(28px,5vw,50px)}
+.sec-head h2{font-family:var(--display);font-size:clamp(1.9rem,4.4vw,3rem);font-weight:800}
+.sec-head p{color:var(--ink-2);font-size:1.05rem;margin:.8rem 0 0}
+.sec-head .count{color:var(--purple-300);font-weight:600}
+
+.hero{position:relative;min-height:86vh;display:flex;flex-direction:column;justify-content:center;
+  padding:96px clamp(16px,4vw,40px) 72px;overflow:hidden}
+.hero__grid{position:absolute;inset:0;z-index:-1;opacity:.6;
+  background-image:linear-gradient(transparent 0 47px,rgba(160,77,255,.06) 47px 48px),
+                   linear-gradient(90deg,transparent 0 47px,rgba(160,77,255,.06) 47px 48px);
+  background-size:48px 48px;
+  -webkit-mask-image:radial-gradient(120% 95% at 50% -12%,#000,transparent 72%);
+          mask-image:radial-gradient(120% 95% at 50% -12%,#000,transparent 72%)}
+.hero__inner{max-width:var(--maxw);margin:0 auto;width:100%}
+.hero__logo{height:clamp(32px,5vw,48px);width:auto;margin-bottom:clamp(24px,5vw,40px)}
+.hero h1{font-family:var(--display);font-weight:800;letter-spacing:-.035em;font-size:clamp(2.6rem,8vw,5.6rem);
+  color:#fff;max-width:15ch}
+.hero h1 em{font-style:normal;color:var(--purple)}
+.hero__sub{font-size:clamp(1.05rem,2.2vw,1.3rem);color:var(--ink-2);max-width:60ch;margin:1.4rem 0 0}
+.hero__sub code{color:var(--purple-300);background:rgba(160,77,255,.10);padding:1px 7px;border-radius:6px;font-size:.9em}
+.hero__meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:2.2rem}
+.pill{display:inline-flex;align-items:center;gap:8px;font-size:.82rem;font-weight:600;color:var(--ink-2);
+  background:var(--surface);border:1px solid var(--border);padding:8px 15px;border-radius:var(--r-pill)}
+.pill .dot{width:9px;height:9px;border-radius:50%;background:var(--purple)}
+
+.swatches{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.sw{border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:var(--surface)}
+.sw__chip{height:170px;display:flex;align-items:flex-end;padding:16px}
+.sw__chip .hx{font-weight:700;font-size:1.02rem}
+.sw__body{padding:16px 18px 20px}
+.sw__body .nm{color:#fff;font-weight:700;font-size:1.05rem}
+.sw__body .use{font-size:.9rem;color:var(--ink-2);margin:.35rem 0 .8rem}
+.sw__body .meta{font-size:.78rem;color:var(--muted);font-variant-numeric:tabular-nums;line-height:1.5}
+.copy{cursor:pointer;font:inherit;font-size:.8rem;font-weight:600;color:#fff;background:rgba(255,255,255,.09);
+  border:1px solid var(--border);padding:6px 12px;border-radius:var(--r-pill);transition:background .18s,transform .1s;margin-top:12px}
+.copy:hover{background:rgba(255,255,255,.18)}
+.copy:active{transform:scale(.96)}
+.tokens{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-top:22px}
+.tok{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:12px 14px}
+.tok .box{width:34px;height:34px;border-radius:9px;border:1px solid rgba(255,255,255,.16);flex:none}
+.tok .tk{font-size:.82rem}.tok .tk b{display:block;color:#fff;font-weight:600}
+.tok .tk span{color:var(--muted);font-variant-numeric:tabular-nums}
+.gradientbar{margin-top:24px;height:118px;border-radius:var(--r-lg);border:1px solid var(--border);
+  background:linear-gradient(90deg,#a04dff 0%,#5b2fa3 45%,#08282d 100%);display:flex;align-items:flex-end;
+  padding:14px 18px;color:#fff;font-weight:600;font-size:.85rem}
+.gradientbar code{color:#fff}
+.brandref{margin-top:24px;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:var(--surface)}
+.brandref img{width:100%;display:block}
+.brandref figcaption{padding:12px 16px;font-size:.82rem;color:var(--muted)}
+
+.logos{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:18px}
+.logo-card{border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:var(--surface)}
+.logo-stage{height:188px;display:flex;align-items:center;justify-content:center;padding:34px}
+.logo-stage img{max-height:72px;width:auto}
+.logo-stage.on-dark{background:radial-gradient(120% 140% at 50% 0,#123a42,#08282d)}
+.logo-stage.on-light{background:#f4f5f7}
+.lc-body{padding:14px 18px 18px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.lc-body b{color:#fff;font-weight:600;font-size:.95rem}.lc-body span{color:var(--muted);font-size:.82rem}
+.dl{font-size:.8rem;font-weight:600;color:var(--purple-300);border:1px solid var(--border);padding:6px 12px;
+  border-radius:var(--r-pill);white-space:nowrap;transition:background .18s,color .18s}
+.dl:hover{background:var(--surface-2);color:#fff}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;margin-top:22px}
+.rule{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:16px 18px}
+.rule h4{margin:0 0 8px;color:#fff;font-size:.95rem;display:flex;align-items:center;gap:8px}
+.rule.do h4::before{content:"✓";color:#39d98a;font-weight:800}
+.rule.dont h4::before{content:"✕";color:#ff6b8a;font-weight:800}
+.rule ul{margin:0;padding-left:18px;font-size:.9rem;color:var(--ink-2)}.rule li{margin:.3rem 0}
+
+.typefam{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:18px}
+.tf{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px}
+.tf .aa{font-size:4.4rem;line-height:1;color:#fff;margin-bottom:6px}
+.tf .fam{color:#fff;font-weight:700;font-size:1.1rem}
+.tf .role{color:var(--muted);font-size:.85rem;margin:.2rem 0 1rem}
+.tf .spec{font-size:1.5rem;color:var(--ink-2)}
+.scale{margin-top:30px;display:flex;flex-direction:column;gap:14px}
+.scale .row{display:flex;align-items:baseline;gap:18px;border-bottom:1px solid var(--border);padding-bottom:14px;flex-wrap:wrap}
+.scale .row .lbl{color:var(--muted);font-size:.76rem;min-width:150px;font-variant-numeric:tabular-nums}
+.scale .row .samp{color:#fff}
+.weights{margin-top:26px;display:flex;flex-direction:column;gap:6px}
+.weights .w{font-size:1.5rem;color:#fff}
+.weights .w span{color:var(--muted);font-size:.8rem;font-family:var(--font);font-weight:500;margin-left:14px;vertical-align:middle}
+
+.icongrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:12px}
+.chip{background:#f4f5f7;border:1px solid var(--border);border-radius:var(--r-md);padding:16px 8px 10px;
+  text-align:center;transition:transform .18s var(--ease),box-shadow .18s}
+.chip:hover{transform:translateY(-3px);box-shadow:0 10px 26px rgba(0,0,0,.35)}
+.chip--dark{background:var(--surface)}
+.chip img{width:38px;height:38px;object-fit:contain;margin:0 auto 10px}
+.chip figcaption{font-size:.72rem;color:#3a4a4d;line-height:1.25;overflow-wrap:break-word;hyphens:none}
+.chip--dark figcaption{color:var(--ink-2)}
+.subhead{font-family:var(--display);font-weight:700;color:#fff;font-size:1.15rem;margin:34px 0 14px;display:flex;
+  align-items:center;gap:10px;flex-wrap:wrap}
+.subhead .n{font-size:.78rem;color:var(--purple-300);background:var(--surface);border:1px solid var(--border);
+  padding:3px 10px;border-radius:var(--r-pill);font-family:var(--font);font-weight:600}
+
+.gfx{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px}
+.gfx figure{margin:0;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:var(--surface)}
+.gfx .ph{aspect-ratio:16/10;width:100%;object-fit:cover;background:#02090b;display:block}
+.gfx figcaption{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;
+  font-size:.85rem;color:#fff;font-weight:500}
+
+.index{border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:var(--surface)}
+.index .ir{display:grid;grid-template-columns:1.1fr 2fr auto;gap:16px;align-items:center;padding:15px 20px;
+  border-top:1px solid var(--border)}
+.index .ir:first-child{border-top:0}
+.index .ir b{color:#fff;font-weight:600;font-size:.95rem}
+.index .ir .desc{color:var(--ink-2);font-size:.86rem}
+@media(max-width:640px){.index .ir{grid-template-columns:1fr;gap:6px}}
+
+footer{border-top:1px solid var(--border);padding:44px 0 60px;color:var(--muted);font-size:.85rem}
+footer .fx{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+footer strong{color:#fff}footer code{color:var(--purple-300)}
+footer .fdots{display:flex;gap:8px}
+footer .fdots i{width:22px;height:22px;border-radius:6px;border:1px solid var(--border)}
+
+.toast{position:fixed;bottom:26px;left:50%;transform:translate(-50%,20px);opacity:0;pointer-events:none;
+  background:#fff;color:#08282d;font-weight:600;font-size:.85rem;padding:10px 18px;border-radius:var(--r-pill);
+  box-shadow:0 12px 40px rgba(0,0,0,.4);transition:opacity .25s,transform .25s;z-index:200}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+.rise{opacity:0;transform:translateY(18px);animation:rise .7s var(--ease) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+  .rise{opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+<nav class="nav">
+  <img class="nav__logo" src="../media/logos/maintain-media-logo-darkbg.svg" alt="Maintain Media">
+  <div class="nav__links">
+    <a href="#logo">Logo</a><a href="#color">Colour</a><a href="#type">Typography</a>
+    <a href="#icons">Iconography</a><a href="#graphics">Graphics</a><a href="#assets">Assets</a>
+  </div>
+</nav>
+
+<header class="hero">
+  <span class="hero__grid"></span>
+  <div class="hero__inner">
+    <img class="hero__logo rise" src="../media/logos/maintain-media-logo-darkbg.svg" alt="Maintain Media logo">
+    <h1 class="rise" style="animation-delay:.06s">The Maintain&nbsp;Media <em>design system</em></h1>
+    <p class="hero__sub rise" style="animation-delay:.12s">The single source of truth for the brand's visual identity —
+      every logo, colour, typeface, icon, and graphic, shown in full and linked straight to the source files in <code>media/</code>.</p>
+    <div class="hero__meta rise" style="animation-delay:.18s">
+      <span class="pill"><span class="dot"></span>Purple #a04dff</span>
+      <span class="pill">105 icons</span>
+      <span class="pill">3 type families</span>
+      <span class="pill">Brand · identity-preserving</span>
+    </div>
+  </div>
+</header>
+
+<main>
+<section id="logo"><div class="wrap">
+  <div class="sec-head"><h2>Logo</h2><p>The ascending “M” mountain mark with the Maintain Media wordmark.
+    Prefer the vector SVGs; the light-background version carries dark text, the dark-background version white.</p></div>
+  <div class="logos">
+    <div class="logo-card"><div class="logo-stage on-dark"><img src="../media/logos/maintain-media-logo-darkbg.svg" alt="Maintain Media logo, white, on dark"></div>
+      <div class="lc-body"><div><b>Dark background</b><br><span>white wordmark · canonical vector</span></div>
+      <a class="dl" href="../media/logos/maintain-media-logo-darkbg.svg" download>SVG</a></div></div>
+    <div class="logo-card"><div class="logo-stage on-light"><img src="../media/logos/maintain-media-logo-lightbg.svg" alt="Maintain Media logo, dark, on light"></div>
+      <div class="lc-body"><div><b>Light background</b><br><span>dark wordmark · canonical vector</span></div>
+      <a class="dl" href="../media/logos/maintain-media-logo-lightbg.svg" download>SVG</a></div></div>
+  </div>
+  <div class="rules">
+    <div class="rule do"><h4>Do</h4><ul><li>Use the SVG vectors wherever possible.</li>
+      <li>Keep clearspace ≥ the height of the “M” mark.</li>
+      <li>Match the variant to the background.</li></ul></div>
+    <div class="rule dont"><h4>Don't</h4><ul><li>Recolour the mark off-brand or add effects.</li>
+      <li>Stretch, rotate, or crop the logo.</li>
+      <li>Place the dark wordmark on a dark background.</li></ul></div>
+  </div>
+</div></section>
+
+<section id="color"><div class="wrap">
+  <div class="sec-head"><h2>Colour</h2><p>Three core brand colours — hex is the source of truth. The extended tokens
+    below are derived for building interfaces (this page uses them).</p></div>
+  <div class="swatches"><div class="sw"><div class="sw__chip" style="background:#a04dff"><span class="hx" style="color:#ffffff">#a04dff</span></div><div class="sw__body"><div class="nm">Purple</div><div class="use">Primary. Logo mark, accents, links, focus, key CTAs.</div><div class="meta">OKLCH oklch(0.59 0.25 295)<br>RGB 160 77 255</div><button class="copy" data-copy="#a04dff">Copy #a04dff</button></div></div><div class="sw"><div class="sw__chip" style="background:#08282d"><span class="hx" style="color:#ffffff">#08282d</span></div><div class="sw__body"><div class="nm">Dark</div><div class="use">Dark surfaces, deep backgrounds, text on light.</div><div class="meta">OKLCH oklch(0.26 0.03 210)<br>RGB 8 40 45</div><button class="copy" data-copy="#08282d">Copy #08282d</button></div></div><div class="sw"><div class="sw__chip" style="background:#ffffff"><span class="hx" style="color:#08282d">#ffffff</span></div><div class="sw__body"><div class="nm">White</div><div class="use">Text on dark, negative space, light surfaces.</div><div class="meta">OKLCH oklch(1 0 0)<br>RGB 255 255 255</div><button class="copy" data-copy="#ffffff">Copy #ffffff</button></div></div></div>
+  <div class="gradientbar">Signature gradient · purple → deep teal — <code>#a04dff → #08282d</code></div>
+  <div class="tokens"><div class="tok"><span class="box" style="background:#061518"></span><span class="tk"><b>--bg</b><span>#061518</span></span></div><div class="tok"><span class="box" style="background:#0c2a30"></span><span class="tk"><b>--surface</b><span>#0c2a30</span></span></div><div class="tok"><span class="box" style="background:#123a42"></span><span class="tk"><b>--surface-2</b><span>#123a42</span></span></div><div class="tok"><span class="box" style="background:#c79bff"></span><span class="tk"><b>--purple-300</b><span>#c79bff</span></span></div><div class="tok"><span class="box" style="background:#8a34f0"></span><span class="tk"><b>--purple-600</b><span>#8a34f0</span></span></div><div class="tok"><span class="box" style="background:#cdd9db"></span><span class="tk"><b>--ink-2</b><span>#cdd9db</span></span></div><div class="tok"><span class="box" style="background:#93a7aa"></span><span class="tk"><b>--muted</b><span>#93a7aa</span></span></div><div class="tok"><span class="box" style="background:rgba(255,255,255,.10)"></span><span class="tk"><b>--border</b><span>rgba(255,255,255,.10)</span></span></div></div>
+  <figure class="brandref"><a href="../media/brand/maintain-media-brandkit-colors.png" target="_blank" rel="noopener"><img loading="lazy" src="previews/brand_maintain-media-brandkit-colors.png" alt="Original Maintain Media brand-kit colour board"></a><figcaption>Original brand-kit colour board · <code>media/brand/</code></figcaption></figure>
+</div></section>
+
+<section id="type"><div class="wrap">
+  <div class="sec-head"><h2>Typography</h2><p>The brand type library — rendered here in the real font files.
+    Pair on weight; don't mix the two geometric sans families in the same body copy.</p></div>
+  <div class="typefam"><div class="tf"><div class="aa" style="font-family:'Albert Sans';font-weight:700">Aa</div><div class="fam">Albert Sans</div><div class="role">Primary · UI, body, most headings</div><div class="spec" style="font-family:'Albert Sans'">Maintain Media</div></div><div class="tf"><div class="aa" style="font-family:'Vela Sans';font-weight:800">Aa</div><div class="fam">Vela Sans</div><div class="role">Display · large expressive headlines</div><div class="spec" style="font-family:'Vela Sans'">Maintain Media</div></div><div class="tf"><div class="aa" style="font-family:'Aptos';font-weight:700">Aa</div><div class="fam">Aptos</div><div class="role">Documents · Word, PowerPoint, email</div><div class="spec" style="font-family:'Aptos'">Maintain Media</div></div></div>
+  <div class="scale"><div class="row"><span class="lbl">Display · 800 · Vela Sans<br>clamp 2.6–5.6rem</span><span class="samp" style="font-family:var(--display);font-weight:800;font-size:3.4rem">Maintain Media</span></div><div class="row"><span class="lbl">H1 · 700<br>2.5rem / 40px</span><span class="samp" style="font-family:var(--font);font-weight:700;font-size:2.5rem">Design system</span></div><div class="row"><span class="lbl">H2 · 700<br>2rem / 32px</span><span class="samp" style="font-family:var(--font);font-weight:700;font-size:2rem">Foundations</span></div><div class="row"><span class="lbl">H3 · 600<br>1.5rem / 24px</span><span class="samp" style="font-family:var(--font);font-weight:600;font-size:1.5rem">Iconography</span></div><div class="row"><span class="lbl">Body · 400<br>1.0625rem / 17px</span><span class="samp" style="font-family:var(--font);font-weight:400;font-size:1.0625rem">The single source of truth for the brand&#x27;s visual identity.</span></div><div class="row"><span class="lbl">Caption · 500<br>0.82rem / 13px</span><span class="samp" style="font-family:var(--font);font-weight:500;font-size:0.82rem">Labels, metadata, captions</span></div></div>
+  <div class="weights"><div class="w" style="font-weight:400">Maintain Media<span>Albert Sans 400 · Regular</span></div><div class="w" style="font-weight:500">Maintain Media<span>Albert Sans 500 · Medium</span></div><div class="w" style="font-weight:600">Maintain Media<span>Albert Sans 600 · SemiBold</span></div><div class="w" style="font-weight:700">Maintain Media<span>Albert Sans 700 · Bold</span></div><div class="w" style="font-weight:800">Maintain Media<span>Albert Sans 800 · ExtraBold</span></div></div>
+</div></section>
+
+<section id="icons"><div class="wrap">
+  <div class="sec-head"><h2>Iconography</h2><p><span class="count">105 icons</span> across two coherent sets.
+    Pick one set per surface — don't mix line and filled in the same context.</p></div>
+  <div class="subhead">Line icons <span class="n">66 · dark #08282d</span></div>
+  <div class="icongrid"><figure class="chip"><img loading="lazy" src="previews/Iconography_Add.png" alt="Add icon" width="38" height="38"><figcaption>Add</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Analytics_Pie.png" alt="Analytics Pie icon" width="38" height="38"><figcaption>Analytics Pie</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Arrow_External_Left.png" alt="Arrow External Left icon" width="38" height="38"><figcaption>Arrow External Left</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Arrow_External_Right.png" alt="Arrow External Right icon" width="38" height="38"><figcaption>Arrow External Right</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Arrow_Left.png" alt="Arrow Left icon" width="38" height="38"><figcaption>Arrow Left</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Arrow_Right.png" alt="Arrow Right icon" width="38" height="38"><figcaption>Arrow Right</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Badge.png" alt="Badge icon" width="38" height="38"><figcaption>Badge</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Bell.png" alt="Bell icon" width="38" height="38"><figcaption>Bell</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Bin.png" alt="Bin icon" width="38" height="38"><figcaption>Bin</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Briefcase.png" alt="Briefcase icon" width="38" height="38"><figcaption>Briefcase</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Calendar.png" alt="Calendar icon" width="38" height="38"><figcaption>Calendar</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Care.png" alt="Care icon" width="38" height="38"><figcaption>Care</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Check.png" alt="Check icon" width="38" height="38"><figcaption>Check</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Chevron_Down.png" alt="Chevron Down icon" width="38" height="38"><figcaption>Chevron Down</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Chevron_Left.png" alt="Chevron Left icon" width="38" height="38"><figcaption>Chevron Left</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Chevron_Right.png" alt="Chevron Right icon" width="38" height="38"><figcaption>Chevron Right</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Chevron_Up.png" alt="Chevron Up icon" width="38" height="38"><figcaption>Chevron Up</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_CircleCheck.png" alt="Circle Check icon" width="38" height="38"><figcaption>Circle Check</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Clock.png" alt="Clock icon" width="38" height="38"><figcaption>Clock</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Close.png" alt="Close icon" width="38" height="38"><figcaption>Close</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Code.png" alt="Code icon" width="38" height="38"><figcaption>Code</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Cog.png" alt="Cog icon" width="38" height="38"><figcaption>Cog</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Coin.png" alt="Coin icon" width="38" height="38"><figcaption>Coin</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Credit_Card.png" alt="Credit Card icon" width="38" height="38"><figcaption>Credit Card</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Database.png" alt="Database icon" width="38" height="38"><figcaption>Database</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Desktop.png" alt="Desktop icon" width="38" height="38"><figcaption>Desktop</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Dollar.png" alt="Dollar icon" width="38" height="38"><figcaption>Dollar</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Email.png" alt="Email icon" width="38" height="38"><figcaption>Email</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Eye.png" alt="Eye icon" width="38" height="38"><figcaption>Eye</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Filter.png" alt="Filter icon" width="38" height="38"><figcaption>Filter</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Flag.png" alt="Flag icon" width="38" height="38"><figcaption>Flag</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Folder.png" alt="Folder icon" width="38" height="38"><figcaption>Folder</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Graph_Ascend.png" alt="Graph Ascend icon" width="38" height="38"><figcaption>Graph Ascend</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Graph_Descend.png" alt="Graph Descend icon" width="38" height="38"><figcaption>Graph Descend</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Graph.png" alt="Graph icon" width="38" height="38"><figcaption>Graph</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Heart.png" alt="Heart icon" width="38" height="38"><figcaption>Heart</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Home.png" alt="Home icon" width="38" height="38"><figcaption>Home</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Info.png" alt="Info icon" width="38" height="38"><figcaption>Info</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Laptop.png" alt="Laptop icon" width="38" height="38"><figcaption>Laptop</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Less.png" alt="Less icon" width="38" height="38"><figcaption>Less</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Lightning.png" alt="Lightning icon" width="38" height="38"><figcaption>Lightning</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Link.png" alt="Link icon" width="38" height="38"><figcaption>Link</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Mark.png" alt="Mark icon" width="38" height="38"><figcaption>Mark</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Megaphone.png" alt="Megaphone icon" width="38" height="38"><figcaption>Megaphone</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Message.png" alt="Message icon" width="38" height="38"><figcaption>Message</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Mobile.png" alt="Mobile icon" width="38" height="38"><figcaption>Mobile</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Password.png" alt="Password icon" width="38" height="38"><figcaption>Password</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Pencil_Writing.png" alt="Pencil Writing icon" width="38" height="38"><figcaption>Pencil Writing</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Pencil.png" alt="Pencil icon" width="38" height="38"><figcaption>Pencil</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Phone.png" alt="Phone icon" width="38" height="38"><figcaption>Phone</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Play-1.png" alt="Play 1 icon" width="38" height="38"><figcaption>Play 1</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Play.png" alt="Play icon" width="38" height="38"><figcaption>Play</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Report.png" alt="Report icon" width="38" height="38"><figcaption>Report</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Search.png" alt="Search icon" width="38" height="38"><figcaption>Search</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Settings.png" alt="Settings icon" width="38" height="38"><figcaption>Settings</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Share.png" alt="Share icon" width="38" height="38"><figcaption>Share</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Star.png" alt="Star icon" width="38" height="38"><figcaption>Star</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Support.png" alt="Support icon" width="38" height="38"><figcaption>Support</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Sync.png" alt="Sync icon" width="38" height="38"><figcaption>Sync</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Tag.png" alt="Tag icon" width="38" height="38"><figcaption>Tag</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Test.png" alt="Test icon" width="38" height="38"><figcaption>Test</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Tool.png" alt="Tool icon" width="38" height="38"><figcaption>Tool</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_User.png" alt="User icon" width="38" height="38"><figcaption>User</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Wallet.png" alt="Wallet icon" width="38" height="38"><figcaption>Wallet</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Web.png" alt="Web icon" width="38" height="38"><figcaption>Web</figcaption></figure><figure class="chip"><img loading="lazy" src="previews/Iconography_Wifi.png" alt="Wifi icon" width="38" height="38"><figcaption>Wifi</figcaption></figure></div>
+  <div class="subhead">Colored icons <span class="n">27 · purple SVG</span></div>
+  <div class="icongrid"><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/BookOpen.svg" alt="Book Open icon" width="38" height="38"><figcaption>Book Open</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/CalendarCheck.svg" alt="Calendar Check icon" width="38" height="38"><figcaption>Calendar Check</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/icons-colored_CaretDoubleRight.png" alt="Caret Double Right icon" width="38" height="38"><figcaption>Caret Double Right</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/ChartBar.svg" alt="Chart Bar icon" width="38" height="38"><figcaption>Chart Bar</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/ChartLine.svg" alt="Chart Line icon" width="38" height="38"><figcaption>Chart Line</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/icons-colored_Chats.png" alt="Chats icon" width="38" height="38"><figcaption>Chats</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/icons-colored_CircleCheck.png" alt="Circle Check icon" width="38" height="38"><figcaption>Circle Check</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/ClockClockwise.svg" alt="Clock Clockwise icon" width="38" height="38"><figcaption>Clock Clockwise</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/EnvelopeSimple.svg" alt="Envelope Simple icon" width="38" height="38"><figcaption>Envelope Simple</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/FastForward.svg" alt="Fast Forward icon" width="38" height="38"><figcaption>Fast Forward</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/FlagBanner.svg" alt="Flag Banner icon" width="38" height="38"><figcaption>Flag Banner</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/Globe.svg" alt="Globe icon" width="38" height="38"><figcaption>Globe</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/Graph.svg" alt="Graph icon" width="38" height="38"><figcaption>Graph</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/LinkedinLogo.svg" alt="Linkedin Logo icon" width="38" height="38"><figcaption>Linkedin Logo</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/icons-colored_ListChecks.png" alt="List Checks icon" width="38" height="38"><figcaption>List Checks</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/icons-colored_MegaphoneSimple.png" alt="Megaphone Simple icon" width="38" height="38"><figcaption>Megaphone Simple</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/icons-colored_Phone.png" alt="Phone icon" width="38" height="38"><figcaption>Phone</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/PuzzlePiece.svg" alt="Puzzle Piece icon" width="38" height="38"><figcaption>Puzzle Piece</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/ShieldWarning.svg" alt="Shield Warning icon" width="38" height="38"><figcaption>Shield Warning</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/icons-colored_Stack.png" alt="Stack icon" width="38" height="38"><figcaption>Stack</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/icons-colored_Star.png" alt="Star icon" width="38" height="38"><figcaption>Star</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/icons-colored_Sun.png" alt="Sun icon" width="38" height="38"><figcaption>Sun</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/Target.svg" alt="Target icon" width="38" height="38"><figcaption>Target</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/TreeStructure.svg" alt="Tree Structure icon" width="38" height="38"><figcaption>Tree Structure</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/icons-colored_User.png" alt="User icon" width="38" height="38"><figcaption>User</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/UsersThree.svg" alt="Users Three icon" width="38" height="38"><figcaption>Users Three</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/icons-colored_WarningDiamond.png" alt="Warning Diamond icon" width="38" height="38"><figcaption>Warning Diamond</figcaption></figure></div>
+  <div class="subhead">Canva icon set <span class="n">12 · PNG exports</span></div>
+  <div class="icongrid"><figure class="chip chip--dark"><img loading="lazy" src="previews/complete-toolkit_04_Canva_Assets_Icons_CaretDoubleRight.png" alt="Caret Double Right icon" width="38" height="38"><figcaption>Caret Double Right</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/complete-toolkit_04_Canva_Assets_Icons_Chats.png" alt="Chats icon" width="38" height="38"><figcaption>Chats</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/complete-toolkit_04_Canva_Assets_Icons_CircleCheck.png" alt="Circle Check icon" width="38" height="38"><figcaption>Circle Check</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/complete-toolkit_04_Canva_Assets_Icons_Globe.png" alt="Globe icon" width="38" height="38"><figcaption>Globe</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/complete-toolkit_04_Canva_Assets_Icons_ListChecks.png" alt="List Checks icon" width="38" height="38"><figcaption>List Checks</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/complete-toolkit_04_Canva_Assets_Icons_MegaphoneSimple.png" alt="Megaphone Simple icon" width="38" height="38"><figcaption>Megaphone Simple</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/complete-toolkit_04_Canva_Assets_Icons_Stack.png" alt="Stack icon" width="38" height="38"><figcaption>Stack</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/complete-toolkit_04_Canva_Assets_Icons_Star.png" alt="Star icon" width="38" height="38"><figcaption>Star</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/complete-toolkit_04_Canva_Assets_Icons_Sun.png" alt="Sun icon" width="38" height="38"><figcaption>Sun</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/complete-toolkit_04_Canva_Assets_Icons_Target.png" alt="Target icon" width="38" height="38"><figcaption>Target</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/complete-toolkit_04_Canva_Assets_Icons_User.png" alt="User icon" width="38" height="38"><figcaption>User</figcaption></figure><figure class="chip chip--dark"><img loading="lazy" src="previews/complete-toolkit_04_Canva_Assets_Icons_WarningDiamond.png" alt="Warning Diamond icon" width="38" height="38"><figcaption>Warning Diamond</figcaption></figure></div>
+</div></section>
+
+<section id="graphics"><div class="wrap">
+  <div class="sec-head"><h2>Graphics &amp; Backgrounds</h2><p>Signature gradients, the mountain wireframe, and background
+    textures. Thumbnails preview the assets; “Open” links to the full-resolution source.</p></div>
+  <div class="gfx"><figure><a href="../media/backgrounds/maintain-media-gradient-bg.png" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="previews/backgrounds_maintain-media-gradient-bg.png" alt="Brand gradient · hero"></a><figcaption><span>Brand gradient · hero</span><a class="dl" href="../media/backgrounds/maintain-media-gradient-bg.png" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/blu-gradient.svg" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/graphics/blu-gradient.svg" alt="Teal gradient · vector"></a><figcaption><span>Teal gradient · vector</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/blu-gradient.svg" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/blue-gradient.png" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="previews/graphics_blue-gradient.png" alt="Teal gradient"></a><figcaption><span>Teal gradient</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/blue-gradient.png" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/cover%202.jpg" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="previews/graphics_cover_2.jpg" alt="Cover background · alt"></a><figcaption><span>Cover background · alt</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/cover%202.jpg" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/cover.jpg" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="previews/graphics_cover.jpg" alt="Cover background"></a><figcaption><span>Cover background</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/cover.jpg" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/Gradient-pantone-1.png" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="previews/graphics_Gradient-pantone-1.png" alt="Purple gradient · tall"></a><figcaption><span>Purple gradient · tall</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/Gradient-pantone-1.png" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/gradient-white.jpg" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="previews/graphics_gradient-white.jpg" alt="White gradient"></a><figcaption><span>White gradient</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/gradient-white.jpg" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/gradient.jpg" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="previews/graphics_gradient.jpg" alt="Dark gradient"></a><figcaption><span>Dark gradient</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/gradient.jpg" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/gradient.png" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="previews/graphics_gradient.png" alt="Purple gradient · glow"></a><figcaption><span>Purple gradient · glow</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/gradient.png" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/mountain%20forms%202.png" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="previews/graphics_mountain_forms_2.png" alt="Mountain wireframe"></a><figcaption><span>Mountain wireframe</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/mountain%20forms%202.png" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/mountain.svg" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="../media/complete-toolkit/01%20Visual%20Identity/graphics/mountain.svg" alt="Mountain graphic · vector"></a><figcaption><span>Mountain graphic · vector</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/mountain.svg" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/orange-gradient.png" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="previews/graphics_orange-gradient.png" alt="Purple gradient · radial"></a><figcaption><span>Purple gradient · radial</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/orange-gradient.png" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/section.jpg" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="previews/graphics_section.jpg" alt="Section background"></a><figcaption><span>Section background</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/section.jpg" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/white%20bg.jpg" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="previews/graphics_white_bg.jpg" alt="White background"></a><figcaption><span>White background</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/white%20bg.jpg" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/white-gradient.png" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="previews/graphics_white-gradient.png" alt="White gradient · radial"></a><figcaption><span>White gradient · radial</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/white-gradient.png" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/white-lineargradient.png" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="previews/graphics_white-lineargradient.png" alt="White gradient · linear"></a><figcaption><span>White gradient · linear</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/white-lineargradient.png" download>Open</a></figcaption></figure><figure><a href="../media/complete-toolkit/01%20Visual%20Identity/graphics/–°–_xBB_–æ–_x2116__x28_0_x29_.png" target="_blank" rel="noopener"><img class="ph" loading="lazy" src="previews/graphics__xBB___x2116__x28_0_x29_.png" alt="–°– X Bb –Æ– X2116 X28 0 X29"></a><figcaption><span>–°– X Bb –Æ– X2116 X28 0 X29</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/–°–_xBB_–æ–_x2116__x28_0_x29_.png" download>Open</a></figcaption></figure></div>
+</div></section>
+
+<section id="assets"><div class="wrap">
+  <div class="sec-head"><h2>Asset index</h2><p>Every folder in the library, linked. When building anything for
+    Maintain Media, start here.</p></div>
+  <div class="index"><div class="ir"><b>Logos</b><span class="desc">SVG wordmark, dark & light backgrounds (+ raster fallbacks)</span><a class="dl" href="../media/logos/" target="_blank" rel="noopener">Open&nbsp;→</a></div><div class="ir"><b>Colour reference</b><span class="desc">Original brand-kit colour board</span><a class="dl" href="../media/brand/" target="_blank" rel="noopener">Open&nbsp;→</a></div><div class="ir"><b>Line icons</b><span class="desc">66 stroke icons (dark)</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/Iconography/" target="_blank" rel="noopener">Open&nbsp;→</a></div><div class="ir"><b>Colored icons</b><span class="desc">27 filled purple icons (SVG)</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/icons-colored/" target="_blank" rel="noopener">Open&nbsp;→</a></div><div class="ir"><b>Canva icons</b><span class="desc">12 Canva-optimised PNG icons</span><a class="dl" href="../media/complete-toolkit/04%20Canva%20Assets/Icons/" target="_blank" rel="noopener">Open&nbsp;→</a></div><div class="ir"><b>Graphics & backgrounds</b><span class="desc">Gradients, wireframe, textures</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/graphics/" target="_blank" rel="noopener">Open&nbsp;→</a></div><div class="ir"><b>Backgrounds (hero)</b><span class="desc">Brand gradient background</span><a class="dl" href="../media/backgrounds/" target="_blank" rel="noopener">Open&nbsp;→</a></div><div class="ir"><b>Type — Albert Sans</b><span class="desc">Primary UI/body family (variable + static)</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/Typography/Albert%20Sans/" target="_blank" rel="noopener">Open&nbsp;→</a></div><div class="ir"><b>Type — Vela Sans</b><span class="desc">Display family</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/Typography/Vela%20Sans/" target="_blank" rel="noopener">Open&nbsp;→</a></div><div class="ir"><b>Type — Aptos</b><span class="desc">Document/Office family</span><a class="dl" href="../media/complete-toolkit/01%20Visual%20Identity/Typography/Microsoft%20Aptos%20Fonts/" target="_blank" rel="noopener">Open&nbsp;→</a></div><div class="ir"><b>Specifications</b><span class="desc">Written visual spec (DESIGN.md) & strategy (PRODUCT.md)</span><a class="dl" href="../DESIGN.md" target="_blank" rel="noopener">Open&nbsp;→</a></div></div>
+</div></section>
+</main>
+
+<footer><div class="wrap"><div class="fx">
+  <div><strong>Maintain Media</strong> — Design System · single source of truth<br>
+    Generated from <code>media/</code> · re-run <code>design-system/generate.py</code> after adding assets.</div>
+  <div class="fdots"><i style="background:#a04dff"></i><i style="background:#08282d"></i><i style="background:#fff"></i></div>
+</div></div></footer>
+
+<div class="toast" id="toast">Copied</div>
+<script>
+document.addEventListener('click',e=>{
+  const b=e.target.closest('.copy'); if(!b)return;
+  navigator.clipboard?.writeText(b.dataset.copy).then(()=>{
+    const t=document.getElementById('toast'); t.textContent='Copied '+b.dataset.copy; t.classList.add('show');
+    clearTimeout(window.__tt); window.__tt=setTimeout(()=>t.classList.remove('show'),1400);
+  });
+});
+</script>
+</body></html>

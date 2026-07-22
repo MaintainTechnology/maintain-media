@@ -1,0 +1,11 @@
+{
+  "timestamp": "2026-07-22T02:31:36.137Z",
+  "projectRoot": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media",
+  "structure": {
+    "hasPackageJson": true,
+    "hasTsConfig": false,
+    "hasClaudeConfig": true,
+    "hasClaudeFlow": true
+  },
+  "scannedAt": 1784687496138
+}
