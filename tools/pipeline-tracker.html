@@ -1,0 +1,1558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maintain Media — Pipeline Tracker</title>
+<style>
+/* =============================================================================
+   MAINTAIN MEDIA — PIPELINE TRACKER
+   Palette derived from the Maintain Media one-pager: near-black navy ground,
+   violet accent, warm cream surfaces. Each pipeline stage gets its own accent
+   color (left border + header) layered on top of this base for fast scanning.
+   ============================================================================= */
+:root{
+  --mm-ink:#12121c;
+  --mm-navy:#0b0e1a;
+  --mm-navy-2:#141a2e;
+  --mm-purple:#7c5cff;
+  --mm-purple-dark:#5b3fd9;
+  --mm-purple-light:#a996ff;
+  --mm-cream:#f5f3ee;
+  --mm-cream-2:#eeece4;
+  --mm-white:#ffffff;
+  --mm-muted:#6b7280;
+  --mm-border:#e2ded3;
+  --mm-danger:#dc2626;
+  --mm-success:#16a34a;
+
+  /* stage accents */
+  --st-hot:#e6396b;
+  --st-revisit:#8a5a2b;
+  --st-meeting:#7c5cff;
+  --st-reschedule:#e08a1e;
+  --st-proposal:#2563eb;
+  --st-decision:#0d9488;
+  --st-won:#16a34a;
+  --st-lost:#64748b;
+
+  --radius-sm:6px; --radius-md:10px; --radius-lg:16px;
+  --shadow-sm:0 1px 3px rgba(11,14,26,.08);
+  --shadow-md:0 4px 16px rgba(11,14,26,.10);
+  --shadow-lg:0 16px 40px rgba(11,14,26,.18);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  background:var(--mm-cream);
+  color:var(--mm-ink);
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+a{color:var(--mm-purple-dark);}
+button{font-family:inherit;cursor:pointer;}
+input,select,textarea{font-family:inherit;}
+::-webkit-scrollbar{height:10px;width:10px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:#c9c4b5;border-radius:8px;}
+::-webkit-scrollbar-thumb:hover{background:#b3ad9a;}
+
+/* ---------- Header / brand bar ---------- */
+.mm-header{
+  background:linear-gradient(120deg,var(--mm-navy) 0%,#151a30 100%);
+  color:var(--mm-white);
+  padding:18px 24px;
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  flex-wrap:wrap;
+  position:sticky; top:0; z-index:50;
+  box-shadow:var(--shadow-md);
+}
+.mm-brand{display:flex; align-items:center; gap:12px;}
+.mm-logo{
+  width:38px;height:38px;border-radius:10px;
+  background:linear-gradient(135deg,var(--mm-purple) 0%,var(--mm-purple-dark) 100%);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:800;font-size:16px;color:#fff;flex:none;
+}
+.mm-brand-text h1{font-size:17px;margin:0;font-weight:700;letter-spacing:.2px;}
+.mm-brand-text span{font-size:12px;color:#b9b6c9;display:block;margin-top:1px;}
+.mm-tabs{display:flex;gap:6px;background:rgba(255,255,255,.08);padding:4px;border-radius:10px;}
+.mm-tab-btn{
+  border:none;background:transparent;color:#cfcbe0;padding:8px 16px;border-radius:8px;
+  font-size:13px;font-weight:600;transition:.15s;
+}
+.mm-tab-btn.active{background:var(--mm-purple);color:#fff;}
+.mm-header-actions{display:flex;gap:8px;flex-wrap:wrap;}
+
+.btn{
+  border:1px solid transparent;border-radius:8px;padding:9px 14px;font-size:13px;font-weight:600;
+  display:inline-flex;align-items:center;gap:6px;transition:.15s;white-space:nowrap;
+}
+.btn-primary{background:var(--mm-purple);color:#fff;}
+.btn-primary:hover{background:var(--mm-purple-dark);}
+.btn-ghost{background:rgba(255,255,255,.08);color:#fff;border-color:rgba(255,255,255,.18);}
+.btn-ghost:hover{background:rgba(255,255,255,.16);}
+.btn-light{background:var(--mm-white);color:var(--mm-ink);border-color:var(--mm-border);}
+.btn-light:hover{background:var(--mm-cream-2);}
+.btn-danger{background:var(--mm-danger);color:#fff;}
+.btn-danger:hover{background:#b91c1c;}
+.btn-outline{background:transparent;border-color:var(--mm-border);color:var(--mm-ink);}
+.btn-outline:hover{background:var(--mm-cream-2);}
+.btn-sm{padding:6px 10px;font-size:12px;}
+.btn:disabled{opacity:.5;cursor:not-allowed;}
+
+/* ---------- Layout shell ---------- */
+.mm-main{padding:20px 24px 60px;max-width:1900px;margin:0 auto;}
+.view{display:none;}
+.view.active{display:block;}
+
+/* ---------- Dashboard ---------- */
+.dash-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px;
+}
+.dash-card{
+  background:var(--mm-white);border:1px solid var(--mm-border);border-radius:var(--radius-md);
+  padding:14px 16px;box-shadow:var(--shadow-sm);
+}
+.dash-card .label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--mm-muted);font-weight:700;}
+.dash-card .value{font-size:24px;font-weight:800;margin-top:4px;color:var(--mm-ink);}
+.dash-card.accent-purple .value{color:var(--mm-purple-dark);}
+.dash-card.accent-hot .value{color:var(--st-hot);}
+.dash-card.accent-won .value{color:var(--st-won);}
+.dash-card.accent-lost .value{color:var(--st-lost);}
+
+/* ---------- Toolbar ---------- */
+.toolbar{
+  background:var(--mm-white);border:1px solid var(--mm-border);border-radius:var(--radius-md);
+  padding:14px;margin-bottom:18px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow-sm);
+}
+.toolbar-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center;}
+.toolbar-row.between{justify-content:space-between;}
+.search-input{
+  flex:1 1 220px;min-width:180px;padding:9px 12px;border:1px solid var(--mm-border);border-radius:8px;font-size:13px;
+}
+select.filter-select, input.filter-input{
+  padding:8px 10px;border:1px solid var(--mm-border);border-radius:8px;font-size:12.5px;background:#fff;color:var(--mm-ink);
+}
+.toggle-chip{
+  border:1px solid var(--mm-border);background:#fff;border-radius:999px;padding:6px 12px;font-size:12px;font-weight:600;
+  color:var(--mm-muted);display:inline-flex;align-items:center;gap:6px;
+}
+.toggle-chip.on{background:var(--mm-purple);border-color:var(--mm-purple);color:#fff;}
+.toolbar-label{font-size:11px;font-weight:700;color:var(--mm-muted);text-transform:uppercase;letter-spacing:.05em;margin-right:2px;}
+
+/* ---------- Board ---------- */
+.board{display:flex;gap:14px;overflow-x:auto;padding-bottom:12px;align-items:flex-start;}
+.column{
+  flex:0 0 300px;background:rgba(255,255,255,.5);border-radius:var(--radius-lg);
+  display:flex;flex-direction:column;max-height:calc(100vh - 260px);min-height:200px;
+  border:1px solid var(--mm-border);
+}
+.column-head{
+  padding:12px 14px;border-radius:var(--radius-lg) var(--radius-lg) 0 0;color:#fff;
+  display:flex;align-items:center;justify-content:space-between;flex:none;
+}
+.column-head h3{margin:0;font-size:13.5px;font-weight:700;letter-spacing:.2px;}
+.column-count{background:rgba(255,255,255,.25);border-radius:999px;padding:2px 9px;font-size:12px;font-weight:700;}
+.column-body{padding:10px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:10px;}
+.column-body.drag-over{background:rgba(124,92,255,.08);outline:2px dashed var(--mm-purple);outline-offset:-4px;border-radius:8px;}
+.column-empty{color:var(--mm-muted);font-size:12.5px;text-align:center;padding:24px 8px;border:1px dashed var(--mm-border);border-radius:8px;}
+
+/* stage color mapping */
+.head-hot{background:var(--st-hot);}
+.head-revisit{background:var(--st-revisit);}
+.head-meeting{background:var(--st-meeting);}
+.head-reschedule{background:var(--st-reschedule);}
+.head-proposal{background:var(--st-proposal);}
+.head-decision{background:var(--st-decision);}
+.head-won{background:var(--st-won);}
+.head-lost{background:var(--st-lost);}
+
+/* ---------- Lead card ---------- */
+.lead-card{
+  background:#fff;border-radius:var(--radius-md);padding:12px 12px 10px;box-shadow:var(--shadow-sm);
+  border:1px solid var(--mm-border);border-left-width:4px;cursor:grab;transition:box-shadow .15s, transform .1s;
+}
+.lead-card:hover{box-shadow:var(--shadow-md);}
+.lead-card.dragging{opacity:.4;}
+.lead-card.overdue{outline:1px solid var(--mm-danger);}
+.card-hot{border-left-color:var(--st-hot);}
+.card-revisit{border-left-color:var(--st-revisit);}
+.card-meeting{border-left-color:var(--st-meeting);}
+.card-reschedule{border-left-color:var(--st-reschedule);}
+.card-proposal{border-left-color:var(--st-proposal);}
+.card-decision{border-left-color:var(--st-decision);}
+.card-won{border-left-color:var(--st-won);}
+.card-lost{border-left-color:var(--st-lost);}
+
+.card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:6px;}
+.card-company{font-size:13.5px;font-weight:700;color:var(--mm-ink);line-height:1.25;}
+.card-contact{font-size:12px;color:var(--mm-muted);margin-top:1px;}
+.card-jobtitle{font-size:11.5px;color:var(--mm-muted);}
+.card-menu-btn{background:none;border:none;color:var(--mm-muted);font-size:16px;padding:2px 4px;border-radius:6px;line-height:1;}
+.card-menu-btn:hover{background:var(--mm-cream-2);}
+.badge{display:inline-block;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;letter-spacing:.02em;}
+.badge-hot{background:#fde2e9;color:#b91c4c;}
+.badge-high{background:#ffead2;color:#b45309;}
+.badge-medium{background:#fef6cf;color:#92720a;}
+.badge-low{background:#e6e9ef;color:#475569;}
+.badge-sample{background:#ede9fe;color:#6d28d9;}
+.badge-overdue{background:var(--mm-danger);color:#fff;}
+.card-badges{display:flex;gap:5px;flex-wrap:wrap;margin-top:7px;}
+.card-meta{margin-top:8px;font-size:11.5px;color:var(--mm-ink);display:flex;flex-direction:column;gap:3px;}
+.card-meta .row{display:flex;justify-content:space-between;gap:6px;}
+.card-meta .k{color:var(--mm-muted);}
+.card-meta .v.overdue-text{color:var(--mm-danger);font-weight:700;}
+.card-notes{margin-top:8px;font-size:11.5px;color:#374151;background:var(--mm-cream);padding:6px 8px;border-radius:6px;max-height:52px;overflow:hidden;}
+.card-footer{margin-top:9px;display:flex;justify-content:space-between;align-items:center;gap:6px;}
+.card-value{font-weight:800;font-size:13px;color:var(--mm-purple-dark);}
+.move-select{font-size:11px;border:1px solid var(--mm-border);border-radius:6px;padding:4px 6px;background:#fff;max-width:112px;}
+
+/* ---------- Modals ---------- */
+.overlay{position:fixed;inset:0;background:rgba(11,14,26,.55);display:none;align-items:flex-start;justify-content:center;z-index:200;padding:30px 16px;overflow-y:auto;}
+.overlay.open{display:flex;}
+.modal{background:#fff;border-radius:var(--radius-lg);max-width:640px;width:100%;box-shadow:var(--shadow-lg);margin-bottom:40px;}
+.modal.modal-wide{max-width:820px;}
+.modal-head{padding:18px 22px;border-bottom:1px solid var(--mm-border);display:flex;justify-content:space-between;align-items:center;}
+.modal-head h2{margin:0;font-size:16.5px;}
+.modal-close{border:none;background:none;font-size:20px;color:var(--mm-muted);line-height:1;padding:4px;}
+.modal-body{padding:20px 22px;max-height:70vh;overflow-y:auto;}
+.modal-foot{padding:16px 22px;border-top:1px solid var(--mm-border);display:flex;justify-content:flex-end;gap:8px;flex-wrap:wrap;}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-grid .full{grid-column:1/-1;}
+.field label{display:block;font-size:12px;font-weight:700;color:var(--mm-muted);margin-bottom:4px;}
+.field input,.field select,.field textarea{
+  width:100%;padding:9px 10px;border:1px solid var(--mm-border);border-radius:8px;font-size:13px;background:#fff;color:var(--mm-ink);
+}
+.field textarea{resize:vertical;min-height:60px;}
+.field.required label:after{content:" *";color:var(--mm-danger);}
+.field-error{color:var(--mm-danger);font-size:11px;margin-top:3px;display:none;}
+.field.invalid input,.field.invalid select,.field.invalid textarea{border-color:var(--mm-danger);}
+.field.invalid .field-error{display:block;}
+.section-title{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--mm-purple-dark);margin:18px 0 10px;padding-top:14px;border-top:1px solid var(--mm-border);}
+.section-title:first-child{margin-top:0;padding-top:0;border-top:none;}
+.conditional-block{background:var(--mm-cream);border-radius:10px;padding:14px;margin-top:8px;}
+
+/* ---------- Detail modal / activity ---------- */
+.detail-header{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+.detail-title h3{margin:0 0 2px;font-size:17px;}
+.detail-title p{margin:0;font-size:13px;color:var(--mm-muted);}
+.detail-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px 20px;margin:16px 0;font-size:12.5px;}
+.detail-grid .k{color:var(--mm-muted);}
+.detail-grid .row{display:flex;justify-content:space-between;border-bottom:1px dashed var(--mm-border);padding:5px 0;}
+.quick-actions{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 4px;}
+.activity-add{background:var(--mm-cream);border-radius:10px;padding:12px;margin:14px 0;}
+.activity-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:10px;}
+.activity-item{border-left:3px solid var(--mm-purple);padding:6px 0 6px 12px;font-size:12.5px;}
+.activity-item .a-top{display:flex;justify-content:space-between;font-weight:700;color:var(--mm-ink);}
+.activity-item .a-date{color:var(--mm-muted);font-weight:600;font-size:11.5px;}
+.activity-item .a-notes{margin-top:2px;color:#374151;}
+.activity-item .a-stage{margin-top:2px;font-size:11px;color:var(--mm-purple-dark);}
+.activity-item .a-next{margin-top:2px;font-size:11px;color:var(--mm-muted);font-style:italic;}
+
+/* ---------- Prospects table ---------- */
+.prospect-toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:12px;}
+.table-wrap{overflow-x:auto;background:#fff;border:1px solid var(--mm-border);border-radius:var(--radius-md);box-shadow:var(--shadow-sm);}
+table.prospects-table{border-collapse:collapse;width:100%;font-size:12.5px;min-width:1000px;}
+table.prospects-table th{
+  background:var(--mm-navy);color:#fff;text-align:left;padding:10px 12px;position:sticky;top:0;font-size:11.5px;
+  text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;
+}
+table.prospects-table td{padding:9px 12px;border-bottom:1px solid var(--mm-border);vertical-align:top;}
+table.prospects-table tr:hover td{background:var(--mm-cream);}
+.pill{display:inline-block;background:var(--mm-cream-2);border-radius:999px;padding:2px 8px;font-size:11px;font-weight:600;color:#374151;}
+.li-done{color:var(--mm-success);font-weight:700;}
+.li-pending{color:#b45309;font-weight:700;}
+.li-need{color:var(--mm-purple-dark);font-weight:700;}
+.prospect-notice{
+  background:#fff8e6;border:1px solid #f0d896;border-radius:10px;padding:10px 14px;font-size:12.5px;color:#7a5c00;margin-bottom:14px;
+}
+.result-count{font-size:12px;color:var(--mm-muted);}
+
+/* ---------- misc ---------- */
+.hint{font-size:11.5px;color:var(--mm-muted);}
+.confirm-box{text-align:center;}
+.confirm-box input{margin-top:10px;text-align:center;}
+.footer-note{text-align:center;color:var(--mm-muted);font-size:11.5px;margin-top:30px;}
+
+@media (max-width:900px){
+  .board{flex-direction:column;overflow-x:visible;}
+  .column{flex:1 1 auto;max-height:none;width:100%;}
+  .column-body{overflow-y:visible;}
+  .form-grid{grid-template-columns:1fr;}
+  .detail-grid{grid-template-columns:1fr;}
+  .mm-header{padding:14px 16px;}
+  .mm-main{padding:16px 12px 50px;}
+}
+</style>
+</head>
+<body>
+
+<header class="mm-header">
+  <div class="mm-brand">
+    <div class="mm-logo">M</div>
+    <div class="mm-brand-text">
+      <h1>Maintain Media</h1>
+      <span>Executive Branding — Pipeline Tracker</span>
+    </div>
+  </div>
+  <div class="mm-tabs">
+    <button class="mm-tab-btn active" data-view="board">Pipeline Board</button>
+    <button class="mm-tab-btn" data-view="prospects">Prospects List</button>
+  </div>
+  <div class="mm-header-actions">
+    <button class="btn btn-primary" id="btnAddLead">+ Add New Lead</button>
+    <button class="btn btn-ghost" id="btnExportCSV">Export CSV</button>
+    <button class="btn btn-ghost" id="btnExportJSON">Export JSON</button>
+    <button class="btn btn-ghost" id="btnImport">Import</button>
+    <button class="btn btn-ghost" id="btnClearAll">Clear Data</button>
+    <input type="file" id="importFile" accept=".json" style="display:none;">
+  </div>
+</header>
+
+<main class="mm-main">
+
+  <!-- ============================= PIPELINE BOARD VIEW ============================= -->
+  <section id="view-board" class="view active">
+
+    <div class="dash-grid" id="dashGrid"><!-- populated by renderDashboard() --></div>
+
+    <div class="toolbar">
+      <div class="toolbar-row">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search company, contact, email...">
+        <select class="filter-select" id="filterIndustry"><option value="">All Industries</option></select>
+        <select class="filter-select" id="filterOwner"><option value="">All Owners</option></select>
+        <select class="filter-select" id="filterSource"><option value="">All Sources</option></select>
+        <select class="filter-select" id="filterPriority">
+          <option value="">All Priorities</option>
+          <option>Hot</option><option>High</option><option>Medium</option><option>Low</option>
+        </select>
+        <select class="filter-select" id="filterStage"><option value="">All Stages</option></select>
+      </div>
+      <div class="toolbar-row">
+        <span class="toolbar-label">Follow-up</span>
+        <select class="filter-select" id="filterFollowUp">
+          <option value="">Any</option>
+          <option value="overdue">Overdue</option>
+          <option value="today">Due Today</option>
+          <option value="week">Due This Week</option>
+          <option value="none">No Date Set</option>
+        </select>
+        <span class="toolbar-label">Meeting</span>
+        <select class="filter-select" id="filterMeeting">
+          <option value="">Any</option>
+          <option value="today">Today</option>
+          <option value="week">Next 7 Days</option>
+          <option value="none">No Date Set</option>
+        </select>
+        <span class="toolbar-label">Sort</span>
+        <select class="filter-select" id="sortBy">
+          <option value="">Default</option>
+          <option value="company">Company Name (A–Z)</option>
+          <option value="activity">Latest Activity</option>
+          <option value="value">Deal Value (High–Low)</option>
+          <option value="decision">Decision Due Date</option>
+        </select>
+        <button class="btn btn-outline btn-sm" id="btnResetFilters">Reset Filters</button>
+      </div>
+      <div class="toolbar-row">
+        <button class="toggle-chip" data-toggle="overdue">⚠ Overdue Follow-ups</button>
+        <button class="toggle-chip" data-toggle="actionToday">📌 Needs Action Today</button>
+        <button class="toggle-chip" data-toggle="upcomingMeetings">📅 Upcoming Meetings</button>
+        <button class="toggle-chip" data-toggle="decisionSoon">⏳ Decisions Due ≤7 Days</button>
+      </div>
+    </div>
+
+    <div class="board" id="board"><!-- populated by renderBoard() --></div>
+  </section>
+
+  <!-- ============================= PROSPECTS LIST VIEW ============================= -->
+  <section id="view-prospects" class="view">
+    <div class="prospect-notice">
+      Sourced only from the Maintain Media Executive Branding — Prospect Shortlist v3 (Google Doc, prepared by Airen Petalbert, July 2026). 160 prospects across Batch 1 (Tiers 1–3), Batch 2 (New Tiers A–C) and Batch 3 (Tiers A–C). This is a reference list, not the sales pipeline — use "Promote to Pipeline" to turn a prospect into an active lead card on the board.
+    </div>
+    <div class="prospect-toolbar">
+      <input type="text" class="search-input" id="prospectSearch" placeholder="Search name, role, company, notes...">
+      <select class="filter-select" id="prospectSectionFilter"><option value="">All Batches / Tiers</option></select>
+      <select class="filter-select" id="prospectLiFilter">
+        <option value="">Any LinkedIn Status</option>
+        <option value="done">DONE / Connected</option>
+        <option value="pending">Pending Connection</option>
+        <option value="need">Need to Connect</option>
+        <option value="other">Other / Not Checked</option>
+      </select>
+      <select class="filter-select" id="prospectEmailFilter">
+        <option value="">Any Contact Type</option>
+        <option value="email">Has Email</option>
+        <option value="linkedin_only">LinkedIn Only</option>
+      </select>
+      <button class="btn btn-outline btn-sm" id="btnResetProspectFilters">Reset Filters</button>
+      <button class="btn btn-ghost" id="btnExportProspectsCSV" style="background:var(--mm-purple);color:#fff;">Export Prospects CSV</button>
+      <span class="result-count" id="prospectCount"></span>
+    </div>
+    <div class="table-wrap">
+      <table class="prospects-table">
+        <thead>
+          <tr>
+            <th>#</th><th>Name</th><th>Role &amp; Company</th><th>Contact</th>
+            <th>Why They'd Buy</th><th>LinkedIn Status</th><th>Jon's Notes</th><th>Batch / Tier</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="prospectsBody"><!-- populated by renderProspects() --></tbody>
+      </table>
+    </div>
+  </section>
+
+  <p class="footer-note">Maintain Media Pipeline Tracker · data is stored locally in this browser (localStorage) · nothing is sent anywhere</p>
+</main>
+
+<!-- ============================= ADD / EDIT LEAD MODAL ============================= -->
+<div class="overlay" id="overlayLeadForm">
+  <div class="modal modal-wide">
+    <div class="modal-head">
+      <h2 id="leadFormTitle">Add New Lead</h2>
+      <button class="modal-close" data-close>&times;</button>
+    </div>
+    <div class="modal-body">
+      <form id="leadForm">
+        <input type="hidden" id="f_id">
+
+        <div class="section-title">Company &amp; Contact</div>
+        <div class="form-grid">
+          <div class="field required"><label>Company Name</label><input id="f_company" required><div class="field-error">Company name is required.</div></div>
+          <div class="field required"><label>Contact Person</label><input id="f_contact" required><div class="field-error">Contact person is required.</div></div>
+          <div class="field"><label>Job Title</label><input id="f_jobTitle"></div>
+          <div class="field"><label>Industry / Sector</label><input id="f_industry" list="industryList"></div>
+          <div class="field required"><label>Email Address</label><input id="f_email" type="email" required><div class="field-error">A valid email is required.</div></div>
+          <div class="field"><label>Phone Number</label><input id="f_phone"></div>
+          <div class="field full"><label>LinkedIn Profile</label><input id="f_linkedin" placeholder="linkedin.com/in/... or connection status"></div>
+        </div>
+
+        <div class="section-title">Lead Details</div>
+        <div class="form-grid">
+          <div class="field"><label>Lead Source</label><input id="f_source" list="sourceList"></div>
+          <div class="field"><label>Assigned Owner</label><input id="f_owner" list="ownerList"></div>
+          <div class="field"><label>Estimated Deal Value (AUD)</label><input id="f_dealValue" type="number" min="0" step="1"></div>
+          <div class="field required"><label>Priority</label>
+            <select id="f_priority"><option>Hot</option><option>High</option><option>Medium</option><option>Low</option></select>
+          </div>
+          <div class="field required"><label>Current Stage</label>
+            <select id="f_stage">
+              <option value="hot">Hot Leads</option>
+              <option value="revisit">Revisit</option>
+              <option value="meeting">Meeting Booked</option>
+              <option value="reschedule">Reschedule</option>
+              <option value="proposal">Proposal Sent</option>
+              <option value="decision">Decision Due</option>
+              <option value="won">Closed Won</option>
+              <option value="lost">Closed Lost</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="section-title">Dates</div>
+        <div class="form-grid">
+          <div class="field"><label>Meeting Date</label><input id="f_meetingDate" type="date"></div>
+          <div class="field"><label>Follow-up Date</label><input id="f_followUpDate" type="date"></div>
+          <div class="field"><label>Decision Due Date</label><input id="f_decisionDueDate" type="date"></div>
+          <div class="field"><label>Last Contact Date</label><input id="f_lastContactDate" type="date"></div>
+        </div>
+
+        <div class="field full" style="margin-top:12px;"><label>Notes</label><textarea id="f_notes"></textarea></div>
+
+        <div id="lostBlock" class="conditional-block full" style="display:none;">
+          <div class="field required">
+            <label>Reason Lost</label>
+            <select id="f_lostReason">
+              <option value="">— Select a reason —</option>
+              <option>No response</option><option>Not interested</option><option>No budget</option>
+              <option>Timing issue</option><option>Chose another provider</option>
+              <option>Not a good fit</option><option>Other</option>
+            </select>
+            <div class="field-error">A lost reason is required when stage is Closed Lost.</div>
+          </div>
+        </div>
+
+        <div id="wonBlock" class="conditional-block full" style="display:none;">
+          <div class="form-grid">
+            <div class="field"><label>Final Deal Value (AUD)</label><input id="f_finalValue" type="number" min="0" step="1"></div>
+            <div class="field"><label>Contract Date</label><input id="f_contractDate" type="date"></div>
+            <div class="field"><label>Service Selected</label><input id="f_serviceSelected" placeholder="e.g. Full Executive Branding Package"></div>
+            <div class="field"><label>Implementation / Next-step Date</label><input id="f_implementationDate" type="date"></div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" data-close>Cancel</button>
+      <button class="btn btn-primary" id="btnSaveLead">Save Lead</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================= LEAD DETAIL / ACTIVITY MODAL ============================= -->
+<div class="overlay" id="overlayDetail">
+  <div class="modal modal-wide">
+    <div class="modal-head">
+      <h2>Lead Detail</h2>
+      <button class="modal-close" data-close>&times;</button>
+    </div>
+    <div class="modal-body" id="detailBody"><!-- populated by openDetailModal() --></div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" id="btnDuplicateLead">Duplicate</button>
+      <button class="btn btn-danger" id="btnDeleteLead">Delete</button>
+      <button class="btn btn-light" id="btnEditLead">Edit Lead</button>
+      <button class="btn btn-primary" data-close>Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================= LOST REASON PROMPT ============================= -->
+<div class="overlay" id="overlayLostPrompt">
+  <div class="modal">
+    <div class="modal-head"><h2>Reason for Closed Lost</h2><button class="modal-close" data-close-cancelmove>&times;</button></div>
+    <div class="modal-body">
+      <p class="hint">This lead is being moved to <strong>Closed Lost</strong>. Please select a reason before continuing.</p>
+      <div class="field required">
+        <label>Lost Reason</label>
+        <select id="promptLostReason">
+          <option value="">— Select a reason —</option>
+          <option>No response</option><option>Not interested</option><option>No budget</option>
+          <option>Timing issue</option><option>Chose another provider</option>
+          <option>Not a good fit</option><option>Other</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" data-close-cancelmove>Cancel Move</button>
+      <button class="btn btn-danger" id="btnConfirmLostReason">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================= CLOSED WON PROMPT ============================= -->
+<div class="overlay" id="overlayWonPrompt">
+  <div class="modal">
+    <div class="modal-head"><h2>Closed Won — Deal Details</h2><button class="modal-close" data-close-cancelmove>&times;</button></div>
+    <div class="modal-body">
+      <p class="hint">This lead is being moved to <strong>Closed Won</strong>. Record the deal details now, or skip and add them later from the lead detail view.</p>
+      <div class="form-grid">
+        <div class="field"><label>Final Deal Value (AUD)</label><input id="promptFinalValue" type="number" min="0" step="1"></div>
+        <div class="field"><label>Contract Date</label><input id="promptContractDate" type="date"></div>
+        <div class="field"><label>Service Selected</label><input id="promptServiceSelected"></div>
+        <div class="field"><label>Implementation / Next-step Date</label><input id="promptImplementationDate" type="date"></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" data-close-cancelmove>Cancel Move</button>
+      <button class="btn btn-outline" id="btnSkipWonPrompt">Skip for Now</button>
+      <button class="btn btn-primary" id="btnConfirmWonPrompt">Save &amp; Move</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================= CLEAR ALL DATA CONFIRM ============================= -->
+<div class="overlay" id="overlayClearConfirm">
+  <div class="modal">
+    <div class="modal-head"><h2>Clear All Data</h2><button class="modal-close" data-close>&times;</button></div>
+    <div class="modal-body confirm-box">
+      <p>This permanently deletes <strong>all leads and activity history</strong> stored in this browser. This cannot be undone.</p>
+      <p class="hint">Type <strong>DELETE</strong> below to confirm.</p>
+      <input type="text" class="filter-input" id="clearConfirmInput" style="width:160px;">
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-outline" data-close>Cancel</button>
+      <button class="btn btn-danger" id="btnConfirmClear" disabled>Delete Everything</button>
+    </div>
+  </div>
+</div>
+
+<datalist id="industryList"></datalist>
+<datalist id="sourceList"></datalist>
+<datalist id="ownerList"></datalist>
+
+<script>
+/* =============================================================================
+   CONFIG
+   ============================================================================= */
+const STAGES = [
+  {key:'hot',        label:'Hot Leads'},
+  {key:'revisit',    label:'Revisit'},
+  {key:'meeting',     label:'Meeting Booked'},
+  {key:'reschedule',  label:'Reschedule'},
+  {key:'proposal',    label:'Proposal Sent'},
+  {key:'decision',    label:'Decision Due'},
+  {key:'won',         label:'Closed Won'},
+  {key:'lost',        label:'Closed Lost'},
+];
+const STAGE_MAP = Object.fromEntries(STAGES.map(s=>[s.key,s.label]));
+const LOST_REASONS = ['No response','Not interested','No budget','Timing issue','Chose another provider','Not a good fit','Other'];
+const STORAGE_KEY = 'mm_pipeline_state_v2';
+const PROSPECTS_KEY = 'mm_prospects_v1';
+
+/* =============================================================================
+   PROSPECTS DATA — parsed from the source Google Doc (read-only reference list)
+   ============================================================================= */
+const PROSPECTS_SEED = [{"num": 1, "name": "Marissa Shipley", "role": "CEO & Co-Founder, CompliantERP", "contact": "marissa.l.shipley@tmr.qld.gov.au", "why": "Founder selling into the ERP market — HoERP story featured", "linkedin": "Pending connection request", "notes": "⚠ Role changed: profile shows Cerpass Software, not CompliantERP", "section": "Batch 1 — Tier 1: Most Likely to Buy (all 1st-degree)"}, {"num": 2, "name": "Chris Rae", "role": "Founder & Chief Architect, DalRae Solutions", "contact": "chris@dalraesolutions.com.au", "why": "On both lists; boutique founder, brand = deal flow", "linkedin": "Pending connection request", "notes": "He sold his business and might be semi retired, but could be interested. Might need to personalise this message given his situation", "section": "Batch 1 — Tier 1: Most Likely to Buy (all 1st-degree)"}, {"num": 3, "name": "Kalyan Vankayalapati", "role": "MD, Innovapptive", "contact": "kalyan@innovapptive.com | +61 7 3112 2984", "why": "Runs a product company selling to our exact audience", "linkedin": "Pending connection request", "notes": "", "section": "Batch 1 — Tier 1: Most Likely to Buy (all 1st-degree)"}, {"num": 4, "name": "Karen Zwissler", "role": "CEO, SAP Australian User Group", "contact": "Karen.GAICD@saug.com.au", "why": "Community megaphone — HoERP story featured", "linkedin": "DONE", "notes": "She has changed roles... no longer in that role", "section": "Batch 1 — Tier 1: Most Likely to Buy (all 1st-degree)"}, {"num": 5, "name": "Rob Ritchie", "role": "MD, The Cravern Group", "contact": "Robert.Ritchie@cravern.com", "why": "On both lists; MD of consulting group", "linkedin": "DONE", "notes": "", "section": "Batch 1 — Tier 1: Most Likely to Buy (all 1st-degree)"}, {"num": 6, "name": "Jasmine O'Reilly", "role": "MD, The Outlier Group", "contact": "jasmine@theoutliergroup.com.au", "why": "Boutique MD — HoERP story featured", "linkedin": "1st — can DM directly", "notes": "Jasmine does a good job of her profile... might not be relevant.", "section": "Batch 1 — Tier 1: Most Likely to Buy (all 1st-degree)"}, {"num": 7, "name": "Jeffrey Chenevey", "role": "Founder & Operating Partner, Lumerai Advisors", "contact": "jeff.chenevey@lumeraiadvisors.com", "why": "Advisory founder — HoERP story featured", "linkedin": "DONE", "notes": "", "section": "Batch 1 — Tier 1: Most Likely to Buy (all 1st-degree)"}, {"num": 8, "name": "Renee Clayton", "role": "CEO, Glen Fisk", "contact": "renee.clayton@glenfisk.com.au", "why": "Strikeforce subscriber; recruiter", "linkedin": "DONE", "notes": "She is a recruiter... could be a candidate for the other monetisation campaigns. Like first recruiter profiled. Also I dont know if she is CEO", "section": "Batch 1 — Tier 1: Most Likely to Buy (all 1st-degree)"}, {"num": 9, "name": "Saurabh Kerkar", "role": "Large Transformation Delivery Leader, Queensland Rail", "contact": "saurabh.erp07@gmail.com", "why": "HoERP story featured (“The Quiet Fighter”)", "linkedin": "DONE", "notes": "", "section": "Batch 1 — Tier 1: Most Likely to Buy (all 1st-degree)"}, {"num": 10, "name": "Tanya Jenke", "role": "Director Customer Success, Cority", "contact": "tanya.jenke@cority.com | +61 1800 875 325 x248", "why": "HoERP Webinar #8 guest — story featured", "linkedin": "1st — can DM directly", "notes": "Employee at Cority, need to consider who it would land", "section": "Batch 1 — Tier 1: Most Likely to Buy (all 1st-degree)"}, {"num": 11, "name": "Marc Correia", "role": "Lead (Asia), SpinifexIT", "contact": "marcchalown@gmail.com", "why": "HoERP story featured (“The Reluctant Risk-Taker”)", "linkedin": "DONE", "notes": "Might help with his profile", "section": "Batch 1 — Tier 1: Most Likely to Buy (all 1st-degree)"}, {"num": 12, "name": "Colin Williams", "role": "Founder & Director, heyProcurement", "contact": "colin.williams@heyprocurement.com", "why": "On both lists; early-stage founder needing visibility", "linkedin": "Pending connection request", "notes": "", "section": "Batch 1 — Tier 1: Most Likely to Buy (all 1st-degree)"}, {"num": 13, "name": "Simon Pate", "role": "Founder, ERP Tools / Onshore Consulting", "contact": "simonpate@onshoreconsulting.com.au", "why": "On both lists; founder — HoERP story featured", "linkedin": "DONE", "notes": "", "section": "Batch 1 — Tier 1: Most Likely to Buy (all 1st-degree)"}, {"num": 14, "name": "David Ogilvie", "role": "Founder / Advisor, Ogilvie.ai", "contact": "david@ogilvie.ai", "why": "Independent ERP advisor — HoERP story featured", "linkedin": "DONE", "notes": "", "section": "Batch 1 — Tier 1: Most Likely to Buy (all 1st-degree)"}, {"num": 15, "name": "Nadav Moas", "role": "CIO, Aidacare", "contact": "nadav.moas@aidacare.com.au", "why": "CIO with career-capital motive", "linkedin": "Pending connection request", "notes": "Dont know this person", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 16, "name": "Matthew Isaacs", "role": "GM Technology, Challenger", "contact": "maisaacs@challenger.com.au", "why": "GM Technology — visibility drives opportunities", "linkedin": "1st — can DM directly", "notes": "Employee so doubt it", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 17, "name": "Eben Du Toit", "role": "GM Enterprise Platforms, The Lottery Corporation", "contact": "eben.dutoit@thelotterycorporation.com", "why": "Early Strikeforce reader", "linkedin": "2nd — connection request or email first", "notes": "No to Eben", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 18, "name": "Mark Ledgerwood", "role": "Global Head, Cloud & Infrastructure, BHP", "contact": "mark.ledgerwood@bhp.com", "why": "Global platform leader at BHP", "linkedin": "2nd — connection request or email first⚠ BHP role marked Past on profile", "notes": "Employee so doubt it", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 19, "name": "Todd Gee", "role": "Head of Enterprise Architecture, CS Energy", "contact": "TGee@csenergy.com.au", "why": "Head of EA — natural thought-leadership beat", "linkedin": "2nd — connection request or email first⚠ CS Energy role marked Past on profile", "notes": "Employee so doubt it", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 20, "name": "Gordon McCoy", "role": "Head of SAP Centre of Excellence, Foodstuffs NZ", "contact": "gordon.mccoy@foodstuffs.co.nz", "why": "SAP CoE lead — deep lessons to share", "linkedin": "2nd — connection request or email first", "notes": "Employee so doubt it", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 21, "name": "Maria Angelica Yap", "role": "Country GM, DXC", "contact": "mariaangelica.yap@dxc.com", "why": "Country GM — brand opens doors", "linkedin": "Pending connection request", "notes": "", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 22, "name": "Colleen Hebbert", "role": "ANZ Head of Cyber Advisory, SAP", "contact": "c.hebbert@sap.com | +61 7 3173 5606", "why": "Webinar #7 guest — story featured", "linkedin": "1st — can DM directly", "notes": "Employee at SAP. You know Colleen, so maybe not", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 23, "name": "Shalini Misra", "role": "Senior Director & Digital Offerings Leader, Sopra Steria", "contact": "shalini.mishra@soprasteria.com", "why": "On both lists — HoERP story featured", "linkedin": "DONE", "notes": "", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 24, "name": "Nathan Morelli", "role": "Head of Cyber Security, SA Power Networks", "contact": "nathan.morelli@sapowernetworks.com.au", "why": "Credible, under-visible", "linkedin": "DONE", "notes": "", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 25, "name": "Stephen Silver", "role": "Partner, KPMG", "contact": "spsilver@kpmg.com.au", "why": "Big-four partner", "linkedin": "2nd — connection request or email first", "notes": "No – Partner KPMG too senior in Tier 1 consulting", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 26, "name": "Andrew Shaw", "role": "Partner, Deloitte", "contact": "andshaw@deloitte.com", "why": "Big-four partner", "linkedin": "2nd — connection request or email first", "notes": "No – Partner Deloitte too senior in Tier 1 consulting", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 27, "name": "Tom Reznicek", "role": "Partner, Crowe", "contact": "tom.reznicek@crowe.com", "why": "Mid-tier partner — niche visibility", "linkedin": "Pending connection request", "notes": "", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 28, "name": "Jo Lahman", "role": "MD, Accenture", "contact": "jo.lahman@accenture.com", "why": "Accenture MD", "linkedin": "2nd — connection request or email first", "notes": "No – Partner Accenture too senior in Tier 1 consulting", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 29, "name": "Vaibhav Tiwari", "role": "Director Engineering, Maersk", "contact": "vaibhav.tiwari@maersk.com | +61 2 9696 9696", "why": "HoERP story featured", "linkedin": "Pending connection request", "notes": "", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 30, "name": "Kerry Williamson", "role": "MD, Dialog Fitzroy", "contact": "kwilliamson@dialogfitzroy.com", "why": "MD — visibility sets firm perception", "linkedin": "Pending connection request", "notes": "", "section": "Batch 1 — Tier 2: Warm, Senior, Budget Exists"}, {"num": 31, "name": "Benjamin Chambers", "role": "Fractional COO, Prescience", "contact": "benjamin.chambers@prescience.com.au", "why": "Fractional exec", "linkedin": "1st — can DM directly", "notes": "No – does it himself in his business offering", "section": "Batch 1 — Tier 3: Nurture with the Intro Offer"}, {"num": 32, "name": "Allison Arandez", "role": "Founder / Fractional HR Tech Advisory", "contact": "allison.arandez@rizing.com", "why": "Fractional founder — HoERP story featured", "linkedin": "DONE", "notes": "", "section": "Batch 1 — Tier 3: Nurture with the Intro Offer"}, {"num": 33, "name": "Dale Rabeneck", "role": "MD, Apex Performance Advisors", "contact": "dalerabeneck@apexperformanceadvisors.com", "why": "Advisory MD", "linkedin": "Pending connection request", "notes": "", "section": "Batch 1 — Tier 3: Nurture with the Intro Offer"}, {"num": 34, "name": "Stuart Cook", "role": "Founding Partner, Twiyo", "contact": "stuart@twiyo.com.au", "why": "Founding partner", "linkedin": "2nd — connection request or email first", "notes": "I doubt it...", "section": "Batch 1 — Tier 3: Nurture with the Intro Offer"}, {"num": 35, "name": "Damien Kirchner", "role": "Co-Founder, Solitech", "contact": "damien@solitech.solutions", "why": "Early-stage co-founder", "linkedin": "Pending connection request", "notes": "", "section": "Batch 1 — Tier 3: Nurture with the Intro Offer"}, {"num": 36, "name": "Imran Ansari", "role": "Co-Founder & Director, Inkit", "contact": "imran.ansari@inkit.com.au", "why": "Co-founder", "linkedin": "DONE", "notes": "", "section": "Batch 1 — Tier 3: Nurture with the Intro Offer"}, {"num": 37, "name": "Frank Magliozzi", "role": "Principal Director, SAP Transformation, KPMG", "contact": "fmagliozzi@kpmg.com.au", "why": "Crowded niche — visible voices get shortlisted", "linkedin": "Pending connection request", "notes": "", "section": "Batch 1 — Tier 3: Nurture with the Intro Offer"}, {"num": 38, "name": "Rebecca Sinclair", "role": "Partner, KPMG", "contact": "rsinclair@hockeyqld.com.au", "why": "Big-four partner", "linkedin": "2nd — connection request or email first", "notes": "No – Partner Accenture too senior in Tier 1 consulting", "section": "Batch 1 — Tier 3: Nurture with the Intro Offer"}, {"num": 39, "name": "Islam Abdelkhalek", "role": "SAP EAM Director, HITS Arabia", "contact": "iabdelkhalek@hitsarabia.com", "why": "Global EAM specialist", "linkedin": "DONE", "notes": "⚠ Role changed: now SAP EAM Director at PwC, not HITS Arabia", "section": "Batch 1 — Tier 3: Nurture with the Intro Offer"}, {"num": 40, "name": "Sergey Margaryan", "role": "Director, SAP, Telecon", "contact": "smargaryan@telecon.com", "why": "SAP director", "linkedin": "Pending connection request", "notes": "", "section": "Batch 1 — Tier 3: Nurture with the Intro Offer"}, {"num": 41, "name": "Carsten Kullmann", "role": "Head of Enterprise Platforms, Broadbeach GC", "contact": "carstenkullmann@broadbeachgc.com", "why": "Platform leader", "linkedin": "NEED TO CONNECT", "notes": "", "section": "Batch 1 — Tier 3: Nurture with the Intro Offer"}, {"num": 42, "name": "Oleksandr Petryk", "role": "CEO, Dinamicka", "contact": "o.petryk@dinamicka.com", "why": "Services CEO — non-ERP variant", "linkedin": "NEED TO CONNECT", "notes": "", "section": "Batch 1 — Tier 3: Nurture with the Intro Offer"}, {"num": 43, "name": "Stef (Stefan) Baumann", "role": "Director SAP Services APAC, SoftwareONE / S4HANA & Cloud Advisor, Noveon Group", "contact": "Stefan.Baumann@softwareone.com", "why": "Senior SAP advisor — two Zoho records, merge dupe; strong advisory-brand fit", "linkedin": "NEED TO CONNECT", "notes": "OK", "section": "New — Tier A: Boutique Leaders & Independent Advisors"}, {"num": 44, "name": "Chandra Shekhar", "role": "Program Director — SAP, Samishti Infotech", "contact": "C.Shekhar@samishti.com", "why": "Boutique director selling SAP services", "linkedin": "NEED TO CONNECT", "notes": "OK", "section": "New — Tier A: Boutique Leaders & Independent Advisors"}, {"num": 45, "name": "Steve Turner", "role": "S/4HANA Finance, Core-Fi Partners", "contact": "STurner@fipartners.ca", "why": "Boutique partner — HoERP story featured", "linkedin": "Not checked yet", "notes": "He is a consultant working for me…i think he already has this service… so hold out for now.", "section": "New — Tier A: Boutique Leaders & Independent Advisors"}, {"num": 46, "name": "Sahil Naqvi", "role": "Technology Advisor, Subcinctus Consulting", "contact": "sahil.naqvi@ausforming.com", "why": "Advisory — visibility = credibility", "linkedin": "DONE", "notes": "OK", "section": "New — Tier A: Boutique Leaders & Independent Advisors"}, {"num": 47, "name": "Jacques Maeda", "role": "Solutions Architect, Tessera Labs", "contact": "jkmaeda@gmail.com", "why": "Boutique tech firm", "linkedin": "DONE", "notes": "OK", "section": "New — Tier A: Boutique Leaders & Independent Advisors"}, {"num": 48, "name": "Paras Arora", "role": "Enterprise Architect, XAI Technology Investments", "contact": "paras146@gmail.com", "why": "Independent EA in the AI/ERP crossover", "linkedin": "DONE", "notes": "OK", "section": "New — Tier A: Boutique Leaders & Independent Advisors"}, {"num": 49, "name": "Gordon Carlyle", "role": "Global Perspectives Consulting (career break)", "contact": "gordo33@outlook.com", "why": "Rebuilding visibility for the comeback — strong personal motive", "linkedin": "Not checked yet", "notes": "No…", "section": "New — Tier A: Boutique Leaders & Independent Advisors"}, {"num": 50, "name": "Jagath Sothivel", "role": "Tritusa — SAP S/4HANA Testing & QA", "contact": "Jagath.Sothivel@tritusa.com.au", "why": "Boutique firm voice; colleague Manimaran (Director SAP, Tritusa) also in network", "linkedin": "NEED TO CONNECT", "notes": "OK", "section": "New — Tier A: Boutique Leaders & Independent Advisors"}, {"num": 51, "name": "Sam Borkar", "role": "Principal Consultant, ERM", "contact": "sam.borkar@erm.com | +61 3 9696 8011", "why": "HoERP story featured — knows the effect", "linkedin": "DONE", "notes": "OK", "section": "New — Tier B: Featured Alumni, Consultant Profiles"}, {"num": 52, "name": "Richard Williams", "role": "Manager, SAP EAM Practice, Blu Pantera", "contact": "richard.williams@blupantera.com", "why": "HoERP story featured — boutique practice lead", "linkedin": "NEED TO CONNECT", "notes": "OK", "section": "New — Tier B: Featured Alumni, Consultant Profiles"}, {"num": 53, "name": "Maria Norma (Riane) Avila", "role": "Senior Oracle Application Consultant, NRI", "contact": "riane.avila@gmail.com", "why": "HoERP story featured", "linkedin": "DONE", "notes": "OK", "section": "New — Tier B: Featured Alumni, Consultant Profiles"}, {"num": 54, "name": "Umesh Sharma", "role": "SuccessFactors Specialist, EY", "contact": "Umesh.Sharma@gds.ey.com", "why": "HoERP story featured (EY employee — Jon to confirm)", "linkedin": "NEED TO CONNECT", "notes": "OK", "section": "New — Tier B: Featured Alumni, Consultant Profiles"}, {"num": 55, "name": "Hanlie Bezuidenhout", "role": "Director, People Culture, PwC", "contact": "hanlie_bezuidenhout@pwc.com", "why": "HoERP story featured (big-4 director — near Jon's partner line, his call)", "linkedin": "NEED TO CONNECT", "notes": "OK", "section": "New — Tier B: Featured Alumni, Consultant Profiles"}, {"num": 56, "name": "Vishal Bhatia", "role": "SAP HR & Payroll Consultant, Brisbane City Council", "contact": "(no email in Zoho)", "why": "HoERP story featured", "linkedin": "DONE", "notes": "OK", "section": "New — Tier B: Featured Alumni, Consultant Profiles"}, {"num": 57, "name": "Nitesh Chawla", "role": "SAP Integration Architect, Independent", "contact": "(no email in Zoho)", "why": "Independent — name is the business", "linkedin": "Not checked yet", "notes": "OK  &#10;  &#10;NO EMAIL", "section": "New — Tier C: Independent Contractors"}, {"num": 58, "name": "Saurabh Goel", "role": "Contractor (SAP)", "contact": "saurabh_goel@ymail.com", "why": "Independent contractor", "linkedin": "DONE", "notes": "No", "section": "New — Tier C: Independent Contractors"}, {"num": 59, "name": "Vijay Sachan", "role": "SAP S/4 Implementation Data Lead", "contact": "vijay.sachan@gmail.com", "why": "Independent contractor", "linkedin": "DONE", "notes": "OK", "section": "New — Tier C: Independent Contractors"}, {"num": 60, "name": "Sharad Narayan", "role": "SAP HANA Modeller, QLD Government (contract)", "contact": "intellianalyticsau@gmail.com", "why": "Contractor — profile-overhaul entry product", "linkedin": "DONE", "notes": "OK", "section": "New — Tier C: Independent Contractors"}, {"num": 61, "name": "Judith O'Callaghan", "role": "Founder & Principal, Northpoint Integrity Services", "contact": "LinkedIn only", "why": "ERP Advisory founder, 33K followers — already building a brand, wants it scaled", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 62, "name": "Joel Campbell", "role": "Founder & Principal Advisor, Campbell Advisory Services", "contact": "LinkedIn only", "why": "Independent, no vendor affiliations — brand is the whole pitch", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 63, "name": "Ejaz Muhammad", "role": "Founder & Principal SAP Consultant, Zyra Solutions", "contact": "LinkedIn only", "why": "Boutique SAP EAM/PLM founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 64, "name": "Annabelle Roux", "role": "Founder & SAP PM/EAM Consultant, Gentackle", "contact": "LinkedIn only", "why": "Solo SAP EAM consultant, France", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 65, "name": "Sai Kulendran", "role": "Co-Founder, BizHub Consulting Service", "contact": "LinkedIn only", "why": "ERP consulting co-founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 66, "name": "Shaun Oxley", "role": "Company Director & Principal SAP PM Consultant, Collaboration of Design Engineers", "contact": "LinkedIn only", "why": "Boutique SAP PM consultancy owner", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 67, "name": "Jakob Bent Smed", "role": "Independent Client-Side ERP Advisor", "contact": "LinkedIn only", "why": "“Phase 0 ERP Creator” — personal-brand-led advisory practice", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 68, "name": "Ravi Sankar Venna", "role": "Independent SAP Consultant, SAP Mentor Alumni", "contact": "LinkedIn only", "why": "Independent consultant, established SAP community credibility", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 69, "name": "Mark Savage", "role": "Director, Integrate ERP", "contact": "LinkedIn only", "why": "SAP staffing founder — visibility drives placements", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 70, "name": "Manjil Chowdhury", "role": "Founder & CEO, Centredge Services", "contact": "LinkedIn only", "why": "MS Dynamics 365 boutique founder — widens beyond SAP-only", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 71, "name": "Vinita Kasliwal", "role": "Founder & Director, Peritos Solutions", "contact": "LinkedIn only", "why": "SAP + MS Dynamics consulting founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 72, "name": "Jeff Stubbs", "role": "Founder, Zentrix", "contact": "LinkedIn only", "why": "SAP reporting/Power BI niche founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 73, "name": "Dan Johnson", "role": "Founder, Cedar Ridge", "contact": "LinkedIn only", "why": "Scaling ERP & SaaS businesses — UK", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 74, "name": "Harjit Khatkar", "role": "Founder & CEO, Icon Consulting Group", "contact": "LinkedIn only", "why": "Established consulting firm founder, Singapore", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 75, "name": "Marcial Aninon", "role": "Founder, Likha Consulting", "contact": "LinkedIn only", "why": "SAP Finance boutique founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 76, "name": "Maywand Atrafi", "role": "Founder, Envocon", "contact": "LinkedIn only", "why": "SAP EHSM boutique founder, Netherlands", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 77, "name": "Reza Yousefzadeh", "role": "Founder & Principal Architect, Infinite Byte", "contact": "LinkedIn only", "why": "Data architecture boutique founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 78, "name": "Paul Yue", "role": "Founder, Pinnacle IT Consulting Group", "contact": "LinkedIn only", "why": "SAP HCM/Payroll boutique founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 79, "name": "Johanes Gunawan", "role": "Founder, Fingers Technology", "contact": "LinkedIn only", "why": "SAP HCM/Payroll SME turned founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 80, "name": "Youssef Annan", "role": "SAP FICO Specialist", "contact": "LinkedIn only", "why": "18K followers already — freelance-style, ready to scale the brand", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 81, "name": "John Pringle", "role": "Freelance SAP FICO & PS Consultant", "contact": "LinkedIn only", "why": "Independent freelancer, Canada", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 82, "name": "Ashok Palani", "role": "SAP Principal Architect", "contact": "LinkedIn only", "why": "Independent-style advisory voice, TOGAF credentialed", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 83, "name": "Chris Schroefl", "role": "CEO & Co-Founder, Natuvion APJ", "contact": "LinkedIn only", "why": "7K followers, data migration company CEO", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 84, "name": "Arun Govind", "role": "Co-Founder (stealth), ex-SAP", "contact": "LinkedIn only", "why": "Early-stage founder building new venture", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 85, "name": "David Laborieux", "role": "SAP S/4HANA & ERP Transformation Leader", "contact": "LinkedIn only", "why": "Ex-Accenture, now positioning independently", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 86, "name": "Syed Mudassir H. Kirmani", "role": "Independent Director, SAP & Digital Transformation", "contact": "LinkedIn only", "why": "26K followers — strong existing brand, wants to scale further", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 87, "name": "Andrew Charlton", "role": "Founder, Exelblue Group", "contact": "LinkedIn only", "why": "MS Dynamics/Salesforce/NetSuite boutique founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 88, "name": "Shankar Visveswaran", "role": "Co-Founder, SAP S/4HANA Business Transformation", "contact": "LinkedIn only", "why": "Finance transformation co-founder, London", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 89, "name": "Umesh Shinde", "role": "Founder & MD, Abhiyanta India", "contact": "LinkedIn only", "why": "12K followers, SAP/engineering platform founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 90, "name": "Dibyendu Mahata", "role": "Founder, Cloud Route Consulting", "contact": "LinkedIn only", "why": "SAP SuccessFactors boutique founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier A: SAP/ERP Boutique Founders & Independent Consultants"}, {"num": 91, "name": "Ava Kodeiri", "role": "Founder & MD, Pelatin Pty Ltd", "contact": "LinkedIn only", "why": "Advisory & transformation founder — confirm current SAP role status", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 92, "name": "Indira Cole", "role": "Founder, Indigo People", "contact": "LinkedIn only", "why": "SAP/sales recruitment founder, 21K followers", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 93, "name": "Alex Gomez", "role": "Director, Acuity Search", "contact": "LinkedIn only", "why": "SAP recruitment brand, 23K followers", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 94, "name": "Sam Vargas", "role": "Director, Acuity Search", "contact": "LinkedIn only", "why": "SAP recruitment partner", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 95, "name": "Kevin Hayes", "role": "Founder, SAP Hunters", "contact": "LinkedIn only", "why": "SAP recruitment founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 96, "name": "Bryce Gammon", "role": "Founder & CEO, SafetySuite", "contact": "LinkedIn only", "why": "SAP SuccessFactors WH&S product founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 97, "name": "Anup Rathi", "role": "Founder & Product Director, On Device Solutions", "contact": "LinkedIn only", "why": "ERP-adjacent product founder, India", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 98, "name": "Jannie Potgieter", "role": "Founder Group CEO, Collaborit Asset Management Engineering", "contact": "LinkedIn only", "why": "EAM engineering group founder, South Africa", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 99, "name": "Ashokk N Menon", "role": "Founder, Procurement Superheroes", "contact": "LinkedIn only", "why": "Fractional CPO practice founder, 9K followers", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 100, "name": "Sundeep Ravande", "role": "CEO, Co-Founder, Innovapptive", "contact": "LinkedIn only", "why": "Connected worker platform CEO", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 101, "name": "Priteesh Shah", "role": "Business Transformation Leader, Entrepreneur", "contact": "LinkedIn only", "why": "SAP solutions expert positioning as entrepreneur", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 102, "name": "Cameron Kenna", "role": "CEO, Ampersand International", "contact": "LinkedIn only", "why": "Executive search & coaching CEO, 5K followers", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 103, "name": "Samantha McIntyre", "role": "Founder, Tech Boosters", "contact": "LinkedIn only", "why": "Former CIO turned founder, 8K followers", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 104, "name": "Mark Sanders", "role": "CEO & Founder, Tiikr", "contact": "LinkedIn only", "why": "Workflow automation founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 105, "name": "Veronica Eleonora Palumbo", "role": "Founder, Senquentia", "contact": "LinkedIn only", "why": "Executive advisory founder, Canada", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 106, "name": "Francesca Hayes", "role": "Co-Founder/CEO, Encompass Consulting Services", "contact": "LinkedIn only", "why": "Gov & Tier 1 transformation co-founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 107, "name": "Branko Ceran", "role": "Interim & Fractional CIDO", "contact": "LinkedIn only", "why": "Fractional exec — personal brand is the offering", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 108, "name": "Angela Seeto", "role": "Prominence", "contact": "LinkedIn only", "why": "Human-centred management consulting founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 109, "name": "Stephen Kovacs", "role": "Managing Director (Consulting), Escient", "contact": "LinkedIn only", "why": "Boutique consulting MD", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 110, "name": "Richard Duncan", "role": "Co-Founder, Team Building with Purpose", "contact": "LinkedIn only", "why": "Change specialist, 7K followers", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 111, "name": "Adem Adil", "role": "Co-Founder & CEO, Ausforming", "contact": "LinkedIn only", "why": "Enterprise software co-founder/CEO", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 112, "name": "Ma. Soledad Rovira", "role": "Founder Consultant, Rovira Consulting", "contact": "LinkedIn only", "why": "HR/OD independent consultant, Chile", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 113, "name": "Bernadette Stone", "role": "CIO, Great Southern Bank", "contact": "LinkedIn only", "why": "CIO with career-capital motive", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 114, "name": "Chris Crozier", "role": "Chief Information Officer", "contact": "LinkedIn only", "why": "30K followers already — wants to scale further", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 115, "name": "Sue Phillips", "role": "Chief Financial Officer", "contact": "LinkedIn only", "why": "CFO — visibility opens board seats", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 116, "name": "David Mumford", "role": "CIO/CTO/GM IT", "contact": "LinkedIn only", "why": "SAP/ERP-focused technology exec", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 117, "name": "Kim Elms", "role": "Enterprise Architect / CTO, NHVR", "contact": "LinkedIn only", "why": "Executive MBA, EA/CTO combo", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 118, "name": "Joseph Alexander", "role": "SAP Functional Stream Lead and Author", "contact": "LinkedIn only", "why": "Published author, 18+ yrs SAP consulting", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 119, "name": "Andrew Sims", "role": "Senior SAP Consultant, Independent Consultant", "contact": "LinkedIn only", "why": "Independent contractor", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 120, "name": "Yonglian Shen", "role": "SAP Technical Consultant, Independent SAP Consultant", "contact": "LinkedIn only", "why": "Independent contractor", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 121, "name": "Fransua Joubert", "role": "SAP Functional Consultant, Independent Consultant", "contact": "LinkedIn only", "why": "Independent contractor, South Africa", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 122, "name": "Michele Tremblay", "role": "SAP PS Consultant, Indépendant", "contact": "LinkedIn only", "why": "Independent contractor, Canada", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 123, "name": "Berhane Merhazion", "role": "Technology Executive Advisor", "contact": "LinkedIn only", "why": "Own consulting practice", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 124, "name": "Mohamed Amani", "role": "Change Management Consultant", "contact": "LinkedIn only", "why": "Own coaching/consulting practice, 22K followers", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 125, "name": "Yvan Morissette", "role": "Partner, ACPE inc", "contact": "LinkedIn only", "why": "Own performance-improvement firm", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 126, "name": "Matthew Alford", "role": "Founder & Director, Kaiviti Shipping", "contact": "LinkedIn only", "why": "Supply chain founder, Fiji", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 127, "name": "Senthil T N", "role": "SAP Architect turned AI health startup founder", "contact": "LinkedIn only", "why": "11K followers — building second act as founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 128, "name": "Mike Ellis", "role": "EVP Global Consulting, SAP HCM & SuccessFactors", "contact": "LinkedIn only", "why": "Building/scaling a consulting practice", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 129, "name": "Alonso Vargas", "role": "Co-Founder, Smart Suites", "contact": "LinkedIn only", "why": "4K followers, tech co-founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 130, "name": "Jean-François Dumont", "role": "Founder, Conexio Agency", "contact": "LinkedIn only", "why": "Tech recruitment agency founder, Canada", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 131, "name": "Andrew Macdonald", "role": "Founder & CEO, Flout Software", "contact": "LinkedIn only", "why": "Mining data software founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 132, "name": "Michael Sterling", "role": "Founder, MS Marketing", "contact": "LinkedIn only", "why": "19K followers, B2B marketing founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 133, "name": "Robert L. Hodges", "role": "Founder & CEO, Proficio Ventures", "contact": "LinkedIn only", "why": "Venture builder, 7K followers", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 134, "name": "Joel Hams", "role": "Founding Director, Altera Financial", "contact": "LinkedIn only", "why": "Financial services founding director", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 135, "name": "Vera Stambolziovska", "role": "MD, Verafide Consulting", "contact": "LinkedIn only", "why": "Talent acquisition consulting founder, 9K followers", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 136, "name": "Sandeep Reddy", "role": "Founder & CEO, Reddsand Ltd", "contact": "LinkedIn only", "why": "HR tech consulting founder, UK", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 137, "name": "Tahir Shakir", "role": "Founder, TA Solutions", "contact": "LinkedIn only", "why": "AI-native automation founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 138, "name": "Varun Dogra", "role": "Founder, MakeMyCX", "contact": "LinkedIn only", "why": "Salesforce/MuleSoft solution founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 139, "name": "Paul Kingston", "role": "Founder, Vixtro", "contact": "LinkedIn only", "why": "Managed IT & cybersecurity founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 140, "name": "David Anders", "role": "Global CISO, Board Member", "contact": "LinkedIn only", "why": "Senior security exec, board-level visibility motive", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 141, "name": "Brett Cowan", "role": "Founder, Payroll Standard", "contact": "LinkedIn only", "why": "Payroll product + consulting founder, 9K followers", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 142, "name": "Fabien Zanchi", "role": "Founder & Principal, PowerData Group", "contact": "LinkedIn only", "why": "Data/cybersecurity/transformation founder, 17K followers", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 143, "name": "Dane Boers", "role": "Founder, Modla", "contact": "LinkedIn only", "why": "Asset analytics founder, 8K followers — EAM-adjacent", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 144, "name": "Fabricio Nishioka Cardoso", "role": "Fab Data Solutions", "contact": "LinkedIn only", "why": "Data analytics consultancy founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 145, "name": "Simon Benney", "role": "Managing Partner & Founder, Kernow Advisory", "contact": "LinkedIn only", "why": "C-level advisory founder, board member", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier B: ERP-Adjacent Founders, Recruiters & Senior Execs"}, {"num": 146, "name": "Colin James", "role": "Co-Founder, The Colin James Method", "contact": "LinkedIn only", "why": "C-suite exec coach, keynote speaker, author — 10K followers, non-ERP", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier C: Broader Consulting / Coaching Founders (non-ERP)"}, {"num": 147, "name": "Ian Markram", "role": "IT Professional Services Coach, Loading Growth", "contact": "LinkedIn only", "why": "Coaches IT founders/entrepreneurs, 13K followers", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier C: Broader Consulting / Coaching Founders (non-ERP)"}, {"num": 148, "name": "Lindy MacPherson", "role": "Founder, LM Advisory", "contact": "LinkedIn only", "why": "Author, speaker, leadership coach", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier C: Broader Consulting / Coaching Founders (non-ERP)"}, {"num": 149, "name": "Steve Mendl", "role": "Founder, Career Transition & Retirement Coach", "contact": "LinkedIn only", "why": "Author, keynote speaker, 2K followers", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier C: Broader Consulting / Coaching Founders (non-ERP)"}, {"num": 150, "name": "Kim McCarthy", "role": "GTM Advisor for SaaS Founders", "contact": "LinkedIn only", "why": "25K followers, works with B2B founders/CEOs", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier C: Broader Consulting / Coaching Founders (non-ERP)"}, {"num": 151, "name": "Nidhi Arora", "role": "Founder, Shifting Realms", "contact": "LinkedIn only", "why": "Executive coaching platform founder, India", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier C: Broader Consulting / Coaching Founders (non-ERP)"}, {"num": 152, "name": "Justina Stromnes", "role": "Executive Coach, J. Stromnes Consulting", "contact": "LinkedIn only", "why": "Organisational psychologist, own practice", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier C: Broader Consulting / Coaching Founders (non-ERP)"}, {"num": 153, "name": "Abbas Muhajer", "role": "Owner, The Alternative Board Brisbane South", "contact": "LinkedIn only", "why": "Business advisory board owner", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier C: Broader Consulting / Coaching Founders (non-ERP)"}, {"num": 154, "name": "Alan Myers", "role": "Business Coach & Strategic Advisor, Beyond BC", "contact": "LinkedIn only", "why": "Franchise growth coach", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier C: Broader Consulting / Coaching Founders (non-ERP)"}, {"num": 155, "name": "Mark Wilson", "role": "CEO & Founder, Donarity", "contact": "LinkedIn only", "why": "8K followers, connected-work tech founder", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier C: Broader Consulting / Coaching Founders (non-ERP)"}, {"num": 156, "name": "Mike G Robinson", "role": "Founder, MGRNZ & Maximised AI", "contact": "LinkedIn only", "why": "AI systems founder, NZ", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier C: Broader Consulting / Coaching Founders (non-ERP)"}, {"num": 157, "name": "Sonya Walker", "role": "Board Director & Technology Advisor", "contact": "LinkedIn only", "why": "31K followers already — strong existing brand to scale", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier C: Broader Consulting / Coaching Founders (non-ERP)"}, {"num": 158, "name": "Ryan McKergow", "role": "Founder, Be More Productive", "contact": "LinkedIn only", "why": "Side-venture founder, 4K followers", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier C: Broader Consulting / Coaching Founders (non-ERP)"}, {"num": 159, "name": "Dimuth Samaranayaka", "role": "Founder & Advisor", "contact": "LinkedIn only", "why": "CTO/CDO turned founder-advisor", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier C: Broader Consulting / Coaching Founders (non-ERP)"}, {"num": 160, "name": "Rod Butterss", "role": "Founder of Multiple Businesses", "contact": "LinkedIn only", "why": "Speaker/coach helping leaders “build their own consulting brand” — exact ICP match, non-ERP", "linkedin": "1st-degree with Jon — Airen's connection status not checked", "notes": "", "section": "Batch 3 — Tier C: Broader Consulting / Coaching Founders (non-ERP)"}];
+
+/* =============================================================================
+   SEED PIPELINE DATA — used only the first time the tracker is opened
+   (no saved state in localStorage yet). Real leads only — no demo/sample cards.
+   ============================================================================= */
+function seedActivity(entries){
+  const base = Date.now() - entries.length*1000;
+  return entries.map((e,i)=> Object.assign(actEntry(e.type, e.notes, e.fromStage, e.toStage, e.nextAction), {ts: base + i*1000}));
+}
+function seedLeads(){
+  const today = todayStr();
+  const mk = (o)=>Object.assign({
+    id: uid(), company:'', contact:'', jobTitle:'', industry:'', email:'', phone:'',
+    linkedin:'', source:'', owner:'', dealValue:null, meetingDate:'', followUpDate:'',
+    decisionDueDate:'', lastContactDate:'', priority:'Medium', notes:'', stage:'hot',
+    lostReason:'', won:{finalValue:null,contractDate:'',serviceSelected:'',implementationDate:''},
+    activity:[], sample:false, createdAt:Date.now(), updatedAt:Date.now()
+  }, o);
+
+  return [
+    mk({
+      company:'SpinifexIT', contact:'Marc Correia', jobTitle:'Lead (Asia)',
+      industry:'SAP Consulting / ERP Tools', email:'marcchalown@gmail.com',
+      linkedin:'Connected (1st-degree)', source:'Executive Branding Outreach — Humans of ERP Network',
+      owner:'Airen Petalbert', priority:'Hot', stage:'hot', lastContactDate:today,
+      followUpDate:addDays(today,5),
+      notes:'Meeting pending — confirm date and time.',
+      activity: seedActivity([
+        {type:'Lead Created', notes:'Lead added to the pipeline from outreach.', fromStage:'', toStage:'Hot Leads'},
+        {type:'Status Update', notes:'Meeting pending — confirm date and time.', fromStage:'Hot Leads', toStage:'Hot Leads', nextAction:'Confirm meeting date/time.'},
+      ])
+    }),
+    mk({
+      company:'Onshore Consulting (ERP Tools)', contact:'Simon Pate', jobTitle:'Founder',
+      industry:'ERP Consulting', email:'simonpate@onshoreconsulting.com.au',
+      linkedin:'Connected (1st-degree)', source:'Executive Branding Outreach — Humans of ERP Network',
+      owner:'Airen Petalbert', priority:'Hot', stage:'hot', lastContactDate:today,
+      followUpDate:addDays(today,5),
+      notes:'Meeting pending — confirm date and time.',
+      activity: seedActivity([
+        {type:'Lead Created', notes:'Lead added to the pipeline from outreach.', fromStage:'', toStage:'Hot Leads'},
+        {type:'Status Update', notes:'Meeting pending — confirm date and time.', fromStage:'Hot Leads', toStage:'Hot Leads', nextAction:'Confirm meeting date/time.'},
+      ])
+    }),
+    mk({
+      company:'XAI Technology Investments', contact:'Paras Arora', jobTitle:'Enterprise Architect',
+      industry:'AI / Enterprise Technology', email:'paras146@gmail.com',
+      linkedin:'Connected (1st-degree)', source:'Executive Branding Outreach — Humans of ERP Network',
+      owner:'Airen Petalbert', priority:'Hot', stage:'meeting', lastContactDate:today,
+      notes:'Meeting booked — date/time to be confirmed and added here.',
+      activity: seedActivity([
+        {type:'Lead Created', notes:'Lead added to the pipeline from outreach.', fromStage:'', toStage:'Hot Leads'},
+        {type:'Status Update', notes:'Asked about costing, meeting pending.', fromStage:'Hot Leads', toStage:'Hot Leads'},
+        {type:'Stage Change', notes:'Meeting booked.', fromStage:'Hot Leads', toStage:'Meeting Booked', nextAction:'Confirm meeting date/time in the lead record.'},
+      ])
+    }),
+    mk({
+      company:'Sopra Steria', contact:'Shalini Misra', jobTitle:'Senior Director & Digital Offerings Leader',
+      industry:'IT Consulting & Digital Services', email:'shalini.mishra@soprasteria.com',
+      linkedin:'Connected (1st-degree)', source:'Executive Branding Outreach — Humans of ERP Network',
+      owner:'Airen Petalbert', priority:'Medium', stage:'revisit', lastContactDate:today,
+      notes:"Revisit — replied to outreach, said she'll get back to us once she's back from travels.",
+      activity: seedActivity([
+        {type:'Lead Created', notes:'Lead added to the pipeline from outreach.', fromStage:'', toStage:'Hot Leads'},
+        {type:'Status Update', notes:"Replied to outreach. Will reply once back from travels.", fromStage:'Hot Leads', toStage:'Hot Leads'},
+        {type:'Stage Change', notes:'Marked for revisit.', fromStage:'Hot Leads', toStage:'Revisit', nextAction:'Follow up once she is back from travels.'},
+      ])
+    }),
+    mk({
+      company:'Ogilvie.ai', contact:'David Ogilvie', jobTitle:'Founder / Advisor',
+      industry:'Independent ERP Advisory', email:'david@ogilvie.ai',
+      linkedin:'Connected (1st-degree)', source:'Executive Branding Outreach — Humans of ERP Network',
+      owner:'Airen Petalbert', priority:'Medium', stage:'revisit', lastContactDate:today,
+      followUpDate:'2026-08-17',
+      notes:'Revisit in the third week of August.',
+      activity: seedActivity([
+        {type:'Lead Created', notes:'Lead added to the pipeline from outreach.', fromStage:'', toStage:'Hot Leads'},
+        {type:'Status Update', notes:'Asked us to revisit in the third week of August.', fromStage:'Hot Leads', toStage:'Hot Leads'},
+        {type:'Stage Change', notes:'Marked for revisit — follow up week of 17 Aug 2026.', fromStage:'Hot Leads', toStage:'Revisit', nextAction:'Reconnect during the third week of August.'},
+      ])
+    }),
+    mk({
+      company:'Rizing', contact:'Allison Arandez', jobTitle:'Founder / Fractional HR Tech Advisor',
+      industry:'SAP HR / SuccessFactors Consulting', email:'allison.arandez@rizing.com',
+      linkedin:'Connected (1st-degree)', source:'Executive Branding Outreach — Humans of ERP Network',
+      owner:'Airen Petalbert', priority:'Low', stage:'revisit', lastContactDate:today,
+      notes:'Revisit in 2027 — long-term nurture, not active right now.',
+      activity: seedActivity([
+        {type:'Lead Created', notes:'Lead added to the pipeline from outreach.', fromStage:'', toStage:'Hot Leads'},
+        {type:'Stage Change', notes:'Asked us to revisit in 2027 — categorized as Timing issue before a Revisit stage existed.', fromStage:'Hot Leads', toStage:'Closed Lost'},
+        {type:'Stage Change', notes:'Revisit stage added — moved here since this is a future revisit, not a genuine loss.', fromStage:'Closed Lost', toStage:'Revisit', nextAction:'Revisit in 2027.'},
+      ])
+    }),
+    mk({
+      company:'Tessera Labs', contact:'Jacques Maeda', jobTitle:'Solutions Architect',
+      industry:'Technology Solutions', email:'jkmaeda@gmail.com',
+      linkedin:'Connected (1st-degree)', source:'Executive Branding Outreach — Humans of ERP Network',
+      owner:'Airen Petalbert', priority:'Low', stage:'lost', lastContactDate:today,
+      lostReason:'Not interested',
+      notes:'Declined the offer. Closed lost.',
+      activity: seedActivity([
+        {type:'Lead Created', notes:'Lead added to the pipeline from outreach.', fromStage:'', toStage:'Hot Leads'},
+        {type:'Stage Change', notes:'Declined the offer.', fromStage:'Hot Leads', toStage:'Closed Lost', nextAction:'No further action — declined.'},
+      ])
+    }),
+  ];
+}
+
+/* =============================================================================
+   STATE / STORAGE
+   ============================================================================= */
+let state = { leads: [] };
+let filters = { search:'', industry:'', owner:'', source:'', priority:'', stage:'',
+  followUp:'', meeting:'', sortBy:'', overdue:false, actionToday:false, upcomingMeetings:false, decisionSoon:false };
+let prospectFilters = { search:'', section:'', li:'', contactType:'' };
+let currentView = 'board';
+let dragLeadId = null;
+let pendingStageMove = null; // {leadId, newStage} while lost/won prompt is open
+
+function loadState(){
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if(raw){
+    try{ state = JSON.parse(raw); return; }catch(e){ /* fall through to seed */ }
+  }
+  state = { leads: seedLeads() };
+  saveState();
+}
+function saveState(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+function loadProspects(){
+  const raw = localStorage.getItem(PROSPECTS_KEY);
+  if(raw){ try{ return JSON.parse(raw); }catch(e){ /* fall through */ } }
+  localStorage.setItem(PROSPECTS_KEY, JSON.stringify(PROSPECTS_SEED));
+  return PROSPECTS_SEED;
+}
+let prospects = [];
+
+/* =============================================================================
+   UTILITIES
+   ============================================================================= */
+function uid(){ return (crypto.randomUUID ? crypto.randomUUID() : 'id-'+Date.now()+'-'+Math.random().toString(16).slice(2)); }
+function todayStr(){ const d=new Date(); return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()); }
+function pad(n){ return n<10 ? '0'+n : ''+n; }
+function addDays(dateStr, n){
+  const d = new Date(dateStr+'T00:00:00'); d.setDate(d.getDate()+n);
+  return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+}
+function fmtDate(dateStr){
+  if(!dateStr) return '—';
+  const d = new Date(dateStr+'T00:00:00');
+  return d.toLocaleDateString('en-AU',{day:'2-digit',month:'short',year:'numeric'});
+}
+function fmtMoney(n){
+  if(n===null || n===undefined || n==='') return 'TBC';
+  return '$'+Number(n).toLocaleString('en-AU');
+}
+function escapeHtml(s){
+  if(s===null||s===undefined) return '';
+  return String(s).replace(/[&<>"']/g, m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+}
+function actEntry(type, notes, fromStage, toStage, nextAction){
+  return { id:uid(), ts:Date.now(), type, notes:notes||'', fromStage:fromStage||'', toStage:toStage||'', nextAction:nextAction||'' };
+}
+function isClosedStage(stage){ return stage==='won' || stage==='lost'; }
+function leadDealValue(lead){
+  if(lead.stage==='won' && lead.won && lead.won.finalValue) return Number(lead.won.finalValue);
+  return lead.dealValue!==null && lead.dealValue!==undefined && lead.dealValue!=='' ? Number(lead.dealValue) : null;
+}
+function isFollowUpOverdue(lead){ return lead.followUpDate && lead.followUpDate < todayStr() && !isClosedStage(lead.stage); }
+function isDecisionOverdue(lead){ return lead.decisionDueDate && lead.decisionDueDate < todayStr() && !isClosedStage(lead.stage); }
+function lastActivityTs(lead){
+  if(lead.activity && lead.activity.length) return Math.max(...lead.activity.map(a=>a.ts));
+  return lead.updatedAt || lead.createdAt || 0;
+}
+
+/* =============================================================================
+   DASHBOARD
+   ============================================================================= */
+function renderDashboard(){
+  const leads = state.leads;
+  const active = leads.filter(l=>!isClosedStage(l.stage));
+  const countBy = key => leads.filter(l=>l.stage===key).length;
+  const won = leads.filter(l=>l.stage==='won');
+  const lost = leads.filter(l=>l.stage==='lost');
+  const pipelineValue = active.reduce((sum,l)=> sum + (leadDealValue(l)||0), 0);
+  const wonValue = won.reduce((sum,l)=> sum + (leadDealValue(l)||0), 0);
+  const winRate = (won.length+lost.length)>0 ? Math.round((won.length/(won.length+lost.length))*100) : 0;
+
+  const cards = [
+    {label:'Total Active Leads', value: active.length, cls:''},
+    {label:'Hot Leads', value: countBy('hot'), cls:'accent-hot'},
+    {label:'Revisit', value: countBy('revisit'), cls:'accent-purple'},
+    {label:'Meetings Booked', value: countBy('meeting'), cls:'accent-purple'},
+    {label:'Proposals Sent', value: countBy('proposal'), cls:'accent-purple'},
+    {label:'Decisions Due', value: countBy('decision'), cls:'accent-purple'},
+    {label:'Closed Won', value: won.length, cls:'accent-won'},
+    {label:'Closed Lost', value: lost.length, cls:'accent-lost'},
+    {label:'Total Pipeline Value', value: fmtMoney(pipelineValue), cls:'accent-purple'},
+    {label:'Total Won Value', value: fmtMoney(wonValue), cls:'accent-won'},
+    {label:'Win Rate', value: winRate+'%', cls:'accent-purple'},
+  ];
+  document.getElementById('dashGrid').innerHTML = cards.map(c=>`
+    <div class="dash-card ${c.cls}"><div class="label">${c.label}</div><div class="value">${c.value}</div></div>
+  `).join('');
+}
+
+/* =============================================================================
+   FILTER OPTIONS (industry / owner / source / stage selects populated from data)
+   ============================================================================= */
+function populateFilterOptions(){
+  const industries = [...new Set(state.leads.map(l=>l.industry).filter(Boolean))].sort();
+  const owners = [...new Set(state.leads.map(l=>l.owner).filter(Boolean))].sort();
+  const sources = [...new Set(state.leads.map(l=>l.source).filter(Boolean))].sort();
+
+  fillSelect('filterIndustry', industries, 'All Industries');
+  fillSelect('filterOwner', owners, 'All Owners');
+  fillSelect('filterSource', sources, 'All Sources');
+
+  const stageSel = document.getElementById('filterStage');
+  stageSel.innerHTML = '<option value="">All Stages</option>' + STAGES.map(s=>`<option value="${s.key}">${s.label}</option>`).join('');
+
+  fillDatalist('industryList', industries);
+  fillDatalist('sourceList', sources);
+  fillDatalist('ownerList', owners);
+}
+function fillSelect(id, values, allLabel){
+  const el = document.getElementById(id);
+  const current = el.value;
+  el.innerHTML = `<option value="">${allLabel}</option>` + values.map(v=>`<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join('');
+  el.value = current;
+}
+function fillDatalist(id, values){
+  document.getElementById(id).innerHTML = values.map(v=>`<option value="${escapeHtml(v)}">`).join('');
+}
+
+/* =============================================================================
+   FILTERING / SORTING for the board
+   ============================================================================= */
+function getFilteredLeads(){
+  const t = todayStr();
+  const weekAhead = addDays(t,7);
+  let leads = state.leads.slice();
+
+  if(filters.search){
+    const q = filters.search.toLowerCase();
+    leads = leads.filter(l => (l.company+' '+l.contact+' '+l.email).toLowerCase().includes(q));
+  }
+  if(filters.industry) leads = leads.filter(l=>l.industry===filters.industry);
+  if(filters.owner) leads = leads.filter(l=>l.owner===filters.owner);
+  if(filters.source) leads = leads.filter(l=>l.source===filters.source);
+  if(filters.priority) leads = leads.filter(l=>l.priority===filters.priority);
+  if(filters.stage) leads = leads.filter(l=>l.stage===filters.stage);
+
+  if(filters.followUp==='overdue') leads = leads.filter(isFollowUpOverdue);
+  else if(filters.followUp==='today') leads = leads.filter(l=>l.followUpDate===t);
+  else if(filters.followUp==='week') leads = leads.filter(l=>l.followUpDate && l.followUpDate>=t && l.followUpDate<=weekAhead);
+  else if(filters.followUp==='none') leads = leads.filter(l=>!l.followUpDate);
+
+  if(filters.meeting==='today') leads = leads.filter(l=>l.meetingDate===t);
+  else if(filters.meeting==='week') leads = leads.filter(l=>l.meetingDate && l.meetingDate>=t && l.meetingDate<=weekAhead);
+  else if(filters.meeting==='none') leads = leads.filter(l=>!l.meetingDate);
+
+  if(filters.overdue) leads = leads.filter(l=>isFollowUpOverdue(l) || isDecisionOverdue(l));
+  if(filters.actionToday) leads = leads.filter(l=>l.followUpDate===t || l.meetingDate===t || l.decisionDueDate===t);
+  if(filters.upcomingMeetings) leads = leads.filter(l=>l.meetingDate && l.meetingDate>=t && l.meetingDate<=weekAhead);
+  if(filters.decisionSoon) leads = leads.filter(l=>l.decisionDueDate && l.decisionDueDate>=t && l.decisionDueDate<=weekAhead && !isClosedStage(l.stage));
+
+  if(filters.sortBy==='company') leads.sort((a,b)=>a.company.localeCompare(b.company));
+  else if(filters.sortBy==='activity') leads.sort((a,b)=>lastActivityTs(b)-lastActivityTs(a));
+  else if(filters.sortBy==='value') leads.sort((a,b)=>(leadDealValue(b)||0)-(leadDealValue(a)||0));
+  else if(filters.sortBy==='decision') leads.sort((a,b)=>(a.decisionDueDate||'9999').localeCompare(b.decisionDueDate||'9999'));
+
+  return leads;
+}
+
+/* =============================================================================
+   BOARD RENDERING
+   ============================================================================= */
+function renderBoard(){
+  const leads = getFilteredLeads();
+  const board = document.getElementById('board');
+  const visibleStages = filters.stage ? STAGES.filter(s=>s.key===filters.stage) : STAGES;
+
+  board.innerHTML = visibleStages.map(stage=>{
+    const stageLeads = leads.filter(l=>l.stage===stage.key);
+    return `
+    <div class="column" data-stage="${stage.key}">
+      <div class="column-head head-${stage.key}">
+        <h3>${stage.label}</h3>
+        <span class="column-count">${stageLeads.length}</span>
+      </div>
+      <div class="column-body" data-stage="${stage.key}">
+        ${stageLeads.length ? stageLeads.map(cardHtml).join('') : '<div class="column-empty">No leads in this stage</div>'}
+      </div>
+    </div>`;
+  }).join('');
+
+  attachDnDHandlers();
+  attachCardHandlers();
+}
+
+function cardHtml(lead){
+  const overdueFollow = isFollowUpOverdue(lead);
+  const overdueDecision = isDecisionOverdue(lead);
+  const overdueAny = overdueFollow || overdueDecision;
+  const priorityCls = 'badge-'+lead.priority.toLowerCase();
+  const value = leadDealValue(lead);
+
+  const metaRows = [];
+  if(lead.stage==='meeting' || lead.meetingDate) metaRows.push(['Meeting', fmtDate(lead.meetingDate)]);
+  if(lead.followUpDate) metaRows.push(['Follow-up', fmtDate(lead.followUpDate), overdueFollow]);
+  if(lead.decisionDueDate) metaRows.push(['Decision Due', fmtDate(lead.decisionDueDate), overdueDecision]);
+  if(lead.lastContactDate) metaRows.push(['Last Contact', fmtDate(lead.lastContactDate)]);
+
+  const moveOptions = STAGES.filter(s=>s.key!==lead.stage).map(s=>`<option value="${s.key}">${s.label}</option>`).join('');
+
+  return `
+  <div class="lead-card card-${lead.stage} ${overdueAny?'overdue':''}" draggable="true" data-id="${lead.id}">
+    <div class="card-top">
+      <div>
+        <div class="card-company">${escapeHtml(lead.company)}</div>
+        <div class="card-contact">${escapeHtml(lead.contact)}</div>
+        <div class="card-jobtitle">${escapeHtml(lead.jobTitle)}${lead.industry ? ' · '+escapeHtml(lead.industry) : ''}</div>
+      </div>
+      <button class="card-menu-btn" data-open-detail="${lead.id}" title="Open lead">⋯</button>
+    </div>
+    <div class="card-badges">
+      <span class="badge ${priorityCls}">${lead.priority}</span>
+      ${lead.sample ? '<span class="badge badge-sample">Sample</span>' : ''}
+      ${overdueFollow ? '<span class="badge badge-overdue">Follow-up overdue</span>' : ''}
+      ${overdueDecision ? '<span class="badge badge-overdue">Decision overdue</span>' : ''}
+    </div>
+    <div class="card-meta">
+      ${metaRows.map(([k,v,bad])=>`<div class="row"><span class="k">${k}</span><span class="v ${bad?'overdue-text':''}">${v}</span></div>`).join('')}
+    </div>
+    ${lead.notes ? `<div class="card-notes">${escapeHtml(lead.notes)}</div>` : ''}
+    <div class="card-footer">
+      <span class="card-value">${fmtMoney(value)}</span>
+      <select class="move-select" data-move-id="${lead.id}">
+        <option value="">Move to…</option>
+        ${moveOptions}
+      </select>
+    </div>
+  </div>`;
+}
+
+/* =============================================================================
+   DRAG AND DROP  (desktop) + move-select dropdown (mobile / accessible fallback)
+   ============================================================================= */
+function attachDnDHandlers(){
+  document.querySelectorAll('.lead-card').forEach(card=>{
+    card.addEventListener('dragstart', e=>{
+      dragLeadId = card.dataset.id;
+      card.classList.add('dragging');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', card.dataset.id);
+    });
+    card.addEventListener('dragend', ()=>{ card.classList.remove('dragging'); dragLeadId=null; });
+  });
+
+  document.querySelectorAll('.column-body').forEach(col=>{
+    col.addEventListener('dragover', e=>{ e.preventDefault(); col.classList.add('drag-over'); });
+    col.addEventListener('dragleave', ()=>{ col.classList.remove('drag-over'); });
+    col.addEventListener('drop', e=>{
+      e.preventDefault();
+      col.classList.remove('drag-over');
+      const id = e.dataTransfer.getData('text/plain') || dragLeadId;
+      const newStage = col.dataset.stage;
+      if(id) changeStage(id, newStage);
+    });
+  });
+}
+function attachCardHandlers(){
+  document.querySelectorAll('[data-open-detail]').forEach(btn=>{
+    btn.addEventListener('click', e=>{ e.stopPropagation(); openDetailModal(btn.dataset.openDetail); });
+  });
+  document.querySelectorAll('.lead-card').forEach(card=>{
+    card.addEventListener('click', ()=> openDetailModal(card.dataset.id));
+  });
+  document.querySelectorAll('.move-select').forEach(sel=>{
+    sel.addEventListener('click', e=>e.stopPropagation());
+    sel.addEventListener('change', e=>{
+      e.stopPropagation();
+      const newStage = sel.value;
+      if(newStage) changeStage(sel.dataset.moveId, newStage);
+      sel.value='';
+    });
+  });
+}
+
+/* Central stage-change function: handles the Closed Lost / Closed Won side effects. */
+function changeStage(leadId, newStage){
+  const lead = state.leads.find(l=>l.id===leadId);
+  if(!lead || lead.stage===newStage) return;
+
+  if(newStage==='lost'){
+    pendingStageMove = {leadId, newStage};
+    document.getElementById('promptLostReason').value = '';
+    openOverlay('overlayLostPrompt');
+    return;
+  }
+  if(newStage==='won'){
+    pendingStageMove = {leadId, newStage};
+    document.getElementById('promptFinalValue').value = lead.dealValue || '';
+    document.getElementById('promptContractDate').value = todayStr();
+    document.getElementById('promptServiceSelected').value = '';
+    document.getElementById('promptImplementationDate').value = '';
+    openOverlay('overlayWonPrompt');
+    return;
+  }
+  applyStageChange(lead, newStage);
+}
+function applyStageChange(lead, newStage, extra){
+  const fromLabel = STAGE_MAP[lead.stage];
+  const toLabel = STAGE_MAP[newStage];
+  lead.activity.unshift(actEntry('Stage Change', (extra&&extra.note)||`Moved from ${fromLabel} to ${toLabel}.`, fromLabel, toLabel, (extra&&extra.nextAction)||''));
+  lead.stage = newStage;
+  lead.updatedAt = Date.now();
+  if(newStage!=='lost') lead.lostReason='';
+  saveState();
+  renderAll();
+}
+
+/* =============================================================================
+   ADD / EDIT LEAD MODAL
+   ============================================================================= */
+function openLeadForm(lead){
+  document.getElementById('leadFormTitle').textContent = lead ? 'Edit Lead' : 'Add New Lead';
+  const f = id => document.getElementById(id);
+  f('f_id').value = lead ? lead.id : '';
+  f('f_company').value = lead ? lead.company : '';
+  f('f_contact').value = lead ? lead.contact : '';
+  f('f_jobTitle').value = lead ? lead.jobTitle : '';
+  f('f_industry').value = lead ? lead.industry : '';
+  f('f_email').value = lead ? lead.email : '';
+  f('f_phone').value = lead ? lead.phone : '';
+  f('f_linkedin').value = lead ? lead.linkedin : '';
+  f('f_source').value = lead ? lead.source : '';
+  f('f_owner').value = lead ? lead.owner : '';
+  f('f_dealValue').value = lead && lead.dealValue!==null ? lead.dealValue : '';
+  f('f_priority').value = lead ? lead.priority : 'Medium';
+  f('f_stage').value = lead ? lead.stage : 'hot';
+  f('f_meetingDate').value = lead ? lead.meetingDate : '';
+  f('f_followUpDate').value = lead ? lead.followUpDate : '';
+  f('f_decisionDueDate').value = lead ? lead.decisionDueDate : '';
+  f('f_lastContactDate').value = lead ? lead.lastContactDate : todayStr();
+  f('f_notes').value = lead ? lead.notes : '';
+  f('f_lostReason').value = lead ? lead.lostReason : '';
+  f('f_finalValue').value = lead && lead.won ? lead.won.finalValue||'' : '';
+  f('f_contractDate').value = lead && lead.won ? lead.won.contractDate||'' : '';
+  f('f_serviceSelected').value = lead && lead.won ? lead.won.serviceSelected||'' : '';
+  f('f_implementationDate').value = lead && lead.won ? lead.won.implementationDate||'' : '';
+
+  toggleConditionalBlocks();
+  clearFormErrors();
+  populateFilterOptions();
+  openOverlay('overlayLeadForm');
+}
+function toggleConditionalBlocks(){
+  const stage = document.getElementById('f_stage').value;
+  document.getElementById('lostBlock').style.display = stage==='lost' ? 'block' : 'none';
+  document.getElementById('wonBlock').style.display = stage==='won' ? 'block' : 'none';
+}
+function clearFormErrors(){
+  document.querySelectorAll('#leadForm .field').forEach(f=>f.classList.remove('invalid'));
+}
+function validateLeadForm(){
+  clearFormErrors();
+  let valid = true;
+  const require = (id)=>{
+    const el = document.getElementById(id);
+    if(!el.value.trim()){ el.closest('.field').classList.add('invalid'); valid=false; }
+  };
+  require('f_company'); require('f_contact');
+  const email = document.getElementById('f_email');
+  if(!email.value.trim() || !/^\S+@\S+\.\S+$/.test(email.value.trim())){
+    email.closest('.field').classList.add('invalid'); valid=false;
+  }
+  if(document.getElementById('f_stage').value==='lost' && !document.getElementById('f_lostReason').value){
+    document.getElementById('f_lostReason').closest('.field').classList.add('invalid'); valid=false;
+  }
+  return valid;
+}
+function saveLeadFromForm(){
+  if(!validateLeadForm()) return;
+  const f = id => document.getElementById(id).value;
+  const id = f('f_id');
+  const isNew = !id;
+  const lead = isNew ? {
+    id: uid(), activity: [], sample:false, createdAt: Date.now()
+  } : state.leads.find(l=>l.id===id);
+  const prevStage = isNew ? null : lead.stage;
+
+  lead.company = f('f_company').trim();
+  lead.contact = f('f_contact').trim();
+  lead.jobTitle = f('f_jobTitle').trim();
+  lead.industry = f('f_industry').trim();
+  lead.email = f('f_email').trim();
+  lead.phone = f('f_phone').trim();
+  lead.linkedin = f('f_linkedin').trim();
+  lead.source = f('f_source').trim();
+  lead.owner = f('f_owner').trim();
+  lead.dealValue = f('f_dealValue')==='' ? null : Number(f('f_dealValue'));
+  lead.priority = f('f_priority');
+  lead.stage = f('f_stage');
+  lead.meetingDate = f('f_meetingDate');
+  lead.followUpDate = f('f_followUpDate');
+  lead.decisionDueDate = f('f_decisionDueDate');
+  lead.lastContactDate = f('f_lastContactDate');
+  lead.notes = f('f_notes');
+  lead.lostReason = lead.stage==='lost' ? f('f_lostReason') : '';
+  lead.won = {
+    finalValue: f('f_finalValue')==='' ? null : Number(f('f_finalValue')),
+    contractDate: f('f_contractDate'),
+    serviceSelected: f('f_serviceSelected'),
+    implementationDate: f('f_implementationDate'),
+  };
+  lead.updatedAt = Date.now();
+
+  if(isNew){
+    lead.activity.push(actEntry('Lead Created','Lead added to the pipeline.','', STAGE_MAP[lead.stage], ''));
+    state.leads.push(lead);
+  } else if(prevStage !== lead.stage){
+    lead.activity.unshift(actEntry('Stage Change', 'Updated via edit form.', STAGE_MAP[prevStage], STAGE_MAP[lead.stage], ''));
+  }
+
+  saveState();
+  closeOverlay('overlayLeadForm');
+  renderAll();
+}
+
+/* =============================================================================
+   LEAD DETAIL / ACTIVITY MODAL
+   ============================================================================= */
+let detailLeadId = null;
+function openDetailModal(id){
+  detailLeadId = id;
+  const lead = state.leads.find(l=>l.id===id);
+  if(!lead) return;
+  const value = leadDealValue(lead);
+
+  const rows = [
+    ['Job Title', escapeHtml(lead.jobTitle)||'—'],
+    ['Industry / Sector', escapeHtml(lead.industry)||'—'],
+    ['Email', escapeHtml(lead.email)||'—'],
+    ['Phone', escapeHtml(lead.phone)||'—'],
+    ['LinkedIn', escapeHtml(lead.linkedin)||'—'],
+    ['Lead Source', escapeHtml(lead.source)||'—'],
+    ['Assigned Owner', escapeHtml(lead.owner)||'—'],
+    ['Estimated Deal Value', fmtMoney(lead.dealValue)],
+    ['Meeting Date', fmtDate(lead.meetingDate)],
+    ['Follow-up Date', fmtDate(lead.followUpDate)],
+    ['Decision Due Date', fmtDate(lead.decisionDueDate)],
+    ['Last Contact Date', fmtDate(lead.lastContactDate)],
+    ['Priority', lead.priority],
+    ['Current Status', STAGE_MAP[lead.stage]],
+  ];
+  if(lead.stage==='lost') rows.push(['Lost Reason', escapeHtml(lead.lostReason)||'—']);
+  if(lead.stage==='won'){
+    rows.push(['Final Deal Value', fmtMoney(lead.won.finalValue)]);
+    rows.push(['Contract Date', fmtDate(lead.won.contractDate)]);
+    rows.push(['Service Selected', escapeHtml(lead.won.serviceSelected)||'—']);
+    rows.push(['Implementation Date', fmtDate(lead.won.implementationDate)]);
+  }
+
+  const activitySorted = lead.activity.slice().sort((a,b)=>b.ts-a.ts);
+
+  document.getElementById('detailBody').innerHTML = `
+    <div class="detail-header">
+      <div class="detail-title">
+        <h3>${escapeHtml(lead.company)} ${lead.sample?'<span class="badge badge-sample">Sample</span>':''}</h3>
+        <p>${escapeHtml(lead.contact)} · ${escapeHtml(lead.jobTitle)}</p>
+      </div>
+      <div>
+        <span class="badge badge-${lead.priority.toLowerCase()}">${lead.priority}</span>
+        <span class="pill">${STAGE_MAP[lead.stage]}</span>
+      </div>
+    </div>
+    <div class="detail-grid">
+      ${rows.map(([k,v])=>`<div class="row"><span class="k">${k}</span><span>${v}</span></div>`).join('')}
+    </div>
+    ${lead.notes ? `<div class="card-notes" style="max-height:none;">${escapeHtml(lead.notes)}</div>` : ''}
+
+    <div class="quick-actions">
+      <button class="btn btn-outline btn-sm" data-quick="completed">Mark Meeting Completed</button>
+      <button class="btn btn-outline btn-sm" data-quick="cancelled">Mark Meeting Cancelled</button>
+      <button class="btn btn-outline btn-sm" data-quick="rescheduled">Mark Meeting Rescheduled</button>
+    </div>
+
+    <div class="section-title">Activity &amp; Notes</div>
+    <div class="activity-add">
+      <div class="form-grid">
+        <div class="field"><label>Activity Type</label>
+          <select id="actType">
+            <option>Call</option><option>Email</option><option>LinkedIn Message</option>
+            <option>Meeting</option><option>Note</option><option>Follow-up Scheduled</option>
+          </select>
+        </div>
+        <div class="field"><label>Next Action</label><input id="actNextAction" placeholder="e.g. Send proposal Friday"></div>
+        <div class="field full"><label>Notes</label><textarea id="actNotes" placeholder="What happened / was discussed"></textarea></div>
+      </div>
+      <button class="btn btn-primary btn-sm" id="btnAddActivity" style="margin-top:8px;">+ Add Activity Note</button>
+    </div>
+
+    <ul class="activity-list">
+      ${activitySorted.length ? activitySorted.map(a=>`
+        <li class="activity-item">
+          <div class="a-top"><span>${escapeHtml(a.type)}</span><span class="a-date">${new Date(a.ts).toLocaleString('en-AU')}</span></div>
+          ${a.notes?`<div class="a-notes">${escapeHtml(a.notes)}</div>`:''}
+          ${a.fromStage||a.toStage?`<div class="a-stage">${escapeHtml(a.fromStage)||'—'} → ${escapeHtml(a.toStage)||'—'}</div>`:''}
+          ${a.nextAction?`<div class="a-next">Next: ${escapeHtml(a.nextAction)}</div>`:''}
+        </li>`).join('') : '<li class="hint">No activity logged yet.</li>'}
+    </ul>
+  `;
+
+  document.getElementById('btnAddActivity').addEventListener('click', ()=>{
+    const type = document.getElementById('actType').value;
+    const notes = document.getElementById('actNotes').value.trim();
+    const nextAction = document.getElementById('actNextAction').value.trim();
+    if(!notes && !nextAction) return;
+    lead.activity.unshift(actEntry(type, notes, '', '', nextAction));
+    lead.lastContactDate = todayStr();
+    lead.updatedAt = Date.now();
+    saveState();
+    renderAll();
+    openDetailModal(lead.id);
+  });
+  document.querySelectorAll('[data-quick]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const kind = btn.dataset.quick;
+      const labels = {completed:'Meeting Completed', cancelled:'Meeting Cancelled', rescheduled:'Meeting Rescheduled'};
+      lead.activity.unshift(actEntry(labels[kind], '', '', '', ''));
+      if(kind==='rescheduled'){
+        lead.meetingDate = '';
+        lead.stage = 'reschedule';
+      }
+      lead.updatedAt = Date.now();
+      saveState();
+      renderAll();
+      openDetailModal(lead.id);
+    });
+  });
+
+  openOverlay('overlayDetail');
+}
+
+/* =============================================================================
+   DELETE / DUPLICATE
+   ============================================================================= */
+function deleteLead(id){
+  if(!confirm('Delete this lead permanently? This cannot be undone.')) return;
+  state.leads = state.leads.filter(l=>l.id!==id);
+  saveState();
+  closeOverlay('overlayDetail');
+  renderAll();
+}
+function duplicateLead(id){
+  const lead = state.leads.find(l=>l.id===id);
+  if(!lead) return;
+  const copy = JSON.parse(JSON.stringify(lead));
+  copy.id = uid();
+  copy.company = lead.company + ' (Copy)';
+  copy.createdAt = Date.now();
+  copy.updatedAt = Date.now();
+  copy.activity = [actEntry('Lead Created', 'Duplicated from '+lead.company+'.', '', STAGE_MAP[copy.stage], '')];
+  state.leads.push(copy);
+  saveState();
+  renderAll();
+  openDetailModal(copy.id);
+}
+
+/* =============================================================================
+   EXPORT / IMPORT / CLEAR
+   ============================================================================= */
+function downloadFile(filename, content, mime){
+  const blob = new Blob([content], {type:mime});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function exportCSV(){
+  const cols = ['company','contact','jobTitle','industry','email','phone','linkedin','source','owner',
+    'dealValue','meetingDate','followUpDate','decisionDueDate','lastContactDate','priority','stage','lostReason','notes'];
+  const header = cols.join(',');
+  const rows = state.leads.map(l => cols.map(c=>csvCell(l[c])).join(','));
+  downloadFile('maintain-media-pipeline.csv', [header,...rows].join('\n'), 'text/csv');
+}
+function csvCell(v){
+  if(v===null||v===undefined) v='';
+  v = String(v).replace(/"/g,'""');
+  return /[",\n]/.test(v) ? `"${v}"` : v;
+}
+function exportJSON(){
+  downloadFile('maintain-media-pipeline.json', JSON.stringify(state, null, 2), 'application/json');
+}
+function importJSONFile(file){
+  const reader = new FileReader();
+  reader.onload = e=>{
+    let data;
+    try{ data = JSON.parse(e.target.result); }
+    catch(err){ alert('That file is not valid JSON.'); return; }
+    if(!data || !Array.isArray(data.leads)){ alert('This file does not look like a Maintain Media pipeline export (expected a "leads" array).'); return; }
+    const replace = confirm('Click OK to REPLACE all current leads with this file, or Cancel to MERGE (append as new leads).');
+    if(replace){
+      state = { leads: data.leads };
+    } else {
+      data.leads.forEach(l=>{ l.id = uid(); state.leads.push(l); });
+    }
+    saveState();
+    renderAll();
+  };
+  reader.readAsText(file);
+}
+
+/* =============================================================================
+   PROSPECTS LIST (read-only reference table sourced from the shortlist doc)
+   ============================================================================= */
+function liStatusClass(li){
+  const s = (li||'').toLowerCase();
+  if(s.includes('done')) return 'li-done';
+  if(s.includes('pending')) return 'li-pending';
+  if(s.includes('need')) return 'li-need';
+  return '';
+}
+function liStatusKey(li){
+  const s=(li||'').toLowerCase();
+  if(s.includes('done')) return 'done';
+  if(s.includes('pending')) return 'pending';
+  if(s.includes('need')) return 'need';
+  return 'other';
+}
+function populateProspectFilterOptions(){
+  const sections = [...new Set(prospects.map(p=>p.section))];
+  const sel = document.getElementById('prospectSectionFilter');
+  sel.innerHTML = '<option value="">All Batches / Tiers</option>' + sections.map(s=>`<option value="${escapeHtml(s)}">${escapeHtml(s)}</option>`).join('');
+}
+function getFilteredProspects(){
+  let rows = prospects.slice();
+  if(prospectFilters.search){
+    const q = prospectFilters.search.toLowerCase();
+    rows = rows.filter(p => (p.name+' '+p.role+' '+p.contact+' '+p.why+' '+p.notes).toLowerCase().includes(q));
+  }
+  if(prospectFilters.section) rows = rows.filter(p=>p.section===prospectFilters.section);
+  if(prospectFilters.li) rows = rows.filter(p=>liStatusKey(p.linkedin)===prospectFilters.li);
+  if(prospectFilters.contactType==='email') rows = rows.filter(p=>/@/.test(p.contact));
+  if(prospectFilters.contactType==='linkedin_only') rows = rows.filter(p=>!/@/.test(p.contact));
+  return rows;
+}
+function renderProspects(){
+  const rows = getFilteredProspects();
+  document.getElementById('prospectCount').textContent = `${rows.length} of ${prospects.length} prospects`;
+  document.getElementById('prospectsBody').innerHTML = rows.map(p=>`
+    <tr>
+      <td>${p.num}</td>
+      <td><strong>${escapeHtml(p.name)}</strong></td>
+      <td>${escapeHtml(p.role)}</td>
+      <td>${escapeHtml(p.contact)}</td>
+      <td>${escapeHtml(p.why)}</td>
+      <td class="${liStatusClass(p.linkedin)}">${escapeHtml(p.linkedin)}</td>
+      <td>${escapeHtml(p.notes)||'—'}</td>
+      <td><span class="pill">${escapeHtml(p.section.replace(/^Batch \d+ — /,'').replace(/^New — /,''))}</span></td>
+      <td><button class="btn btn-light btn-sm" data-promote="${p.num}">Promote to Pipeline</button></td>
+    </tr>
+  `).join('');
+
+  document.querySelectorAll('[data-promote]').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const p = prospects.find(x=>x.num===Number(btn.dataset.promote));
+      promoteProspect(p);
+    });
+  });
+}
+function promoteProspect(p){
+  const emailMatch = (p.contact.match(/[\w.+-]+@[\w-]+\.[\w.-]+/)||[])[0] || '';
+  const commaIdx = p.role.indexOf(',');
+  const jobTitle = commaIdx>-1 ? p.role.slice(0,commaIdx).trim() : p.role;
+  const company = commaIdx>-1 ? p.role.slice(commaIdx+1).trim() : '';
+  switchView('board');
+  openLeadForm(null);
+  document.getElementById('f_company').value = company || p.role;
+  document.getElementById('f_contact').value = p.name;
+  document.getElementById('f_jobTitle').value = jobTitle;
+  document.getElementById('f_email').value = emailMatch;
+  document.getElementById('f_linkedin').value = p.linkedin;
+  document.getElementById('f_source').value = 'Executive Branding Outreach — Humans of ERP Network';
+  document.getElementById('f_owner').value = 'Airen Petalbert';
+  document.getElementById('f_notes').value = [p.why, p.notes].filter(Boolean).join(' — ');
+  document.getElementById('f_lastContactDate').value = todayStr();
+}
+function exportProspectsCSV(){
+  const cols = ['num','name','role','contact','why','linkedin','notes','section'];
+  const header = cols.join(',');
+  const rows = prospects.map(p=>cols.map(c=>csvCell(p[c])).join(','));
+  downloadFile('maintain-media-prospects.csv', [header,...rows].join('\n'), 'text/csv');
+}
+
+/* =============================================================================
+   OVERLAY / MODAL HELPERS
+   ============================================================================= */
+function openOverlay(id){ document.getElementById(id).classList.add('open'); }
+function closeOverlay(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('[data-close]').forEach(btn=>{
+  btn.addEventListener('click', ()=> btn.closest('.overlay').classList.remove('open'));
+});
+document.querySelectorAll('.overlay').forEach(ov=>{
+  ov.addEventListener('click', e=>{ if(e.target===ov) ov.classList.remove('open'); });
+});
+document.querySelectorAll('[data-close-cancelmove]').forEach(btn=>{
+  btn.addEventListener('click', ()=>{ pendingStageMove=null; btn.closest('.overlay').classList.remove('open'); });
+});
+document.addEventListener('keydown', e=>{
+  if(e.key==='Escape') document.querySelectorAll('.overlay.open').forEach(ov=>ov.classList.remove('open'));
+});
+
+/* =============================================================================
+   VIEW SWITCHING (Pipeline Board vs Prospects List)
+   ============================================================================= */
+function switchView(view){
+  currentView = view;
+  document.querySelectorAll('.mm-tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.view===view));
+  document.getElementById('view-board').classList.toggle('active', view==='board');
+  document.getElementById('view-prospects').classList.toggle('active', view==='prospects');
+}
+
+/* =============================================================================
+   RENDER ALL
+   ============================================================================= */
+function renderAll(){
+  renderDashboard();
+  populateFilterOptions();
+  renderBoard();
+}
+
+/* =============================================================================
+   INIT
+   ============================================================================= */
+document.addEventListener('DOMContentLoaded', ()=>{
+  loadState();
+  prospects = loadProspects();
+  populateProspectFilterOptions();
+  renderAll();
+  renderProspects();
+
+  document.querySelectorAll('.mm-tab-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=> switchView(btn.dataset.view));
+  });
+
+  document.getElementById('btnAddLead').addEventListener('click', ()=> openLeadForm(null));
+  document.getElementById('f_stage').addEventListener('change', toggleConditionalBlocks);
+  document.getElementById('btnSaveLead').addEventListener('click', saveLeadFromForm);
+
+  document.getElementById('btnEditLead').addEventListener('click', ()=>{
+    const lead = state.leads.find(l=>l.id===detailLeadId);
+    closeOverlay('overlayDetail');
+    openLeadForm(lead);
+  });
+  document.getElementById('btnDeleteLead').addEventListener('click', ()=> deleteLead(detailLeadId));
+  document.getElementById('btnDuplicateLead').addEventListener('click', ()=> duplicateLead(detailLeadId));
+
+  // Lost reason prompt
+  document.getElementById('btnConfirmLostReason').addEventListener('click', ()=>{
+    const reason = document.getElementById('promptLostReason').value;
+    if(!reason){ alert('Please select a lost reason.'); return; }
+    const lead = state.leads.find(l=>l.id===pendingStageMove.leadId);
+    lead.lostReason = reason;
+    applyStageChange(lead, 'lost', {note:'Lost reason: '+reason});
+    pendingStageMove = null;
+    closeOverlay('overlayLostPrompt');
+  });
+
+  // Won details prompt
+  document.getElementById('btnConfirmWonPrompt').addEventListener('click', ()=>{
+    const lead = state.leads.find(l=>l.id===pendingStageMove.leadId);
+    lead.won = {
+      finalValue: document.getElementById('promptFinalValue').value ? Number(document.getElementById('promptFinalValue').value) : lead.dealValue,
+      contractDate: document.getElementById('promptContractDate').value,
+      serviceSelected: document.getElementById('promptServiceSelected').value,
+      implementationDate: document.getElementById('promptImplementationDate').value,
+    };
+    applyStageChange(lead, 'won', {note:'Deal closed won.'});
+    pendingStageMove = null;
+    closeOverlay('overlayWonPrompt');
+  });
+  document.getElementById('btnSkipWonPrompt').addEventListener('click', ()=>{
+    const lead = state.leads.find(l=>l.id===pendingStageMove.leadId);
+    applyStageChange(lead, 'won', {note:'Deal closed won (details not yet recorded).'});
+    pendingStageMove = null;
+    closeOverlay('overlayWonPrompt');
+  });
+
+  // Toolbar: search / filters / sort
+  document.getElementById('searchInput').addEventListener('input', e=>{ filters.search=e.target.value; renderBoard(); });
+  ['filterIndustry','filterOwner','filterSource','filterPriority','filterStage','filterFollowUp','filterMeeting','sortBy'].forEach(id=>{
+    document.getElementById(id).addEventListener('change', e=>{
+      const key = {filterIndustry:'industry',filterOwner:'owner',filterSource:'source',filterPriority:'priority',
+        filterStage:'stage',filterFollowUp:'followUp',filterMeeting:'meeting',sortBy:'sortBy'}[id];
+      filters[key] = e.target.value;
+      renderBoard();
+    });
+  });
+  document.getElementById('btnResetFilters').addEventListener('click', ()=>{
+    filters = { search:'', industry:'', owner:'', source:'', priority:'', stage:'', followUp:'', meeting:'', sortBy:'',
+      overdue:false, actionToday:false, upcomingMeetings:false, decisionSoon:false };
+    document.getElementById('searchInput').value='';
+    document.querySelectorAll('.filter-select').forEach(s=>s.value='');
+    document.querySelectorAll('.toggle-chip').forEach(c=>c.classList.remove('on'));
+    renderBoard();
+  });
+  document.querySelectorAll('.toggle-chip').forEach(chip=>{
+    chip.addEventListener('click', ()=>{
+      const key = chip.dataset.toggle;
+      filters[key] = !filters[key];
+      chip.classList.toggle('on', filters[key]);
+      renderBoard();
+    });
+  });
+
+  // Export / Import / Clear
+  document.getElementById('btnExportCSV').addEventListener('click', exportCSV);
+  document.getElementById('btnExportJSON').addEventListener('click', exportJSON);
+  document.getElementById('btnImport').addEventListener('click', ()=> document.getElementById('importFile').click());
+  document.getElementById('importFile').addEventListener('change', e=>{
+    if(e.target.files[0]) importJSONFile(e.target.files[0]);
+    e.target.value = '';
+  });
+  document.getElementById('btnClearAll').addEventListener('click', ()=>{
+    document.getElementById('clearConfirmInput').value='';
+    document.getElementById('btnConfirmClear').disabled = true;
+    openOverlay('overlayClearConfirm');
+  });
+  document.getElementById('clearConfirmInput').addEventListener('input', e=>{
+    document.getElementById('btnConfirmClear').disabled = e.target.value.trim().toUpperCase() !== 'DELETE';
+  });
+  document.getElementById('btnConfirmClear').addEventListener('click', ()=>{
+    localStorage.removeItem(STORAGE_KEY);
+    state = { leads: [] };
+    saveState();
+    closeOverlay('overlayClearConfirm');
+    renderAll();
+  });
+
+  // Prospects list toolbar
+  document.getElementById('prospectSearch').addEventListener('input', e=>{ prospectFilters.search=e.target.value; renderProspects(); });
+  document.getElementById('prospectSectionFilter').addEventListener('change', e=>{ prospectFilters.section=e.target.value; renderProspects(); });
+  document.getElementById('prospectLiFilter').addEventListener('change', e=>{ prospectFilters.li=e.target.value; renderProspects(); });
+  document.getElementById('prospectEmailFilter').addEventListener('change', e=>{ prospectFilters.contactType=e.target.value; renderProspects(); });
+  document.getElementById('btnResetProspectFilters').addEventListener('click', ()=>{
+    prospectFilters = { search:'', section:'', li:'', contactType:'' };
+    document.getElementById('prospectSearch').value='';
+    document.getElementById('prospectSectionFilter').value='';
+    document.getElementById('prospectLiFilter').value='';
+    document.getElementById('prospectEmailFilter').value='';
+    renderProspects();
+  });
+  document.getElementById('btnExportProspectsCSV').addEventListener('click', exportProspectsCSV);
+});
+</script>
+</body>
+</html>
