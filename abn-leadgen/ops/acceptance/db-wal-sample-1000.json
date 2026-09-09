@@ -1,0 +1,826 @@
+{
+  "command": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\.venv\\Scripts\\python.exe ops/db_wal_sample.py --rows 1000 --output ops/acceptance/db-wal-sample-1000.json",
+  "started_at": "2026-09-08T14:22:18.128480+00:00",
+  "finished_at": "2026-09-08T14:23:55.151148+00:00",
+  "git_revision": "40b9a016d67ddbe075b6114e630b672e722d5eef",
+  "working_tree": "shared uncommitted implementation; revision alone does not identify source",
+  "script_sha256": "7eeca06fe1901f047825872eb629deb04e5d3bceeb670615c865fc67214495d1",
+  "uv_lock_sha256": "c7c7a58208f93368d2050b3a75daed625e5bacda8a241b9be56213f6e9552b30",
+  "python": "3.12.12",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "postgresql": "PostgreSQL 16.15, compiled by Visual C++ build 1944, 64-bit",
+  "schema": "abr_test_b5e8119d7a1344148fbfcfab5ea0e0c9",
+  "migrations": [
+    {
+      "name": "001_foundation.sql",
+      "digest": "d7ef3c5b0797930a6cd703e9522178a1be7527f5ed976653e4af7aafba46f84e"
+    },
+    {
+      "name": "002_workflows.sql",
+      "digest": "ba3a840dd78a1df0ce588f8af0511ff7923d9c206170463d865df2e9e4299ee3"
+    },
+    {
+      "name": "003_sources.sql",
+      "digest": "6715f3bfbb0516eb5431e81fbc20c0bfcbf27c128cf62768539670cc900ea09e"
+    },
+    {
+      "name": "004_evidence_hardening.sql",
+      "digest": "42667a604b31737303aba4bd4eaeed334464fcc316994c03303129e5eb34f999"
+    },
+    {
+      "name": "005_source_delivery.sql",
+      "digest": "9b4fb82e9449bcebae726bde42f9ae22c9fa7759cf0a5b41a556f4c8feed5633"
+    },
+    {
+      "name": "006_crm_dispatch.sql",
+      "digest": "d97b423cd0ff5a98115ec4a64ae1e869887f249e3bda5af25b2406f66655b657"
+    },
+    {
+      "name": "007_retention_and_consent.sql",
+      "digest": "57f7384d8d116840f2749f740e1906a8aee6c7d98d3e440e92bb79bdcdf710bd"
+    },
+    {
+      "name": "008_source_restrictions.sql",
+      "digest": "2cb64cb6f892ceb8a019050c2dd2ef4e2cea3ae9fe7562d9bd3f60b409a4f884"
+    },
+    {
+      "name": "009_signal_names.sql",
+      "digest": "af606aa56584bc65da33fa08ec87f453f611d7fc7e1b5b81b1f9b2c9c7697624"
+    },
+    {
+      "name": "010_assignments.sql",
+      "digest": "568cef31237864ca1b7a90789d84f63d9b59811b001a0ea0ff3aa933f5dbfb07"
+    },
+    {
+      "name": "011_artifact_locations.sql",
+      "digest": "242b978b11e575eef9a31ec6113af4db1ef10543f55d95dcea060e56e1c28edc"
+    },
+    {
+      "name": "012_report_artifacts.sql",
+      "digest": "7a473814bb23068ad5f2b574736cfbb8f6b49fd4f794e52e570bf327656e87d2"
+    },
+    {
+      "name": "013_retention_minimisation.sql",
+      "digest": "fbae1a0a518b39b37a831aaae77eb343790e9891978a9cb65cc7af19004b48d2"
+    },
+    {
+      "name": "014_reviewed_merge.sql",
+      "digest": "9fbae0c86097ad75f530dca94d9bc66611179dd5b028330a9349354165bf74e7"
+    },
+    {
+      "name": "015_activity_correction.sql",
+      "digest": "851ba88e8ac019fa7e2e030a51d7361f98c7399d586c31556a44bda80e268052"
+    },
+    {
+      "name": "016_metric_sequence.sql",
+      "digest": "9fd0c75a4943e3d2eb6f5c96b12e838404a626eff3702b90e2b1eb4d12e32c8d"
+    },
+    {
+      "name": "017_enrichment_attempts.sql",
+      "digest": "0f707c19ca466182aff62778828f10ea8d0b9398682df9cae692fc519f7f8b59"
+    },
+    {
+      "name": "018_enrichment_retention.sql",
+      "digest": "583b65b6750077a8c91ac65a50d525a1c90f70cbe553accc5aedbaeaf26bd7f2"
+    }
+  ],
+  "sample_leads": 1000,
+  "sample_shape": "one policy; per lead: canonical group, QBCC source link, queue, identity, contact, collection provenance, licence, express basis and audit controls via production service methods",
+  "insert_elapsed_seconds": 93.09278610000183,
+  "table_sizes_before": [
+    {
+      "table_name": "abr_event",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "action_intent",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "alarm_outbox",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "artifact_manifest",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "audit_event",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "budget_month",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "budget_reservation",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "business_group",
+      "table_bytes": 0,
+      "index_bytes": 8192,
+      "total_bytes": 8192
+    },
+    {
+      "table_name": "candidate_queue",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "collection_provenance",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "contact_basis",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "contact_record",
+      "table_bytes": 8192,
+      "index_bytes": 32768,
+      "total_bytes": 40960
+    },
+    {
+      "table_name": "crm_identity",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "crm_outbox",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "deletion_job",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "dnc_wash",
+      "table_bytes": 8192,
+      "index_bytes": 24576,
+      "total_bytes": 32768
+    },
+    {
+      "table_name": "domain_identity",
+      "table_bytes": 8192,
+      "index_bytes": 24576,
+      "total_bytes": 32768
+    },
+    {
+      "table_name": "enrichment_attempt",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "enrichment_operation",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "fixture_crm_record",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "group_merge",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "idempotency_receipt",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "lead_entity",
+      "table_bytes": 8192,
+      "index_bytes": 24576,
+      "total_bytes": 32768
+    },
+    {
+      "table_name": "lead_source_link",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "licence_review",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "operator_activity",
+      "table_bytes": 8192,
+      "index_bytes": 24576,
+      "total_bytes": 32768
+    },
+    {
+      "table_name": "outcome_event",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "pipeline_run",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "policy",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "propagation_outbox",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "qbcc_event",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "release_gate",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "relevance_assessment",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "restore_receipt",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "restricted_evidence_archive",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "retained_event_metric",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "retention_hold",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "schema_migration",
+      "table_bytes": 16384,
+      "index_bytes": 16384,
+      "total_bytes": 32768
+    },
+    {
+      "table_name": "source_content",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "source_cursor",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "source_observation",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "source_promotion",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "source_snapshot",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    },
+    {
+      "table_name": "suppression_alias",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "suppression_event",
+      "table_bytes": 8192,
+      "index_bytes": 32768,
+      "total_bytes": 40960
+    },
+    {
+      "table_name": "system_state",
+      "table_bytes": 16384,
+      "index_bytes": 16384,
+      "total_bytes": 32768
+    },
+    {
+      "table_name": "unsubscribe_token",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "wash_batch",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "worklist",
+      "table_bytes": 0,
+      "index_bytes": 16384,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "worklist_assignment",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384
+    },
+    {
+      "table_name": "worklist_row",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576
+    }
+  ],
+  "table_sizes_after": [
+    {
+      "table_name": "abr_event",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "action_intent",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "alarm_outbox",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "artifact_manifest",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "audit_event",
+      "table_bytes": 458752,
+      "index_bytes": 147456,
+      "total_bytes": 606208,
+      "row_count": 3000,
+      "growth_bytes": 589824
+    },
+    {
+      "table_name": "budget_month",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "budget_reservation",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "business_group",
+      "table_bytes": 81920,
+      "index_bytes": 57344,
+      "total_bytes": 139264,
+      "row_count": 1000,
+      "growth_bytes": 131072
+    },
+    {
+      "table_name": "candidate_queue",
+      "table_bytes": 294912,
+      "index_bytes": 147456,
+      "total_bytes": 442368,
+      "row_count": 1000,
+      "growth_bytes": 417792
+    },
+    {
+      "table_name": "collection_provenance",
+      "table_bytes": 950272,
+      "index_bytes": 147456,
+      "total_bytes": 1097728,
+      "row_count": 1000,
+      "growth_bytes": 1073152
+    },
+    {
+      "table_name": "contact_basis",
+      "table_bytes": 663552,
+      "index_bytes": 98304,
+      "total_bytes": 761856,
+      "row_count": 1000,
+      "growth_bytes": 737280
+    },
+    {
+      "table_name": "contact_record",
+      "table_bytes": 663552,
+      "index_bytes": 385024,
+      "total_bytes": 1048576,
+      "row_count": 1000,
+      "growth_bytes": 1007616
+    },
+    {
+      "table_name": "crm_identity",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "crm_outbox",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "deletion_job",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "dnc_wash",
+      "table_bytes": 8192,
+      "index_bytes": 24576,
+      "total_bytes": 32768,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "domain_identity",
+      "table_bytes": 663552,
+      "index_bytes": 188416,
+      "total_bytes": 851968,
+      "row_count": 1000,
+      "growth_bytes": 819200
+    },
+    {
+      "table_name": "enrichment_attempt",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "enrichment_operation",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "fixture_crm_record",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "group_merge",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "idempotency_receipt",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "lead_entity",
+      "table_bytes": 565248,
+      "index_bytes": 204800,
+      "total_bytes": 770048,
+      "row_count": 1000,
+      "growth_bytes": 737280
+    },
+    {
+      "table_name": "lead_source_link",
+      "table_bytes": 303104,
+      "index_bytes": 204800,
+      "total_bytes": 507904,
+      "row_count": 1000,
+      "growth_bytes": 483328
+    },
+    {
+      "table_name": "licence_review",
+      "table_bytes": 278528,
+      "index_bytes": 98304,
+      "total_bytes": 376832,
+      "row_count": 1000,
+      "growth_bytes": 352256
+    },
+    {
+      "table_name": "operator_activity",
+      "table_bytes": 8192,
+      "index_bytes": 24576,
+      "total_bytes": 32768,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "outcome_event",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "pipeline_run",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "policy",
+      "table_bytes": 16384,
+      "index_bytes": 16384,
+      "total_bytes": 32768,
+      "row_count": 1,
+      "growth_bytes": 16384
+    },
+    {
+      "table_name": "propagation_outbox",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "qbcc_event",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "release_gate",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "relevance_assessment",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "restore_receipt",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "restricted_evidence_archive",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "retained_event_metric",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "retention_hold",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "schema_migration",
+      "table_bytes": 16384,
+      "index_bytes": 16384,
+      "total_bytes": 32768,
+      "row_count": 18,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "source_content",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "source_cursor",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "source_observation",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "source_promotion",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "source_snapshot",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "suppression_alias",
+      "table_bytes": 180224,
+      "index_bytes": 147456,
+      "total_bytes": 327680,
+      "row_count": 1000,
+      "growth_bytes": 311296
+    },
+    {
+      "table_name": "suppression_event",
+      "table_bytes": 8192,
+      "index_bytes": 32768,
+      "total_bytes": 40960,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "system_state",
+      "table_bytes": 704512,
+      "index_bytes": 16384,
+      "total_bytes": 720896,
+      "row_count": 3,
+      "growth_bytes": 688128
+    },
+    {
+      "table_name": "unsubscribe_token",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "wash_batch",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "worklist",
+      "table_bytes": 0,
+      "index_bytes": 16384,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "worklist_assignment",
+      "table_bytes": 8192,
+      "index_bytes": 8192,
+      "total_bytes": 16384,
+      "row_count": 0,
+      "growth_bytes": 0
+    },
+    {
+      "table_name": "worklist_row",
+      "table_bytes": 8192,
+      "index_bytes": 16384,
+      "total_bytes": 24576,
+      "row_count": 0,
+      "growth_bytes": 0
+    }
+  ],
+  "db_growth_bytes": 7364608,
+  "db_growth_bytes_per_lead": 7364.608,
+  "wal_start_lsn": "0/37042068",
+  "wal_end_lsn": "0/3B9F0B20",
+  "wal_global_interval_bytes": 77261496,
+  "wal_global_interval_bytes_per_lead": 77261.496,
+  "wal_scope": "cluster-wide insert LSN interval includes concurrent agents/checkpoints; upper bound for this sample's generated WAL, not isolated attributable WAL or retained WAL disk usage; migration and cleanup excluded",
+  "db_projection_factor": 2,
+  "db_projected_bytes_per_lead_at_2x": 14729.216,
+  "wal_projected_bytes_per_lead_at_2x": 154522.992,
+  "limits": [
+    "1000-row maximum sample; no 20.5M PostgreSQL duplicate",
+    "append-only history, outcome/worklist/CRM volume and retained WAL need separate workload bounds",
+    "encrypted synthetic fixture payload lengths are not an upper bound for every future real record",
+    "no host certification, production capacity admission or full-register runtime claim"
+  ],
+  "full_scale_certified": false,
+  "schema_cleanup": "complete"
+}

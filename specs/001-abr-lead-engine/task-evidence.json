@@ -1,0 +1,934 @@
+{
+  "spec_version": "4.0",
+  "scope": "Completed local engineering tasks; no production approval implied",
+  "verified_tree_sha256": "3c2ba7ed46ead9fdf8dc3476f9b6f85159791f2238f6c02a6b1ada573e7f16ae",
+  "checked_at": "2026-09-09T01:21:32.126327+00:00",
+  "tasks": {
+    "T001": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T001 | Local done | Python3.12.12 package, CLI, `.python-version`, exact `uv.lock`. Root executed frozen install into a new task-local environment plus configuration validation; `clean-install-b49ced2ba0264af589161c529a492238.json` records passed status/command/lock/log hashes. Hosted CI execution remains separate. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T002": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T002 | Local done | `ops/compose.test.yaml`, native task-local PG16, schema-per-test `tests/conftest.py`, non-loopback socket guard and strict fixture DB/credential settings. Actual PG tests execute; no remote fixture database is accepted. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T003": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T003 | Local done | Closed Pydantic `config.py`, fixture YAML, capability defaults off, redacted CLI errors, explicit live key requirements. README documents configuration and the separate native backup binary override. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T004": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T004 | Local done | `ops/decisions.md` records absent legacy extractor/corpus, synthetic rules and production blocker without claiming30 recovered rules. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T005": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T005 | Local done | Foundation plus hardening migrations implement current identities, provenance, tri-state/express evidence and deferred composite constraints; actual service insert paths and acceptance matrix exercise them. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T006": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T006 | Local done | Workflows and subsequent migrations persist budget/queue/worklist/outbox/audit/action IDs, checked states and optimistic revisions; recovery/concurrency tests use PostgreSQL. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T007": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T007 | Local done after final verification | Initial audit found the explicit FK negative matrix missing. Root added `test_acceptance_matrix.py`: actual deferred wrong-contact/channel/lead/domain-identity and first-provenance failures. Reported focused result11 passed46.24s includes this matrix and T012/T026 cases. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T008": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T008 | Local done | JWT actor/scopes, role/assignment checks, body limits, idempotency receipts, closed errors and safe failure recording in auth/API/service. API auth, altered-key-body, rate-lane and assignment regressions execute. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T009": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T009 | Local done | Persisted encrypted key custody, distinct key material, versioned alias tokens and lookup-only prior keys; erasure/rotation/reload/retirement tests and native restore receipt. Real secret-manager/AU custody remains G3. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T010": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T010 | Local done | `compliance/policy.py`, release-gate DB records and service checks refuse missing/expired capability evidence. Human policy/role checks are implemented; real approvals intentionally absent. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T011": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T011 | Local done | Integer budget reservation/settlement verifies dated price/tax/FX/contingency, idempotent operation and original reservation month. Durable enrichment worker integrates reservations before provider calls. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T012": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T012 | Local done after final verification | Concurrent near-cap/uncertain cases plus new actual Brisbane rollover, old-month settlement and cap-zero regressions in `test_acceptance_matrix.py`; focused matrix result above. Original test named crossmonth alone had not crossed months; this gap was corrected. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T013": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T013 | Local done | Release-gates ledger has explicit scope/owner/evidence/review fields and pending G1\u00e2\u20ac\u201cG7 approvals. Creating pending records is the deliverable; obtaining approval is T058/T065. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T014": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T014 | Local done | UTF16LE `tests/fixtures/qbcc/synthetic_contractors.csv` and parser tests cover category collapse, missing/shared identifiers, scalar conflicts and malformed geography with semantic counts. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T015": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T015 | Local done, fixture contract | `ingest/qbcc.py` validates/collapses/quarantines and produces baseline/backlog/category/status observations; source age remains unknown when publisher metadata is unavailable. Actual source contract is external pending. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T016": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T016 | Local done | `qualify/identity.py`, canonical family/service methods and reviewed merge API use reviewed evidence, atomic restriction union and prevent automatic shared-endpoint merges. Merge, cancellation-family and evidence-retention regressions recorded. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T017": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T017 | Local done after final verification | Queue fairness/order/oldest10/60-cap/eight-week expiry and event-only reactivation exist. Audit found promised YAML missing; source owner added closed exact-v4 qualification/scoring YAML and propagated rule version/hash. Owner reports54 focused tests passed27.80s including960 score combinations, plus2 DB version cases passed6.56s; Ruff/mypy8 source files clean. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T018": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T018 | Local done | `test_crawl_safety.py` exercises unsafe DNS/private/mixed-IP/rebinding/redirect/robots cases before transport, plus pinned peer/SNI and deadline constraints. Synthetic transports do not certify deployed host egress. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T019": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T019 | Local done, adapter boundary | Deterministic at-most-three query generation and exact identifier/reviewer corroboration primitives exist in `enrich/identity.py`, with positive/negative tests and service evidence enforcement. Live SERP adapter/account and real result execution remain disabled. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T020": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T020 | Local done | Static bounded crawler enforces deadline/size/page/redirect/request/domain-throttle and robots/public-IP checks; real transport boundary tests cover numeric-IP pinning, peer verification and TLS validation. No production crawling was performed. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T021": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T021 | Local done, adapter boundary | Endpoint normalization, single deterministic eligible-email choice and400-character sourced static positioning helper plus service capture/provenance requirements are tested. Live verification provider and its result mapping remain gated; synthetic worker does not establish a real deliverability receipt. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T022": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T022 | Local done | Durable worker/migrations017/018/020 persist lease/stage/operation/budget receipts, cooldown and erased-family identity. Independent worker/retention review tested blocked eligibility, missing/expired stage evidence, uncertainty and no repayment. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T023": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T023 | Local done | Reviewer-only permission route and `Service.basis`, monotonic sequence/current evidence selection, explicit express scope/withdrawal validation; actual DB positive and missing/future/withdrawn/unknown tests. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T024": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T024 | Local done, fixture receipt contract | `compliance/wash.py` manual batch import and service licence review validate batch/member/content/account/time observations atomically. Native provider receipt format/account is explicitly not certified. Latest observation regression added under T026. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T025": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T025 | Local done | Current `Service.gate` checks exact identity, freshness, basis, licence, verification/wash, policy, suppression and safe expiry/reasons. Real DB-to-report positive and quarantine tests close observed projection defects. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T026": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T026 | Local done after final verification | Existing allowed/blocked phone/email, expiry and200-to60 fairness tests plus new latest-listed/error timestamp and equal-time/later-import cases in `test_acceptance_matrix.py`. New matrix reported11 passed46.24s. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T027": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T027 | Local done | Escaped branded private HTML/MD/CSV, immutable complete row schema and actual360x800 browser review. Browser found and root fixed generated-at ordering; DB-to-renderer regression proves allowed contact visibility. `browser-review.md` records focused keyboard/overflow check, not full WCAG certification. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T028": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T028 | Local done for tested orderings | Actual suppression-first/consumption-first DB paths, stale opt-out write, alias/endpoint future matching and concurrent CRM provider/suppression tests. Unavailable authority remains fail closed; an independent production outage drill is not claimed. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T029": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T029 | Local done, fixture downstream scope | Synchronous durable suppression, reason-specific restrictions, reviewed cancellation resolution and intent invalidation are implemented. Audit found missing propagation consumer; `ops/propagation.py`/migration023/CLI now close the fixture gap with7 passing PG tests and a4.637317-second verified CLI stop. `propagation-review.md` records root's draft fixes and contract limits. Server commit-ack latency remains unknown; real Sheets/GHL60s propagation is not certified. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T030": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T030 | Local done | Authenticated suppression API and narrow token unsubscribe POST utility, durable idempotent receipts and endpoint-free responses. Anonymous utility is not a general data/read API. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T031": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T031 | Local done | Reviewer evidence-bound email relevance, phone script/wash branch, versioned single-use intents and dispatch-result timing under authority; tests cover forged/stale data and dispatch/suppression orderings without claiming recall. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T032": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T032 | Local done | IANA timezone/locality/holiday coverage and permitted calling windows, licence expiry and independent invitation policy; unit and actual phone gate cases. Real holiday/script approval remains G4. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T033": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T033 | Local done, local deletion scope | Finite DB/artifact retention, selected evidence/holds, one-way merge evidence erasure, minimal metrics, quarantine ledger replay and backup lifetime planning exist and are tested. External Sheet/CRM/backups deletion completion requires separate receipts. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T034": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T034 | Local done, fixture restore scope | Actual erasure/key/alias retention and native PG16 dump/restore ledger replay, before/after backup restrictions and tombstone cases; action gate ordering in control tests. Quarantine is deliberately not automatically released after financial/key history uncertainty. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T035": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T035 | Local done | Synthetic ABR baseline/change/recompression/repartition/same-date/unsafe-generation/XML fixtures and generated fault cases, including absent GST and simultaneous events. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T036": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T036 | Local done after new final verification, injected contract | Closure audit found the missing composition. `ingest/discovery.py` now takes an explicit closed publisher mapping and injected bounded metadata/HTTP adapters, downloads the complete inventory with verified resume, rereads metadata before real archive ingest, checks inner generation and writes an exclusive manifest. Root and source owner reviewed it; source review found metadata-response validator absence, now explicitly recorded unavailable.17 discovery plus41 source tests passed58/58 in4.52s; Ruff/mypy clean. Actual publisher mapping, metadata response headers, polling installation and live smoke remain T053/T058/T065; this adds no live enablement. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T037": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T037 | Local done after latest focused/final checks | Hardened namespace parser, bounded Arrow and immutable source validation. Review found unconnected publication canary; source owner added weighted fill/schema comparison before promotion with real Parquet verification and positive/negative PG test. Latest focused result4 passed15.80s; final combination is root-owned. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T038": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T038 | Local done for local storage lifecycle | Exact mapped-label/uncompressed-member identity, exclusive manifest writes/readback, ownership metadata and current no-op/same-day/A\u00e2\u20ac\u201cB\u00e2\u20ac\u201cA/parser rebaseline tests. Real encrypted AU object-upload provider remains an external deployment gate. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T039": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T039 | Local done | Full-set materialised DuckDB events, exclusive transition rules, disappearance and empty/forged-diff rejection. Adaptive range partition tests plus actual full output benchmark exist;60s performance is not claimed. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T040": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T040 | Local done, synthetic mode | Closed deterministic YAML rule loader, sorted BN/MAIN/TRD priority, OTN exclusion, literal provenance/hash and explicit production corpus evidence gate. Tests synthesize controlled rule sets; production classification remains disabled. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T041": {
+      "state": "pending",
+      "scope": "Pending: recover the actual legacy 30-rule corpus or obtain an approved replacement and 100-record precision review.",
+      "review": "| T041 | External pending | Actual legacy30-rule corpus or approved replacement and100-record stratified review do not exist. Fixture rule tests cannot check this box. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": []
+    },
+    "T042": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T042 | Local done | Completed-month status-age proxy with end-of-month clamping, future exclusion, ABR tiers and cautious signal wording; units verify no business-creation/turnover implication. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T043": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T043 | Local done | Atomic source promotion/cursor CAS, OS/session/source locks, full-register Parquet authority, pre-write artifact ownership and staged recovery; actual PostgreSQL/process lock/fault tests. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T044": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T044 | Local done, fixture contract | Source failure boundaries/rollback, source-specific locks, parser rebaseline, A\u00e2\u20ac\u201cB\u00e2\u20ac\u201cA recurrence and deterministic classifier tests are distributed across recovery/unit/pipeline suites. The three revised alarm assertions passed focused rerun; final combined check remains pending. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T045": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T045 | Local done, mock contracts | Node Sheets sort/immutable-row/version/idempotency tests and CRM actual DB uncertainty/identity/shared-endpoint cases. Tests live in output/control/CRM suites instead of one proposed contract filename. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T046": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T046 | Local done | Closed dated outcome API, immutable row/version bindings, tri-state invitation evidence, latest saved projection and suppression despite stale row. Actual API/service and generated CSV tests recorded. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T047": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T047 | Local done, uninstalled bridge | Protected IDs, actual-editor HMAC, suppression-first synchronous write, durable unsaved repair queue and bounded retries; actual generated CSV is consumed by Node bridge test. Real Google Sheets sharing/editor/install contract stays G5. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T048": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T048 | Local done, mock provider scope | Version-bound selected-tierA human approval, durable encrypted projection, no network under DB locks, uncertain create/update reconciliation, five-attempt bounds and in-flight suppression follow-up are tested. Fixture propagation now applies and confirms stop projections, with uncertainty/retry and never-dispatched approval regressions; real GHL account/API semantics remain gated. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T049": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T049 | Local done, typed fixture boundary | Actual CRM loader validates all required field types/IDs/enums/nullability/version and owned tags before dispatch; CRM recovery/mapping suite22 passed previously. Real custom IDs/location/GHL rate-limit/tag API and processor-country receipts remain G5/T065. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T050": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T050 | Local done after final verification | Dated distinct group/cohort metrics, immutable selected tier/signal and activity corrections/interval unions are wired. Audit's cost-input gap is closed by migration022, `ops/costs.py`, `cost-import` and exact-window summary integration. `cost-input-review.md`:5 PG tests passed14.78s with retention/known/unknown/evidence/currency/idempotency cases; unknown costs stay unknown. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T051": {
+      "state": "pending",
+      "scope": "Pending: four measured QBCC weeks, owner expansion decision and eight-week cohort outcomes.",
+      "review": "| T051 | External pending | Four real QBCC weeks/owner expansion decision and eight-week A/B cost/outcome observation do not exist. `pilot-results.md` correctly remains pending. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": []
+    },
+    "T052": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T052 | Local done | CLI run/resume/status/exit contract, immutable redacted receipts, stage/recovery metadata and report digest validation; independent handover verified new-run/no-op, exact replay and missing-HTML repair without source repromotion. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T053": {
+      "state": "pending",
+      "scope": "Partial: Linux systemd installation, access, timer and overlap drill not executed; templates and local locks tested.",
+      "review": "| T053 | Partial deployment verification | Systemd source/monitor services/timers and shared nonblocking lock templates exist; Windows actual OS/DB locks and source crash recovery are tested. `systemd-analyze verify`, Linux service account/access/overlap/timer/heartbeat deployment drill remain unexecuted. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": []
+    },
+    "T054": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T054 | Local done, unknown inputs explicit | Complete closed flag/threshold inventory, owner/runbooks, baseline/no-op exceptions, persisted observations and bounded deduplicated mock alarm claims/receipts. Monitor latest suite12 passed37.12s includes weighted fill contract and exact2pp boundary; live external baselines/notification channels remain absent by design. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T055": {
+      "state": "pending",
+      "scope": "Partial: selected three-thread diff varied from 58.42s to 103.95s, so 60s stretch is not consistently met; full XML pipeline/AU host/retained WAL and backup bounds need target-host evidence.",
+      "review": "| T055 | Partial measured capacity | Disk formula/headroom, RSS/spill sampling, full materialised20.5M-universe Parquet workload and separate1,000-promoted-lead DB/WAL sample exist. Successful snapshot size20.295M each; final400k-partition choice measured73.3443s,1.435M events,693923840-byte RSS and328990720-byte spill (`diff-recheck-82f2b2206da3471dafed13746776852e.json`).800k experiment regressed111.993s;400k source hash restored. These are single-run local observations; <=60s stretch, full XML-to-output<=6h, target AU host and retained WAL/backup bounds remain unproven. Original OOM retained. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": []
+    },
+    "T056": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T056 | Local done for bounded documented handover | README/runbook/access/key/retention/recovery commands now concrete. Independent new UUID/replay/report-loss recovery and six hashes passed; separate actual PG CRM/source/restore reviews exist. The single handover did not freshly install a machine or independently exercise every user action/provider/restore as one operator; preserve that limit. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T057": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T057 | Local implementation done; final result pending | `tests/requirements.json` covers FR001\u00e2\u20ac\u201c043 with scoped file links; `ops/verify.py` records command outcomes/timeouts, spec/code hashes and unchanged-tree status, and CI is configured. File mappings alone are not requirement proof. Final successful immutable verify receipt and hosted CI execution are separate pending evidence. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T058": {
+      "state": "pending",
+      "scope": "Pending: applicable G1-G7 policy/source/vendor/AU infrastructure/pilot approvals.",
+      "review": "| T058 | External pending | Current source/legal/vendor sandbox/AU infrastructure/Linux/capacity/security/pilot release approvals not supplied; all G1\u00e2\u20ac\u201cG7 remain pending and outreach off. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": []
+    },
+    "T059": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T059 | Partial final verification | Multiple bounded independent reviews found/fixed actual defects; trajectory/rubric exists. Latest builds and this task audit precede final frozen combined verification and completed final release-review evidence. No whole-spec PASS is justified yet. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T060": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T060 | Local done after final verification | Reviewer-visible likely-duplicate hints implemented with closed reasons and false/positive cases; no automatic shared-contact merge. Independent focused duplicate/quarantine/cancellation/merge suite reported7 passed22.50s. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T061": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T061 | Local done after final verification | Monitor connected to pipeline result and API closed failure recorder; current-month/expiry/retention, mock delivery, exact fill contract and client-vs-server suppression latency tests. Latest monitor12 passed37.12s; no measured absent input invented. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T062": {
+      "state": "pending",
+      "scope": "Partial: PG 16 native CI setup and bounded verification code exist; hosted Linux execution has not been observed.",
+      "review": "| T062 | Local setup code done; CI execution pending | CI specifies PG16.15 service and installs native `postgresql-16`, uses `ABR_FIXTURE_PG_BIN`; backup code verifies major16 and real restore is not skipped. Verification runner preserves timed-out/unlaunchable command receipts and revision hashes. Hosted Linux execution/minor native-package pinning is not evidenced by Windows run. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": []
+    },
+    "T063": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T063 | Partial, root-owned status reconciliation | Root-authorised path/module mapping documented in plan/implementation-status; document validator reports21 mirrors/43 requirements valid. Task checkboxes still require this evidence audit and final verification before completion edits; regenerate/sync hashes after those edits. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T064": {
+      "state": "complete",
+      "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
+      "review": "| T064 | Partial, root-owned final run pending | Current report/API/browser and independent handover are evidenced; final additional canary/cost/qualification/propagation changes require combined unchanged-tree verification and final review/trajectory update. Intermediate325-pass result was not clean or frozen. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
+          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "command": "uv run python ops/verify.py",
+          "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
+        }
+      ]
+    },
+    "T065": {
+      "state": "pending",
+      "scope": "Pending: actual source/rule/provider/wash/host inputs and release authorisation; fixtures cannot satisfy these obligations.",
+      "review": "| T065 | External pending | Authentic corpus/source contract, vendor receipt/field/rate-limit/account behaviour, AU host/security/capacity/Linux/access and G1\u00e2\u20ac\u201cG7 approvals cannot be replaced by fixture results. |",
+      "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
+      "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
+      "evidence": []
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "rows": 20500000,
+  "elapsed_seconds": 111.99323829999776,
+  "sampled_peak_rss_bytes": 861544448,
+  "output_bytes": 101245597,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.12",
+  "runtime_version": "3.12.12",
+  "sample_interval_seconds": 0.01,
+  "full_scale_certified": false,
+  "db_wal_measured": false,
+  "event_counts": {
+    "gst_cancelled": 205000,
+    "name_changed": 205000,
+    "gst_registered": 205000,
+    "abn_cancelled": 205000,
+    "abn_reactivated": 205000,
+    "abn_disappeared": 205000,
+    "abn_new": 205000
+  },
+  "status": "complete",
+  "event_count": 1435000,
+  "input_root": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\benchmark-3cf2633055484c90a0ea52bfc53000a1",
+  "output": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\diff-recheck-b292e5504ddb49e2adfa2caeccc82154\\events.parquet",
+  "peak_spill_bytes": 321060864,
+  "diff_code_sha256": "fc15d0adafac9f6bc78a341d7dc85eba0af50a497e3cd9f418ad47330ad8d7f6",
+  "lockfile_sha256": "c7c7a58208f93368d2050b3a75daed625e5bacda8a241b9be56213f6e9552b30"
+}

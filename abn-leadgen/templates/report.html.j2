@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en-AU"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow,noarchive"><meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<title>Maintain Media — private worklist</title>
+<style>
+:root{color-scheme:dark;--purple:#a04dff;--bg:#061518;--surface:#0c2a30;--ink:#fff;--body:#cdd9db}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--body);font:1rem/1.65 "Albert Sans",Arial,sans-serif}
+main{max-width:75rem;margin:auto;padding:clamp(16px,4vw,48px)}header{border-top:4px solid var(--purple);padding-top:24px}
+h1,h2,strong{color:var(--ink)}h1{font-size:clamp(2rem,6vw,3.125rem);line-height:1.2;margin:16px 0}h2{font-size:1.5625rem;overflow-wrap:anywhere}
+p{max-width:72ch}a{color:#c79bff}a:focus-visible{outline:3px solid var(--purple);outline-offset:4px}
+.download{display:inline-block;padding:12px 16px;border:1px solid var(--purple);border-radius:8px;min-height:44px}
+.row{background:var(--surface);border:1px solid #375057;border-radius:14px;padding:24px;margin:24px 0;overflow-wrap:anywhere}
+dl{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px}dt{font-weight:600;color:#fff}dd{margin:4px 0 0}.gate{border-left:4px solid var(--purple);padding-left:12px}
+small{font-size:.875rem}footer{border-top:1px solid #375057;padding-top:24px}code{overflow-wrap:anywhere}
+</style></head><body><main><header><strong>Maintain Media</strong><h1>Private review worklist</h1>
+<p>{{ mode|upper }} · Generated {{ generated_at }} · {{ rows|length }} distinct business groups</p>
+<p>Restricted to authorised reviewers. These are candidates for investigation. A static record cannot authorise sending or calling. Use the current control check immediately before any approved contact attempt.</p>
+<a class="download" href="worklist.csv" download>Download private worklist CSV</a></header>
+{% for row in rows %}<article class="row" aria-labelledby="lead-{{ row.row_id }}"><h2 id="lead-{{ row.row_id }}">{{ row.business_name }}</h2>
+<p>{{ row.signal }}</p><p>{{ row.source }} · {{ row.source_age }} · Tier {{ row.tier }} · Score {{ row.score }}/100</p>
+<p class="gate"><strong>{{ row.gate_label }}</strong><br>{{ row.reasons }}</p>
+<dl><div><dt>Candidate contact</dt><dd>{{ row.contact }}</dd></div><div><dt>Next action</dt><dd>{{ row.next_action }}</dd></div>
+<div><dt>Decision checked / expires (UTC offset shown)</dt><dd>{{ row.gate_checked_at }} / {{ row.gate_expires_at }}</dd></div>
+<div><dt>Policy version</dt><dd>{{ row.policy_version }}</dd></div></dl>
+<dl><div><dt>Recorded outcome</dt><dd>{{ row.status }} · {{ row.attempts }} attempts</dd></div>
+<div><dt>Actual activity date</dt><dd>{{ row.occurred_at or 'Not recorded' }}</dd></div>
+<div><dt>Invitation state</dt><dd>{{ row.invitation_state }}</dd></div><div><dt>Reviewer notes</dt><dd>{{ row.notes or 'None recorded' }}</dd></div></dl>
+<small>Row {{ row.row_id }} · Version {{ row.row_version }}</small></article>{% else %}<p>No candidate rows in this run. Consult the private run manifest for blocked, deferred and missing-data counts.</p>{% endfor %}
+<footer><p>Signals do not establish actual turnover, buying intent, current trading or consent. Source ages are literal publication ages; current licence and permission checks remain separate.</p>
+<p>Australian Business Register, Commonwealth of Australia, <a href="https://creativecommons.org/licenses/by/3.0/au/">CC BY 3.0 AU</a> · <a href="https://abr.business.gov.au/Tools/BulkExtract">ABR source</a>.<br>QBCC Licensed Contractors Register, State of Queensland, <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>. Source terms require a dated release check.</p>
+<small>Run {{ run_id }}. Keep this HTML, Markdown and CSV bundle in private access-controlled storage. No public-link sharing.</small></footer></main></body></html>

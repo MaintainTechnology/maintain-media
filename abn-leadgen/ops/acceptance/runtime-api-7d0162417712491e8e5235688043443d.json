@@ -1,0 +1,23 @@
+{
+  "status": "passed",
+  "checked_at": "2026-09-09T01:02:28.230317+00:00",
+  "url": "http://127.0.0.1:8766",
+  "reviewed_tree_sha256": "3c2ba7ed46ead9fdf8dc3476f9b6f85159791f2238f6c02a6b1ada573e7f16ae",
+  "health": {
+    "status": "ready",
+    "mode": "fixture",
+    "outreach": "disabled"
+  },
+  "anonymous_schema_http": 401,
+  "authenticated_schema_http": 200,
+  "authorised_worklist_http": 200,
+  "optout_first_http": 201,
+  "optout_replay_http": 200,
+  "durably_observed_suppression_rows": 1,
+  "request_id": "e05f5b93-3da9-423a-bcd9-18325f050d51",
+  "optout_request_through_commit_ack_seconds": 0.29858439999225084,
+  "measurement_scope": "Single local fixture HTTP request including server/database commit and response; not a production SLA",
+  "command": "uv run python .runtime/check_running_api.py",
+  "script_sha256": "94a0c9d8fc676b51ccadc536b9ee4ec9661b86b59c358718a3aee876820dd75f",
+  "outreach_sent": 0
+}

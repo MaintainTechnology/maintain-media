@@ -1,0 +1,46 @@
+{
+  "status": "observed",
+  "sources": [
+    {
+      "source": "abr",
+      "observation_digest": "2852c74a5e8731f624643a50a6ed7f594be11a9c727dd7dc11414388f347a547",
+      "alarms": [
+        "timer_heartbeat_missed"
+      ],
+      "unknown_inputs": [
+        "source_age_days",
+        "mismatch_hours",
+        "field_fill_delta_pp",
+        "classification_delta_pp",
+        "approved_hit_rate_baseline",
+        "required_free_disk_bytes",
+        "suppression_commit_seconds",
+        "timer_last_success_at",
+        "restore_status",
+        "four_comparable_publications"
+      ]
+    },
+    {
+      "source": "qbcc",
+      "observation_digest": "a60908d9600dae7167254d48079f1fff97e8c038713e2c8fccaab3f2da4b38e2",
+      "alarms": [
+        "timer_heartbeat_missed"
+      ],
+      "unknown_inputs": [
+        "source_age_days",
+        "mismatch_hours",
+        "field_fill_delta_pp",
+        "classification_delta_pp",
+        "approved_hit_rate_baseline",
+        "required_free_disk_bytes",
+        "suppression_commit_seconds",
+        "timer_last_success_at",
+        "restore_status",
+        "four_comparable_publications"
+      ]
+    }
+  ],
+  "notifications_sent": 0,
+  "active_run_heartbeat_threshold_seconds": 300,
+  "inventory": "Unknown external baselines and backup/timer receipts require explicit evidence observations"
+}

@@ -1,0 +1,24 @@
+{
+  "assessed_at": "2026-09-09T00:43:00Z",
+  "scope": "Local engineering assessment after the retained-metrics and discovery repairs; before new thread experiments",
+  "code_tree_sha256": "c132b389560cf5e6da4e33658c839e17ee56416aee18b592d38c39cb19d4d6df",
+  "verification": "verify-ccce0e8d9d5a4c46bb88dbb2583d4dbc/result.json",
+  "tests_passed": 408,
+  "score": 92,
+  "dimensions": {
+    "specification_behaviour": [23, 25],
+    "data_integrity": [19, 20],
+    "security": [24, 25],
+    "operations": [17, 20],
+    "maintainability": [9, 10]
+  },
+  "deductions": {
+    "authentic_source_vendor_contracts_and_original_rules": 2,
+    "authentic_full_source_scale_evidence": 1,
+    "production_security_and_cross_system_certification": 1,
+    "stretch_performance_target_host_scheduler_and_pilot_evidence": 3,
+    "hosted_ci_execution": 1
+  },
+  "next_attempt": "Compare isolated one-thread and three-thread query variants against the two-thread best, including complete semantic output equality. No points are awarded in advance.",
+  "full_spec_acceptance": "incomplete"
+}

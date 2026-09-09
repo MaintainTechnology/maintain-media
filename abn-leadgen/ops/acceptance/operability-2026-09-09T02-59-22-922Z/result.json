@@ -1,0 +1,490 @@
+{
+  "status": "passed",
+  "checked_at": "2026-09-09T03:00:14.189Z",
+  "checks": [
+    "All navigation, brand/home and setup entry links operate",
+    "ALL run from leads at 1440px: persisted configuration, actual completion, HTML/CSV/Markdown valid",
+    "ABR run from runs at 1440px: persisted configuration, actual completion, HTML/CSV/Markdown valid",
+    "QBCC run from leads at 390px: persisted configuration, actual completion, HTML/CSV/Markdown valid",
+    "Every stored lead opens; name/formatted ABN search and all 12 source/tier combinations match the database",
+    "Latest-leads Export CSV button downloads the current selected worklist",
+    "Both screen Refresh buttons work",
+    "All views remain operable at desktop/tablet/phone widths; zero uncaught browser errors"
+  ],
+  "runs": [
+    {
+      "job_id": "70e15836-6602-4e51-9eb9-2891ba75ff1d",
+      "run_id": "3b079e34-64b7-49bb-89bb-a8c97957113c",
+      "state": "complete",
+      "source": "all",
+      "started_at": "2026-09-09T02:59:31.538414+00:00",
+      "finished_at": "2026-09-09T02:59:40.001485+00:00",
+      "error_code": null,
+      "monthly_cap_micro_aud": 150000000
+    },
+    {
+      "job_id": "83367181-8268-4474-a4b4-8d68cf70b9c3",
+      "run_id": "85304332-aba9-46a8-9005-d5c9c696555d",
+      "state": "complete",
+      "source": "abr",
+      "started_at": "2026-09-09T02:59:46.587854+00:00",
+      "finished_at": "2026-09-09T02:59:58.147028+00:00",
+      "error_code": null,
+      "monthly_cap_micro_aud": 150000000
+    },
+    {
+      "job_id": "f65a2855-b8ef-46dc-b5a9-67a06147ad94",
+      "run_id": "197e6c73-9fca-480c-bae7-6c7cb24d4787",
+      "state": "complete",
+      "source": "qbcc",
+      "started_at": "2026-09-09T03:00:04.000850+00:00",
+      "finished_at": "2026-09-09T03:00:07.025343+00:00",
+      "error_code": null,
+      "monthly_cap_micro_aud": 149990000
+    }
+  ],
+  "controls": [
+    {
+      "view": "leads",
+      "tag": "A",
+      "text": "Skip to content",
+      "id": "",
+      "href": "#main"
+    },
+    {
+      "view": "leads",
+      "tag": "A",
+      "text": "",
+      "id": "",
+      "href": "#leads"
+    },
+    {
+      "view": "leads",
+      "tag": "A",
+      "text": "Latest leads2",
+      "id": "",
+      "href": "#leads"
+    },
+    {
+      "view": "leads",
+      "tag": "A",
+      "text": "Run history",
+      "id": "",
+      "href": "#runs"
+    },
+    {
+      "view": "leads",
+      "tag": "A",
+      "text": "Setup & settings",
+      "id": "",
+      "href": "#setup"
+    },
+    {
+      "view": "leads",
+      "tag": "A",
+      "text": "View setup",
+      "id": "",
+      "href": "#setup"
+    },
+    {
+      "view": "leads",
+      "tag": "BUTTON",
+      "text": "Refresh",
+      "id": "",
+      "href": null
+    },
+    {
+      "view": "leads",
+      "tag": "BUTTON",
+      "text": "Run demo",
+      "id": "",
+      "href": null
+    },
+    {
+      "view": "leads",
+      "tag": "A",
+      "text": "See what’s needed for live data →",
+      "id": "",
+      "href": "#setup"
+    },
+    {
+      "view": "leads",
+      "tag": "BUTTON",
+      "text": "Export latest CSV",
+      "id": "",
+      "href": null
+    },
+    {
+      "view": "leads",
+      "tag": "INPUT",
+      "text": "",
+      "id": "lead-search",
+      "href": null
+    },
+    {
+      "view": "leads",
+      "tag": "SELECT",
+      "text": "All sourcesABRQBCC",
+      "id": "source-filter",
+      "href": null
+    },
+    {
+      "view": "leads",
+      "tag": "SELECT",
+      "text": "All tiersTier ATier BTier C",
+      "id": "tier-filter",
+      "href": null
+    },
+    {
+      "view": "leads",
+      "tag": "BUTTON",
+      "text": "Synthetic BuilderQBCC·ABN not recordedTier A90/100",
+      "id": "",
+      "href": null
+    },
+    {
+      "view": "leads",
+      "tag": "BUTTON",
+      "text": "Example & SonsQBCC·ABN 10 000 000 032Tier A95/100",
+      "id": "",
+      "href": null
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Skip to content",
+      "id": "",
+      "href": "#main"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "",
+      "id": "",
+      "href": "#leads"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Latest leads2",
+      "id": "",
+      "href": "#leads"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Run history",
+      "id": "",
+      "href": "#runs"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Setup & settings",
+      "id": "",
+      "href": "#setup"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "View setup",
+      "id": "",
+      "href": "#setup"
+    },
+    {
+      "view": "runs",
+      "tag": "BUTTON",
+      "text": "Run demo",
+      "id": "",
+      "href": null
+    },
+    {
+      "view": "runs",
+      "tag": "BUTTON",
+      "text": "Refresh",
+      "id": "",
+      "href": null
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Report",
+      "id": "",
+      "href": "/api/reports/cebdb8c8-5c3a-4dd5-99e0-53b3f8a91bbf/html"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "CSV",
+      "id": "",
+      "href": "/api/reports/cebdb8c8-5c3a-4dd5-99e0-53b3f8a91bbf/csv"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Report",
+      "id": "",
+      "href": "/api/reports/b86c2171-2064-439a-8fcd-8a96fefaa07f/html"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "CSV",
+      "id": "",
+      "href": "/api/reports/b86c2171-2064-439a-8fcd-8a96fefaa07f/csv"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Report",
+      "id": "",
+      "href": "/api/reports/0e3d5dc2-4675-412a-8114-555e86187e0b/html"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "CSV",
+      "id": "",
+      "href": "/api/reports/0e3d5dc2-4675-412a-8114-555e86187e0b/csv"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Report",
+      "id": "",
+      "href": "/api/reports/0a7ecbc3-0334-4ce8-a8aa-9c1481a3c73b/html"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "CSV",
+      "id": "",
+      "href": "/api/reports/0a7ecbc3-0334-4ce8-a8aa-9c1481a3c73b/csv"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Report",
+      "id": "",
+      "href": "/api/reports/b0fbe8ea-3422-404a-84d1-39e0a55ff9df/html"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "CSV",
+      "id": "",
+      "href": "/api/reports/b0fbe8ea-3422-404a-84d1-39e0a55ff9df/csv"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Report",
+      "id": "",
+      "href": "/api/reports/84359116-3af7-48b3-9d1c-fe7cb5692ed4/html"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "CSV",
+      "id": "",
+      "href": "/api/reports/84359116-3af7-48b3-9d1c-fe7cb5692ed4/csv"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Report",
+      "id": "",
+      "href": "/api/reports/eed619d9-3b14-4dea-a920-d1a7fe2edc7b/html"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "CSV",
+      "id": "",
+      "href": "/api/reports/eed619d9-3b14-4dea-a920-d1a7fe2edc7b/csv"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Report",
+      "id": "",
+      "href": "/api/reports/826c1557-1cb2-4cbc-b59c-7fed8e280c92/html"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "CSV",
+      "id": "",
+      "href": "/api/reports/826c1557-1cb2-4cbc-b59c-7fed8e280c92/csv"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Report",
+      "id": "",
+      "href": "/api/reports/498c7767-594e-4c7c-a32e-f6c48b5c0478/html"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "CSV",
+      "id": "",
+      "href": "/api/reports/498c7767-594e-4c7c-a32e-f6c48b5c0478/csv"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Report",
+      "id": "",
+      "href": "/api/reports/879088e2-d578-47e0-a413-cf2228cdf4f8/html"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "CSV",
+      "id": "",
+      "href": "/api/reports/879088e2-d578-47e0-a413-cf2228cdf4f8/csv"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Report",
+      "id": "",
+      "href": "/api/reports/a9073203-fc30-4b02-81c4-8045ce43bb69/html"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "CSV",
+      "id": "",
+      "href": "/api/reports/a9073203-fc30-4b02-81c4-8045ce43bb69/csv"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Report",
+      "id": "",
+      "href": "/api/reports/60d10c94-9ae5-4621-b722-61c182aa5414/html"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "CSV",
+      "id": "",
+      "href": "/api/reports/60d10c94-9ae5-4621-b722-61c182aa5414/csv"
+    },
+    {
+      "view": "setup",
+      "tag": "A",
+      "text": "Skip to content",
+      "id": "",
+      "href": "#main"
+    },
+    {
+      "view": "setup",
+      "tag": "A",
+      "text": "",
+      "id": "",
+      "href": "#leads"
+    },
+    {
+      "view": "setup",
+      "tag": "A",
+      "text": "Latest leads2",
+      "id": "",
+      "href": "#leads"
+    },
+    {
+      "view": "setup",
+      "tag": "A",
+      "text": "Run history",
+      "id": "",
+      "href": "#runs"
+    },
+    {
+      "view": "setup",
+      "tag": "A",
+      "text": "Setup & settings",
+      "id": "",
+      "href": "#setup"
+    },
+    {
+      "view": "setup",
+      "tag": "A",
+      "text": "View setup",
+      "id": "",
+      "href": "#setup"
+    },
+    {
+      "view": "setup",
+      "tag": "SELECT",
+      "text": "ABR + QBCCAustralian Business Register (ABR)QBCC contractor register",
+      "id": "default-source",
+      "href": null
+    },
+    {
+      "view": "setup",
+      "tag": "INPUT",
+      "text": "",
+      "id": "monthly-cap",
+      "href": null
+    },
+    {
+      "view": "setup",
+      "tag": "BUTTON",
+      "text": "Save changes",
+      "id": "save-settings",
+      "href": null
+    },
+    {
+      "view": "setup",
+      "tag": "BUTTON",
+      "text": "Discard changes",
+      "id": "reset-settings",
+      "href": null
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Report",
+      "id": "",
+      "href": "/api/reports/3b079e34-64b7-49bb-89bb-a8c97957113c/html"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "CSV",
+      "id": "",
+      "href": "/api/reports/3b079e34-64b7-49bb-89bb-a8c97957113c/csv"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Report",
+      "id": "",
+      "href": "/api/reports/197e6c73-9fca-480c-bae7-6c7cb24d4787/html"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "CSV",
+      "id": "",
+      "href": "/api/reports/197e6c73-9fca-480c-bae7-6c7cb24d4787/csv"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "Report",
+      "id": "",
+      "href": "/api/reports/85304332-aba9-46a8-9005-d5c9c696555d/html"
+    },
+    {
+      "view": "runs",
+      "tag": "A",
+      "text": "CSV",
+      "id": "",
+      "href": "/api/reports/85304332-aba9-46a8-9005-d5c9c696555d/csv"
+    }
+  ],
+  "browser_errors": []
+}

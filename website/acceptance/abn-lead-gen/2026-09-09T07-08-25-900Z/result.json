@@ -1,0 +1,149 @@
+{
+  "status": "passed",
+  "checked_at": "2026-09-09T07:09:31.763Z",
+  "origin": "http://127.0.0.1:3001",
+  "mode": "fixture",
+  "checks": [
+    {
+      "name": "Anonymous page redirects and every protected API family denies access",
+      "status": "passed",
+      "denied_routes": 8
+    },
+    {
+      "name": "Rejected sign-in recovers and the configured administrator signs in",
+      "status": "passed"
+    },
+    {
+      "name": "Authenticated writes reject missing CSRF and a hostile origin",
+      "status": "passed"
+    },
+    {
+      "name": "All workspace views, brand navigation and return-to-website link operate",
+      "status": "passed"
+    },
+    {
+      "name": "Every business opens, names and formatted ABNs search, all 12 filters match stored data, empty state clears",
+      "status": "passed",
+      "leads": 2
+    },
+    {
+      "name": "A$0 and A$150 save across reload, out-of-range budgets fail validation, discard restores the saved value",
+      "status": "passed"
+    },
+    {
+      "name": "ALL actual fixture run uses saved source and cap, prevents double click, and serves all 3 masked report formats",
+      "status": "passed"
+    },
+    {
+      "name": "ABR actual fixture run uses saved source and cap, prevents double click, and serves all 3 masked report formats",
+      "status": "passed"
+    },
+    {
+      "name": "QBCC actual fixture run uses saved source and cap, prevents double click, and serves all 3 masked report formats",
+      "status": "passed"
+    },
+    {
+      "name": "HTML popup and nested CSV, direct CSV/Markdown downloads, latest export and both refresh controls operate",
+      "status": "passed"
+    },
+    {
+      "name": "All views fit 1440/820/390/360px, keyboard skip preserves the view, reduced motion is respected, bridge remains server-side",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed and non-JSON refreshes preserve usable data and recover",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Offline first load disables dependent controls then recovers",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Initial loading protects settings and every dependent action until data arrives",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Settings draft survives refresh and rejected saves; recovery and discard work",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Saved settings cannot be replaced by an older in-flight refresh",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Rejected and ambiguous run attempts recover without duplicate clicks or lost retry identity",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Malformed save and run confirmations preserve drafts and explain the unconfirmed action",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "A run confirmed by polling clears an ambiguous retry identity before the next new run",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Unsaved settings prevent accidental page exit and can be kept after cancelling sign-out",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Failed sign-out keeps the unsaved draft and a persistent actionable error",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Stale report error recovers and blocked popup retains the report CSV link",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Expired authentication clears protected content and returns to sign-in",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Sign-out revokes access, API routes deny reuse and direct dashboard re-entry requires sign-in",
+      "status": "passed"
+    }
+  ],
+  "runs": [
+    {
+      "source": "all",
+      "run_id": "3de0c742-1fa7-4794-9388-3db4ceb8476b",
+      "state": "complete",
+      "run_requests": 1,
+      "viewport": 1440
+    },
+    {
+      "source": "abr",
+      "run_id": "29e9cfce-2c91-4079-adc2-d213b1245de8",
+      "state": "complete",
+      "run_requests": 1,
+      "viewport": 1440
+    },
+    {
+      "source": "qbcc",
+      "run_id": "6efc450d-6824-45ed-b33c-fa28f5d11b2d",
+      "state": "complete",
+      "run_requests": 1,
+      "viewport": 390
+    }
+  ],
+  "viewports": [
+    1440,
+    820,
+    390,
+    360
+  ],
+  "preference_restoration": "passed",
+  "browser_errors": []
+}

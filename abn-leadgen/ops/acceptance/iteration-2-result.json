@@ -1,0 +1,8 @@
+{
+  "command": "uv run pytest -q --junitxml=ops/acceptance/iteration-2-tests.xml",
+  "result": "325 passed, 3 failed in725.73s",
+  "scope": "Intermediate combined suite; source changed during execution; three prior alarm-count assertions corrected with separate focused evidence",
+  "environment": "Windows-11-10.0.26200-SP0",
+  "junit_sha256": "366ef6d4ce214da61bcf768ab19abb8d53aedd33ed4b5000dd4d7f431812bdcd",
+  "log_sha256": "27b6da0016953c921c8751b8cdec70cd565d4efbede2f2ed2ab51682d5ced79c"
+}

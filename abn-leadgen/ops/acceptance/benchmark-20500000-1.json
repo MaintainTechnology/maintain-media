@@ -1,0 +1,13 @@
+{
+  "status": "failed",
+  "rows": 20500000,
+  "command": "uv run abr-engine benchmark --rows 20500000 --output ops/acceptance/benchmark-20500000-1.json",
+  "environment": "Windows, Python3.12.12, DuckDB1.5.5, 512MiB buffer, two threads, 8GiB spill ceiling",
+  "failure": "DuckDB OutOfMemoryException during COPY event output: failed to pin 256KiB block (488.4MiB/488.2MiB used)",
+  "inputs": "var/benchmark-3cf2633055484c90a0ea52bfc53000a1",
+  "previous_bytes": 780315601,
+  "current_bytes": 780425406,
+  "output_complete": false,
+  "full_scale_certified": false,
+  "next_change": "Filter changed rows before lateral event expansion and disable insertion-order preservation; reuse verified fixture inputs for a new immutable output."
+}

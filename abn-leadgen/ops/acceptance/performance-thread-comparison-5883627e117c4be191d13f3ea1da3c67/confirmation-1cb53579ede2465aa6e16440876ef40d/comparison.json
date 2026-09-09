@@ -1,0 +1,36 @@
+{
+  "created_at": "2026-09-09T00:52:20.867023+00:00",
+  "main_diff_sha256": "8df5488572e812c750b36780e29374cfdffba17d7587f3202fd116b37d0c105a",
+  "harness_sha256": "33e40b1fdb9dda9f0e3a4533e01f3a990ad8dd69be3dd9f04351701ca1eea840",
+  "lockfile_sha256": "c7c7a58208f93368d2050b3a75daed625e5bacda8a241b9be56213f6e9552b30",
+  "capacity_helper_sha256": "325b66e446621b9a5e207fbdfb9b67c2062905d16088f8422f6532118d2d2a26",
+  "input_files": [
+    {
+      "path": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\benchmark-3cf2633055484c90a0ea52bfc53000a1\\previous.parquet",
+      "sha256": "4dcfcb918fa8a8c5b325f9178bba64cf00fba3022b9211ef243824568eee7f22",
+      "size_bytes": 780315601
+    },
+    {
+      "path": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\benchmark-3cf2633055484c90a0ea52bfc53000a1\\current.parquet",
+      "sha256": "78bf3476a106e7b2181ce9c1b33d6f97381710e851cc2839279b87455fbfd1d3",
+      "size_bytes": 780425406
+    }
+  ],
+  "reference_sha256": "44fa3fb4a78a3357a9ac217325c8950faf7047c1654a950c99e1d399630a5676",
+  "order": [
+    2,
+    3
+  ],
+  "cache_state": "Uncontrolled local filesystem cache; sequential runs may benefit differently",
+  "rss_guard_bytes": 2147483648,
+  "rss_guard": "parent samples sum RSS of launcher and recursively discovered descendants every 10ms; not a kernel memory limit",
+  "rss_guard_scope": "captured_process_tree",
+  "logical_cpu_count": 16,
+  "physical_cpu_count": 8,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.12",
+  "duckdb": "1.5.5",
+  "prior_comparison_receipt": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\.runtime\\performance-thread-comparison\\comparison-5883627e117c4be191d13f3ea1da3c67\\comparison.json",
+  "prior_comparison_receipt_sha256": "e9f9eb62028d0311d030b0e5b5ce86868a18e13f65586aa85b57149f6957d939",
+  "prior_semantic_receipt_sha256": "1ffcdfa20b30cb5cb3da2a0635c85af325f6a8546872869a66cd9be63a9010b6"
+}

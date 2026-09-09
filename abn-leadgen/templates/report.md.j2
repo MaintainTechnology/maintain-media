@@ -1,0 +1,33 @@
+# Maintain Media — private review worklist
+
+{{ mode|md }} · Generated {{ generated_at|md }} · {{ rows|length }} distinct business groups
+
+Restricted to authorised reviewers. Candidate records require current control checks immediately before approved contact. This report does not authorise sending or calling.
+
+[Download private CSV](worklist.csv)
+
+{% for row in rows %}## {{ row.business_name|md }}
+
+{{ row.signal|md }}
+
+{{ row.source|md }} · {{ row.source_age|md }} · Tier {{ row.tier|md }} · Score {{ row.score }}/100
+
+**{{ row.gate_label|md }}** — {{ row.reasons|md }}
+
+- Candidate contact: {{ row.contact|md }}
+- Next action: {{ row.next_action|md }}
+- Checked: {{ row.gate_checked_at|md }}; expires: {{ row.gate_expires_at|md }}
+- Policy: {{ row.policy_version|md }}
+- Row: {{ row.row_id|md }}; version: {{ row.row_version }}
+- Recorded outcome: {{ row.status|md }}; attempts: {{ row.attempts }}; actual activity date: {{ (row.occurred_at or 'Not recorded')|md }}
+- Invitation state: {{ row.invitation_state|md }}
+- Reviewer notes: {{ (row.notes or 'None recorded')|md }}
+
+{% else %}No candidate rows. Missing, blocked and deferred counts belong in the private run manifest.
+{% endfor %}
+Signals do not establish actual turnover, buying intent, current trading or consent.
+
+Australian Business Register, Commonwealth of Australia, [CC BY 3.0 AU](https://creativecommons.org/licenses/by/3.0/au/). [ABR source](https://abr.business.gov.au/Tools/BulkExtract).
+QBCC Licensed Contractors Register, State of Queensland, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). Source terms require a dated release check.
+
+Run {{ run_id|md }}. Private storage only; no public-link sharing.

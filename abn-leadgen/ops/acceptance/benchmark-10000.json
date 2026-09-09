@@ -1,0 +1,36 @@
+{
+  "rows": 10000,
+  "elapsed_seconds": 0.40330309999990277,
+  "sampled_peak_rss_bytes": 134324224,
+  "output_bytes": 1138447,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.12",
+  "runtime_version": "3.12.12",
+  "sample_interval_seconds": 0.01,
+  "full_scale_certified": false,
+  "db_wal_measured": false,
+  "event_count": 4339,
+  "admission": {
+    "remaining_downloads": 0,
+    "staged_parquet_upper_bound": 40960000,
+    "prior_snapshot_bytes": 0,
+    "new_snapshot_upper_bound": 40960000,
+    "configured_spill_limit": 8589934592,
+    "projected_db_growth": 0,
+    "projected_wal_growth": 0,
+    "temporary_backup_bytes": 0,
+    "existing_allocations": {}
+  },
+  "free_bytes_before": 138604359680,
+  "required_free_bytes": 35515400192,
+  "lockfile_sha256": "c7c7a58208f93368d2050b3a75daed625e5bacda8a241b9be56213f6e9552b30",
+  "artifact_paths": [
+    "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\ops\\acceptance\\benchmark-79b3f362e03b4390965e740b0f5e5f65\\previous.parquet",
+    "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\ops\\acceptance\\benchmark-79b3f362e03b4390965e740b0f5e5f65\\current.parquet",
+    "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\ops\\acceptance\\benchmark-79b3f362e03b4390965e740b0f5e5f65\\events.parquet"
+  ],
+  "input_kind": "synthetic-wide-unique-keys",
+  "ingest_parser_measured": false,
+  "all_event_types_measured": false,
+  "limitation": "Measures generation plus materialised diff, not the full source-to-CRM pipeline or approved host capacity."
+}

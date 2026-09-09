@@ -1,0 +1,2 @@
+ALTER TABLE operator_activity ADD COLUMN recorded_seq bigint GENERATED ALWAYS AS IDENTITY UNIQUE;
+ALTER TABLE outcome_event ADD COLUMN recorded_seq bigint GENERATED ALWAYS AS IDENTITY UNIQUE;

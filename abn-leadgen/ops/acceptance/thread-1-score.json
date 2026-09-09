@@ -1,0 +1,14 @@
+{
+  "iteration": 5,
+  "scope": "Substantive isolated performance rewrite, followed by assessment of the best retained local implementation",
+  "candidate_threads": 1,
+  "candidate_sha256": "5f72ea756a9d8a0fdef1bc7bcda96b53acabd10f6c8df25968f5467b4206a47c",
+  "candidate_diff_seconds": 93.4161,
+  "candidate_semantic_comparison": "Both EXCEPT ALL differences zero against the retained reference; 205000 events of each of seven types",
+  "selected_threads": 2,
+  "selected_diff_sha256": "8df5488572e812c750b36780e29374cfdffba17d7587f3202fd116b37d0c105a",
+  "best_retained_score": 92,
+  "score_change": 0,
+  "decision": "Reject the alternative: it did not improve the retained 73.344307-second observation or meet the 60-second stretch target. Keep the previously verified implementation.",
+  "measurement_limit": "Single local runs with uncontrolled filesystem cache; this does not establish universal thread-count superiority or target-host capacity."
+}

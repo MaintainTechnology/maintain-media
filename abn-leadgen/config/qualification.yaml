@@ -1,0 +1,27 @@
+schema_version: 1
+rule_version: abr-qualification-v4.0
+spec_version: '4.0'
+scoring:
+  abr_tier: {A: 60, B: 30, C: 0}
+  confidence: {high: 15, medium: 5, none: 0}
+  qbcc_tier_a: 60
+  qbcc_category: {'1': 15, '2': 20}
+  geography: 10
+  company: 5
+  contact: {deliverable_email: 20, phone: 15, website: 5, none: 0}
+  cap: 100
+qualification:
+  full_state: QLD
+  partial_state: NSW
+  postcode_min: '2450'
+  postcode_max: '2490'
+  gst_age_min_months: 12
+  gst_age_max_months_exclusive: 60
+  tier_b_entity_classes: [company, trust]
+  tier_b_confidences: [high, medium]
+  qbcc_categories: ['1', '2']
+  qbcc_events: [icp_backlog, new, category_changed]
+queue:
+  expiry_weeks: 8
+  weekly_limit: 60
+  oldest_reserve: 10

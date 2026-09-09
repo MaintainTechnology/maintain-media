@@ -1,0 +1,237 @@
+{
+  "main": {
+    "id": "6022b03eee3686b8",
+    "type": "split",
+    "children": [
+      {
+        "id": "a748df96bdcaba6b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "64cbd9ea6fd65f0f",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Specs/ABR Lead Engine.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "ABR Lead Engine"
+            }
+          }
+        ]
+      },
+      {
+        "id": "58b479b6c85ba757",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "fce86470e2f2d7c7",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Graph view"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "09e06bf375191ff4",
+    "type": "split",
+    "children": [
+      {
+        "id": "2a90306577071535",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "08a750c7d795f353",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "26e9b0774bed8b60",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "109a5148a5a7cc2c",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 359.8999938964844
+  },
+  "right": {
+    "id": "7f23b376b1f4467d",
+    "type": "split",
+    "children": [
+      {
+        "id": "03fa703631dcb7fe",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "706174f5a8348526",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Welcome.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks"
+            }
+          },
+          {
+            "id": "feaa3f2ce54ac105",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Welcome.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links"
+            }
+          },
+          {
+            "id": "aaf332524f7fbe8a",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "2845e1150207528e",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "All properties"
+            }
+          },
+          {
+            "id": "a21fd1d0169b5ce7",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Welcome.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "Outline"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false,
+      "bases:Create new base": false
+    }
+  },
+  "active": "64cbd9ea6fd65f0f",
+  "lastOpenFiles": [
+    "Specs/ABR Lead Engine - Final Review Plan.md",
+    "Specs/ABR Lead Engine - Final Judge.md",
+    "Specs/ABR Lead Engine - Build Contract Precision.md",
+    "Specs/ABR Lead Engine - Security and Readiness Checklist.md",
+    "Specs/ABR Lead Engine - Specification Checklist.md",
+    "Specs/ABR Lead Engine - Spec Kit Status.md",
+    "Specs/ABR Lead Engine - Reviewer Notes.md",
+    "Specs/ABR Lead Engine - Council Review.md",
+    "Specs/ABR Lead Engine - Consistency Analysis.md",
+    "Specs/ABR Lead Engine - Build Tasks.md",
+    "Specs/ABR Lead Engine - Developer Quickstart.md",
+    "Specs/ABR Lead Engine - Interface Contracts.md",
+    "Specs/ABR Lead Engine - Research and Decisions.md",
+    "Specs/ABR Lead Engine - Data Model.md",
+    "Specs/ABR Lead Engine - Technical Plan.md",
+    "Specs/ABR Lead Engine - Product Specification.md",
+    "Specs/ABR Lead Engine - Constitution.md",
+    "Specs/ABR Lead Engine - v3.5 Archive.md",
+    "Specs/ABR Lead Engine - Source Checks.md",
+    "Specs/ABR Lead Engine - Build Hub.md",
+    "Specs/Archive/ABR Lead Engine - Explained Simply v3.5.md",
+    "Specs/Archive",
+    "Specs/ABR Lead Engine - Explained Simply.draft.md",
+    "Specs/ABR Lead Engine - Explained Simply.md",
+    "Specs/ABR Lead Engine.md",
+    "Welcome.md",
+    "Specs"
+  ]
+}

@@ -1,0 +1,16 @@
+{
+  "status": "passed",
+  "checked_at": "2026-09-09T03:04:52.632638+00:00",
+  "database_loss_status": 503,
+  "recovery": {
+    "status": "ready",
+    "mode": "fixture",
+    "url": "http://127.0.0.1:8767/",
+    "pid": 139664,
+    "already_running": true,
+    "recovered": true
+  },
+  "settings_preserved": true,
+  "lead_records_preserved": true,
+  "scope": "Existing isolated Windows fixture DB and loopback dashboard"
+}

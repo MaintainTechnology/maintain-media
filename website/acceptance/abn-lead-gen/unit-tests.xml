@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testsuite name="admin authentication and request boundaries" time="13.392312" disabled="0" errors="0" tests="15" failures="0" skipped="0" hostname="Daligdig">
+		<testcase name="registry rejects malformed, duplicate and weak configuration" time="0.005739" classname="test"/>
+		<testcase name="missing or partial environment configuration fails closed" time="0.002126" classname="test"/>
+		<testcase name="signed admin cookie verifies without exposing its secret or password hash" time="0.006186" classname="test"/>
+		<testcase name="malformed, forged, expired and future tokens are rejected" time="0.005368" classname="test"/>
+		<testcase name="disabled users, removed users, changed roles and password resets revoke access" time="0.002008" classname="test"/>
+		<testcase name="cookie parsing rejects duplicates and does not accept similarly named cookies" time="0.074478" classname="test"/>
+		<testcase name="every mutation requires current admin, same origin and session-bound CSRF" time="0.015518" classname="test"/>
+		<testcase name="cookie attributes protect JavaScript access and add Secure on HTTPS" time="0.003828" classname="test"/>
+		<testcase name="Next internal URL normalization preserves the exact validated loopback browser origin" time="3.091708" classname="test"/>
+		<testcase name="configured HTTPS reverse-proxy origin is canonical and rejects hostile public hosts" time="0.920344" classname="test"/>
+		<testcase name="request bodies require bounded JSON objects" time="0.019439" classname="test"/>
+		<testcase name="sign-in rejects invalid credentials generically and issues an admin cookie" time="3.185293" classname="test"/>
+		<testcase name="login and logout reject cross-origin requests; logout clears a valid cookie" time="0.018083" classname="test"/>
+		<testcase name="current environment account changes are checked at each request" time="2.064386" classname="test"/>
+		<testcase name="throttling rejects repeated attempts and provides retry guidance" time="3.945635" classname="test"/>
+	</testsuite>
+	<testcase name="account CLI provisions, resets and disables multiple local admins without printing credentials" time="8.634467" classname="test"/>
+	<testcase name="only explicit endpoints and methods can reach the engine" time="0.006582" classname="test"/>
+	<testcase name="engine origin cannot be a remote host, credential URL or arbitrary path" time="0.001632" classname="test"/>
+	<testcase name="mutation bodies must be bounded JSON objects" time="0.127179" classname="test"/>
+	<testcase name="dashboard hides upstream CSRF and rewrites only allowed report URLs" time="0.013884" classname="test"/>
+	<testcase name="writes use a fresh server-side token and never forward browser credentials" time="0.008357" classname="test"/>
+	<testcase name="report formats preserve downloads, masked text and protected nested links" time="0.011014" classname="test"/>
+	<testcase name="stale reports, malformed upstream and outages fail without sensitive errors" time="0.007144" classname="test"/>
+	<testcase name="uppercase UUID requests retain the report's canonical protected CSV link" time="0.004674" classname="test"/>
+	<!-- tests 25 -->
+	<!-- suites 0 -->
+	<!-- pass 25 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 23572.6563 -->
+</testsuites>

@@ -1,0 +1,10 @@
+[Unit]
+Description=Check redacted operations alarms every minute
+
+[Timer]
+OnCalendar=*-*-* *:*:00 UTC
+Persistent=true
+Unit=abr-engine-monitor.service
+
+[Install]
+WantedBy=timers.target

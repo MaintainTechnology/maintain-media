@@ -1,0 +1,98 @@
+{
+  "status": "passed",
+  "checked_at": "2026-09-09T03:09:55.534Z",
+  "suite": "intercepted resilience regressions",
+  "checks": [
+    {
+      "name": "Saved settings survive an older in-flight refresh",
+      "status": "passed",
+      "saved_cap": 99,
+      "saved_source": "abr",
+      "dashboard_requests": 3,
+      "browser_errors": []
+    },
+    {
+      "name": "Malformed snapshots preserve usable data and run recovery",
+      "status": "passed",
+      "malformed_cases": 3,
+      "intercepted_run_requests": 1,
+      "recovered": true,
+      "browser_errors": []
+    },
+    {
+      "name": "Skip link preserves each view and focuses its main content",
+      "status": "passed",
+      "views": [
+        "leads",
+        "runs",
+        "setup"
+      ],
+      "browser_errors": []
+    },
+    {
+      "name": "Initial loading disables dependent controls until a valid snapshot",
+      "status": "passed",
+      "controls_enabled_after_load": true,
+      "browser_errors": []
+    },
+    {
+      "name": "Empty workspace run prevents duplicate clicks and recovers from rejection",
+      "status": "passed",
+      "intercepted_run_requests": 1,
+      "browser_errors": []
+    },
+    {
+      "name": "Offline first load keeps an honest disabled state and recovers",
+      "status": "passed",
+      "recovered": true,
+      "browser_errors": []
+    },
+    {
+      "name": "Unsaved settings survive ordinary background refresh",
+      "status": "passed",
+      "unsaved_input_preserved": true,
+      "discard_restores_saved_value": true,
+      "browser_errors": []
+    },
+    {
+      "name": "Stale report errors persist across polling and recover explicitly",
+      "status": "passed",
+      "error_persisted": true,
+      "recovered": true,
+      "non_json_error_explained": true,
+      "browser_errors": []
+    },
+    {
+      "name": "Blocked popup opens report in this tab with a working CSV and Back",
+      "status": "passed",
+      "csv_download": "worklist.csv",
+      "back_restores_dashboard": true,
+      "browser_errors": []
+    },
+    {
+      "name": "Blocked-popup report navigation respects unsaved-settings protection",
+      "status": "passed",
+      "unsaved_dialog": "beforeunload",
+      "cancelled_navigation_preserves_changes": true,
+      "browser_errors": []
+    },
+    {
+      "name": "Operational notices stay visible while other workflows remain usable",
+      "status": "passed",
+      "notice_persistent": true,
+      "text_escaped": true,
+      "controls_usable": true,
+      "unchanged_notices_not_reannounced": true,
+      "browser_errors": []
+    },
+    {
+      "name": "Malformed action confirmations do not claim success or corrupt data",
+      "status": "passed",
+      "settings_remain_unsaved": true,
+      "run_retry_identity_preserved": true,
+      "browser_errors": []
+    }
+  ],
+  "actual_api_mutations": 0,
+  "browser_errors": []
+}

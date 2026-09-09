@@ -1,0 +1,111 @@
+{
+  "status": "failed",
+  "checked_at": "2026-09-09T07:07:39.454Z",
+  "origin": "http://127.0.0.1:3001",
+  "mode": "fixture",
+  "checks": [
+    {
+      "name": "Anonymous page redirects and every protected API family denies access",
+      "status": "passed",
+      "denied_routes": 8
+    },
+    {
+      "name": "Rejected sign-in recovers and the configured administrator signs in",
+      "status": "passed"
+    },
+    {
+      "name": "Authenticated writes reject missing CSRF and a hostile origin",
+      "status": "passed"
+    },
+    {
+      "name": "All workspace views, brand navigation and return-to-website link operate",
+      "status": "passed"
+    },
+    {
+      "name": "Every business opens, names and formatted ABNs search, all 12 filters match stored data, empty state clears",
+      "status": "passed",
+      "leads": 2
+    },
+    {
+      "name": "A$0 and A$150 save across reload, out-of-range budgets fail validation, discard restores the saved value",
+      "status": "passed"
+    },
+    {
+      "name": "ALL actual fixture run uses saved source and cap, prevents double click, and serves all 3 masked report formats",
+      "status": "passed"
+    },
+    {
+      "name": "ABR actual fixture run uses saved source and cap, prevents double click, and serves all 3 masked report formats",
+      "status": "passed"
+    },
+    {
+      "name": "QBCC actual fixture run uses saved source and cap, prevents double click, and serves all 3 masked report formats",
+      "status": "passed"
+    },
+    {
+      "name": "HTML popup and nested CSV, direct CSV/Markdown downloads, latest export and both refresh controls operate",
+      "status": "passed"
+    },
+    {
+      "name": "All views fit 1440/820/390/360px, keyboard skip preserves the view, reduced motion is respected, bridge remains server-side",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed and non-JSON refreshes preserve usable data and recover",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Offline first load disables dependent controls then recovers",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Initial loading protects settings and every dependent action until data arrives",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Settings draft survives refresh and rejected saves; recovery and discard work",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Saved settings cannot be replaced by an older in-flight refresh",
+      "status": "passed",
+      "isolated_api_mutations": true
+    }
+  ],
+  "runs": [
+    {
+      "source": "all",
+      "run_id": "1db3d301-03eb-4f90-a8de-416b9b0e6b75",
+      "state": "complete",
+      "run_requests": 1,
+      "viewport": 1440
+    },
+    {
+      "source": "abr",
+      "run_id": "3a81e6ae-2a92-4f90-8b60-7cc25b7c6ecf",
+      "state": "complete",
+      "run_requests": 1,
+      "viewport": 1440
+    },
+    {
+      "source": "qbcc",
+      "run_id": "a82dd364-bc97-43e0-8f51-069bba6c9554",
+      "state": "complete",
+      "run_requests": 1,
+      "viewport": 390
+    }
+  ],
+  "viewports": [
+    1440,
+    820,
+    390,
+    360
+  ],
+  "preference_restoration": "passed",
+  "browser_errors": [],
+  "failure": "Background snapshot does not hide an action failure\n\nfalse !== true\n"
+}

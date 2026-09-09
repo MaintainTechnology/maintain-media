@@ -1,0 +1,11 @@
+[Unit]
+Description=Discover QBCC weekly
+
+[Timer]
+OnCalendar=Mon *-*-* 00:00:00 UTC
+Persistent=true
+RandomizedDelaySec=120
+Unit=abr-engine-qbcc.service
+
+[Install]
+WantedBy=timers.target

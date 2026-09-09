@@ -1,0 +1,25 @@
+{
+  "status": "passed",
+  "checked_at": "2026-09-09T07:13:15.616Z",
+  "origin": "http://127.0.0.1:3001",
+  "mode": "fixture",
+  "suite": "targeted resilience regression",
+  "probe_filter": "Failed sign-out",
+  "checks": [
+    {
+      "name": "Failed sign-out keeps the unsaved draft and a persistent actionable error",
+      "status": "passed",
+      "isolated_api_mutations": true
+    },
+    {
+      "name": "Sign-out revokes access, API routes deny reuse and direct dashboard re-entry requires sign-in",
+      "status": "passed"
+    }
+  ],
+  "runs": [],
+  "viewports": [
+    1280
+  ],
+  "preference_restoration": "passed",
+  "browser_errors": []
+}

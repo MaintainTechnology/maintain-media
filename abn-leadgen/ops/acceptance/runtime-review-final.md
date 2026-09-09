@@ -1,0 +1,15 @@
+# Running build review — 9 September 2026
+
+The current fixture run is `b0fbe8ea-3422-404a-84d1-39e0a55ff9df`. Its immutable receipt is `runtime-run-b0fbe8ea-3422-404a-84d1-39e0a55ff9df.json`; `final-runtime-run.json` points to the same result. Migration024 was applied to the isolated local PostgreSQL16 database before this run. Both sources completed with one selected business, one blocked/deferred entry and zero live API calls. HTML, Markdown and CSV artifact hashes are in the receipt.
+
+The hidden loopback control process was restarted from the final code on `http://127.0.0.1:8766`. Actual HTTP checks in [runtime-api-7d0162417712491e8e5235688043443d.json](runtime-api-7d0162417712491e8e5235688043443d.json) passed: health200 with fixture/outreach-disabled, anonymous schema401, authenticated schema/worklist200, new synthetic opt-out201 and identical replay200. A separate database transaction observed the committed restriction. Request through returned commit acknowledgement took 0.298584 seconds. This is one local fixture sample, not a production SLA. Tokens and the synthetic endpoint were not saved in the acceptance receipt. Reviewed tree SHA256: `3c2ba7ed46ead9fdf8dc3476f9b6f85159791f2238f6c02a6b1ada573e7f16ae`.
+
+The refreshed report at `http://127.0.0.1:8767/report.html` visibly identifies this run. The server serves only its synthetic report directory. An actual 360×800 browser check found `innerWidth=360`, `scrollWidth=345`, with no horizontal overflow. The candidate-only email label, duplicate-review action and source limitations are present. Tab focuses the CSV link with a solid2.4px outline. The viewport was restored and the report marked as a deliverable.
+
+The reporting repair has separate [erasure metrics evidence](erasure-metrics-review.md) and [independent review](final-metrics-discovery-review.md). Its tests compare the same closed-window counts before/after profile erasure and cover corrections, merged attribution, scoped holds, expiry and late cost entry. The fresh ordinary fixture run verifies integration; it does not substitute for those specific regression cases.
+
+The earlier held publication and explicit zero-event recovery remain in `runtime-held-498c7767.json` and `runtime-rebaseline.json`; the previous runtime review is preserved in `runtime-review-before024.md`. No historical business events were invented to repair missing legacy file-location metadata.
+
+This is a private review artifact and control API, not a live lead collection or outreach service. Local loopback preview does not certify production access control. Hosted CI, approved live source/vendor adapters, AU deployment, Linux scheduler and the measured pilot remain pending. Final whole-package checks are recorded separately in the immutable verification receipt and release review.
+
+The earlier browser tab timed out during debugger synchronisation. A fresh tab in the same in-app browser loaded this current run and passed the recorded width/focus checks; it is marked as the deliverable. The service remained available during that browser-control recovery.

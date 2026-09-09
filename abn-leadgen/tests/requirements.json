@@ -1,0 +1,418 @@
+{
+  "spec_version": "4.0",
+  "scope": "Engineering acceptance mapping, not a declaration that every production requirement has passed",
+  "requirements": [
+    {
+      "requirement": "FR-001",
+      "canonical": "R1",
+      "tests": [
+        "tests/unit/test_enrichment.py",
+        "tests/integration/test_control_review_regressions.py"
+      ],
+      "scope": "Synthetic default and live capabilities fail closed; production G1-G7 pending"
+    },
+    {
+      "requirement": "FR-002",
+      "canonical": "R2",
+      "tests": [
+        "tests/unit/test_sources.py",
+        "tests/integration/test_pipeline.py",
+        "tests/unit/test_discovery.py"
+      ],
+      "scope": "Source manifests and identity fixtures; real dated source smoke pending"
+    },
+    {
+      "requirement": "FR-003",
+      "canonical": "R3",
+      "tests": [
+        "tests/unit/test_sources.py",
+        "tests/integration/test_abr_recovery.py",
+        "tests/unit/test_discovery.py"
+      ],
+      "scope": "Generation coherence, current-only noop and fresh recurrence; actual publication discovery approval pending"
+    },
+    {
+      "requirement": "FR-004",
+      "canonical": "R4",
+      "tests": [
+        "tests/unit/test_sources.py",
+        "tests/unit/test_discovery.py"
+      ],
+      "scope": "HTTPS/resume/length/archive rejection via injected transport"
+    },
+    {
+      "requirement": "FR-005",
+      "canonical": "R5",
+      "tests": [
+        "tests/unit/test_sources.py",
+        "tests/unit/test_publication_quality.py",
+        "tests/integration/test_abr_recovery.py"
+      ],
+      "scope": "Streaming XML schema/count/canaries; full XML scale on target host pending"
+    },
+    {
+      "requirement": "FR-006",
+      "canonical": "R6",
+      "tests": [
+        "tests/integration/test_pipeline.py",
+        "tests/integration/test_abr_recovery.py"
+      ],
+      "scope": "Immutable artifact ownership, readback and promotion"
+    },
+    {
+      "requirement": "FR-007",
+      "canonical": "R7",
+      "tests": [
+        "tests/integration/test_pipeline.py",
+        "tests/integration/test_abr_recovery.py"
+      ],
+      "scope": "Atomic CAS and crash replay"
+    },
+    {
+      "requirement": "FR-008",
+      "canonical": "R8",
+      "tests": [
+        "tests/unit/test_sources.py",
+        "tests/integration/test_abr_recovery.py",
+        "tests/unit/test_diff_review.py"
+      ],
+      "scope": "Seven exact observed event types including disappearances"
+    },
+    {
+      "requirement": "FR-009",
+      "canonical": "R9",
+      "tests": [
+        "tests/unit/test_sources.py"
+      ],
+      "scope": "Deterministic synthetic classifier; actual 30 rules and precision review pending"
+    },
+    {
+      "requirement": "FR-010",
+      "canonical": "R10",
+      "tests": [
+        "tests/unit/test_sources.py",
+        "tests/unit/test_qualification_policy.py"
+      ],
+      "scope": "ABR/QBCC tiers without revenue inference"
+    },
+    {
+      "requirement": "FR-011",
+      "canonical": "R11",
+      "tests": [
+        "tests/unit/test_sources.py",
+        "tests/unit/test_enrichment.py"
+      ],
+      "scope": "Geography and completed calendar months"
+    },
+    {
+      "requirement": "FR-012",
+      "canonical": "R12",
+      "tests": [
+        "tests/unit/test_sources.py",
+        "tests/integration/test_control_review_regressions.py"
+      ],
+      "scope": "QBCC collapse/ABN/address/age and current licence review"
+    },
+    {
+      "requirement": "FR-013",
+      "canonical": "R13",
+      "tests": [
+        "tests/integration/test_merge.py",
+        "tests/integration/test_merge_review_regressions.py",
+        "tests/integration/test_duplicate_hints.py",
+        "tests/integration/test_merge_cancellation_resolution.py"
+      ],
+      "scope": "Canonical alias merge and restriction union"
+    },
+    {
+      "requirement": "FR-014",
+      "canonical": "R14",
+      "tests": [
+        "tests/unit/test_sources.py",
+        "tests/integration/test_control.py",
+        "tests/unit/test_qualification_policy.py"
+      ],
+      "scope": "200-to60, fairness, queue expiry and current gate"
+    },
+    {
+      "requirement": "FR-015",
+      "canonical": "R15",
+      "tests": [
+        "tests/unit/test_enrichment.py",
+        "tests/integration/test_enrichment_worker.py",
+        "tests/integration/test_enrichment_worker_review.py"
+      ],
+      "scope": "Durable lease/reservation/apply recovery, policy/quarantine rechecks and90-day merged-family cooldown; actual providers separately gated"
+    },
+    {
+      "requirement": "FR-016",
+      "canonical": "R16",
+      "tests": [
+        "tests/unit/test_enrichment.py",
+        "tests/integration/test_control_review_regressions.py"
+      ],
+      "scope": "Own-domain exact or reviewed corroboration, current identity"
+    },
+    {
+      "requirement": "FR-017",
+      "canonical": "R17",
+      "tests": [
+        "tests/contract/test_crawl_safety.py"
+      ],
+      "scope": "Bounded static crawl, pinned public DNS/TLS and robots"
+    },
+    {
+      "requirement": "FR-018",
+      "canonical": "R18",
+      "tests": [
+        "tests/unit/test_enrichment.py",
+        "tests/integration/test_control_review_regressions.py"
+      ],
+      "scope": "Endpoint normalisation/selection/verification separation"
+    },
+    {
+      "requirement": "FR-019",
+      "canonical": "R19",
+      "tests": [
+        "tests/integration/test_control.py",
+        "tests/integration/test_control_review_regressions.py",
+        "tests/integration/test_enrichment_worker.py",
+        "tests/integration/test_acceptance_matrix.py"
+      ],
+      "scope": "Atomic reservations, dated FX, cap and uncertain charges"
+    },
+    {
+      "requirement": "FR-020",
+      "canonical": "R20",
+      "tests": [
+        "tests/integration/test_control_review_regressions.py",
+        "tests/integration/test_acceptance_matrix.py"
+      ],
+      "scope": "Actual PostgreSQL deferred/composite provenance"
+    },
+    {
+      "requirement": "FR-021",
+      "canonical": "R21",
+      "tests": [
+        "tests/integration/test_control_review_regressions.py",
+        "tests/integration/test_control.py",
+        "tests/integration/test_acceptance_matrix.py"
+      ],
+      "scope": "Latest sequence, actual express consent, inference limbs"
+    },
+    {
+      "requirement": "FR-022",
+      "canonical": "R22",
+      "tests": [
+        "tests/integration/test_control.py",
+        "tests/unit/test_outputs.py",
+        "tests/integration/test_final_report_review.py"
+      ],
+      "scope": "Allowed/blocked current export and masking"
+    },
+    {
+      "requirement": "FR-023",
+      "canonical": "R23",
+      "tests": [
+        "tests/integration/test_control_review_regressions.py",
+        "tests/integration/test_acceptance_matrix.py"
+      ],
+      "scope": "Exact manual-wash receipt and latest observation"
+    },
+    {
+      "requirement": "FR-024",
+      "canonical": "R24",
+      "tests": [
+        "tests/integration/test_control.py",
+        "tests/integration/test_api_assignments.py"
+      ],
+      "scope": "Single-use current action/actor binding and races; sender certification pending"
+    },
+    {
+      "requirement": "FR-025",
+      "canonical": "R25",
+      "tests": [
+        "tests/integration/test_control.py",
+        "tests/integration/test_merge_review_regressions.py",
+        "tests/integration/test_retention.py",
+        "tests/integration/test_propagation.py"
+      ],
+      "scope": "Committed group/endpoint optout, future aliases and recovery"
+    },
+    {
+      "requirement": "FR-026",
+      "canonical": "R26",
+      "tests": [
+        "tests/integration/test_control_review_regressions.py",
+        "tests/integration/test_api_assignments.py",
+        "tests/integration/test_read_quarantine.py",
+        "tests/integration/test_final_report_review.py"
+      ],
+      "scope": "Scopes, key custody/rotation/dependency and audit"
+    },
+    {
+      "requirement": "FR-027",
+      "canonical": "R27",
+      "tests": [
+        "tests/integration/test_control_review_regressions.py"
+      ],
+      "scope": "Policy capability fence; qualified legal review pending"
+    },
+    {
+      "requirement": "FR-028",
+      "canonical": "R28",
+      "tests": [
+        "tests/integration/test_control_review_regressions.py",
+        "tests/unit/test_enrichment.py"
+      ],
+      "scope": "Confirmed timezone/calendar/wash and invitation state; Part2 excluded"
+    },
+    {
+      "requirement": "FR-029",
+      "canonical": "R29",
+      "tests": [
+        "tests/integration/test_retention.py",
+        "tests/integration/test_backup.py",
+        "tests/integration/test_merge_evidence_retention.py",
+        "tests/integration/test_cost_evidence.py",
+        "tests/integration/test_erasure_metrics.py"
+      ],
+      "scope": "Finite retention, erased profile, restricted archive, native backup/replay"
+    },
+    {
+      "requirement": "FR-030",
+      "canonical": "R30",
+      "tests": [
+        "tests/integration/test_control_review_regressions.py"
+      ],
+      "scope": "Unknown live processor approvals denied; AU contract pending"
+    },
+    {
+      "requirement": "FR-031",
+      "canonical": "R31",
+      "tests": [
+        "tests/unit/test_outputs.py",
+        "tests/integration/test_api_assignments.py"
+      ],
+      "scope": "Private escaped report and executable Sheets CSV contract; browser evidence separate"
+    },
+    {
+      "requirement": "FR-032",
+      "canonical": "R32",
+      "tests": [
+        "tests/integration/test_control.py",
+        "tests/integration/test_api_assignments.py",
+        "tests/unit/test_outputs.py"
+      ],
+      "scope": "Version/idempotency/closed outcomes and edit bridge"
+    },
+    {
+      "requirement": "FR-033",
+      "canonical": "R33",
+      "tests": [
+        "tests/integration/test_crm_recovery.py",
+        "tests/integration/test_propagation.py"
+      ],
+      "scope": "Typed mappings, approval, provider uncertainty and suppression race; live vendor sandbox pending"
+    },
+    {
+      "requirement": "FR-034",
+      "canonical": "R34",
+      "tests": [
+        "tests/unit/test_outputs.py",
+        "tests/integration/test_operational_summary.py",
+        "tests/integration/test_pipeline.py",
+        "tests/integration/test_summary_review.py",
+        "tests/integration/test_cost_evidence.py",
+        "tests/integration/test_erasure_metrics.py"
+      ],
+      "scope": "Immutable summaries, real DB metrics, explicit unknown denominators/costs"
+    },
+    {
+      "requirement": "FR-035",
+      "canonical": "R35",
+      "tests": [
+        "tests/unit/test_outputs.py",
+        "tests/integration/test_pipeline.py",
+        "tests/integration/test_ops_monitor.py"
+      ],
+      "scope": "Alarm inventory, durable locks and scheduler templates; Linux drill pending"
+    },
+    {
+      "requirement": "FR-036",
+      "canonical": "R36",
+      "tests": [
+        "tests/unit/test_outputs.py",
+        "tests/unit/test_sources.py"
+      ],
+      "scope": "20.5M output-bearing resource evidence under ops/acceptance; target host certification pending"
+    },
+    {
+      "requirement": "FR-037",
+      "canonical": "R37",
+      "tests": [
+        "tests/integration/test_control_review_regressions.py",
+        "tests/integration/test_pipeline.py",
+        "tests/integration/test_acceptance_matrix.py"
+      ],
+      "scope": "Actual isolated PostgreSQL16 and injected boundary failures"
+    },
+    {
+      "requirement": "FR-038",
+      "canonical": "R38",
+      "tests": [
+        "tests/unit/test_outputs.py",
+        "tests/integration/test_operational_summary.py",
+        "tests/integration/test_cost_evidence.py",
+        "tests/integration/test_erasure_metrics.py"
+      ],
+      "scope": "Dated cohort metrics; four/eight-week live pilot pending"
+    },
+    {
+      "requirement": "FR-039",
+      "canonical": "R39",
+      "tests": [
+        "tests/integration/test_pipeline.py",
+        "tests/integration/test_backup.py"
+      ],
+      "scope": "CLI and recovery commands; independent handover evidence separate"
+    },
+    {
+      "requirement": "FR-040",
+      "canonical": "R40",
+      "tests": [
+        "tests/unit/test_outputs.py",
+        "tests/unit/test_sources.py"
+      ],
+      "scope": "Cautious signal wording and synthetic labels; release facts recheck pending"
+    },
+    {
+      "requirement": "FR-041",
+      "canonical": "R41",
+      "tests": [
+        "tests/integration/test_abr_recovery.py",
+        "tests/integration/test_retention.py",
+        "tests/integration/test_erasure_metrics.py",
+        "tests/unit/test_discovery.py"
+      ],
+      "scope": "Parser rebaseline, ordered migrations, dual-key retention"
+    },
+    {
+      "requirement": "FR-042",
+      "canonical": "R42",
+      "tests": [
+        "tests/contract/test_crawl_safety.py",
+        "tests/integration/test_pipeline.py"
+      ],
+      "scope": "No sending/dialling/procurement; fixture output only"
+    },
+    {
+      "requirement": "FR-043",
+      "canonical": "R43",
+      "tests": [
+        "tests/integration/test_pipeline.py"
+      ],
+      "scope": "This requirement map and verify.py; scores distinct from full specification release"
+    }
+  ]
+}

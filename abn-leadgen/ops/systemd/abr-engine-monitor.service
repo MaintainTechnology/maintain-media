@@ -1,0 +1,19 @@
+[Unit]
+Description=Maintain Media redacted alarm monitor (fixture default)
+After=postgresql.service
+
+[Service]
+Type=oneshot
+User=abr-engine
+Group=abr-engine
+WorkingDirectory=/opt/abn-leadgen
+UMask=0077
+ExecStart=/opt/abn-leadgen/.venv/bin/abr-engine alarms check --mode fixture
+ExecStart=/opt/abn-leadgen/.venv/bin/abr-engine alarms drain --mode fixture
+TimeoutStartSec=120
+MemoryMax=512M
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+

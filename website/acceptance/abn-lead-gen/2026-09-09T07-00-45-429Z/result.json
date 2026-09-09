@@ -1,0 +1,22 @@
+{
+  "status": "failed",
+  "checked_at": "2026-09-09T07:00:57.324Z",
+  "origin": "http://127.0.0.1:3001",
+  "mode": "fixture",
+  "checks": [
+    {
+      "name": "Anonymous page redirects and every protected API family denies access",
+      "status": "passed",
+      "denied_routes": 8
+    }
+  ],
+  "runs": [],
+  "viewports": [
+    1440,
+    820,
+    390,
+    360
+  ],
+  "preference_restoration": "not needed",
+  "browser_errors": []
+}

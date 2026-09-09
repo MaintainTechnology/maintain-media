@@ -1,0 +1,24 @@
+{
+  "status": "passed",
+  "checked_at": "2026-09-09T02:05:35.650Z",
+  "checks": [
+    "Previous report URL opens dashboard with actual stored lead data",
+    "ABN search, combined source/tier filters, empty-state recovery, lead details",
+    "Background refresh preserves keyboard focus on the selected business",
+    "Settings save across reload, effective budget displayed, invalid amount rejected, discard works",
+    "Actual fixture run uses saved source/cap, reaches completion, receipt survives reload",
+    "Run CSV downloads, report opens, report’s own CSV link downloads",
+    "Background refresh preserves keyboard focus on report downloads",
+    "Rejected run remains visible across background refresh and has working recovery",
+    "All 3 views fit 1440, 820, 390 and 360px without page overflow",
+    "Reduced motion respected; no browser JavaScript errors"
+  ],
+  "run_id": "b86c2171-2064-439a-8fcd-8a96fefaa07f",
+  "viewports": [
+    1440,
+    820,
+    390,
+    360
+  ],
+  "browser_errors": []
+}
