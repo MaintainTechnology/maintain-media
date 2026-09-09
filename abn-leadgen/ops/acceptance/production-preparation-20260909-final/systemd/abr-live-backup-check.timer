@@ -1,0 +1,10 @@
+[Unit]
+Description=Verify current AU backup coverage every hour
+
+[Timer]
+OnCalendar=*-*-* *:15:00 UTC
+Persistent=true
+Unit=abr-live-backup-check.service
+
+[Install]
+WantedBy=timers.target

@@ -2,6 +2,14 @@
 
 All production gates are **PENDING**. Fixtures do not approve legal policy, real-source collection, vendor use, calling or sending. Live capabilities remain OFF; all approval fields below are intentionally empty.
 
+Update, 9 September 2026: current official catalogue and schema metadata were checked;
+the exact 30-rule corpus was recovered and the user approved its targeting direction.
+This is partial G2 evidence, not a completed G2 precision review or live release.
+See [targeting approval](acceptance/live-sources/targeting-approval-2026-09-09.json) and
+[source evidence](acceptance/live-sources/source-check-2026-09-09.json).
+Run `abr-engine release-check --mode pilot` to inspect actual database approvals and
+remaining runtime blockers. The default fixture database has no live approvals.
+
 | Gate / scope | Accountable owner | Required evidence | Approved by / at | Expiry / next review | State |
 |---|---|---|---|---|---|
 | G1 source and collection | Jon Pepper + qualified adviser | Dated ABR/QBCC licences, terms, necessity, collection/harvesting position, Privacy Act applicability, APP5 notices, channel-specific APP7/Spam/DNCR interaction, retention justification | Pending | Pending | PENDING |

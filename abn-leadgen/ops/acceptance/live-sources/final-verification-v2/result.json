@@ -1,0 +1,64 @@
+{
+  "status": "passed",
+  "checked_at": "2026-09-09T13:07:37.291756+00:00",
+  "source_and_python_tests_unchanged": true,
+  "inventory_sha256": "c28faa480a7c1553dbedcbef516490799e7213bbe1713f96e43359a6149e6651",
+  "commands": [
+    {
+      "command": [
+        "uv",
+        "run",
+        "--frozen",
+        "ruff",
+        "check",
+        "src",
+        "tests",
+        "ops"
+      ],
+      "exit_code": 0,
+      "seconds": 0.78,
+      "log": "check-1.log"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "--frozen",
+        "mypy",
+        "src/abr_engine"
+      ],
+      "exit_code": 0,
+      "seconds": 1.16,
+      "log": "check-2.log"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "--frozen",
+        "mypy",
+        "--follow-imports=silent",
+        "ops/production/prepare.py"
+      ],
+      "exit_code": 0,
+      "seconds": 4.83,
+      "log": "check-3.log"
+    },
+    {
+      "command": [
+        "uv",
+        "run",
+        "--frozen",
+        "pytest",
+        "-q",
+        "--junitxml=C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\ops\\acceptance\\live-sources\\final-verification-v2\\pytest.xml"
+      ],
+      "exit_code": 0,
+      "seconds": 796.36,
+      "log": "check-4.log"
+    }
+  ],
+  "python": "3.12.12",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "scope": "Local engineering checks; synthetic data and mocked vendor I/O. No live release or installation."
+}

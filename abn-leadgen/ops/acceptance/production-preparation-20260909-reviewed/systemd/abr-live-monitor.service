@@ -1,0 +1,28 @@
+[Unit]
+Description=Maintain Media controlled monitor
+After=postgresql.service
+
+[Service]
+Type=oneshot
+User=abr-engine
+Group=abr-engine
+WorkingDirectory=/opt/abn-leadgen
+EnvironmentFile=/etc/abr-engine/runtime.env
+RuntimeDirectory=abr-engine
+RuntimeDirectoryPreserve=yes
+StateDirectory=abr-engine
+UMask=0077
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+ReadWritePaths=/var/lib/abr-engine /run/abr-engine
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ExecStartPre=/opt/abn-leadgen/.venv/bin/python /opt/abn-leadgen/ops/production/prepare.py check --plan /etc/abr-engine/deployment-plan.json --manifest /etc/abr-engine/deployment-manifest.json --scope monitor
+ExecStart=/opt/abn-leadgen/.venv/bin/abr-engine alarms check --config /etc/abr-engine/config.yaml --mode pilot
+TimeoutStartSec=120
+MemoryMax=512M

@@ -4,7 +4,7 @@ project: Maintain Media
 version: "4.0"
 synced: 2026-09-09
 source: "specs/001-abr-lead-engine/tasks.md"
-source_sha256: b9fc289cf266e4d98fa707e2317a7dade44f5b83418dc6930785373c5b13624b
+source_sha256: 0f5715dcf77a97b9fdd675b748b6674cce79f26eb32dea5ad3eacaf119b45553
 tags: [abr-lead-engine, maintain-media]
 ---
 > Synced from the repository; local document links adapted for Obsidian.
@@ -134,3 +134,14 @@ Assessed 2026-09-09 after the authorised fixture implementation. Inventory:43FRs
 ## Executed status closure
 
 Final local verification: 408 tests passed, no failures/errors/skips; frozen install, Ruff, mypy and vault checks passed. 58 of 65 local engineering tasks are complete. The seven remaining tasks above retain their original obligations and are explicitly pending/partial in `task-evidence.json`. The [final build review](C:/Users/dalig/Desktop/MaintainTech/MaintainOrg/maintain-media/abn-leadgen/ops/acceptance/release-review.md) separates local engineering 92/100 from incomplete full-spec acceptance.
+
+## Phase 10: Convergence
+
+Live-release assessment, 9 September 2026: the user's request authorises implementing the remaining live capabilities. Existing G1–G7 evidence is still required; no approval or elapsed pilot time is inferred. Requirements-quality checklists pass (12/12 and 20/20). These tasks resolve concrete live gaps underneath T065; earlier fixture receipts remain historical.
+
+- [x] T066 Implement bounded official QBCC/ABR catalogue inspection and a redacted executable release-readiness check in `abn-leadgen/src/abr_engine/ingest/catalogue.py`, `ops/readiness.py` and CLI; capture actual metadata separately from register-row ingestion per FR-002/FR-037/FR-040 (partial, HIGH).
+- [x] T067 Implement explicit authentic QBCC schema mapping, missing-status handling, conservative category interpretation and migration regressions in `abn-leadgen/src/abr_engine/ingest/qbcc.py` per FR-005/FR-012/FR-041 (partial, HIGH).
+- [x] T068 Recover the now-present literal legacy corpus without executing its extraction script; preserve exact order/hash and prepare the owner decision and 100-record precision review artifacts per FR-009/FR-040/T041 (partial, HIGH; owner review remains external).
+- [x] T069 Implement and test a bounded GoHighLevel v2 transport and owner-restricted Sheet installation package; retain live writer blocks until actual identity, mapping and suppression sandbox evidence is available per FR-026/FR-031/FR-032/FR-033 (partial, HIGH).
+- [x] T070 Prepare a reproducible production bundle using supported commands, one scheduler and explicit backup/restore/access dependencies; validate fail-closed preflight without claiming installation on an unselected host per FR-026/FR-029/FR-035/FR-039 (partial, HIGH).
+- [ ] T071 Connect approved real ingestion, current licence/identity review, protected Next.js worklist, actual-editor bridge, CRM drain and suppression propagation end to end on the identified AU host; prove the full live workflow before changing demo labels per FR-001/FR-012/FR-025/FR-030/FR-031/FR-033/FR-037 (partial, HIGH; approved-file QBCC review intake and narrow cleanup are implemented, but accepted promotion/worklist/vendor integration and source/account/host evidence remain required).

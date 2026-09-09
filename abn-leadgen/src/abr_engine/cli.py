@@ -33,6 +33,112 @@ alarms_app = typer.Typer()
 app.add_typer(alarms_app, name="alarms")
 propagation_app = typer.Typer()
 app.add_typer(propagation_app, name="propagation")
+sources_app = typer.Typer()
+app.add_typer(sources_app, name="sources")
+
+
+@sources_app.command("inspect")
+def sources_inspect(source: Annotated[str, typer.Option("--source")]):
+    """Read current official catalogue metadata only; never download register rows."""
+    from abr_engine.ingest.catalogue import inspect_catalogue
+    from abr_engine.ingest.common import SourceError
+
+    if source not in {"qbcc", "abr"}:
+        raise typer.BadParameter("Source must be qbcc or abr")
+    try:
+        output(inspect_catalogue(source))
+    except SourceError as exc:
+        output({"status": "held", "code": exc.code, "source": source,
+                "register_rows_downloaded": 0})
+        raise typer.Exit(3) from None
+
+
+@sources_app.command("stage-qbcc")
+def sources_stage_qbcc(
+    config: Annotated[Path, typer.Option("--config")],
+    input_path: Annotated[Path, typer.Option("--file")],
+    source_sha256: Annotated[str, typer.Option("--source-sha256")],
+    inventory_before_sha256: Annotated[str, typer.Option("--inventory-before-sha256")],
+    inventory_after_sha256: Annotated[str, typer.Option("--inventory-after-sha256")],
+    mapping_evidence_ref: Annotated[str, typer.Option("--mapping-evidence-ref")],
+    mapping_evidence_sha256: Annotated[str, typer.Option("--mapping-evidence-sha256")],
+    retrieved_at: Annotated[str, typer.Option("--retrieved-at", help="ISO 8601 timestamp including timezone")],
+    expected_cursor_version: Annotated[int, typer.Option("--expected-cursor-version")],
+    run_id: Annotated[UUID, typer.Option("--run-id")],
+):
+    """Stage an explicitly approved file for licence review; never create candidates."""
+    from abr_engine.ingest.common import SourceError
+    from abr_engine.ingest.qbcc_review import QBCCReviewRequest, stage_qbcc_review
+
+    def operation():
+        # This entry point uses the mode declared in the private YAML. It does not
+        # construct the fixture Service, load dotenv files or override live mode.
+        if config.name.startswith(".env") or config.suffix not in {".yaml", ".yml"}:
+            raise ValueError("A YAML configuration is required")
+        settings = load_settings(config)
+        request = QBCCReviewRequest.model_validate({
+            "run_id": run_id, "input_path": input_path, "source_sha256": source_sha256,
+            "inventory_before_sha256": inventory_before_sha256,
+            "inventory_after_sha256": inventory_after_sha256,
+            "mapping_evidence_ref": mapping_evidence_ref,
+            "mapping_evidence_sha256": mapping_evidence_sha256,
+            "retrieved_at": retrieved_at, "expected_cursor_version": expected_cursor_version,
+        })
+        try:
+            return stage_qbcc_review(settings, request)
+        except SourceError as exc:
+            return {"status": "held", "code": exc.code, "source": "qbcc", "accepted": False}
+
+    guarded(operation)
+
+
+@sources_app.command("cleanup-qbcc-review")
+def sources_cleanup_qbcc_review(
+    config: Annotated[Path, typer.Option("--config")],
+    run_id: Annotated[UUID | None, typer.Option("--run-id")] = None,
+    execute: bool = False,
+):
+    """Preview or expire only owned QBCC review intake; honours retention holds."""
+    from abr_engine.ingest.common import SourceError
+    from abr_engine.ingest.qbcc_review import cleanup_qbcc_review
+
+    def operation():
+        if config.name.startswith(".env") or config.suffix not in {".yaml", ".yml"}:
+            raise ValueError("A YAML configuration is required")
+        settings = load_settings(config)
+        try:
+            return cleanup_qbcc_review(settings, run_id=run_id, execute=execute)
+        except SourceError as exc:
+            return {"status": "held", "code": exc.code, "source": "qbcc"}
+
+    guarded(operation)
+
+
+@app.command("release-check")
+def release_check(config: Path | None = None, mode: str = "pilot"):
+    """Inspect live gates without loading keys, changing mode or writing approvals."""
+    from abr_engine.ops.readiness import readiness_report
+
+    if mode not in {"pilot", "production"}:
+        raise typer.BadParameter("Release target must be pilot or production")
+    try:
+        settings = load_settings(config)
+    except (ValidationError, ValueError, OSError):
+        output({"status": "invalid", "code": "INVALID_CONFIGURATION"})
+        raise typer.Exit(2) from None
+    rows = []
+    available = True
+    try:
+        with transaction(settings) as conn:
+            conn.execute("SET TRANSACTION READ ONLY")
+            rows = conn.execute("SELECT gate_name,environment,scope,revision,approved_at,expires_at,"
+                                "evidence_ref,evidence_sha256 FROM release_gate").fetchall()
+    except psycopg.Error:
+        available = False
+    result = readiness_report(settings, rows, target=mode, database_available=available)
+    output(result)
+    if result["status"] != "ready":
+        raise typer.Exit(6)
 
 
 def output(value):

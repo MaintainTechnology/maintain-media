@@ -4,7 +4,7 @@ project: Maintain Media
 version: "4.0"
 synced: 2026-09-09
 source: "specs/001-abr-lead-engine/spec.md"
-source_sha256: 99e0c864a90c25583e6904facb657516f3282080050fd0bb56c928ac5eed9c21
+source_sha256: 805d8e1b51c3f52ccb67a7aec902a04c4ccf9668b697b78b81db24e1cc842ac6
 tags: [abr-lead-engine, maintain-media]
 ---
 > Synced from the repository; local document links adapted for Obsidian.
@@ -14,7 +14,7 @@ tags: [abr-lead-engine, maintain-media]
 
 **Feature directory:** specs/001-abr-lead-engine
 **Created:** 2026-09-08 · **Version:** 4.0
-**Status:** authorised local implementation in `abn-leadgen/`; full production acceptance outstanding.
+**Status:** live implementation authorised in `abn-leadgen/`; full production acceptance outstanding.
 **Input:** Review, improve and record the specification using LLM Council and Spec Kit, then build, run and review it as subsequently requested by the user.
 **Authority:** [[ABR Lead Engine|Canonical specification]]. FR-nnn corresponds exactly to Rn;
 the canonical requirement contains the complete policy, boundary and acceptance detail.
@@ -174,7 +174,7 @@ creates; stale data beyond retention; lost lock; interrupted restore.
 SC-008/009 require a live pilot and remain pending; they cannot pass from document inspection.
 
 ## Assumptions
-- Documentation and build planning are this task's scope; no application implementation is claimed.
+- The user has authorised implementation towards live operation; current execution and remaining production dependencies are recorded in implementation status.
 - QLD/northern NSW pilot, human CRM approval, manual DNCR wash and A$150/month are explicit defaults.
 - The intended legacy rule source must be recovered or explicitly replaced before production classification.
 - Legal/policy, processor, account, capacity and release evidence are deployment dependencies,
@@ -182,6 +182,14 @@ SC-008/009 require a live pilot and remain pending; they cannot pass from docume
 - The system provides no automatic authority over external senders that have not integrated its live gate.
 
 ## Clarifications
+### Session 2026-09-09
+The user authorised work towards live operation and explicitly approved retaining all
+30 recovered trade categories, QLD plus NSW postcodes 2450–2490, QBCC Categories 1–2
+and a maximum of 60 businesses weekly. This is targeting-direction approval only.
+The exact rule corpus is now recovered; real precision sampling, source/privacy and
+vendor decisions, production hosting and the measured pilot remain outstanding.
+The earlier missing-file/defaults statements below describe the original review.
+
 ### Session 2026-09-08
 Optional scope/stack/budget/pilot intake was offered. No reply is recorded; the defaults above are
 planning assumptions, not user-confirmed answers. Remaining approval-dependent choices are

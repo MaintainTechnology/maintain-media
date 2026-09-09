@@ -187,7 +187,7 @@
     "T013": {
       "state": "complete",
       "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
-      "review": "| T013 | Local done | Release-gates ledger has explicit scope/owner/evidence/review fields and pending G1\u00e2\u20ac\u201cG7 approvals. Creating pending records is the deliverable; obtaining approval is T058/T065. |",
+      "review": "| T013 | Local done | Release-gates ledger has explicit scope/owner/evidence/review fields and pending G1â€“G7 approvals. Creating pending records is the deliverable; obtaining approval is T058/T065. |",
       "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
       "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
       "evidence": [
@@ -562,7 +562,7 @@
     "T038": {
       "state": "complete",
       "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
-      "review": "| T038 | Local done for local storage lifecycle | Exact mapped-label/uncompressed-member identity, exclusive manifest writes/readback, ownership metadata and current no-op/same-day/A\u00e2\u20ac\u201cB\u00e2\u20ac\u201cA/parser rebaseline tests. Real encrypted AU object-upload provider remains an external deployment gate. |",
+      "review": "| T038 | Local done for local storage lifecycle | Exact mapped-label/uncompressed-member identity, exclusive manifest writes/readback, ownership metadata and current no-op/same-day/Aâ€“Bâ€“A/parser rebaseline tests. Real encrypted AU object-upload provider remains an external deployment gate. |",
       "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
       "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
       "evidence": [
@@ -645,7 +645,7 @@
     "T044": {
       "state": "complete",
       "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
-      "review": "| T044 | Local done, fixture contract | Source failure boundaries/rollback, source-specific locks, parser rebaseline, A\u00e2\u20ac\u201cB\u00e2\u20ac\u201cA recurrence and deterministic classifier tests are distributed across recovery/unit/pipeline suites. The three revised alarm assertions passed focused rerun; final combined check remains pending. |",
+      "review": "| T044 | Local done, fixture contract | Source failure boundaries/rollback, source-specific locks, parser rebaseline, Aâ€“Bâ€“A recurrence and deterministic classifier tests are distributed across recovery/unit/pipeline suites. The three revised alarm assertions passed focused rerun; final combined check remains pending. |",
       "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
       "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
       "evidence": [
@@ -819,7 +819,7 @@
     "T057": {
       "state": "complete",
       "scope": "Local implementation and tested fixture contract complete; external gate obligations remain separate.",
-      "review": "| T057 | Local implementation done; final result pending | `tests/requirements.json` covers FR001\u00e2\u20ac\u201c043 with scoped file links; `ops/verify.py` records command outcomes/timeouts, spec/code hashes and unchanged-tree status, and CI is configured. File mappings alone are not requirement proof. Final successful immutable verify receipt and hosted CI execution are separate pending evidence. |",
+      "review": "| T057 | Local implementation done; final result pending | `tests/requirements.json` covers FR001â€“043 with scoped file links; `ops/verify.py` records command outcomes/timeouts, spec/code hashes and unchanged-tree status, and CI is configured. File mappings alone are not requirement proof. Final successful immutable verify receipt and hosted CI execution are separate pending evidence. |",
       "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
       "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
       "evidence": [
@@ -834,7 +834,7 @@
     "T058": {
       "state": "pending",
       "scope": "Pending: applicable G1-G7 policy/source/vendor/AU infrastructure/pilot approvals.",
-      "review": "| T058 | External pending | Current source/legal/vendor sandbox/AU infrastructure/Linux/capacity/security/pilot release approvals not supplied; all G1\u00e2\u20ac\u201cG7 remain pending and outreach off. |",
+      "review": "| T058 | External pending | Current source/legal/vendor sandbox/AU infrastructure/Linux/capacity/security/pilot release approvals not supplied; all G1â€“G7 remain pending and outreach off. |",
       "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
       "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
       "evidence": []
@@ -925,10 +925,96 @@
     "T065": {
       "state": "pending",
       "scope": "Pending: actual source/rule/provider/wash/host inputs and release authorisation; fixtures cannot satisfy these obligations.",
-      "review": "| T065 | External pending | Authentic corpus/source contract, vendor receipt/field/rate-limit/account behaviour, AU host/security/capacity/Linux/access and G1\u00e2\u20ac\u201cG7 approvals cannot be replaced by fixture results. |",
+      "review": "| T065 | External pending | Authentic corpus/source contract, vendor receipt/field/rate-limit/account behaviour, AU host/security/capacity/Linux/access and G1â€“G7 approvals cannot be replaced by fixture results. |",
       "review_path": "abn-leadgen/ops/acceptance/task-execution-review.md",
       "review_sha256": "2e32e9c293e590c58d9f9de8e36b90430019e93c748913a4168d99cf31cfcbd8",
       "evidence": []
+    },
+    "T066": {
+      "state": "complete",
+      "scope": "Official metadata inspector and read-only release checker implemented and tested; real catalogue requests succeeded. Register ingestion is separate.",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/live-sources/final-verification-v2/result.json",
+          "sha256": "9af1f32eb7dc182f5241b81cd3a68bb5125de8788bae431e92fc04ae99fda014",
+          "command": "uv run --frozen python ops/acceptance/live-sources/verify_live.py",
+          "result": "641 tests passed, zero failures/errors/skips; Ruff and mypy passed; application and Python test source unchanged. Synthetic/local verification only, not live installation."
+        }
+      ]
+    },
+    "T067": {
+      "state": "complete",
+      "scope": "Authentic published QBCC schema mapped and synthetic publisher-schema regression cases passed; full live-file smoke and status review remain required.",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/live-sources/final-verification-v2/result.json",
+          "sha256": "9af1f32eb7dc182f5241b81cd3a68bb5125de8788bae431e92fc04ae99fda014",
+          "command": "uv run --frozen python ops/acceptance/live-sources/verify_live.py",
+          "result": "641 tests passed, zero failures/errors/skips; Ruff and mypy passed; application and Python test source unchanged. Synthetic/local verification only, not live installation."
+        }
+      ]
+    },
+    "T068": {
+      "state": "complete",
+      "scope": "Exact ordered legacy corpus recovered, targeting direction approved and precision review artifacts prepared; T041 still requires actual100-record review and production approval.",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/live-sources/final-verification-v2/result.json",
+          "sha256": "9af1f32eb7dc182f5241b81cd3a68bb5125de8788bae431e92fc04ae99fda014",
+          "command": "uv run --frozen python ops/acceptance/live-sources/verify_live.py",
+          "result": "641 tests passed, zero failures/errors/skips; Ruff and mypy passed; application and Python test source unchanged. Synthetic/local verification only, not live installation."
+        }
+      ]
+    },
+    "T069": {
+      "state": "complete",
+      "scope": "Real typed GHL transport and private standalone Sheet installation package implemented/tested; actual installation and combined live worker/propagation are T071.",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/live-sources/final-verification-v2/result.json",
+          "sha256": "9af1f32eb7dc182f5241b81cd3a68bb5125de8788bae431e92fc04ae99fda014",
+          "command": "uv run --frozen python ops/acceptance/live-sources/verify_live.py",
+          "result": "641 tests passed, zero failures/errors/skips; Ruff and mypy passed; application and Python test source unchanged. Synthetic/local verification only, not live installation."
+        }
+      ]
+    },
+    "T070": {
+      "state": "complete",
+      "scope": "Reproducible uninstalled production bundle/preflight/backup-receipt checks implemented and tested; host provisioning/timers/real backups and pilot remain pending.",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/live-sources/final-verification-v2/result.json",
+          "sha256": "9af1f32eb7dc182f5241b81cd3a68bb5125de8788bae431e92fc04ae99fda014",
+          "command": "uv run --frozen python ops/acceptance/live-sources/verify_live.py",
+          "result": "641 tests passed, zero failures/errors/skips; Ruff and mypy passed; application and Python test source unchanged. Synthetic/local verification only, not live installation."
+        }
+      ]
+    },
+    "T071": {
+      "state": "pending",
+      "scope": "Partial: gated QBCC operator-file review intake, immutable/encrypted staging, seven-day cleanup and crash recovery are implemented/tested. Accepted promotion, protected licence review/live dashboard, actual-editor bridge, CRM/suppression wiring and identified AU host/account/source approvals remain pending.",
+      "evidence": [
+        {
+          "path": "abn-leadgen/ops/acceptance/live-sources/final-verification-v2/result.json",
+          "sha256": "9af1f32eb7dc182f5241b81cd3a68bb5125de8788bae431e92fc04ae99fda014",
+          "command": "uv run --frozen python ops/acceptance/live-sources/verify_live.py",
+          "result": "641 tests passed, zero failures/errors/skips; Ruff and mypy passed; application and Python test source unchanged. Synthetic/local verification only, not live installation."
+        }
+      ]
     }
+  },
+  "live_preparation_update": {
+    "date": "2026-09-09",
+    "scope": "Phase10 preparation only; prior verified_tree_sha256 and historical receipts remain unchanged",
+    "review": "abn-leadgen/ops/acceptance/live-release-review.md",
+    "final_verification": "abn-leadgen/ops/acceptance/live-sources/final-verification-v2/result.json",
+    "tests": {
+      "tests": 641,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "source_and_tests_sha256": "c28faa480a7c1553dbedcbef516490799e7213bbe1713f96e43359a6149e6651",
+    "full_live_release": "incomplete"
   }
 }

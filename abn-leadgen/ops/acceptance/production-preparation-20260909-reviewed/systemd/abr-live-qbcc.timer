@@ -1,0 +1,12 @@
+[Unit]
+Description=Maintain Media QBCC controlled discovery schedule
+Conflicts=abr-engine-qbcc.timer
+
+[Timer]
+OnCalendar=Mon *-*-* 00:00:00 UTC
+Persistent=true
+RandomizedDelaySec=120
+Unit=abr-live-qbcc.service
+
+[Install]
+WantedBy=timers.target

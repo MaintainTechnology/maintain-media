@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "deployment_id": "00000000-0000-4000-8000-000000000001",
+  "mode": "pilot",
+  "service_user": "abr-engine",
+  "install_root": "/opt/abn-leadgen",
+  "state_root": "/var/lib/abr-engine",
+  "config_path": "/etc/abr-engine/config.yaml",
+  "environment_path": "/etc/abr-engine/runtime.env",
+  "plan_path": "/etc/abr-engine/deployment-plan.json",
+  "manifest_path": "/etc/abr-engine/deployment-manifest.json",
+  "backup_receipt_path": "/var/lib/abr-engine/receipts/latest-backup.json",
+  "host": null,
+  "capacity": {
+    "remaining_downloads": null,
+    "staged_parquet_upper_bound": null,
+    "prior_snapshot_bytes": null,
+    "new_snapshot_upper_bound": null,
+    "configured_spill_limit": null,
+    "projected_db_growth": null,
+    "projected_wal_growth": null,
+    "temporary_backup_bytes": null,
+    "existing_allocations": {},
+    "measurement": null
+  },
+  "egress_firewall": null,
+  "backup_contract": null,
+  "quarantine_restore_drill": null,
+  "linux_scheduler_drill": null
+}

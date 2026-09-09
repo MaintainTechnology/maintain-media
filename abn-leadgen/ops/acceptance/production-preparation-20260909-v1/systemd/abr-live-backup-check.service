@@ -1,0 +1,26 @@
+[Unit]
+Description=Verify independently created AU backup receipt (does not create backups)
+
+[Service]
+Type=oneshot
+User=abr-engine
+Group=abr-engine
+WorkingDirectory=/opt/abn-leadgen
+EnvironmentFile=/etc/abr-engine/runtime.env
+RuntimeDirectory=abr-engine
+RuntimeDirectoryPreserve=yes
+StateDirectory=abr-engine
+UMask=0077
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+ReadWritePaths=/var/lib/abr-engine /run/abr-engine
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ExecStart=/opt/abn-leadgen/.venv/bin/python /opt/abn-leadgen/ops/production/prepare.py verify-backup --plan /etc/abr-engine/deployment-plan.json --receipt /var/lib/abr-engine/receipts/latest-backup.json
+TimeoutStartSec=30
+MemoryMax=256M

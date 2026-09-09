@@ -1,0 +1,27 @@
+{
+  "receipt_id": "9b683ecb-664e-4943-ac99-3fdd96c92d0c",
+  "checked_at": "2026-09-09T12:54:46.890596+00:00",
+  "status": "blocked",
+  "deployment_id": "00000000-0000-4000-8000-000000000001",
+  "blockers": [
+    "BACKUP_CONTRACT_EVIDENCE_REQUIRED",
+    "CAPACITY_BOUNDS_UNKNOWN",
+    "CAPACITY_MEASUREMENT_REQUIRED",
+    "CURRENT_BACKUP_RECEIPT_REQUIRED",
+    "CURRENT_MACHINE_IS_NOT_PROVISIONED_TARGET",
+    "EGRESS_FIREWALL_EVIDENCE_REQUIRED",
+    "LINUX_SCHEDULER_DRILL_EVIDENCE_REQUIRED",
+    "PRIVATE_STATE_ROOT_NOT_PROVISIONED",
+    "PROVISIONED_AU_HOST_REQUIRED",
+    "QUARANTINE_RESTORE_DRILL_EVIDENCE_REQUIRED",
+    "RELEASE_NOT_RUNNING_FROM_DECLARED_INSTALL_ROOT",
+    "SYSTEMD_HOST_REQUIRED",
+    "TARGET_LINUX_HOST_REQUIRED"
+  ],
+  "core_release_check": {
+    "status": "not_checked_host_prerequisites_blocked"
+  },
+  "production_installed": false,
+  "source_or_vendor_requests": 0,
+  "scope": "host_and_current_release_authority"
+}

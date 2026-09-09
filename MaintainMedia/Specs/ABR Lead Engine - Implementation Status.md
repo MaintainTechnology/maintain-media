@@ -4,7 +4,7 @@ project: Maintain Media
 version: "4.0"
 synced: 2026-09-09
 source: "specs/001-abr-lead-engine/implementation-status.md"
-source_sha256: a0959b591717ca8b99b464c4711965aee648ce856b4ad64b3c96befd2aec11f9
+source_sha256: 623f2989e82ee098d036eef7cb0b590d9b9a97ef2898622508c0a90dda5aedca
 tags: [abr-lead-engine, maintain-media]
 ---
 > Synced from the repository; local document links adapted for Obsidian.
@@ -50,6 +50,33 @@ No full-spec PASS or production-ready claim is made. [G1â€“G7](C:/Users/dal
 
 Requirement-quality checklist completion is separate from implementation task completion, which is separate from release approval. Scores describe tested local engineering only. The task execution ledger links any completed checkbox to actual evidence; partial tasks and externally dependent tasks remain unchecked.
 
-## Current verified delivery
+## Earlier verified fixture delivery
 
 408 tests passed with zero failures/errors/skips. Frozen install, lint, types, document/vault validation and unchanged-source verification passed. The final local engineering score is 92/100; trajectory 68→86→91→92→92→92. 58/65 tasks are complete; seven remain partial or dependent on external evidence. See the [final build review](C:/Users/dalig/Desktop/MaintainTech/MaintainOrg/maintain-media/abn-leadgen/ops/acceptance/release-review.md) and [task ledger](C:/Users/dalig/Desktop/MaintainTech/MaintainOrg/maintain-media/specs/001-abr-lead-engine/task-evidence.json). Full-spec and production acceptance remain incomplete.
+
+## Live implementation update — 9 September 2026
+
+The user's current request authorises work towards real sources, approved targeting,
+installed staff integrations and production operation. The exact legacy 30-rule file
+is now recovered; the user approved its targeting direction and the geography,
+QBCC category and weekly limit defaults. Earlier missing-file statements are superseded.
+The real 100-business precision review remains pending.
+
+Current official catalogue metadata is reachable. The authentic QBCC schema, real GHL
+transport, private standalone Sheets installer and production preparation tools are
+implemented and locally verified; none of these observations alone establishes a live
+worklist or installed production service. Current status, exact receipts and remaining
+runtime/account dependencies are in the [live release review](C:/Users/dalig/Desktop/MaintainTech/MaintainOrg/maintain-media/abn-leadgen/ops/acceptance/live-release-review.md).
+Phase 10 tasks distinguish this work from the earlier fixture evidence.
+
+T071 now includes a separate approved-file QBCC intake path with encrypted review
+records, immutable raw custody and narrow seven-day expiry/crash recovery. It
+preserves UNKNOWN licence status, does not create candidates or advance the accepted
+cursor, and has not ingested real business rows. The protected licence review,
+promotion and live worklist integration remain pending.
+
+The final combined live-preparation verification passed 641 tests with no
+failures/errors/skips, plus Ruff and mypy for 60 application modules and the
+production preparer. Application and Python test source hashes stayed unchanged.
+These synthetic/local checks do not establish real-data acceptance, installed
+accounts, a running AU production service or elapsed pilot outcomes.

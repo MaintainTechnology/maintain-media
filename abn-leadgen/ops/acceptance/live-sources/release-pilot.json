@@ -1,0 +1,66 @@
+{
+  "checked_at": "2026-09-09T12:19:18.430550+00:00",
+  "command": "python -m abr_engine.cli release-check --mode pilot",
+  "exit_code": 6,
+  "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result": {
+    "status": "blocked",
+    "checked_at": "2026-09-09T12:19:18.242784+00:00",
+    "configured_mode": "fixture",
+    "target_mode": "pilot",
+    "database_authority_available": true,
+    "checks": [
+      {
+        "capability": "collection",
+        "status": "blocked",
+        "approved_gates": [],
+        "missing_gates": [
+          "G1",
+          "G2",
+          "G3",
+          "G7"
+        ],
+        "blockers": [
+          "LIVE_PIPELINE_NOT_CONNECTED",
+          "LIVE_DASHBOARD_NOT_CONNECTED",
+          "TARGET_ENVIRONMENT_NOT_CONFIGURED",
+          "CAPABILITY_DISABLED",
+          "GATE_G1_CLOSED",
+          "GATE_G2_CLOSED",
+          "GATE_G3_CLOSED",
+          "GATE_G7_CLOSED"
+        ]
+      },
+      {
+        "capability": "crm",
+        "status": "blocked",
+        "approved_gates": [],
+        "missing_gates": [
+          "G1",
+          "G3",
+          "G5",
+          "G7"
+        ],
+        "blockers": [
+          "LIVE_CRM_DRAIN_NOT_CONNECTED",
+          "LIVE_SUPPRESSION_PROPAGATION_NOT_CONNECTED",
+          "TARGET_ENVIRONMENT_NOT_CONFIGURED",
+          "CAPABILITY_DISABLED",
+          "GATE_G1_CLOSED",
+          "GATE_G3_CLOSED",
+          "GATE_G5_CLOSED",
+          "GATE_G7_CLOSED"
+        ]
+      }
+    ],
+    "outreach": "outside_part_1",
+    "production_installed": false,
+    "next_steps": [
+      "Supply the approved AU host and restricted service/storage identities.",
+      "Record actual current G1/G2/G3/G5/G7 evidence for the chosen pilot capabilities.",
+      "Connect real pipeline, dashboard, vendor write-back and suppression, then verify together.",
+      "Start the measured QBCC pilot only after a usable authorised worklist is available.",
+      "Require four measured QBCC weeks and the G6 owner decision before live ABR expansion."
+    ]
+  }
+}

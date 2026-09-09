@@ -1,0 +1,10 @@
+[Unit]
+Description=Maintain Media controlled retention schedule
+
+[Timer]
+OnCalendar=*-*-* 03:20:00 UTC
+Persistent=true
+Unit=abr-live-retention.service
+
+[Install]
+WantedBy=timers.target

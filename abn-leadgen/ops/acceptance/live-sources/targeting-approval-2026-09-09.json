@@ -1,0 +1,21 @@
+{
+  "decision_id": "targeting-direction-2026-09-09",
+  "recorded_at": "2026-09-09T12:10:04Z",
+  "actor": "user in current Codex task",
+  "evidence": "User answered 'Approve these targeting defaults' to the explicit matching question in this task.",
+  "status": "approved",
+  "scope": "Targeting direction only; not source collection, precision certification, vendor processing or release approval",
+  "trade_rules": {
+    "file": "abn-leadgen/config/rules.review.yaml",
+    "sha256": "eb576b2357a1659d564cc02ff9efe99e0ef7200ad0206ebf5d51923b96563c9d",
+    "count": 30,
+    "direction": "retain all recovered categories and order"
+  },
+  "geography": {"full_state": "QLD", "partial_state": "NSW", "postcode_min": "2450", "postcode_max": "2490"},
+  "qbcc_categories": ["1", "2"],
+  "weekly_business_limit": 60,
+  "precision_review_required": true,
+  "precision_review_count": 0,
+  "classifier_activated": false,
+  "production_release_approved": false
+}

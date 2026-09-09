@@ -4,7 +4,7 @@ project: Maintain Media
 version: "4.0"
 synced: 2026-09-09
 source: "specs/001-abr-lead-engine/plan.md"
-source_sha256: 316e0cb994de916077511ef42f0114d9fafe339056c19bbc47416111a05a3425
+source_sha256: 4203607d7ed0a209aebf241a62e90bad0d3e6e7389d2d45000e1efbd95a12fa6
 tags: [abr-lead-engine, maintain-media]
 ---
 > Synced from the repository; local document links adapted for Obsidian.
@@ -18,7 +18,7 @@ tags: [abr-lead-engine, maintain-media]
 
 Build an internal Python pipeline that first produces a controlled QBCC pilot worklist. Introduce whole-register ABR comparison after the four-week commercial gate passes. PostgreSQL owns mutable decisions, cursors, queues and suppression. Immutable Parquet snapshots support comparison. A small authenticated API supports immediate opt-outs, worklist updates and live action checks. It does not send, dial or provide a new frontend application.
 
-This document defines the v4.0 implementation plan. The user subsequently authorised the application in `abn-leadgen/`; the Python package remains `abr_engine`. The original conceptual module paths below map to that application root, with cohesive controls consolidated in `control/service.py` and `control/api.py`; the [[ABR Lead Engine - Implementation Status|execution map]] links actual files and checks. External integrations begin as mocks. `deliverables/abr/extract_new_abns.py` and its claimed 30-rule corpus were absent at review. Recover and validate that corpus, or obtain approval for a separately reviewed replacement, before production classification. Development uses visibly synthetic rules.
+This document defines the v4.0 implementation plan. The user subsequently authorised the application in `abn-leadgen/`; the Python package remains `abr_engine`. The original conceptual module paths below map to that application root, with cohesive controls consolidated in `control/service.py` and `control/api.py`; the [[ABR Lead Engine - Implementation Status|execution map]] links actual files and checks. External integrations begin as mocks. The 30 literal rules in `deliverables/abr/extract_new_abns.py` were recovered on 9 September 2026, superseding the earlier missing-file finding. The user approved their targeting direction, while the real 100-record precision review remains pending. The recovered review artifact stays inactive; fixture runtime defaults are unchanged.
 
 ## Technical Context
 

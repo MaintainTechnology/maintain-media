@@ -1,6 +1,6 @@
 # ABR Lead Engine (Part 1) — Specification
 
-**Version:** 4.0 · **Revised:** 8 September 2026 · **Owner:** Jon Pepper
+**Version:** 4.0 · **Revised:** 9 September 2026 · **Owner:** Jon Pepper
 **Status:** v4.0 product baseline with authorised local implementation; production gates remain closed.
 **Purpose of this revision:** make the specification clear, consistent and buildable. This document
 does not itself certify application behaviour, capacity or legal approval. Executed build evidence
@@ -63,7 +63,11 @@ a tightly defined contract for a separately approved sending/calling system.
 | Unknowns | Unknown identity, permission, current wash, source coherence or action-time gate means blocked |
 | Scope of this task | The user's later instruction authorises building and running the v4.0 system in `abn-leadgen/`, with autonomous build/review cycles; live release still requires the gates below |
 
-These are explicit reversible planning defaults, not answers attributed to the user.
+On 9 September 2026 the user approved the recovered 30 trade categories, the listed
+geography, QBCC Categories 1–2 and the 60-business weekly limit as the targeting
+direction. The [decision record](../abn-leadgen/ops/acceptance/live-sources/targeting-approval-2026-09-09.json)
+preserves that scope. Other defaults remain planning decisions; collection/privacy,
+vendor, accuracy-review and release approvals are separate.
 Any change has an owner, reason, date, version and affected tests in the decision register.
 
 ## Evidence and what the signals mean
@@ -154,10 +158,13 @@ between snapshots, not necessarily occurring that week.
 
 ### Classification, qualification and work
 
-**R9 — Deterministic classification and missing rules.** Preserve the intended 30 legacy trade
-rules only after their exact source is recovered and reviewed. The referenced
-deliverables/abr/extract_new_abns.py is absent in this checkout; no rule corpus has been fabricated.
-Synthetic rule fixtures enable engineering tests; production classification stays disabled until
+**R9 — Deterministic classification and reviewed rules.** Preserve the intended 30 legacy trade
+rules only after their exact source is recovered and reviewed. On 9 September 2026,
+`deliverables/abr/extract_new_abns.py` was present and all 30 ordered literal rules were
+recovered without executing that script. The [review packet](../abn-leadgen/ops/acceptance/live-sources/rules-approval-packet.md)
+records hashes, behavioural differences and the user's targeting-direction approval.
+Production precision review remains pending. Synthetic fixtures enable engineering tests;
+production classification stays disabled until
 a committed rules file, provenance, ordered regexes and expected-output fixtures are approved.
 Evaluate BN names first, then main/legal display name, then TRD; exclude OTN. Within each type
 use a sorted unique canonical name list; within a name evaluate rules in committed order.

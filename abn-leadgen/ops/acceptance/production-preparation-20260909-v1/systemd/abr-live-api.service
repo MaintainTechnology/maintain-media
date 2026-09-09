@@ -1,0 +1,35 @@
+[Unit]
+Description=Maintain Media private control API (live implementation required)
+After=network-online.target postgresql.service
+StartLimitIntervalSec=120
+StartLimitBurst=3
+
+[Service]
+Type=simple
+User=abr-engine
+Group=abr-engine
+WorkingDirectory=/opt/abn-leadgen
+EnvironmentFile=/etc/abr-engine/runtime.env
+RuntimeDirectory=abr-engine
+RuntimeDirectoryPreserve=yes
+StateDirectory=abr-engine
+UMask=0077
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+ReadWritePaths=/var/lib/abr-engine /run/abr-engine
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ExecStartPre=/opt/abn-leadgen/.venv/bin/python /opt/abn-leadgen/ops/production/prepare.py check --plan /etc/abr-engine/deployment-plan.json --manifest /etc/abr-engine/deployment-manifest.json
+ExecStart=/opt/abn-leadgen/.venv/bin/abr-engine serve --port 8766 --config /etc/abr-engine/config.yaml --mode pilot
+Restart=on-failure
+RestartSec=10
+TimeoutStartSec=120
+MemoryMax=512M
+
+[Install]
+WantedBy=multi-user.target

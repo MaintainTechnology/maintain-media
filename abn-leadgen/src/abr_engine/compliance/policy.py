@@ -1,4 +1,5 @@
 """Current capability approvals; no implicit live authority."""
+import re
 from datetime import datetime
 
 from abr_engine.config import Settings
@@ -12,6 +13,19 @@ REQUIRED_GATES = {
 }
 
 
+def current_gate_evidence(record: dict, now: datetime) -> bool:
+    """Use the same closed evidence contract for admission and release reporting."""
+    approved, expires = record.get("approved_at"), record.get("expires_at")
+    reference, checksum = record.get("evidence_ref"), record.get("evidence_sha256")
+    return bool(
+        isinstance(approved, datetime) and approved.tzinfo is not None
+        and isinstance(expires, datetime) and expires.tzinfo is not None
+        and approved <= now < expires
+        and isinstance(reference, str) and reference.strip()
+        and isinstance(checksum, str) and re.fullmatch(r"[0-9a-f]{64}", checksum)
+    )
+
+
 def gate_reasons(conn, settings: Settings, capability: str, now: datetime) -> list[str]:
     if settings.mode == "fixture":
         return []  # Synthetic service evaluations only; fixture transport cannot send.
@@ -19,6 +33,5 @@ def gate_reasons(conn, settings: Settings, capability: str, now: datetime) -> li
         return ["CAPABILITY_DISABLED"]
     rows = conn.execute("SELECT DISTINCT ON (gate_name) * FROM release_gate WHERE environment=%s "
                         "AND scope=%s ORDER BY gate_name,revision DESC", (settings.mode, capability)).fetchall()
-    valid = {r["gate_name"] for r in rows if r["approved_at"] <= now < r["expires_at"]
-             and r["evidence_ref"] and len(r["evidence_sha256"]) == 64}
+    valid = {r["gate_name"] for r in rows if current_gate_evidence(r, now)}
     return ["GATE_" + gate + "_CLOSED" for gate in sorted(REQUIRED_GATES[capability] - valid)]

@@ -1,0 +1,11 @@
+[Unit]
+Description=Maintain Media controlled monitor schedule
+Conflicts=abr-engine-monitor.timer
+
+[Timer]
+OnCalendar=*-*-* *:*:00 UTC
+Persistent=true
+Unit=abr-live-monitor.service
+
+[Install]
+WantedBy=timers.target

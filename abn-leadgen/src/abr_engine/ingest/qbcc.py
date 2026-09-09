@@ -1,4 +1,8 @@
-"""Strict UTF-16LE QBCC fixture mapping with per-licence quarantine."""
+"""Versioned UTF-16LE QBCC mappings with per-licence quarantine.
+
+The publisher register has no status or entity-type field. Its rows are discovery
+evidence; unknown status never becomes an active licence by parsing this file.
+"""
 
 from __future__ import annotations
 
@@ -14,6 +18,18 @@ import pyarrow.parquet as pq
 
 from .common import SourceError, canonical_json, digest_file, normalize_abn
 
+PUBLISHER_VERSION = "qbcc-catalogue-11-column-v1"
+PUBLISHER_CATEGORIES = {
+    **{str(n): f"Category {n}" for n in range(1, 8)},
+    "SC2": "Self Certification - Builder/Trade",
+    "SCT1": "Self Certification - Trade",
+    "N/A": "No Financials Required",
+    "EMRSC1": "Estimated MR SC1",
+    "EMRSC2": "Estimated MR SC2",
+    "EMR1-2": "Estimated MR Cat 1-2",
+    "EMR3-7": "Estimated MR Cat 3-7",
+}
+
 
 @dataclass(frozen=True)
 class QBCCMapping:
@@ -21,6 +37,28 @@ class QBCCMapping:
     columns: dict[str, str]
     fixture_only: bool = True
     approved_evidence: str | None = None
+
+    @classmethod
+    def publisher(cls, *, approved_evidence: str | None = None) -> QBCCMapping:
+        """Observed official schema, independently of collection/release approval."""
+        return cls(
+            PUBLISHER_VERSION,
+            {
+                "licence_number": "Licence Number",
+                "licensee_name": "Licensee Name",
+                "acn": "ACN",
+                "abn": "ABN",
+                "original_address": "Licensee Business Address",
+                "licence_type_description": "Licence Type DESC",
+                "licence_type_code": "Licence Type CODE",
+                "financial_category_description": "Financial Category DESC",
+                "financial_category": "Financial Category CODE",
+                "licence_grade": "Licence Grade",
+                "class_type": "Licence Class Type",
+            },
+            fixture_only=False,
+            approved_evidence=approved_evidence,
+        )
 
     @classmethod
     def fixture(cls) -> QBCCMapping:
@@ -65,6 +103,9 @@ def parse_qbcc(
     mapping = mapping or QBCCMapping.fixture()
     if production and (mapping.fixture_only or not mapping.approved_evidence):
         raise SourceError("SOURCE_MAPPING_UNAPPROVED")
+    publisher = mapping.version == PUBLISHER_VERSION
+    if publisher and mapping.columns != QBCCMapping.publisher().columns:
+        raise SourceError("QBCC_MAPPING_VERSION_MISMATCH")
     if path.stat().st_size > max_file_bytes:
         raise SourceError("SOURCE_SIZE_LIMIT")
     grouped: dict[str, list[dict]] = {}
@@ -96,15 +137,27 @@ def parse_qbcc(
                 row["abn"] = normalize_abn(row["abn"], optional=True)
             except SourceError:
                 reasons.add("INVALID_ABN")
-        fields = [k for k in mapping.columns if k != "class_type"]
+        varying_fields = {"class_type"}
+        if publisher:
+            varying_fields |= {"licence_type_description", "licence_type_code", "licence_grade"}
+        fields = [k for k in mapping.columns if k not in varying_fields]
         if any(len({row[key] for row in rows}) > 1 for key in fields):
             reasons.add("CONFLICTING_LICENCE_FIELDS")
-        if any(row["status"] not in ("ACTIVE", "SUSPENDED", "CANCELLED", "INACTIVE") for row in rows):
-            reasons.add("UNKNOWN_LICENCE_STATUS")
-        if any(
-            row["financial_category"] not in ("SC1", "SC2", "1", "2", "3", "4", "5", "6", "7") for row in rows
+        if not publisher and any(
+            row["status"] not in ("ACTIVE", "SUSPENDED", "CANCELLED", "INACTIVE") for row in rows
         ):
+            reasons.add("UNKNOWN_LICENCE_STATUS")
+        allowed_categories = (
+            PUBLISHER_CATEGORIES if publisher else ("SC1", "SC2", "1", "2", "3", "4", "5", "6", "7")
+        )
+        if any(row["financial_category"] not in allowed_categories for row in rows):
             reasons.add("UNKNOWN_FINANCIAL_CATEGORY")
+        if publisher and any(
+            row["financial_category"] in PUBLISHER_CATEGORIES
+            and row["financial_category_description"] != PUBLISHER_CATEGORIES[row["financial_category"]]
+            for row in rows
+        ):
+            reasons.add("FINANCIAL_CATEGORY_DESCRIPTION_MISMATCH")
         if reasons:
             quarantine.append(
                 {"licence_number": licence, "reason_codes": sorted(reasons), "row_count": len(rows)}
@@ -112,6 +165,17 @@ def parse_qbcc(
             continue
         row = {key: rows[0][key] for key in fields}
         row["class_types"] = sorted({r["class_type"] for r in rows if r["class_type"]})
+        if publisher:
+            row["status"] = "UNKNOWN"
+            row["entity_class"] = "unknown"
+            row["licence_review_required"] = True
+            row["licence_types"] = [
+                {"code": code, "description": description}
+                for code, description in sorted(
+                    {(r["licence_type_code"], r["licence_type_description"]) for r in rows}
+                )
+            ]
+            row["licence_grades"] = sorted({r["licence_grade"] for r in rows if r["licence_grade"]})
         row["state"], row["postcode"] = parse_address(row["original_address"])
         row["geography_review_required"] = row["state"] is None
         row["row_digest"] = hashlib.sha256(canonical_json(row).encode()).hexdigest()
@@ -143,6 +207,27 @@ def write_qbcc_parquet(result: QBCCResult, output: Path) -> Path:
         ]
         + [("class_types", pa.list_(pa.string())), ("geography_review_required", pa.bool_())]
     )
+    if result.mapping_version == PUBLISHER_VERSION:
+        schema = pa.schema(
+            [
+                *schema,
+                pa.field("acn", pa.string()),
+                pa.field("financial_category_description", pa.string()),
+                pa.field("licence_review_required", pa.bool_()),
+                pa.field("licence_grades", pa.list_(pa.string())),
+                pa.field(
+                    "licence_types",
+                    pa.list_(
+                        pa.struct(
+                            [
+                                pa.field("code", pa.string()),
+                                pa.field("description", pa.string()),
+                            ]
+                        )
+                    ),
+                ),
+            ]
+        )
     table = pa.Table.from_pylist(list(result.records), schema=schema)
     pq.write_table(table, output, compression="zstd")
     if pq.read_table(output).num_rows != len(result.records):

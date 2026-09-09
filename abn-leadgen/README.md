@@ -4,7 +4,25 @@ Internal fixture-first Python pipeline for preparing a small, controlled Austral
 
 Part 1 prepares evidence and records outcomes. It does not send email/SMS, dial, buy credits, take payments or enrol campaigns. The local operator dashboard provides a browser interface for the fixture workflow. ABR/GST/QBCC observations are discovery signals, not proof of actual revenue, buying intent or consent.
 
-All [production release gates](ops/release-gates.md) remain **PENDING**. The intended legacy 30-rule corpus, current policy/source approvals, real vendor sandbox contracts, AU hosting evidence, approved capacity plan and live commercial pilot are outstanding. Local benchmark, recovery and fixture results are recorded separately in [acceptance evidence](ops/acceptance/). Synthetic tests cannot close production gates.
+All [production release gates](ops/release-gates.md) remain **PENDING**. The exact 30-rule corpus was recovered on 9 September 2026 and the user approved the targeting direction. The real 100-business precision review, source/privacy approvals, installed vendor contracts, AU hosting/capacity evidence and measured pilot remain outstanding. Local engineering results are separate from these live requirements. See the [live release status](ops/acceptance/live-release-review.md).
+
+## Live release preparation
+
+These commands inspect current official catalogue metadata and current release blockers:
+
+```powershell
+uv run --frozen abr-engine sources inspect --source qbcc
+uv run --frozen abr-engine sources inspect --source abr
+uv run --frozen abr-engine release-check --mode pilot
+```
+
+Catalogue inspection downloads metadata only. It does not import business rows, establish ABR publication coherence or approve collection. It preserves publisher timestamps and rounded size labels without inventing exact values. `release-check` reads the configured database without loading keys or changing approvals; it returns a blocked result while live runtime paths or gate evidence remain missing. `--mode production` additionally checks ABR expansion gates. An explicit `--config` reads the specified YAML; no `.env` discovery is performed.
+
+The [recovered rules packet](ops/acceptance/live-sources/rules-approval-packet.md) records the approved targeting direction and the still-required precision review. The publisher QBCC parser now understands the official 11-column schema, which has no current-status column. Unknown status cannot become active or qualify automatically. The tested synthetic parser remains available separately.
+
+The [QBCC intake guide](ops/acceptance/live-sources/qbcc-intake.md) documents `sources stage-qbcc` and `sources cleanup-qbcc-review`. This gated operator-file path holds encrypted review records without creating candidates or advancing the accepted cursor. Its narrow seven-day cleanup and crash recovery are separate from general live retention. No real register file has been staged, and the licence review interface and worklist promotion still need integration.
+
+The [vendor installation guide](integrations/LIVE-INSTALLATION.md) contains the real GHL transport/preflight and private standalone Sheets installation procedure. These packages are not installed or connected to the live outbox. The [production package](ops/production/README.md) prepares guarded service definitions and a deployment preflight; it neither purchases hosting nor activates a service. Keep the dashboard's fixture labels until the actual private live pipeline and staff workflow pass together.
 
 ## Open the local dashboard
 

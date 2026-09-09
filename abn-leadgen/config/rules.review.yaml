@@ -1,0 +1,99 @@
+version: legacy-recovered-review-v1
+fixture_only: true
+rules:
+- rule_id: legacy-01
+  industry: Plumbing & Gasfitting
+  pattern: \bPLUMB|GASFIT|GAS FIT|BLOCKED DRAIN|DRAIN(AGE|ER|S)?\b|HOT WATER|BACKFLOW
+- rule_id: legacy-02
+  industry: Electrical
+  pattern: \bELECTRIC(AL|IAN|S)?\b|\bSPARK(Y|IES)\b|SWITCHBOARD|\bLEVEL 2 ASP\b|DATA
+    CABL
+- rule_id: legacy-03
+  industry: Solar & Renewables
+  pattern: \bSOLAR\b|PHOTOVOLTAIC|\bPV SYSTEM|BATTERY STORAGE|\bEV CHARG
+- rule_id: legacy-04
+  industry: HVAC & Refrigeration
+  pattern: AIR ?CON|AIRCONDITION|\bHVAC\b|REFRIGERAT|\bCOOLROOM|CLIMATE CONTROL|DUCTED
+- rule_id: legacy-05
+  industry: Roofing & Guttering
+  pattern: \bROOF(ING|ER|S)?\b|GUTTER|\bDOWNPIPE|COLORBOND|\bRE-?ROOF
+- rule_id: legacy-06
+  industry: Carpentry & Joinery
+  pattern: CARPENT|\bJOINER|CABINET ?MAK|\bCABINETRY\b|\bSHOPFIT|\bDECK(ING|S)?\b|\bPERGOLA
+- rule_id: legacy-07
+  industry: Concreting & Kerbing
+  pattern: CONCRET|\bKERB(ING)?\b|\bSCREED|\bSLAB(S)?\b|\bPOLISHED CONC
+- rule_id: legacy-08
+  industry: Bricklaying & Blockwork
+  pattern: BRICKLAY|\bBRICKIE|BLOCKLAY|\bSTONEMASON|MASONRY
+- rule_id: legacy-09
+  industry: Plastering & Rendering
+  pattern: PLASTER|\bRENDER(ING|ER)?\b|\bGYPROCK|\bDRYWALL|\bCORNICE
+- rule_id: legacy-10
+  industry: Painting & Decorating
+  pattern: \bPAINT(ING|ER|ERS)?\b|\bDECORATOR|SPRAY ?PAINT
+- rule_id: legacy-11
+  industry: Tiling & Waterproofing
+  pattern: \bTILE(R|RS|S)?\b|\bTILING\b|WATERPROOF|\bMEMBRANE\b
+- rule_id: legacy-12
+  industry: Flooring & Carpet
+  pattern: FLOOR(ING|S)?\b|\bCARPET|\bVINYL PLANK|TIMBER FLOOR|\bEPOXY FLOOR
+- rule_id: legacy-13
+  industry: Glazing & Windows
+  pattern: \bGLAZ(ING|IER)|\bGLASS\b|\bWINDOW(S)?\b|SHOWER SCREEN|\bSPLASHBACK
+- rule_id: legacy-14
+  industry: Fencing & Gates
+  pattern: \bFENC(E|ES|ING)\b|\bGATE(S)?\b|\bBALUSTRAD|\bRETAINING WALL
+- rule_id: legacy-15
+  industry: Landscaping & Gardening
+  pattern: LANDSCAP|\bGARDEN(ING|S|ER)?\b|\bLAWN|\bTURF|\bMOWING|\bIRRIGATION|\bARBOR|TREE
+    (LOPP|SERVIC|REMOV|CARE)
+- rule_id: legacy-16
+  industry: Earthmoving & Excavation
+  pattern: EXCAVAT|EARTH ?MOV|\bBOBCAT|\bDIGG|\bTIPPER|\bPLANT HIRE|\bBORING\b|\bPILING\b|\bTRENCH
+- rule_id: legacy-17
+  industry: Civil & Infrastructure
+  pattern: \bCIVIL\b|\bASPHALT|\bROAD ?(WORKS|MARK|BASE)|\bBITUMEN|\bSURVEY(ING|OR)
+- rule_id: legacy-18
+  industry: Demolition & Asbestos
+  pattern: DEMOLITION|\bDEMO ?\&|ASBESTOS|\bSTRIP ?OUT
+- rule_id: legacy-19
+  industry: Scaffolding & Rigging
+  pattern: SCAFFOLD|\bRIGGING\b|\bRIGGER|\bDOGGING\b|\bCRANE(S)?\b|\bHOIST
+- rule_id: legacy-20
+  industry: Welding & Metal Fab
+  pattern: \bWELD(ING|ER|S)?\b|\bFABRICAT|\bBOILERMAK|SHEET ?METAL|\bSTEEL(WORK|FIX)|\bENGINEERING
+    WORKS
+- rule_id: legacy-21
+  industry: Building & Construction
+  pattern: \bBUILDER(S)?\b|\bBUILDING\b|CONSTRUCT|\bRENOVAT|\bHOME EXTENSION|\bHOUSE
+    EXTENSION|\bCARPORT|\bGRANNY FLAT|\bFORMWORK|\bFRAM(ING|ER)\b
+- rule_id: legacy-22
+  industry: Automotive & Mechanical
+  pattern: \bMECHANIC|\bAUTOMOTIVE|\bAUTO ?(ELEC|REPAIR|SERV)|\bPANEL ?BEAT|\bSMASH
+    REPAIR|\bTYRE|\bDIESEL
+- rule_id: legacy-23
+  industry: Transport & Haulage
+  pattern: \bHAUL(AGE|ING)|\bTRUCK(ING|S)?\b|\bFREIGHT|\bCOURIER|\bTRANSPORT\b|\bREMOVAL(IST|S)
+- rule_id: legacy-24
+  industry: Cleaning Services
+  pattern: \bCLEAN(ING|ERS?)\b|\bPRESSURE WASH|\bWINDOW CLEAN|\bCARPET CLEAN
+- rule_id: legacy-25
+  industry: Pest Control
+  pattern: \bPEST\b|\bTERMITE|\bVERMIN
+- rule_id: legacy-26
+  industry: Security & Locksmith
+  pattern: \bSECURITY\b|\bLOCKSMITH|\bALARM(S)?\b|\bCCTV\b|\bACCESS CONTROL
+- rule_id: legacy-27
+  industry: Signage & Print
+  pattern: \bSIGN(AGE|S|WRIT)|\bPRINT(ING)?\b|\bVEHICLE WRAP
+- rule_id: legacy-28
+  industry: Pools & Spas
+  pattern: \bPOOL(S)?\b(?! ?TABLE)|POOLS? (AND|&) SPAS?|SWIM ?SPA
+- rule_id: legacy-29
+  industry: Mining & Resources
+  pattern: \bMINING\b|\bDRILL(ING)?\b|\bQUARR|\bRESOURCES\b
+- rule_id: legacy-30
+  industry: Trade Services (general)
+  pattern: \bHANDY ?(MAN|PERSON)|\bMAINTENANCE\b|\bREPAIR(S)?\b|\bINSTALLATION(S)?\b|\bSERVICES?
+    & MAINT|\bPROPERTY SERVICES

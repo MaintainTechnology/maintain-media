@@ -1,0 +1,23 @@
+# Non-secret template. Copy to the operator's restricted configuration directory.
+# Replace every REPLACE_* value with IDs read from the intended GHL sub-account.
+# The process must receive ABR_GHL_TOKEN from its secret manager; never place it here.
+location_id: REPLACE_LOCATION_ID
+mapping_version: maintain-media-ghl-v1
+api_version: '2023-02-21'
+token_env: ABR_GHL_TOKEN
+allow_writes: false
+group_search_field: customFields.REPLACE_GROUP_ID_FIELD
+field_ids:
+  group_id: REPLACE_GROUP_ID_FIELD
+  contact_id: REPLACE_CONTACT_ID_FIELD
+  channel: REPLACE_CHANNEL_FIELD
+  abn: REPLACE_ABN_FIELD
+  signal: REPLACE_SIGNAL_FIELD
+  score: REPLACE_SCORE_FIELD
+  tier: REPLACE_TIER_FIELD
+  industry: REPLACE_INDUSTRY_FIELD
+  entity_class: REPLACE_ENTITY_CLASS_FIELD
+  state: REPLACE_STATE_FIELD
+  website: REPLACE_WEBSITE_FIELD
+  positioning_notes: REPLACE_POSITIONING_NOTES_FIELD
+  basis_summary: REPLACE_BASIS_SUMMARY_FIELD

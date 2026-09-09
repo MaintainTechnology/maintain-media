@@ -1,0 +1,32 @@
+# Prepared code tree: e6dd15d08cb7ab7e9198e54b375a50dad758fc2741663f6805296b10d145064d; uninstalled and release-gated.
+[Unit]
+Description=Maintain Media QBCC controlled source run
+After=network-online.target postgresql.service
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=abr-engine
+Group=abr-engine
+WorkingDirectory=/opt/abn-leadgen
+EnvironmentFile=/etc/abr-engine/runtime.env
+RuntimeDirectory=abr-engine
+RuntimeDirectoryPreserve=yes
+StateDirectory=abr-engine
+UMask=0077
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectKernelModules=yes
+ProtectControlGroups=yes
+RestrictSUIDSGID=yes
+ReadWritePaths=/var/lib/abr-engine /run/abr-engine
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ExecStartPre=/opt/abn-leadgen/.venv/bin/python /opt/abn-leadgen/ops/production/prepare.py check --plan /etc/abr-engine/deployment-plan.json --manifest /etc/abr-engine/deployment-manifest.json
+ExecStart=/usr/bin/flock -n -E 4 /run/abr-engine/pipeline.lock /opt/abn-leadgen/.venv/bin/abr-engine run --source qbcc --config /etc/abr-engine/config.yaml --mode pilot
+SuccessExitStatus=4
+TimeoutStartSec=6h
+MemoryMax=2G
+CPUQuota=200%

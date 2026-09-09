@@ -1,0 +1,10 @@
+[Unit]
+Description=Maintain Media controlled qbcc-review-cleanup schedule
+
+[Timer]
+OnCalendar=*-*-* 03:05:00 UTC
+Persistent=true
+Unit=abr-live-qbcc-review-cleanup.service
+
+[Install]
+WantedBy=timers.target

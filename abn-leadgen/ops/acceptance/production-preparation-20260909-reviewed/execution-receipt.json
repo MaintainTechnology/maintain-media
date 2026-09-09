@@ -1,0 +1,30 @@
+[
+  {
+    "command": [
+      "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\.venv\\Scripts\\python.exe",
+      "ops/production/prepare.py",
+      "render",
+      "--plan",
+      "ops/production/deployment-plan.example.json",
+      "--output",
+      "ops\\acceptance\\production-preparation-20260909-reviewed"
+    ],
+    "exit_code": 0,
+    "status": "prepared_not_deployed"
+  },
+  {
+    "command": [
+      "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\.venv\\Scripts\\python.exe",
+      "ops/production/prepare.py",
+      "check",
+      "--plan",
+      "ops\\acceptance\\production-preparation-20260909-reviewed\\deployment-plan.json",
+      "--manifest",
+      "ops\\acceptance\\production-preparation-20260909-reviewed\\deployment-manifest.json",
+      "--receipt",
+      "ops\\acceptance\\production-preparation-20260909-reviewed\\host-check.json"
+    ],
+    "exit_code": 6,
+    "status": "blocked"
+  }
+]

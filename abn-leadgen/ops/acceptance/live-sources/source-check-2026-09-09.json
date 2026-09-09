@@ -1,0 +1,103 @@
+{
+  "checked_at": "2026-09-09T12:07:04.370645+00:00",
+  "scope": "Public catalogue metadata, zero-row schema, aggregate category counts only; no business records or CSV/ZIP bytes downloaded or ingested.",
+  "methods": {
+    "catalogues": "PowerShell Invoke-WebRequest against public CKAN package_show; HTTP 200 and success true for both sources",
+    "schema": "CKAN datastore_search with limit=0; HTTP 200 and no record rows",
+    "categories": "CKAN datastore_search_sql GROUP BY Financial Category CODE and Financial Category DESC, COUNT(*) with LIMIT 50; no individual licence rows"
+  },
+  "qbcc": {
+    "dataset_url": "https://www.data.qld.gov.au/dataset/qbcc-licensed-contractors-register",
+    "metadata_url": "https://www.data.qld.gov.au/api/3/action/package_show?id=qbcc-licensed-contractors-register",
+    "dataset_id": "980b6499-c0b4-491b-ba9c-1c7506368a50",
+    "resource_id": "25608781-b28c-44f8-8545-0ab18d84082f",
+    "resource_url": "https://www.data.qld.gov.au/dataset/980b6499-c0b4-491b-ba9c-1c7506368a50/resource/25608781-b28c-44f8-8545-0ab18d84082f/download/builder-contractor-qbcc-licensee-register.csv",
+    "licence": "CC-BY-4.0",
+    "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+    "publisher_last_modified_lexical": "2026-05-18T05:14:43.785988",
+    "metadata_modified_lexical": "2026-05-18T05:16:17.026016",
+    "publisher_size_lexical": "72.6 MiB",
+    "publisher_hash_lexical": "ea7d950f3af67c21966a0e895efad027",
+    "hash_algorithm": "not supplied; not represented as SHA-256",
+    "schema_url": "https://www.data.qld.gov.au/api/3/action/datastore_search?resource_id=25608781-b28c-44f8-8545-0ab18d84082f&limit=0",
+    "schema_fields": [
+      "Licence Number",
+      "Licensee Name",
+      "ACN",
+      "ABN",
+      "Licensee Business Address",
+      "Licence Type DESC",
+      "Licence Type CODE",
+      "Financial Category DESC",
+      "Financial Category CODE",
+      "Licence Grade",
+      "Licence Class Type"
+    ],
+    "datastore_system_field_excluded": "_id",
+    "raw_row_total": 196116,
+    "raw_rows_are_not_distinct_businesses": true,
+    "observed_category_descriptions": {
+      "1": "Category 1",
+      "2": "Category 2",
+      "3": "Category 3",
+      "4": "Category 4",
+      "5": "Category 5",
+      "6": "Category 6",
+      "7": "Category 7",
+      "SC2": "Self Certification - Builder/Trade",
+      "SCT1": "Self Certification - Trade",
+      "N/A": "No Financials Required",
+      "EMRSC1": "Estimated MR SC1",
+      "EMRSC2": "Estimated MR SC2",
+      "EMR1-2": "Estimated MR Cat 1-2",
+      "EMR3-7": "Estimated MR Cat 3-7"
+    },
+    "aggregate_raw_rows_by_category": {
+      "SC2": 74274,
+      "EMRSC1": 391,
+      "2": 9874,
+      "EMR1-2": 142,
+      "4": 497,
+      "7": 392,
+      "N/A": 47549,
+      "1": 9581,
+      "6": 335,
+      "EMRSC2": 259,
+      "3": 2718,
+      "SCT1": 49573,
+      "5": 491,
+      "EMR3-7": 40
+    },
+    "source_warning": "Official catalogue states suspended licences are included and cancelled licences excluded. Current individual licence status requires QBCC licence search. No status or entity class column exists in the observed schema.",
+    "csv_encoding_current_download_verified": false
+  },
+  "abr": {
+    "dataset_url": "https://data.gov.au/data/dataset/abn-bulk-extract",
+    "metadata_url": "https://data.gov.au/data/api/3/action/package_show?id=abn-bulk-extract",
+    "dataset_id": "5bd7fcab-e315-42cb-8daf-50b7efc2027e",
+    "metadata_modified_lexical": "2026-09-08T22:35:39.726848",
+    "licence": "Creative Commons Attribution 3.0 Australia",
+    "licence_url": "http://creativecommons.org/licenses/by/3.0/au/",
+    "zip_resources": [
+      {
+        "resource_id": "0ae4d427-6fa8-4d40-8e76-c6909b5a071b",
+        "last_modified_lexical": "2026-09-08T22:33:55.831895",
+        "declared_size": 497706546
+      },
+      {
+        "resource_id": "635fcb95-7864-4509-9fa7-a62a6e32b62d",
+        "last_modified_lexical": "2026-09-08T22:35:38.999566",
+        "declared_size": 497475853
+      }
+    ],
+    "coherence": "unverified; proximity of metadata timestamps is not generation proof",
+    "publisher_bulk_reference": "https://abr.business.gov.au/Tools/BulkExtract",
+    "fields_limit": "Public identifiers, registration statuses/dates, entity type, names, state/postcode, ASIC identifiers and DGR; no contact field list."
+  },
+  "limitations": [
+    "This summary records observed public metadata projections, not original response-byte receipts.",
+    "Search-index dates were not used for current ABR freshness; direct metadata superseded stale indexed dates.",
+    "Data licences are observed; G1 legal/collection approval, G2 source mapping approval, authentic CSV/ZIP validation and generation coherence remain pending.",
+    "No source, retention, matching, capacity, hosting or vendor gate was approved."
+  ]
+}
