@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<title>SIC Marketing Activity &amp; Performance Summary — August 2026</title>
+<style>
+/* ---------------------------------------------------------------------------
+   Maintain Media — client brochure
+   Design system: DESIGN.md (purple #a04dff, dark #08282d, white #ffffff)
+   Fonts and graphics are loaded from ../../../media/ (repo asset library).
+   Render to PDF with: node render.mjs
+--------------------------------------------------------------------------- */
+
+@font-face { font-family:"Albert Sans"; font-weight:400; font-style:normal;
+  src:url("../../../media/complete-toolkit/01%20Visual%20Identity/Typography/Albert%20Sans/static/AlbertSans-Regular.ttf") format("truetype"); }
+@font-face { font-family:"Albert Sans"; font-weight:500; font-style:normal;
+  src:url("../../../media/complete-toolkit/01%20Visual%20Identity/Typography/Albert%20Sans/static/AlbertSans-Medium.ttf") format("truetype"); }
+@font-face { font-family:"Albert Sans"; font-weight:600; font-style:normal;
+  src:url("../../../media/complete-toolkit/01%20Visual%20Identity/Typography/Albert%20Sans/static/AlbertSans-SemiBold.ttf") format("truetype"); }
+@font-face { font-family:"Albert Sans"; font-weight:700; font-style:normal;
+  src:url("../../../media/complete-toolkit/01%20Visual%20Identity/Typography/Albert%20Sans/static/AlbertSans-Bold.ttf") format("truetype"); }
+@font-face { font-family:"Vela Sans"; font-weight:700; font-style:normal;
+  src:url("../../../media/complete-toolkit/01%20Visual%20Identity/Typography/Vela%20Sans/VelaSans-Bold.otf") format("opentype"); }
+@font-face { font-family:"Vela Sans"; font-weight:800; font-style:normal;
+  src:url("../../../media/complete-toolkit/01%20Visual%20Identity/Typography/Vela%20Sans/VelaSans-ExtraBold.otf") format("opentype"); }
+
+:root{
+  --purple:#a04dff;
+  --purple-300:#c79bff;
+  --purple-600:#8a34f0;
+  --dark:#08282d;
+  --bg:#061518;
+  --surface:#0c2a30;
+  --surface-2:#123a42;
+  --ink-2:#cdd9db;
+  --muted:#93a7aa;
+  --line-light:#e4eaeb;
+  --ink-light-2:#4b6469;
+  --pad:16mm;
+}
+
+*{box-sizing:border-box;margin:0;padding:0;}
+html,body{background:#8b9698;}
+body{
+  font-family:"Albert Sans",system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;
+  font-size:9.4pt;
+  line-height:1.55;
+}
+
+/* ---------- page shell ---------- */
+@page{ size:A4 portrait; margin:0; }
+.page{
+  position:relative;
+  width:210mm; height:297mm;
+  overflow:hidden;
+  page-break-after:always;
+  background:#fff;
+  padding:var(--pad);
+  display:flex; flex-direction:column;
+}
+.page:last-child{ page-break-after:auto; }
+.page.dark{ background:var(--bg); color:#fff; }
+.page.light{ background:#fff; color:var(--dark); }
+
+/* atmosphere on dark pages */
+.glow{
+  position:absolute; pointer-events:none; z-index:0;
+  background:radial-gradient(circle at center, rgba(160,77,255,.42) 0%, rgba(160,77,255,.10) 45%, rgba(160,77,255,0) 70%);
+}
+.mountain{
+  position:absolute; left:0; right:0; bottom:0; z-index:0;
+  width:100%; opacity:.18;
+  filter:brightness(0) saturate(100%) invert(48%) sepia(72%) saturate(4200%) hue-rotate(248deg) brightness(103%) contrast(101%);
+}
+.page > *{ position:relative; z-index:1; }
+.page > .glow, .page > .mountain{ position:absolute; z-index:0; }
+
+/* ---------- shared furniture ---------- */
+.topbar{ display:flex; align-items:center; justify-content:space-between; }
+.logo{ height:8.2mm; width:auto; display:block; }
+.pagemark{
+  font-size:7.6pt; font-weight:600; letter-spacing:.16em; text-transform:uppercase;
+}
+.dark .pagemark{ color:var(--muted); }
+.light .pagemark{ color:var(--ink-light-2); }
+.pagemark b{ color:var(--purple); font-weight:700; }
+
+.footer{
+  position:absolute; left:var(--pad); right:var(--pad); bottom:10mm; z-index:1;
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:7.4pt; letter-spacing:.1em; text-transform:uppercase; font-weight:600;
+}
+.dark .footer{ color:var(--muted); border-top:.35mm solid rgba(255,255,255,.12); padding-top:3mm; }
+.light .footer{ color:var(--ink-light-2); border-top:.35mm solid var(--line-light); padding-top:3mm; }
+
+.kicker{
+  display:inline-flex; align-items:center; gap:2.4mm;
+  font-size:7.8pt; font-weight:700; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--purple);
+}
+.kicker::before{ content:""; width:7mm; height:.7mm; background:var(--purple); display:block; border-radius:99px; }
+
+h1,h2,h3{ font-family:"Vela Sans","Albert Sans",sans-serif; }
+
+.sec-num{
+  font-family:"Vela Sans",sans-serif; font-weight:800; font-size:10pt;
+  color:var(--purple); letter-spacing:.02em;
+}
+.sec-head{ display:flex; align-items:baseline; gap:4mm; margin-bottom:1.5mm; }
+.sec-head h2{
+  font-weight:800; font-size:19pt; line-height:1.1; letter-spacing:-.015em;
+}
+.light .sec-head h2{ color:var(--dark); }
+.sec-sub{ font-size:9.4pt; line-height:1.6; max-width:150mm; }
+.light .sec-sub{ color:#33484c; }
+.dark .sec-sub{ color:var(--ink-2); }
+
+h3.blk{
+  font-family:"Albert Sans",sans-serif; font-weight:700; font-size:10.5pt;
+  letter-spacing:-.005em; margin-bottom:1.6mm;
+}
+.light h3.blk{ color:var(--dark); }
+.dark h3.blk{ color:#fff; }
+
+.rule{ height:.35mm; background:var(--line-light); margin:6mm 0; }
+.dark .rule{ background:rgba(255,255,255,.12); }
+
+/* ---------- cover ---------- */
+.cover-body{ flex:1; display:flex; flex-direction:column; justify-content:center; }
+.cover-body h1{
+  font-weight:800; font-size:38pt; line-height:1.03; letter-spacing:-.025em;
+  margin:6mm 0 5mm;
+}
+.cover-body h1 em{ font-style:normal; color:var(--purple-300); }
+.cover-lede{
+  font-size:11pt; line-height:1.6; color:var(--ink-2); max-width:135mm;
+}
+.cover-meta{
+  margin-top:14mm; display:grid; grid-template-columns:repeat(2,1fr);
+  border-top:.35mm solid rgba(255,255,255,.14);
+}
+.cover-meta div{
+  padding:5mm 6mm 5mm 0; border-bottom:.35mm solid rgba(255,255,255,.14);
+}
+.cover-meta div:nth-child(even){ padding-left:6mm; border-left:.35mm solid rgba(255,255,255,.14); }
+.cover-meta dt{
+  font-size:7.4pt; font-weight:700; letter-spacing:.18em; text-transform:uppercase; color:var(--muted);
+  margin-bottom:1.6mm;
+}
+.cover-meta dd{ font-size:11pt; font-weight:600; color:#fff; }
+
+/* ---------- stat tiles ---------- */
+.stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:3.5mm; }
+.stat{
+  border:.35mm solid rgba(160,77,255,.38);
+  background:linear-gradient(180deg, rgba(160,77,255,.13) 0%, rgba(12,42,48,.55) 100%);
+  border-radius:4mm; padding:6mm 4.5mm 5.5mm;
+  display:flex; flex-direction:column; justify-content:space-between; min-height:34mm;
+}
+.stat .v{
+  font-family:"Vela Sans",sans-serif; font-weight:800; color:#fff;
+  font-size:30pt; line-height:.95; letter-spacing:-.03em;
+}
+.stat .v.word{ font-size:19pt; letter-spacing:-.01em; color:var(--purple-300); }
+.stat .l{
+  margin-top:4mm; font-size:7.6pt; font-weight:700; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--ink-2); line-height:1.45;
+}
+
+/* ---------- pillar rows (icon + label + text) ---------- */
+.pillars{ display:grid; gap:0; }
+.pillar{
+  display:grid; grid-template-columns:9mm 46mm 1fr; gap:5mm; align-items:start;
+  padding:5.8mm 0;
+}
+.light .pillar{ border-bottom:.35mm solid var(--line-light); }
+.dark .pillar{ border-bottom:.35mm solid rgba(255,255,255,.12); }
+.pillar:first-child{ border-top:.35mm solid var(--line-light); }
+.dark .pillar:first-child{ border-top:.35mm solid rgba(255,255,255,.12); }
+.pillar img{ width:7mm; height:7mm; margin-top:.4mm; }
+.pillar .name{ font-weight:700; font-size:10pt; letter-spacing:-.005em; }
+.light .pillar .name{ color:var(--dark); }
+.dark .pillar .name{ color:#fff; }
+.pillar .desc{ font-size:9.2pt; line-height:1.55; }
+.light .pillar .desc{ color:#3c5257; }
+.dark .pillar .desc{ color:var(--ink-2); }
+
+/* ---------- data table ---------- */
+table.data{ width:100%; border-collapse:collapse; }
+table.data th{
+  text-align:left; font-size:7.4pt; font-weight:700; letter-spacing:.16em;
+  text-transform:uppercase; color:var(--ink-light-2); padding:0 0 2.6mm;
+  border-bottom:.5mm solid var(--purple);
+}
+table.data td{
+  padding:3.6mm 0; border-bottom:.35mm solid var(--line-light);
+  font-size:9.2pt; line-height:1.5; vertical-align:top; color:#3c5257;
+}
+table.data td:first-child{ width:52mm; padding-right:6mm; font-weight:700; color:var(--dark); }
+
+/* ---------- bullet list ---------- */
+ul.ticks{ list-style:none; display:grid; gap:2.6mm; }
+ul.ticks li{
+  position:relative; padding-left:6.5mm; font-size:9.2pt; line-height:1.55;
+}
+.light ul.ticks li{ color:#3c5257; }
+.dark ul.ticks li{ color:var(--ink-2); }
+ul.ticks li::before{
+  content:""; position:absolute; left:0; top:1.7mm;
+  width:2.2mm; height:2.2mm; border-radius:99px; background:var(--purple);
+}
+ul.ticks.two{ grid-template-columns:1fr 1fr; column-gap:8mm; }
+
+/* ---------- cards ---------- */
+.cards{ display:grid; gap:3.5mm; }
+.cards.three{ grid-template-columns:repeat(3,1fr); }
+.card{
+  border:.35mm solid var(--line-light); border-radius:4mm; padding:5.5mm 5mm;
+  background:#fbfcfc;
+}
+.card .tag{
+  font-size:7.2pt; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--purple); display:block; margin-bottom:2.4mm;
+}
+.card h4{
+  font-family:"Albert Sans",sans-serif; font-weight:700; font-size:10pt;
+  color:var(--dark); margin-bottom:2.2mm; line-height:1.25;
+}
+.card p{ font-size:8.9pt; line-height:1.55; color:#3c5257; }
+
+/* ---------- callout ---------- */
+.callout{
+  border-radius:4mm; padding:6mm 6.5mm;
+  background:var(--dark); color:#fff;
+  display:grid; grid-template-columns:34mm 1fr; gap:6mm; align-items:center;
+}
+.callout .tag{
+  font-size:7.6pt; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+  color:var(--purple-300);
+}
+.callout p{ font-size:10.5pt; line-height:1.5; font-weight:500; }
+
+.closer{
+  border:.35mm solid rgba(160,77,255,.45); border-radius:5mm;
+  background:linear-gradient(180deg, rgba(160,77,255,.16) 0%, rgba(12,42,48,.5) 100%);
+  padding:9mm 9mm 8.5mm;
+}
+.closer h3{
+  font-weight:800; font-size:16pt; line-height:1.2; letter-spacing:-.02em;
+  color:#fff; margin:4mm 0 3.5mm;
+}
+.closer p{ font-size:10pt; line-height:1.6; color:var(--ink-2); }
+
+.spacer{ flex:1; }
+.mt-a{ margin-top:8mm; } .mt-b{ margin-top:6mm; } .mt-c{ margin-top:4.5mm; }
+</style>
+</head>
+<body>
+
+<!-- ======================= PAGE 1 — COVER ======================= -->
+<section class="page dark">
+  <div class="glow" style="width:200mm;height:200mm;top:-90mm;right:-70mm;"></div>
+  <img class="mountain" src="../../../media/complete-toolkit/01%20Visual%20Identity/graphics/mountain.svg" alt="">
+
+  <div class="topbar">
+    <img class="logo" src="../../../media/logos/maintain-media-logo-darkbg.svg" alt="Maintain Media">
+    <span class="pagemark">August 2026</span>
+  </div>
+
+  <div class="cover-body">
+    <span class="kicker">Client Performance Summary</span>
+    <h1>SIC Marketing<br>Activity &amp; <em>Performance</em></h1>
+    <p class="cover-lede">
+      Performance marketing, creative and brand support delivered by Maintain Media
+      across SIC Surface, SIC Mining and SIC Business in a Box.
+    </p>
+
+    <dl class="cover-meta">
+      <div><dt>Client</dt><dd>SIC</dd></div>
+      <div><dt>Reporting period</dt><dd>August 2026</dd></div>
+      <div><dt>Agency</dt><dd>Maintain Media</dd></div>
+      <div><dt>Primary channels</dt><dd>Meta, Facebook &amp; Instagram</dd></div>
+    </dl>
+  </div>
+
+  <div class="footer"><span>maintainmedia.com.au</span><span>01 / 05</span></div>
+</section>
+
+<!-- ================= PAGE 2 — HIGHLIGHTS / OVERVIEW ================= -->
+<section class="page dark">
+  <div class="glow" style="width:170mm;height:170mm;bottom:-95mm;left:-60mm;"></div>
+  <img class="mountain" src="../../../media/complete-toolkit/01%20Visual%20Identity/graphics/mountain.svg" alt="">
+
+  <div class="topbar">
+    <img class="logo" src="../../../media/logos/maintain-media-logo-darkbg.svg" alt="Maintain Media">
+    <span class="pagemark"><b>01</b> &nbsp;Performance Overview</span>
+  </div>
+
+  <div class="mt-a">
+    <span class="kicker">At a glance</span>
+    <div class="sec-head mt-c"><h2>The month in four numbers</h2></div>
+  </div>
+
+  <div class="stats mt-b">
+    <div class="stat"><span class="v">12</span><span class="l">Ad creatives produced</span></div>
+    <div class="stat"><span class="v word">Live</span><span class="l">Meta lead campaign</span></div>
+    <div class="stat"><span class="v">3</span><span class="l">SIC business areas supported</span></div>
+    <div class="stat"><span class="v word">Active</span><span class="l">Lead generation</span></div>
+  </div>
+
+  <div class="rule"></div>
+
+  <h3 class="blk">Executive summary</h3>
+  <p class="sec-sub">
+    Maintain Media has supported SIC across paid advertising, creative production, organic social
+    media and broader brand collateral. The work has focused on strengthening SIC's presence across
+    its different business areas, developing the creative assets required to support each offer, and
+    establishing a Meta lead-generation channel that is now producing enquiries.
+  </p>
+
+  <div class="mt-a">
+    <h3 class="blk">What this activity is building</h3>
+    <div class="pillars mt-c">
+      <div class="pillar">
+        <img src="../../../media/complete-toolkit/01%20Visual%20Identity/icons-colored/Globe.svg" alt="">
+        <span class="name">Awareness</span>
+        <span class="desc">Advertising and organic content increase visibility for SIC and its different service offerings.</span>
+      </div>
+      <div class="pillar">
+        <img src="../../../media/complete-toolkit/01%20Visual%20Identity/icons-colored/Target.svg" alt="">
+        <span class="name">Lead generation</span>
+        <span class="desc">Meta advertising turns targeted attention into direct enquiries and potential opportunities.</span>
+      </div>
+      <div class="pillar">
+        <img src="../../../media/complete-toolkit/01%20Visual%20Identity/icons-colored/FlagBanner.svg" alt="">
+        <span class="name">Brand credibility</span>
+        <span class="desc">Consistent, professional creative strengthens how SIC is presented across consumer and commercial markets.</span>
+      </div>
+      <div class="pillar">
+        <img src="../../../media/complete-toolkit/01%20Visual%20Identity/icons-colored/PuzzlePiece.svg" alt="">
+        <span class="name">Sales support</span>
+        <span class="desc">Business in a Box and product-focused collateral give SIC stronger assets to communicate its offers.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer"><span>maintainmedia.com.au</span><span>02 / 05</span></div>
+</section>
+
+<!-- ============ PAGE 3 — PAID MEDIA & LEAD GENERATION ============ -->
+<section class="page light">
+  <div class="topbar">
+    <img class="logo" src="../../../media/logos/maintain-media-logo-lightbg.svg" alt="Maintain Media">
+    <span class="pagemark"><b>02</b> &nbsp;Paid Media &amp; Lead Generation</span>
+  </div>
+
+  <div class="mt-a">
+    <div class="sec-head"><span class="sec-num">02</span><h2>Paid media and lead generation</h2></div>
+    <p class="sec-sub">
+      Maintain Media developed and launched a dedicated Meta lead-generation campaign for SIC,
+      creating a direct-response channel designed to convert targeted advertising traffic into
+      enquiries. The campaign has begun generating leads, establishing an initial performance
+      baseline that can be developed further through continued optimisation, audience refinement
+      and creative testing.
+    </p>
+  </div>
+
+  <table class="data mt-b">
+    <thead><tr><th>Area</th><th>Delivered / purpose</th></tr></thead>
+    <tbody>
+      <tr><td>Campaign status</td><td>Live on Meta</td></tr>
+      <tr><td>Primary objective</td><td>Generate direct enquiries for SIC</td></tr>
+      <tr><td>Current outcome</td><td>Campaign has generated leads</td></tr>
+      <tr><td>Ongoing role</td><td>Monitor performance, test creative and improve efficiency over time</td></tr>
+    </tbody>
+  </table>
+
+  <div class="rule"></div>
+
+  <h3 class="blk">Advertising creative</h3>
+  <p class="sec-sub">
+    To support campaign performance and give SIC multiple concepts to test, Maintain Media produced
+    12 dedicated advertising creatives. This gives the account a broader library of assets to rotate
+    across different messages and visual approaches, rather than relying on a single concept, and
+    creates more opportunities to identify the strongest-performing direction as campaign data develops.
+  </p>
+
+  <div class="mt-b">
+    <h3 class="blk">Why multiple creative assets matter</h3>
+    <ul class="ticks two mt-c">
+      <li>Creates more opportunities to test different customer motivations and messages.</li>
+      <li>Reduces reliance on a single advertisement or visual direction.</li>
+      <li>Builds a reusable creative library for future campaign iterations.</li>
+      <li>Provides flexibility to refresh the campaign as performance data develops.</li>
+    </ul>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="callout" style="margin-bottom:16mm;">
+    <span class="tag">Key outcome</span>
+    <p>SIC now has an active paid acquisition channel on Meta, supported by a dedicated creative
+       library and early lead generation.</p>
+  </div>
+
+  <div class="footer"><span>maintainmedia.com.au</span><span>03 / 05</span></div>
+</section>
+
+<!-- ========= PAGE 4 — BRAND, CREATIVE & ORGANIC SOCIAL ========= -->
+<section class="page light">
+  <div class="topbar">
+    <img class="logo" src="../../../media/logos/maintain-media-logo-lightbg.svg" alt="Maintain Media">
+    <span class="pagemark"><b>03</b> &nbsp;Brand, Creative &amp; Social</span>
+  </div>
+
+  <div class="mt-a">
+    <div class="sec-head"><span class="sec-num">03</span><h2>Brand and creative development</h2></div>
+    <p class="sec-sub">
+      Alongside paid media, Maintain Media has developed supporting marketing assets across SIC's
+      wider business areas, creating a more consistent and professional presentation across digital
+      campaigns, sales conversations and physical brand touchpoints.
+    </p>
+  </div>
+
+  <div class="cards three mt-b">
+    <div class="card">
+      <span class="tag">Business in a Box</span>
+      <h4>Packaging the opportunity</h4>
+      <p>Dedicated marketing designs that present Business in a Box as a commercial opportunity and
+         complete business system, rather than simply another product, supporting advertising and
+         prospective operator conversations.</p>
+    </div>
+    <div class="card">
+      <span class="tag">IBC Box branding</span>
+      <h4>Brand on the product itself</h4>
+      <p>The sticker design for the IBC Box was finalised, giving SIC a finished branded element for
+         the physical product and extending the brand beyond digital marketing.</p>
+    </div>
+    <div class="card">
+      <span class="tag">SIC Mining</span>
+      <h4>Capability-led positioning</h4>
+      <p>Dedicated marketing designs supporting a more capability-led and professional presentation
+         for SIC's mining and industrial offering to commercial and B2B audiences.</p>
+    </div>
+  </div>
+
+  <div class="rule"></div>
+
+  <div class="sec-head"><span class="sec-num">04</span><h2>Organic social media</h2></div>
+  <p class="sec-sub">
+    Maintain Media developed social media content for SIC Surface, with the initial focus centred on
+    asphalt driveways and resurfacing. The role of this content is to keep the brand active, provide
+    useful context to prospective customers and support the credibility of paid advertising activity.
+  </p>
+
+  <ul class="ticks two mt-b">
+    <li>Showcases SIC Surface services and applications.</li>
+    <li>Demonstrates the visual impact of asphalt and resurfacing work.</li>
+    <li>Educates prospective customers around resurfacing options.</li>
+    <li>Keeps SIC Surface active and visible across social channels.</li>
+    <li>Supports familiarity and trust for prospects who research the business after seeing an ad.</li>
+    <li>Creates content that can be repurposed into future marketing and advertising assets.</li>
+  </ul>
+
+  <div class="spacer"></div>
+
+  <div class="callout" style="margin-bottom:16mm;">
+    <span class="tag">Where it lands</span>
+    <p>Brand and creative work now spans three SIC business areas, from advertising design
+       through to the branding on the physical product.</p>
+  </div>
+
+  <div class="footer"><span>maintainmedia.com.au</span><span>04 / 05</span></div>
+</section>
+
+<!-- ============ PAGE 5 — HOW IT WORKS TOGETHER / NEXT ============ -->
+<section class="page dark">
+  <div class="glow" style="width:190mm;height:190mm;top:-100mm;left:-70mm;"></div>
+  <img class="mountain" src="../../../media/complete-toolkit/01%20Visual%20Identity/graphics/mountain.svg" alt="">
+
+  <div class="topbar">
+    <img class="logo" src="../../../media/logos/maintain-media-logo-darkbg.svg" alt="Maintain Media">
+    <span class="pagemark"><b>05</b> &nbsp;How It Works Together</span>
+  </div>
+
+  <div class="mt-a">
+    <span class="kicker">The system</span>
+    <div class="sec-head mt-c"><h2>How the activity works together</h2></div>
+    <p class="sec-sub">
+      Each element supports the others. Advertising creates the attention, creative earns the trust,
+      and collateral converts the conversation.
+    </p>
+  </div>
+
+  <div class="pillars mt-b">
+    <div class="pillar">
+      <img src="../../../media/complete-toolkit/01%20Visual%20Identity/icons-colored/Globe.svg" alt="">
+      <span class="name">Awareness</span>
+      <span class="desc">Ads, social content and brand creative increase SIC's visibility across its target markets.</span>
+    </div>
+    <div class="pillar">
+      <img src="../../../media/complete-toolkit/01%20Visual%20Identity/icons-colored/Target.svg" alt="">
+      <span class="name">Lead generation</span>
+      <span class="desc">Meta advertising provides a direct acquisition channel for turning targeted audiences into enquiries.</span>
+    </div>
+    <div class="pillar">
+      <img src="../../../media/complete-toolkit/01%20Visual%20Identity/icons-colored/FlagBanner.svg" alt="">
+      <span class="name">Trust &amp; credibility</span>
+      <span class="desc">Consistent creative and an active social presence give prospects more confidence in the SIC brand.</span>
+    </div>
+    <div class="pillar">
+      <img src="../../../media/complete-toolkit/01%20Visual%20Identity/icons-colored/PuzzlePiece.svg" alt="">
+      <span class="name">Sales enablement</span>
+      <span class="desc">Business in a Box collateral, IBC branding and SIC Mining assets support stronger offer presentation.</span>
+    </div>
+  </div>
+
+  <div class="mt-a">
+    <h3 class="blk">Ongoing direction</h3>
+    <p class="sec-sub">
+      With the initial marketing foundations now in place, the next phase is centred on continuing to
+      optimise the active Meta campaign, expanding the strongest creative directions, maintaining a
+      consistent SIC Surface social presence and building out the creative library across SIC Mining
+      and Business in a Box.
+    </p>
+  </div>
+
+  <div class="spacer"></div>
+
+  <div class="closer" style="margin-bottom:16mm;">
+    <span class="kicker">Key outcome</span>
+    <h3>A more complete marketing foundation for SIC.</h3>
+    <p>
+      Maintain Media has combined paid lead generation, advertising creative, organic social content,
+      product branding and sales-focused collateral across the group, giving SIC one connected
+      marketing system rather than a set of separate activities.
+    </p>
+  </div>
+
+  <div class="footer"><span>maintainmedia.com.au</span><span>05 / 05</span></div>
+</section>
+
+</body>
+</html>
