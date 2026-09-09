@@ -1,0 +1,210 @@
+"""Isolated sequential thread experiments; run only after parent authorisation.
+
+Each candidate is a copied source module; the harness records its actual hash.
+No frozen source/config/test/ops files are written. All artifacts are retained.
+"""
+import argparse
+import hashlib
+import importlib.util
+import json
+import platform
+import subprocess
+import sys
+import time
+from datetime import UTC, datetime
+from pathlib import Path
+from uuid import uuid4
+
+import duckdb
+import psutil
+
+from abr_engine.ops.capacity import measure_callable
+
+HERE = Path(__file__).resolve().parent
+ROOT = HERE.parents[1]
+INPUT = ROOT / "var/benchmark-3cf2633055484c90a0ea52bfc53000a1"
+REFERENCE = ROOT / "var/diff-recheck-c0f055136c6346e9a43b1ec8aef2c052/events.parquet"
+GIB = 1024**3
+EXPECTED = dict.fromkeys(("abn_new", "abn_cancelled", "abn_reactivated", "gst_registered",
+                         "gst_cancelled", "name_changed", "abn_disappeared"), 205000)
+
+
+def digest(path):
+    value = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            value.update(block)
+    return value.hexdigest()
+
+
+def write(path, value):
+    with path.open("x", encoding="utf-8") as stream:
+        json.dump(value, stream, indent=2)
+
+
+def child(threads, work):
+    candidate = HERE / f"events_threads_{threads}.py"
+    spec = importlib.util.spec_from_file_location(f"candidate_threads_{threads}", candidate)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    output = work / "events.parquet"
+    result = {"candidate_sha256": digest(candidate), "candidate_path": str(candidate),
+              "threads": threads, "partition_max_rows_per_side": 400000,
+              "duckdb_memory_limit": "512MB", "spill_limit_bytes": 8*GIB,
+              "full_scale_certified": False, "db_wal_measured": False,
+              "linux_host_certified": False, "reference_output": str(REFERENCE)}
+    try:
+        value, metrics = measure_callable(lambda: module.diff_snapshots(
+            [INPUT / "previous.parquet"], [INPUT / "current.parquet"], output,
+            snapshot_id="4d85c03e-f875-4504-9cec-5cb8023f83cd",
+            observed_at=datetime(2026, 9, 9, tzinfo=UTC), max_spill_bytes=8*GIB),
+            rows=20500000, runtime_version=platform.python_version(), output_paths=[output])
+        result.update(metrics)
+        result["event_count"] = value.event_count
+        write(work / "materialization-receipt.json", {**result, "status": "materialized_validation_pending"})
+        validation_started = time.perf_counter()
+        con = duckdb.connect()
+        try:
+            con.execute("SET memory_limit='512MB'")
+            con.execute("SET threads=1")
+            con.execute("SET temp_directory=?", [str(work / "validation-spill")])
+            con.execute("SET max_temp_directory_size='8GB'")
+            con.from_parquet(str(output)).create_view("candidate")
+            con.from_parquet(str(REFERENCE)).create_view("reference")
+            result["event_counts"] = dict(con.execute("SELECT event_type,count(*) FROM candidate GROUP BY event_type").fetchall())
+            result["semantic_validation_mode"] = "prior exact candidate/input proof reused; fresh full counts"
+            result["prior_semantic_receipt"] = str(HERE / "comparison-5883627e117c4be191d13f3ea1da3c67/threads-3/receipt.json")
+        finally:
+            con.close()
+        result["validation_seconds"] = time.perf_counter()-validation_started
+        result["output_sha256"] = digest(output)
+        result["semantic_proof_pass"] = (result["event_counts"] == EXPECTED and value.event_count == 1435000
+            and result["semantic_validation_mode"].startswith("prior exact candidate/input proof"))
+        result["status"] = "complete" if result["semantic_proof_pass"] else "semantic_failure"
+    except Exception as exc:
+        result.update(status="failed", failure_type=type(exc).__name__, reason=str(exc))
+    write(work / "child-receipt.json", result)
+
+
+def compare():
+    if not all(path.exists() for path in [REFERENCE, INPUT / "previous.parquet", INPUT / "current.parquet"]):
+        raise RuntimeError("Retained sizing inputs/reference missing")
+    if psutil.disk_usage(str(HERE)).free < 25*GIB + 8*GIB + GIB:
+        raise RuntimeError("Disk admission requires 25GiB headroom plus 8GiB spill and 1GiB output")
+    comparison = HERE / ("confirmation-" + uuid4().hex)
+    comparison.mkdir()
+    base = {"created_at": datetime.now(UTC).isoformat(), "main_diff_sha256": digest(ROOT / "src/abr_engine/diff/events.py"),
+            "harness_sha256": digest(Path(__file__)), "lockfile_sha256": digest(ROOT / "uv.lock"),
+            "capacity_helper_sha256": digest(ROOT / "src/abr_engine/ops/capacity.py"),
+            "input_files": [{"path": str(p), "sha256": digest(p), "size_bytes": p.stat().st_size}
+                            for p in [INPUT / "previous.parquet", INPUT / "current.parquet"]],
+            "reference_sha256": digest(REFERENCE), "order": [2, 3],
+            "cache_state": "Uncontrolled local filesystem cache; sequential runs may benefit differently",
+            "rss_guard_bytes": 2*GIB, "rss_guard": "parent samples sum RSS of launcher and recursively discovered descendants every 10ms; not a kernel memory limit",
+            "rss_guard_scope": "captured_process_tree",
+            "logical_cpu_count": psutil.cpu_count(), "physical_cpu_count": psutil.cpu_count(logical=False),
+            "platform": platform.platform(), "python": platform.python_version(), "duckdb": duckdb.__version__}
+    prior_root = HERE / "comparison-5883627e117c4be191d13f3ea1da3c67"
+    prior = json.loads((prior_root / "comparison.json").read_text())
+    proof = json.loads((prior_root / "threads-3/receipt.json").read_text())
+    if (prior["input_files"] != base["input_files"] or prior["reference_sha256"] != base["reference_sha256"]
+        or proof.get("semantic_proof_pass") is not True
+        or proof["candidate_sha256"] != digest(HERE / "events_threads_3.py")
+        or prior["main_diff_sha256"] != digest(HERE / "events_threads_2.py")):
+        raise RuntimeError("Prior exact input/candidate semantic proof unavailable")
+    base["prior_comparison_receipt"] = str(prior_root / "comparison.json")
+    base["prior_comparison_receipt_sha256"] = digest(prior_root / "comparison.json")
+    base["prior_semantic_receipt_sha256"] = digest(prior_root / "threads-3/receipt.json")
+    write(comparison / "comparison.json", base)
+    for threads in (2, 3):
+        work = comparison / f"threads-{threads}"
+        work.mkdir()
+        candidate = HERE / f"events_threads_{threads}.py"
+        write(work / "started.json", {**base, "candidate_path": str(candidate), "candidate_sha256": digest(candidate), "threads": threads})
+        with (work / "stdout.log").open("x") as stdout, (work / "stderr.log").open("x") as stderr:
+            proc = subprocess.Popen([sys.executable, str(Path(__file__)), "--child", str(threads), "--work", str(work)], stdout=stdout, stderr=stderr)
+            observed = psutil.Process(proc.pid)
+            captured = {proc.pid: observed}
+            def live_tree():
+                # Windows venv python can be a launcher. Remember descendants even if
+                # the launcher exits, so neither measurement nor termination loses them.
+                for process in list(captured.values()):
+                    try:
+                        for descendant in process.children(recursive=True):
+                            captured[descendant.pid] = descendant
+                    except (psutil.NoSuchProcess, psutil.AccessDenied):
+                        pass
+                live = []
+                for process in captured.values():
+                    try:
+                        if process.is_running() and process.status() != psutil.STATUS_ZOMBIE:
+                            live.append(process)
+                    except psutil.NoSuchProcess:
+                        pass
+                return live
+            def stop_tree():
+                # Capture once more, kill descendants before their launcher, then wait.
+                live = live_tree()
+                for process in reversed(live):
+                    try:
+                        process.kill()
+                    except psutil.NoSuchProcess:
+                        pass
+                psutil.wait_procs(live, timeout=10)
+            peak_rss = peak_spill = 0
+            killed = None
+            started = last_spill = time.perf_counter()
+            while True:
+                live = live_tree()
+                if proc.poll() is not None and not live:
+                    break
+                try:
+                    sampled_rss = 0
+                    for process in live:
+                        try:
+                            sampled_rss += process.memory_info().rss
+                        except psutil.NoSuchProcess:
+                            pass
+                    peak_rss = max(peak_rss, sampled_rss)
+                    if peak_rss > 2*GIB:
+                        killed = "RSS_LIMIT_EXCEEDED"
+                        stop_tree()
+                        break
+                    if time.perf_counter()-last_spill >= .1:
+                        peak_spill = max(peak_spill, sum(p.stat().st_size for p in work.rglob("*") if p.is_file() and "spill" in str(p.parent)))
+                        last_spill = time.perf_counter()
+                    if time.perf_counter()-started > 1800:
+                        killed = "COMPARISON_TIMEOUT"
+                        stop_tree()
+                        break
+                except (psutil.NoSuchProcess, FileNotFoundError):
+                    pass
+                time.sleep(.01)
+            proc.wait()
+        prior_receipt = work / "child-receipt.json"
+        if not prior_receipt.exists():
+            prior_receipt = work / "materialization-receipt.json"
+        result = json.loads(prior_receipt.read_text()) if prior_receipt.exists() else {"status": "failed"}
+        result.update(parent_sampled_peak_rss_bytes=peak_rss, parent_sampled_peak_spill_bytes=peak_spill,
+                      parent_exit_code=proc.returncode, guard_stop=killed, total_child_seconds=time.perf_counter()-started,
+                      output_retained=str(work / "events.parquet"), candidate_sha256=digest(candidate),
+                      rss_guard_scope="captured_process_tree", captured_process_ids=sorted(captured))
+        if killed:
+            result["status"] = "guard_stopped"
+        write(work / "receipt.json", result)
+        print(json.dumps({"receipt": str(work / "receipt.json"), **result}), flush=True)
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--go", action="store_true", help="Run only after root authorises following frozen suite")
+    parser.add_argument("--child", type=int, choices=(2, 3))
+    parser.add_argument("--work", type=Path)
+    args = parser.parse_args()
+    if args.child:
+        child(args.child, args.work)
+    elif args.go:
+        compare()
+    else:
+        parser.error("Explicit --go required; preparation alone must not start heavy work")

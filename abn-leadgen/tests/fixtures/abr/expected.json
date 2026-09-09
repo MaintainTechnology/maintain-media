@@ -1,0 +1,48 @@
+{
+  "fixture_only": true,
+  "mapping": "ABRMapping.fixture()",
+  "cases": {
+    "abr_baseline": {
+      "rows": 3,
+      "events": 0
+    },
+    "abr_changed": {
+      "rows": 3,
+      "events": 5
+    },
+    "abr_same_date_correction": {
+      "rows": 3,
+      "events": 1
+    },
+    "abr_identical_republish": {
+      "same_content_as": "abr_baseline",
+      "events_against_current_baseline": 0
+    },
+    "abr_repartition_semantic_noop": {
+      "events_against_baseline": 0
+    },
+    "abr_mixed_generation": {
+      "hold": "GENERATION_UNPROVABLE"
+    },
+    "abr_missing_generation": {
+      "hold": "GENERATION_UNPROVABLE"
+    },
+    "abr_inventory_changes_during_download": {
+      "hold": "INVENTORY_CHANGED_DURING_DOWNLOAD"
+    },
+    "abr_a_b_a_then_retry": {
+      "occurrences": [
+        "11111111-1111-4111-8111-111111111111",
+        "22222222-2222-4222-8222-222222222222",
+        "33333333-3333-4333-8333-333333333333"
+      ],
+      "content": [
+        "abr_baseline",
+        "abr_changed",
+        "abr_baseline"
+      ],
+      "retry_reuses_occurrence": true,
+      "cached_a_without_new_observation": "hold"
+    }
+  }
+}

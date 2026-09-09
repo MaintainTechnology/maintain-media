@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="color-scheme" content="dark">
+  <title>ABN Lead Engine · Maintain Media</title>
+  <link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+  <link rel="preload" href="/assets/albert-sans.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="/assets/dashboard.css">
+  <script src="/assets/dashboard.js" defer></script>
+</head>
+<body>
+<!-- THESIS: A working lead review desk: inspect a business beside its source evidence.
+OWN-WORLD: Maintain Media deep teal, purple selections, Albert Sans and the canonical mountain wordmark.
+STORY: See the latest stored leads, inspect restrictions, run the demo pipeline, then configure the next run.
+FIRST VIEWPORT: Compact left navigation; task title and run action; summary strip; searchable list and detail workspace.
+SIGNATURE: Selecting a lead reveals its reasons in place. Motion only acknowledges state. Surface seed aa08d3f6, structure 7: review desk. -->
+  <a class="skip-link" href="#main">Skip to content</a>
+  <svg class="icon-definitions" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><defs>
+    <symbol id="i-leads" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M4 7h16M4 17h16"/><rect x="7" y="4" width="4" height="6" rx="1"/><rect x="14" y="14" width="4" height="6" rx="1"/></symbol>
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-refresh" viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M6.5 6.5A8 8 0 0 1 20 12M4 12a8 8 0 0 0 13.5 5.5"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M4 16v4h16v-4"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-info" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6m0-10v1"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 3H5v18h14V8l-5-5v5h5M8 12h8m-8 4h6"/></symbol>
+    <symbol id="i-play" viewBox="0 0 24 24"><path d="m8 5 11 7-11 7Z"/></symbol>
+  </defs></svg>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#leads" aria-label="Maintain Media — latest leads"><img src="/assets/logo.svg" alt="Maintain Media" width="168" height="34"></a>
+      <div class="workspace-label">ABN Lead Engine</div>
+      <nav class="navigation" aria-label="Main navigation">
+        <a href="#leads" data-view="leads" aria-current="page"><svg class="icon"><use href="#i-leads"/></svg><span>Latest leads</span><span class="nav-count" id="nav-count">—</span></a>
+        <a href="#runs" data-view="runs"><svg class="icon"><use href="#i-clock"/></svg><span>Run history</span></a>
+        <a href="#setup" data-view="setup" aria-label="Setup and settings"><svg class="icon"><use href="#i-settings"/></svg><span>Setup<span class="nav-long"> & settings</span></span></a>
+      </nav>
+      <div class="sidebar-bottom"><div class="local-state"><span class="status-dot" id="connection-dot"></span><span id="connection-label">Connecting</span></div><p>Private workspace<br>On this computer</p><a href="#setup" class="text-link">View setup <svg class="icon"><use href="#i-arrow"/></svg></a></div>
+    </aside>
+    <div class="main-shell">
+      <header class="topbar"><div class="breadcrumb">Workspace <span>/</span> <strong id="breadcrumb-current">Latest leads</strong></div><span class="mode-badge">Demo data</span></header>
+      <main id="main" tabindex="-1">
+        <div id="error-banner" class="notice error-notice" role="alert" hidden><svg class="icon"><use href="#i-info"/></svg><p id="error-text"></p><button class="button small secondary" id="retry-button">Try again</button></div>
+        <div id="operational-notices" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+        <section id="view-leads" class="view" aria-labelledby="leads-title">
+          <div class="page-heading"><div><h1 id="leads-title">Latest businesses.<br class="desktop-break"> Clearer next steps.</h1><p>Review the latest businesses collected by your engine.</p></div><div class="heading-actions"><button class="button secondary refresh-button"><svg class="icon"><use href="#i-refresh"/></svg>Refresh</button><button class="button primary run-button" disabled><svg class="icon"><use href="#i-play"/></svg><span>Run demo</span></button></div></div>
+          <div class="demo-note"><svg class="icon"><use href="#i-info"/></svg><p>You’re in demo mode. These are sample businesses. <a href="#setup">See what’s needed for live data <span aria-hidden="true">→</span></a></p></div>
+          <div class="summary-strip" aria-label="Lead summary"><div><span>Businesses in engine</span><strong id="total-leads">—</strong></div><div><span>Selected for review</span><strong id="selected-leads">—</strong></div><div><span>Needs review</span><strong id="review-leads">—</strong></div><div class="last-run-stat"><span>Latest run</span><strong id="last-run">—</strong></div></div>
+          <div class="section-heading"><div><h2>Latest leads <span class="count-label" id="lead-count"></span></h2><p>Most recently qualified first. Select a business to inspect its details.</p></div><button class="button secondary small export-latest" disabled><svg class="icon"><use href="#i-download"/></svg>Export latest CSV</button></div>
+          <div class="filters"><label class="search-field"><svg class="icon"><use href="#i-search"/></svg><span class="sr-only">Search businesses or ABNs</span><input id="lead-search" disabled type="search" placeholder="Search business name or ABN…" autocomplete="off"></label><label class="filter-field"><span>Source</span><select id="source-filter" disabled><option value="all">All sources</option><option value="abr">ABR</option><option value="qbcc">QBCC</option></select></label><label class="filter-field"><span>Tier</span><select id="tier-filter" disabled><option value="all">All tiers</option><option value="A">Tier A</option><option value="B">Tier B</option><option value="C">Tier C</option></select></label></div>
+          <div class="review-workspace"><div class="lead-list-area"><div class="list-heading"><span>Business / source</span><span>Qualification</span></div><div id="lead-list" aria-label="Businesses" aria-busy="true"><div class="skeleton-row"></div><div class="skeleton-row"></div><div class="skeleton-row"></div></div><div class="list-footer" id="list-footer">Loading your workspace…</div></div><section id="lead-detail" class="lead-detail" aria-label="Business details"><div class="detail-placeholder"><svg class="icon large-icon"><use href="#i-file"/></svg><h3>A little context goes a long way.</h3><p>Select a business to see its source, qualification and next review step.</p></div></section></div>
+          <div class="source-footnote"><svg class="icon"><use href="#i-info"/></svg><p>ABR and QBCC records help find candidates. They do not establish revenue, buying intent or permission to contact.</p></div>
+        </section>
+        <section id="view-runs" class="view" aria-labelledby="runs-title" hidden>
+          <div class="page-heading"><div><h1 id="runs-title">Every run, in one place.</h1><p>Follow the engine’s progress and open the reports it creates.</p></div><button class="button primary run-button" disabled><svg class="icon"><use href="#i-play"/></svg><span>Run demo</span></button></div>
+          <div id="active-run" class="notice run-notice" hidden aria-live="polite"></div>
+          <div class="section-heading"><div><h2>Recent runs</h2><p>Reports reflect the selected worklist for that run.</p></div><button class="button secondary small refresh-button"><svg class="icon"><use href="#i-refresh"/></svg>Refresh</button></div>
+          <div class="runs-table-wrap"><table class="runs-table"><thead><tr><th scope="col">Run</th><th scope="col">Source</th><th scope="col">Status</th><th scope="col">Selected</th><th scope="col">Reports</th></tr></thead><tbody id="run-list"></tbody></table><div id="runs-empty" class="empty-state" hidden><h3>Your first run starts here.</h3><p>Run the demo to process sample data and generate a review worklist.</p><button class="button primary run-button" disabled>Run demo</button></div></div>
+        </section>
+        <section id="view-setup" class="view" aria-labelledby="setup-title" hidden>
+          <div class="page-heading"><div><h1 id="setup-title">Make the engine work for you.</h1><p>Set your run defaults and see how your workspace is connected.</p></div><span class="mode-badge">Local demo workspace</span></div>
+          <div class="settings-layout"><div>
+            <section class="settings-section" aria-labelledby="defaults-title"><h2 id="defaults-title">Run defaults</h2><p>Saved on this computer. Changes apply to the next dashboard run.</p><form id="settings-form" aria-busy="true"><div class="form-field"><label for="default-source">Data source</label><select id="default-source" disabled name="default_source"><option value="all">ABR + QBCC</option><option value="abr">Australian Business Register (ABR)</option><option value="qbcc">QBCC contractor register</option></select><p class="field-hint">Choose which sample source to process when you run the demo.</p></div><div class="form-field"><label for="monthly-cap">Monthly enrichment usage limit</label><div class="money-input"><span>A$</span><input id="monthly-cap" disabled name="monthly_cap" type="number" min="0" max="150" step="0.01" required aria-describedby="cap-hint settings-error"></div><p class="field-hint" id="cap-hint">A$0–150. Limits enrichment usage; the demo does not purchase credits.</p></div><p id="settings-error" class="field-error" role="alert" hidden></p><div class="form-actions"><button class="button primary" id="save-settings" type="submit" disabled>Save changes</button><button class="button secondary" id="reset-settings" type="button" disabled>Discard changes</button><span id="save-status" class="save-status" role="status"></span></div></form></section>
+            <p id="budget-note" class="field-hint">Existing monthly budget limits still apply. Demo runs use free synthetic enrichment.</p>
+            <section class="settings-section" aria-labelledby="sources-title"><h2 id="sources-title">Data sources</h2><p>Publication and processing dates come from the engine’s stored records.</p><div id="source-list" class="source-list"></div></section>
+          </div><aside class="setup-aside"><section aria-labelledby="readiness-title"><div class="section-heading"><h2 id="readiness-title">Workspace readiness</h2><svg class="icon"><use href="#i-settings"/></svg></div><div id="setup-list"></div></section><div class="setup-explainer"><h3>Ready for real businesses?</h3><p>The local demo is ready to explore. Live collection needs approved source access, matching rules, provider setup and a completed release review.</p><p>Live connections are configured during deployment. This dashboard keeps outreach disabled.</p></div></aside></div>
+        </section>
+        <footer class="page-footer"><span>Maintain Media <span aria-hidden="true">·</span> ABN Lead Engine</span><span>Local workspace <span aria-hidden="true">·</span> Outreach disabled</span></footer>
+      </main>
+    </div>
+  </div>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <noscript><p class="noscript">Enable JavaScript to load leads, run the engine and save settings.</p></noscript>
+</body>
+</html>

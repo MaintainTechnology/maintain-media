@@ -1,0 +1,109 @@
+"""Bounded synthetic promoted-record sizing; never a full-register or isolated-WAL claim."""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import platform
+import subprocess
+import sys
+import time
+from datetime import UTC, datetime
+from pathlib import Path
+from uuid import uuid4
+
+from psycopg import sql
+
+from abr_engine.compliance.keys import load_keys
+from abr_engine.config import ROOT, Settings
+from abr_engine.control.service import Service
+from abr_engine.db import connect, migrate
+from abr_engine.fixture import seed_contact, seed_policy
+
+
+def relations(conn, schema):
+    return conn.execute("""SELECT c.relname AS table_name,
+        pg_table_size(c.oid) AS table_bytes, pg_indexes_size(c.oid) AS index_bytes,
+        pg_total_relation_size(c.oid) AS total_bytes
+        FROM pg_class c JOIN pg_namespace n ON n.oid=c.relnamespace
+        WHERE n.nspname=%s AND c.relkind='r' ORDER BY c.relname""", (schema,)).fetchall()
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--rows", type=int, default=1000)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    if not 1 <= args.rows <= 1000:
+        parser.error("sample is bounded to 1..1000 synthetic promoted leads")
+    if args.output.exists():
+        parser.error("output must be a new evidence artifact")
+    schema = "abr_test_" + uuid4().hex
+    settings = Settings(schema_name=schema)
+    service = Service(settings, load_keys(settings))
+    started = datetime.now(UTC)
+    with connect(Settings()) as conn:
+        conn.execute(sql.SQL("CREATE SCHEMA {}").format(sql.Identifier(schema)))
+    try:
+        migrate(settings)
+        with connect(settings) as conn:
+            version = conn.execute("SELECT version() AS value").fetchone()["value"]
+            migrations = conn.execute("SELECT name,digest FROM schema_migration ORDER BY name").fetchall()
+            before = relations(conn, schema)
+            lsn_start = conn.execute("SELECT pg_current_wal_insert_lsn()::text AS value").fetchone()["value"]
+        timer = time.perf_counter()
+        with connect(settings) as conn:
+            seed_policy(conn, service)
+            for index in range(args.rows):
+                seed_contact(conn, service, name=f"Synthetic sizing business {index:04d}",
+                             alias=f"990000{index:06d}")
+                if (index + 1) % 100 == 0:
+                    print(f"Materialised {index + 1}/{args.rows} synthetic promoted records", flush=True)
+        elapsed = time.perf_counter() - timer
+        with connect(settings) as conn:
+            lsn_end = conn.execute("SELECT pg_current_wal_insert_lsn()::text AS value").fetchone()["value"]
+            wal_bytes = int(conn.execute("SELECT pg_wal_lsn_diff(%s::pg_lsn,%s::pg_lsn) AS value",
+                                         (lsn_end, lsn_start)).fetchone()["value"])
+            after = relations(conn, schema)
+            counts = {row["table_name"]: conn.execute(sql.SQL("SELECT count(*) AS n FROM {}").format(
+                sql.Identifier(row["table_name"]))).fetchone()["n"] for row in after}
+        prior = {row["table_name"]: row for row in before}
+        for row in after:
+            row["row_count"] = counts[row["table_name"]]
+            row["growth_bytes"] = row["total_bytes"] - prior[row["table_name"]]["total_bytes"]
+        db_growth = sum(row["growth_bytes"] for row in after)
+        payload = {
+            "command": subprocess.list2cmdline([sys.executable, *sys.argv]),
+            "started_at": started.isoformat(), "finished_at": datetime.now(UTC).isoformat(),
+            "git_revision": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip(),
+            "working_tree": "shared uncommitted implementation; revision alone does not identify source",
+            "script_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+            "uv_lock_sha256": hashlib.sha256((ROOT / "uv.lock").read_bytes()).hexdigest(),
+            "python": platform.python_version(), "platform": platform.platform(), "postgresql": version,
+            "schema": schema, "migrations": migrations, "sample_leads": args.rows,
+            "sample_shape": "one policy; per lead: canonical group, QBCC source link, queue, identity, contact, collection provenance, licence, express basis and audit controls via production service methods",
+            "insert_elapsed_seconds": elapsed, "table_sizes_before": before, "table_sizes_after": after,
+            "db_growth_bytes": db_growth, "db_growth_bytes_per_lead": db_growth / args.rows,
+            "wal_start_lsn": lsn_start, "wal_end_lsn": lsn_end,
+            "wal_global_interval_bytes": wal_bytes, "wal_global_interval_bytes_per_lead": wal_bytes / args.rows,
+            "wal_scope": "cluster-wide insert LSN interval includes concurrent agents/checkpoints; upper bound for this sample's generated WAL, not isolated attributable WAL or retained WAL disk usage; migration and cleanup excluded",
+            "db_projection_factor": 2, "db_projected_bytes_per_lead_at_2x": db_growth / args.rows * 2,
+            "wal_projected_bytes_per_lead_at_2x": wal_bytes / args.rows * 2,
+            "limits": ["1000-row maximum sample; no 20.5M PostgreSQL duplicate", "append-only history, outcome/worklist/CRM volume and retained WAL need separate workload bounds", "encrypted synthetic fixture payload lengths are not an upper bound for every future real record", "no host certification, production capacity admission or full-register runtime claim"],
+            "full_scale_certified": False, "schema_cleanup": "pending",
+        }
+    finally:
+        # Exact generated fixture namespace only; never touch public or another task schema.
+        assert schema.startswith("abr_test_") and len(schema) == 41
+        with connect(Settings()) as conn:
+            conn.execute(sql.SQL("DROP SCHEMA {} CASCADE").format(sql.Identifier(schema)))
+    payload["schema_cleanup"] = "complete"
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    print(json.dumps({"artifact": str(args.output.resolve()), "rows": args.rows,
+                      "db_growth_bytes": db_growth, "wal_global_interval_bytes": wal_bytes,
+                      "full_scale_certified": False}))
+
+
+if __name__ == "__main__":
+    main()

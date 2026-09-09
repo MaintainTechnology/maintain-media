@@ -1,0 +1,43 @@
+{
+  "status": "passed",
+  "mode": "fixture",
+  "command": [
+    "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\.venv\\Scripts\\python.exe",
+    "-m",
+    "abr_engine.cli",
+    "propagation",
+    "drain",
+    "--mode",
+    "fixture",
+    "--config",
+    "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\ops\\acceptance\\propagation-drill-444cf383-b386-46a9-bc93-a4df3e369a22.fixture.yaml"
+  ],
+  "exit_code": 0,
+  "cli_elapsed_seconds": 4.703425300001982,
+  "enqueue_to_verified_completion_seconds": 4.637317,
+  "result": {
+    "mode": "fixture",
+    "notifications_sent": 0,
+    "results": [
+      {
+        "outbox_id": "5aba7dc9-4c18-4386-a1f6-888fcd9c8fbd",
+        "state": "succeeded",
+        "elapsed_since_enqueue_seconds": 4.637317,
+        "verified_remote_records": 1
+      }
+    ]
+  },
+  "checks": {
+    "endpoint_cleared": true,
+    "approved_suppressed_tag": true,
+    "unrelated_tag_retained": true,
+    "update_fetched_and_verified": true,
+    "optout_ledger_preserved": true
+  },
+  "lock_sha256": "c7c7a58208f93368d2050b3a75daed625e5bacda8a241b9be56213f6e9552b30",
+  "worker_sha256": "93ac32d5fc1703e38afdb53a37cd4645a74cfea1708ffa1472e0391292dfa350",
+  "schema_cleanup": "complete",
+  "python": "3.12.12",
+  "platform": "Windows-11-10.0.26200-SP0",
+  "limits": "One synthetic local PostgreSQL/mock worker. No Google/GHL provider, notification or production latency certification."
+}

@@ -1,0 +1,13 @@
+{
+  "run_id": "879088e2-d578-47e0-a413-cf2228cdf4f8",
+  "initial_status": "complete",
+  "repaired_status": "complete",
+  "immutable_receipt_replay": true,
+  "artifact_hashes_verified": 6,
+  "fresh_repair_bundle": true,
+  "original_artifacts_restored": true,
+  "source_repromotion": false,
+  "csv_rows": 1,
+  "safe_contact_visible": 1,
+  "live_api_calls": 0
+}

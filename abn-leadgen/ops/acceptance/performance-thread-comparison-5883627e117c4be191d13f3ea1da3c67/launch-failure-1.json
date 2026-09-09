@@ -1,0 +1,6 @@
+{
+  "stage": "disk_admission_before_benchmark",
+  "failure": "psutil Windows disk_usage requires str, not Path",
+  "corrected": "str(HERE)",
+  "candidate_executed": false
+}

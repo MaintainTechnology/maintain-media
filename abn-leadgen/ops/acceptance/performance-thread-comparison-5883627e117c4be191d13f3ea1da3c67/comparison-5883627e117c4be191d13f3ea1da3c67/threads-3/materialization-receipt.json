@@ -1,0 +1,22 @@
+{
+  "candidate_sha256": "31116f8187d6588b07a174aeb2f2de506e932b59057d33205b1f0d6cd33d8e51",
+  "candidate_path": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\.runtime\\performance-thread-comparison\\events_threads_3.py",
+  "threads": 3,
+  "partition_max_rows_per_side": 400000,
+  "duckdb_memory_limit": "512MB",
+  "spill_limit_bytes": 8589934592,
+  "full_scale_certified": false,
+  "db_wal_measured": false,
+  "linux_host_certified": false,
+  "reference_output": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\diff-recheck-c0f055136c6346e9a43b1ec8aef2c052\\events.parquet",
+  "rows": 20500000,
+  "elapsed_seconds": 58.41631869999401,
+  "sampled_peak_rss_bytes": 840953856,
+  "output_bytes": 101554474,
+  "platform": "Windows-11-10.0.26200-SP0",
+  "python": "3.12.12",
+  "runtime_version": "3.12.12",
+  "sample_interval_seconds": 0.01,
+  "event_count": 1435000,
+  "status": "materialized_validation_pending"
+}

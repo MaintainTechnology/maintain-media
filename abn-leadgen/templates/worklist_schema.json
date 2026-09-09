@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:maintain-media:worklist-row:v1",
+  "title": "Private immutable worklist row",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "row_id",
+    "worklist_id",
+    "lead_id",
+    "group_id",
+    "row_version",
+    "generated_at",
+    "signal",
+    "tier",
+    "score",
+    "business_name",
+    "safe_contact_view",
+    "gate_label",
+    "gate_checked_at",
+    "next_action",
+    "opener",
+    "status",
+    "attempts",
+    "invitation_state",
+    "occurred_at",
+    "save_state",
+    "invitation_evidence_ref",
+    "notes",
+    "source",
+    "source_age",
+    "source_published_at",
+    "signal_description",
+    "reasons",
+    "gate_expires_at",
+    "policy_version"
+  ],
+  "properties": {
+    "row_id": {
+      "type": "string",
+      "format": "uuid",
+      "readOnly": true
+    },
+    "worklist_id": {
+      "type": "string",
+      "format": "uuid",
+      "readOnly": true
+    },
+    "lead_id": {
+      "type": "string",
+      "format": "uuid",
+      "readOnly": true
+    },
+    "group_id": {
+      "type": "string",
+      "format": "uuid",
+      "readOnly": true
+    },
+    "row_version": {
+      "type": "integer",
+      "minimum": 1,
+      "readOnly": true
+    },
+    "generated_at": {
+      "type": "string",
+      "format": "date-time",
+      "readOnly": true
+    },
+    "signal": {
+      "type": "string",
+      "readOnly": true,
+      "enum": [
+        "abn_new",
+        "gst_registered",
+        "qbcc_backlog",
+        "qbcc_new",
+        "qbcc_category_changed"
+      ]
+    },
+    "tier": {
+      "enum": [
+        "A",
+        "B",
+        "C"
+      ],
+      "readOnly": true
+    },
+    "score": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100,
+      "readOnly": true
+    },
+    "business_name": {
+      "type": "string",
+      "readOnly": true
+    },
+    "safe_contact_view": {
+      "type": "string",
+      "readOnly": true
+    },
+    "gate_label": {
+      "enum": [
+        "Email: needs send-time checks",
+        "Phone: check before calling",
+        "Do not contact",
+        "Needs review"
+      ],
+      "readOnly": true
+    },
+    "gate_checked_at": {
+      "type": "string",
+      "readOnly": true
+    },
+    "next_action": {
+      "type": "string",
+      "readOnly": true
+    },
+    "opener": {
+      "type": "string",
+      "readOnly": true
+    },
+    "status": {
+      "enum": [
+        "not_started",
+        "no_usable_contact",
+        "attempted_no_answer",
+        "contacted_not_interested",
+        "contacted_nurture",
+        "meeting_booked",
+        "meeting_held",
+        "disqualified",
+        "do_not_contact_requested"
+      ]
+    },
+    "attempts": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 100000
+    },
+    "invitation_state": {
+      "enum": [
+        "invited",
+        "uninvited",
+        "unknown"
+      ]
+    },
+    "occurred_at": {
+      "type": "string",
+      "anyOf": [
+        {
+          "const": ""
+        },
+        {
+          "format": "date-time"
+        }
+      ],
+      "description": "Blank means no actual activity yet; never substitute report generation time."
+    },
+    "save_state": {
+      "type": "string",
+      "readOnly": true
+    },
+    "invitation_evidence_ref": {
+      "type": "string"
+    },
+    "notes": {
+      "type": "string",
+      "maxLength": 2000
+    },
+    "source": {
+      "type": "string",
+      "readOnly": true
+    },
+    "source_age": {
+      "type": "string",
+      "readOnly": true
+    },
+    "source_published_at": {
+      "type": "string",
+      "readOnly": true
+    },
+    "signal_description": {
+      "type": "string",
+      "readOnly": true
+    },
+    "reasons": {
+      "type": "string",
+      "readOnly": true
+    },
+    "gate_expires_at": {
+      "type": "string",
+      "readOnly": true
+    },
+    "policy_version": {
+      "type": "string",
+      "readOnly": true
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "invitation_state": {
+            "const": "invited"
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "invitation_evidence_ref"
+        ],
+        "properties": {
+          "invitation_evidence_ref": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    }
+  ],
+  "$comment": "Server authority validates IDs, expected version, current gate, actor scope and future timestamp. readOnly is documentation; Sheets protection and API implement enforcement. Opt-outs bypass routine outcome validation to commit suppression first."
+}

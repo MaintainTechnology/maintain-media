@@ -1,0 +1,19 @@
+{
+  "specs\\abr-lead-engine.md": "08e5585d15f07f8f7301dda9d73e7c153722fed74e9f3eb2cc3a90ff86bc7b5a",
+  "specs\\abr-review-source-checks.md": "b16c85b2238beb343e8f6af9ca7c36c3312cb93d1ae7381daff9e62e74384d68",
+  ".specify\\memory\\constitution.md": "2882b8eab828583568af1b81c4f37f8adcd52b9b8bf66c77b73a96bf05ac2459",
+  "specs\\001-abr-lead-engine\\analysis.md": "639a0541dbfb01ebbb6bb41bbd9f5a24f22e1d7d7d3ccb655c07fc9520caa146",
+  "specs\\001-abr-lead-engine\\checklists\\requirements.md": "c4525a86ba39a48a22983f79f7a36fd9f62d8c94ee6f3908463d29cd04fda2c5",
+  "specs\\001-abr-lead-engine\\checklists\\security-and-readiness.md": "0b270953846b38257217973c1c00b2c4d2e518df0a49b5ccd0de77e0c005e5c0",
+  "specs\\001-abr-lead-engine\\contracts\\interfaces.md": "a6d8dedb1b170c3a9ceaaa8a4ab56efc477d9714b0e80a814616fb3d103c0f34",
+  "specs\\001-abr-lead-engine\\contracts\\precision.md": "973b16b3c12f6b774be673d77cabe47020c1320a6ae068b6cc93ff44b12504c1",
+  "specs\\001-abr-lead-engine\\council-review.md": "1a980750969024764fc2f04842989fbaad51efb6ce0150d2629f713b904c2435",
+  "specs\\001-abr-lead-engine\\data-model.md": "b099e0460f04ae57cb4f15a03479caa6cefee986a832105154ed4a90c31c44f6",
+  "specs\\001-abr-lead-engine\\plan.md": "701f76c31ff9d39faf464c91bd94dbcd2e242d5e768bcca4896060515c49ddce",
+  "specs\\001-abr-lead-engine\\quickstart.md": "60143014730b1ed79adbfbb588e6cdf72a81d58e91b206cc5206c5f10626f434",
+  "specs\\001-abr-lead-engine\\research.md": "218224ae74b51f4f7c7a108a61b4b5e4b13ff4217d52877c99ed3955dd64310a",
+  "specs\\001-abr-lead-engine\\reviewer-notes.md": "944ca834a310ae63267151161d9c0f37677b804ea1c44b9fe2f21257c7e2af46",
+  "specs\\001-abr-lead-engine\\spec.md": "bba722709f8a765f75963d4ea080155e52ce3870d0eb21a5c7142fe116672261",
+  "specs\\001-abr-lead-engine\\tasks.md": "7d4a11b9b59569bd391ae8a7d43d3c73401fcc3c413a557313360d2dc6c0546e",
+  "specs\\001-abr-lead-engine\\workflow-status.md": "d3301ce9285738d6965b5be3bc94ab708be0b5f72b20b03f1c5f32c625872fa8"
+}

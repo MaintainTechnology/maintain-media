@@ -1,0 +1,108 @@
+---
+title: "ABR Lead Engine - Data Model"
+project: Maintain Media
+version: "4.0"
+synced: 2026-09-09
+source: "specs/001-abr-lead-engine/data-model.md"
+source_sha256: b099e0460f04ae57cb4f15a03479caa6cefee986a832105154ed4a90c31c44f6
+tags: [abr-lead-engine, maintain-media]
+---
+> Synced from the repository; local document links adapted for Obsidian.
+> [[ABR Lead Engine - Build Hub|Open the build hub]]
+
+# ABR Lead Engine data model
+
+Design version 4.0, PostgreSQL16 + immutable Parquet. This is the migration contract; executable migrations and database proof remain implementation tasks. UUIDs are generated once and reused on retries; source publication dates are attributes, never snapshot primary keys. Store all instants as `timestamptz` UTC, budget authority in integer micro-AUD and native billable amounts at each provider's documented precision (never float).
+
+## Source state and observations — FR-002–008, FR-012, FR-041
+
+| Entity | Key and required fields | Constraints / lifecycle |
+|---|---|---|
+| `pipeline_run` | `run_id UUID PK`, mode, started_at, finished_at nullable, code_version, rules_digest, config_digest, state, manifest_ref | mode fixture/pilot/production; state running/held/failed/complete. Config secrets excluded from manifest. |
+| `source_observation` | observation_id, source, observed_at, resource_id, URL, last_modified nullable, etag nullable, content_length nullable, download_digest nullable | Append-only metadata evidence; fetches tie back to one run. URLs are approved source hosts. |
+| `source_content` | content_id UUID PK, source, content_digest, schema_version, parser_version, verified_artifact_ref | Unique(source,content_digest,schema_version,parser_version); deduplicated immutable verified content, not publication occurrence identity. |
+| `source_snapshot` | snapshot_id UUID PK, source, content_id FK, expected_cursor_version bigint (0 baseline), declared_generation, schema_version, parser_version, manifest_ref, created_at, state | Unique(source,expected_cursor_version,content_id) for persistent staging/retry; staged/validated/committed/quarantined. UUID represents a validated publication occurrence. Historical A-to-B-to-A creates a new snapshot UUID while reusing A content if retained/verified. No-op only against current cursor content under same parser/schema contract; fresh coherence evidence required, old cache alone insufficient. |
+| `snapshot_member` | snapshot_id + member_name PK, resource_id, SHA256, declared_count, parsed_count, byte_length | FK snapshot; parsed_count=declared_count before validated; duplicate ABN across members is a whole-snapshot error. |
+| `source_cursor` | source PK, committed_snapshot_id FK, version bigint, last_success_at | Exactly one per source; transaction compares expected version/snapshot. |
+| `source_promotion` | run_id + source PK, from_snapshot_id nullable, to_snapshot_id, committed_at | Unique(source,to_snapshot_id); idempotent recovery marker. |
+| `business_state` (Parquet) | snapshot_id + abn logical key, entity_type_ind/text, entity_class, main_name, name_source, other_names array, state, postcode, status/date, GST status/date, industry/confidence/matched_rule/matched_name, status_effective_month, date_in_future | ABN valid 11 digits plus checksum; latest analytical view follows committed cursor. Full register is not duplicated into PostgreSQL. Stage next immutable version before promotion and retain under R29. |
+| `abr_event` | event_id UUID, to_snapshot_id + abn + event_type UNIQUE, from_snapshot_id nullable, before/after JSONB, detected_at, rule_digest, provisional_tier/score | New/cancelled/reactivated/GST-registered/GST-cancelled/name-changed/disappeared; no baseline events; one ABN may have several types. |
+| `qbcc_licence` | snapshot_id + licence_number PK, licensee_name, optional ABN/ACN, original_address, parsed state/postcode, type, financial_category, grade, sorted class_types, row_digest | Collapse class rows; inconsistent scalar attributes quarantine licence for review. No ABN is valid; invalid provided ABN is flagged and cannot establish linkage. |
+| `qbcc_event` | event_id, to_snapshot_id + licence_number + type UNIQUE, before/after, detected_at | new/category_changed/icp_backlog. Backlog once per initial licence discovery; rules edits do not manufacture source events. |
+
+Parquet contains full normalized source business fields plus source-member reference. Normalized name arrays are sorted for SHA-256 business hashing; JSON canonicalization specifies UTF-8, fixed field order, explicit nulls, ISO dates and no insignificant whitespace. Actual checksums distinguish source file identity from business equality. A publication with reordered names may create a snapshot but produces zero business change events; zero events is informational for identical semantic republish.
+
+## Canonical identity and contact evidence — FR-009–018, FR-020–021
+
+| Entity | Required fields | Invariants |
+|---|---|---|
+| `business_group` | group_id UUID PK, restriction_revision, merged_into_group_id nullable FK | Stable opaque group identity survives profile deletion; contains no name, ABN or licence plaintext. Merge redirects preserve all unresolved restrictions. |
+| `lead_entity` | lead_id UUID PK, group_id UUID UNIQUE FK, display_name, source-first-seen, encrypted validated ABN nullable, promoted business fields, state/postcode, lifecycle, revision | Active marketing profile for one business group; deletable independently of group. Only promoted state in PostgreSQL. lifecycle active/disqualified/cancelled/suppressed/deleted. |
+| `lead_source_link` | link_id UUID PK, group_id FK, source_type, encrypted_source_identifier, alias_token, key_version, linked_at, identity_evidence_ref | Active encrypted ABN/licence aliases only; UNIQUE(source_type,alias_token,key_version). Many licences link one group. Deleted with profile unless separately justified evidence; merges require review, never name/phone alone. |
+| `suppression_alias` | alias_type + key_version + alias_token PK, group_id FK, linked_at, migration_version | HMAC-only normalized ABN/licence aliases retained for matching incoming source identities to restriction group after erasure; no plaintext source keys or names. |
+| `domain_identity` | identity_id PK, lead_id FK, registrable_domain, assessment_seq bigint unique, assessment, method, evidence_ref, assessed_by/at, expires_at | UNIQUE(identity_id,lead_id,registrable_domain). approved/rejected/ambiguous; latest assessment_seq per lead+domain is current. Positive approval expires at assessed_at+90days or earlier invalidation. Exact validated ABN/licence or reviewed two-attribute corroboration required; rank never approves. |
+| `licence_review` | review_id, lead_id, licence_number, current_status, identity_match, evidence_ref, reviewed_by/at | Live QBCC action requires positive current status/identity evidence younger than30 days, independent of stale bulk discovery. |
+| `enrichment_attempt` | attempt_id, lead_id, rules_digest, state, started/finished_at, next_eligible_at, queries/fetches/verifications counts, domain_identity_id | pending/running/complete/exhausted/blocked; one active lease per lead. Completed empty results also set 90-day cooldown; temporary budget hold does not start it. |
+| `contact_record` | contact_id PK, lead_id FK, channel, encrypted_value, endpoint_token, token_key_version, first_provenance_id NOT NULL, verification_status, verified_at, revision, first/last_seen | channel email/mobile/landline; UNIQUE(lead_id,channel,endpoint_token); UNIQUE(contact_id,channel) and UNIQUE(contact_id,lead_id,channel) support composite FKs. |
+| `collection_provenance` | provenance_id PK, contact_id, lead_id, channel, registrable_domain, source_type, source_url, snapshot_ref, excerpt_ref, collected_at/by, method, domain_identity_id, robots_result, terms_assessment | UNIQUE(provenance_id,contact_id,channel); FK(contact_id,lead_id,channel) to contact and FK(domain_identity_id,lead_id,registrable_domain) to identity. For web sources URL/captured-page domain must equal recorded domain and identity pointer is required. Append-only corrected by superseding row. |
+| `contact_basis` | basis_id, contact_id, channel, assessment_seq bigint unique, assessment_state, basis_type, evidence_provenance_id, assessed_at/by, expires_at, policy_version, a/b/c/d assessments, rationale, optional express_scope/withdrawal_ref | Email only in v1. assessment_state pass/fail/unknown/withdrawn. Record limbs pass/fail/unknown; inferred path requires all pass plus trained reviewer; express path requires source/scope/time/withdrawal evidence, not invented limbs. Composite FK(evidence_provenance_id,contact_id,channel) to provenance. Latest committed assessment_seq per contact/channel is current; later fail/unknown/withdrawn defeats prior pass. |
+
+Attach deferred composite FK `(first_provenance_id,contact_id,channel)` from contact to provenance after both tables exist. Insert contact + matching provenance in one transaction; autocommit is invalid. Wrong-contact and wrong-channel evidence fails at commit. No override can bypass suppression, expiry or channel/type consistency. Any reviewed exception creates a new evidence-bearing policy assessment with actor, reason and timestamp, never toggles an old boolean.
+
+Email normalization: trim and lowercase only; retain `+tags` and dots. Domain validity checks must not silently rewrite the endpoint identity; any later IDNA canonicalization needs a versioned migration. Phone: pinned library with AU default region, accept valid national or +61 form, output E.164; reject extensions/short/emergency/non-AU/ambiguous numbers. Mobile and landline use the same `phone` token namespace. Tokens are HMAC-SHA256 over namespace + NUL + normalized value. Raw unkeyed hashes are not anonymous identifiers.
+
+## Compliance and action state — FR-022–030
+
+Key retirement is conditional on zero dependent token-only restrictions or verified equivalent
+replacement tokens. Erased identifiers cannot be recreated by rehashing HMACs. Old keys remain
+encrypted with lookup-only service access while dependencies exist; new writes use the active key.
+Apply the erasure-then-rotation fixture and incident freeze in [[ABR Lead Engine - Build Contract Precision|precision.md]].
+
+| Entity | Key / fields | Rules |
+|---|---|---|
+| `dnc_wash` | wash_id PK, endpoint_token/key_version, checked_at, received_at, import_sequence bigint unique, result clear/listed/error, provider, receipt_ref, batch_id, imported_by | Append-only authenticated import. Reject future times/unknown result or mismatched normalized batch. Select latest checked_at then monotonic import_sequence; any newer listed/error blocks older clear. Clear valid only while now < checked_at+30 days. |
+| `suppression_event` | event_id PK, request_id UNIQUE, scope endpoint/business, matching_token/key_version or group_id UUID FK, reason, action add/resolve, resolves_event_id nullable, requested_at, committed_at, actor/source/evidence_ref | Append-only reasons plus materialized projection. Only trained reviewer may resolve cancellation-only reason after positive reactivation evidence; no routine action resolves unsubscribe/complaint. Endpoint scope spans products; group catches future endpoints via suppression_alias. |
+| `do_not_market` | group_id UUID FK + reason PK, first_event_id FK, requested_at, resolved_event_id nullable | Active if any unresolved business reason exists. Re-enrichment never clears a reason; reviewed cancellation resolution leaves all opt-out/complaint/other blocks intact. |
+| `action_intent` | intent_id, group_id/lead_id/contact_id/channel, campaign/template/content_digest, relevance_assessment_id nullable FK, script_policy_version nullable, policy_version, revision, state, created_at, expires_at | Email requires current reviewer relevance FK; phone requires calling/script policy and no email basis/relevance row. pending/denied/consumed/expired/cancelled; short-lived single consumption, immutable final decision snapshot. |
+| `relevance_assessment` | assessment_id UUID PK, contact_id/channel, campaign/template/content_digest, policy_version, reviewer_id, state, role_evidence_id, reason, assessed_at, expires_at, assessment_seq | Email-only; exact content/contact binding, trained reviewer pass/fail/unknown. Latest matching assessment_seq governs; <=24h expiry capped by current basis/identity/policy expiry. See precision contract. |
+| `audit_event` | event_id, actor_id, action, object_type/id, previous_revision, new_revision, reason, created_at, trace_id, safe metadata | Append-only; endpoint values/secrets never in logs. Restricted security writer. |
+| `deletion_job` | job_id, group_id UUID FK, request_id, state, requested_at, primary_done_at, backup_expiry_at, exceptions_ref | pending/running/primary_complete/complete/held; encrypted profile/active aliases deleted, HMAC aliases and group restriction retained; external deletion outbox receipts required before complete. |
+| `release_gate` | gate_name, environment, approved_scope, evidence_ref/digest, approved_by/at, expires_at, revision | Machine-readable live capabilities fail closed if gate missing/expired; fixture mode has no live credentials or permissions. |
+
+Current gate reads use transaction time, current contact/basis revisions, latest wash, active suppression, sender/notice configuration, reviewed policy and recipient time zone. Entity aliases are resolved before all checks. Phone and email do not share a fabricated consent model; phone requires wash and calling checks, email requires assessed basis, deliverability and per-message relevance.
+
+Both candidate export and action consumption require the highest committed domain assessment_seq for the exact lead+registrable domain to be approved and unexpired (90day default). Email additionally requires latest applicable contact basis; action consumption additionally requires latest exact reviewer relevance assessment. Phone uses current wash and script/calling policy and does not require email basis/relevance. Pointers update transactionally with append-only assessments; supplied assessment IDs cannot select older passes. QBCC-origin business additionally requires current positive licence/status+identity review no older than30days. Evidence changes insert a newer blocking assessment immediately. Composite identity/provenance checks cannot be replaced with UI validation.
+
+`canonical_business_key` is permitted only as a transient in-memory matching representation (`abn:<digits>` or `qbcc:<licence>`). It is never a persisted relational key, report/log field or retained erasure alias. Normalize/tokenize incoming identifiers before profile creation, resolve group through suppression_alias, then deny creation/enrichment if restricted. Active source identifiers are encrypted and erased with profile; minimal keyed aliases preserve opt-out matching without raw identifiers.
+
+## Queue, budgets and output — FR-014, FR-019, FR-031–035, FR-038
+
+| Entity | Key / fields | Constraints |
+|---|---|---|
+| `candidate_queue` | candidate_id, lead_id, originating_event_id, first_qualified_at, last_qualifying_event, signal, tier, provisional/final scores, next_attempt_at, state, lease_until/owner | UNIQUE(lead_id,originating_event_id); pending_enrichment/needs_review/ready/exported/deferred/disqualified/suppressed. Worker lease is separate from lifecycle. Eight-week expiry is from original first qualification; retries never reset age. |
+| `budget_month` | account + Australia/Brisbane month PK, cap_micro_aud, reserved_micro_aud, settled_micro_aud | Serial row lock before reservation; total reserved+settled <= cap. |
+| `budget_reservation` | reservation_id, attempt_id + provider_operation + sequence UNIQUE, month, native currency, native upper bound, FX version/rate, tax/fees, reserved AUD, state, provider_request_id | reserved/settled/released/uncertain. Retry is another billed attempt/reservation unless provider proves same idempotent request. Unknown timeout remains reserved. Month cannot change after request starts. |
+| `provider_charge` | charge_id, reservation_id, native amount/currency, actual AUD, invoice_ref, reconciled_at | Overrun freezes further spend and alarms; expired unconfirmed reservations never silently released. |
+| `worklist` / `worklist_row` | worklist_id, week, generated_at; row_id UUID PK, worklist_id + lead_id UNIQUE, candidate_id, exported_revision, row_version, last_gate_at, approval_state | At most 60 rows; protected immutable IDs and concurrency revision. Labels indicate review state, not send permission. |
+| `outcome_event` | event_id, idempotency_key UNIQUE, row_id, expected_version, actor, status, attempts, invitation_state, invitation_evidence_ref, notes, occurred_at | invitation_state invited/uninvited/unknown; meetings derived from dated events, never independent booleans. Append-only event plus projection; non-negative attempts, no client-authoritative tier/signal. |
+| `operator_activity` | activity_id, actor_id, worklist_id, lead_id nullable, category, started_at, ended_at, recorded_at, correction_of nullable | category calling/research/wash/review/admin. Nonnegative duration; overlapping intervals for one operator are unioned, not double-counted. Corrections append. Complete operator worked time includes all categories. |
+| `crm_identity` | location_id + group_id UUID FK PK, remote_contact_id, verified_at | UNIQUE(location_id,remote_contact_id); shared endpoint is not grounds to merge distinct businesses; conflicts go to review. Delete remote mapping after confirmed external deletion, retain only non-identifying deletion receipt. |
+| `crm_outbox` | outbox_id, location_id, lead_id, approved_revision, operation, payload_digest, state, attempts, next_attempt_at, lease, remote_id | UNIQUE(location_id,lead_id,approved_revision,operation); pending/inflight/retry/succeeded/blocked/uncertain/dead_letter. Timeout reconciles before create retry. |
+
+Budget reservations are pessimistic upper bounds including tax, retry and dated FX plus 10% contingency. Unknown prices or expired FX configuration block paid calls. Cross-month requests remain charged to their reservation month, including started/uncertain requests. Cancellations/refunds are audited, never silent releases. Subscription/prepaid commitments are recorded separately from marginal usage so reports do not imply zero cost.
+
+## Finite retention and restores — FR-029
+
+Defaults below are design policy limits pending qualified review, not statements of statutory minimums. A signed legal hold names scope, owner, reason and review date and supersedes normal deletion only for scoped evidence.
+
+| Class | Active retention / deletion trigger |
+|---|---|
+| Raw ZIP/temp downloads | Maximum 30 days; unreferenced staging garbage collected after seven days. |
+| Full ABR/QBCC snapshots and business-state versions | Current + immediately prior committed versions, with 90-day absolute limit; if stale source exceeds this limit, next ingest rebaselines and records history gap. No indefinite monthly thinning. |
+| Unworked enriched profiles | Maximum 180 days since last qualifying source event, no clock reset from routine crawl. Delete unnecessary fields within 30 days of opt-out/disqualification. |
+| Contact/send/collection evidence | Non-selected page captures maximum90 days. Selected evidence maximum seven years from last relevant attempt/assessment under documented purpose; minimized/access-restricted, subject to approved hold. |
+| Routine operational logs | 90 days, redacted; aggregated non-identifying metrics 24 months. |
+| Backups | Encrypted rolling 35-day maximum, no timeless manual copies; primary deletion completes first, final deletion after last backup expires. |
+| Suppression matching tokens/entity keys | Retain while needed to honour opt-out, reviewed annually; no raw endpoint or marketing profile retained in this ledger. |
+
+Restore into isolation, replay deletion/suppression tombstones newer than backup, reconcile central suppression key versions, then pass safety audit before enabling credentials or network egress. Deletion receipt distinguishes primary completion from final backup/external-system completion. Object-store lifecycle rules and report/Sheets/CRM deletion reconciliation must implement the same schedule.

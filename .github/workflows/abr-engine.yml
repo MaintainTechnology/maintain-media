@@ -1,0 +1,44 @@
+name: ABR engine offline acceptance
+on:
+  push:
+    paths: ['abn-leadgen/**', 'specs/**', 'tools/*abr*', '.github/workflows/abr-engine.yml']
+  pull_request:
+    paths: ['abn-leadgen/**', 'specs/**', 'tools/*abr*', '.github/workflows/abr-engine.yml']
+permissions:
+  contents: read
+jobs:
+  offline:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      postgres:
+        image: postgres:16.15
+        env:
+          POSTGRES_USER: abr_fixture
+          POSTGRES_PASSWORD: abr_fixture
+          POSTGRES_DB: abr_fixture
+        ports: ['55432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    defaults:
+      run:
+        working-directory: abn-leadgen
+    env:
+      ABR_FIXTURE_PG_BIN: /usr/lib/postgresql/16/bin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22.22.2'
+      - run: python -m pip install uv==0.11.20
+      - run: sudo apt-get update && sudo apt-get install -y postgresql-16
+      - run: uv run python ops/verify.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: offline-acceptance
+          path: abn-leadgen/ops/acceptance/verify-*
+          retention-days: 30

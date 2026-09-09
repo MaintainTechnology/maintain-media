@@ -1,0 +1,360 @@
+{
+  "status": "preview",
+  "due_groups": [],
+  "artifacts": [
+    {
+      "artifact_id": "3da666c6-7dc7-4e1c-9b14-073e33295275",
+      "state": "held",
+      "reason": "RETENTION_CLASS_UNKNOWN"
+    },
+    {
+      "artifact_id": "d712fe7a-23a1-4c65-880f-672a52eb2115",
+      "state": "held",
+      "reason": "RETENTION_CLASS_UNKNOWN"
+    },
+    {
+      "artifact_id": "e2a86e41-4cb4-4391-8989-d78afefcc3a2",
+      "state": "held",
+      "reason": "RETENTION_CLASS_UNKNOWN"
+    },
+    {
+      "artifact_id": "5d2e4500-a3f0-4150-b547-9c0eb7891947",
+      "state": "held",
+      "reason": "RETENTION_CLASS_UNKNOWN"
+    },
+    {
+      "artifact_id": "82e9f5f0-cd03-49a5-9a2b-2badd551f60a",
+      "state": "held",
+      "reason": "RETENTION_CLASS_UNKNOWN"
+    },
+    {
+      "artifact_id": "f40cd706-83ae-486e-bd9d-1cca77082846",
+      "state": "held",
+      "reason": "RETENTION_CLASS_UNKNOWN"
+    },
+    {
+      "artifact_id": "1cd9c7ff-7648-49ce-b69a-bce985d93837",
+      "state": "held",
+      "reason": "RETENTION_CLASS_UNKNOWN"
+    },
+    {
+      "artifact_id": "c9a7e25b-be88-4d43-af2d-c4925882daa3",
+      "state": "held",
+      "reason": "RETENTION_CLASS_UNKNOWN"
+    },
+    {
+      "artifact_id": "efb2924e-b015-4bd7-bcf7-5905144f36bc",
+      "state": "held",
+      "reason": "RETENTION_CLASS_UNKNOWN"
+    },
+    {
+      "artifact_id": "53a68815-d74e-4bee-b4d8-e97ba842c713",
+      "state": "retained",
+      "due_at": "2026-10-13T14:26:57.317129+00:00"
+    },
+    {
+      "artifact_id": "5faeb968-8fe9-4ffe-8084-a5693dff097d",
+      "state": "retained",
+      "due_at": "2026-10-13T14:26:57.317129+00:00"
+    },
+    {
+      "artifact_id": "73a96435-e61a-44d5-9416-b44eb444d723",
+      "state": "retained",
+      "due_at": "2026-10-13T14:26:57.317129+00:00"
+    },
+    {
+      "artifact_id": "c3f9db8f-441f-4bd9-b7c3-65044a6989ad",
+      "state": "retained",
+      "due_at": "2026-10-13T14:26:57.317129+00:00"
+    },
+    {
+      "artifact_id": "8821f14b-b0df-46cd-933a-365935506d60",
+      "state": "retained",
+      "due_at": "2026-12-07T14:30:08.855108+00:00"
+    },
+    {
+      "artifact_id": "e8865d71-b489-4304-bc30-7b6463689d06",
+      "state": "retained",
+      "due_at": "2026-10-08T14:30:08.855108+00:00"
+    },
+    {
+      "artifact_id": "1c36971a-1b67-411f-b2a7-3a51c29e232a",
+      "state": "retained",
+      "due_at": "2026-12-07T14:30:09.138942+00:00"
+    },
+    {
+      "artifact_id": "2d35d375-42e0-4c40-951f-79a6b9236ae1",
+      "state": "retained",
+      "due_at": "2026-09-15T14:30:09.138942+00:00"
+    },
+    {
+      "artifact_id": "3ac7ac3b-35b8-4b18-86bd-2a58f1fc61a1",
+      "state": "retained",
+      "due_at": "2026-12-07T14:30:09.138942+00:00"
+    },
+    {
+      "artifact_id": "ab630a7f-f4f8-4b2b-8e3d-fcf72e798616",
+      "state": "retained",
+      "due_at": "2026-09-15T14:30:09.138942+00:00"
+    },
+    {
+      "artifact_id": "ad7ec97d-51e9-40fb-a710-daa7f5ac9cbf",
+      "state": "retained",
+      "due_at": "2026-09-15T14:30:09.138942+00:00"
+    },
+    {
+      "artifact_id": "d7820928-256e-4afd-a60b-f9916ac8c81e",
+      "state": "retained",
+      "due_at": "2026-10-08T14:30:09.138942+00:00"
+    },
+    {
+      "artifact_id": "f1c6b5a0-4b2c-4e05-9cdf-fb237ecdc2b2",
+      "state": "retained",
+      "due_at": "2026-10-08T14:30:09.138942+00:00"
+    },
+    {
+      "artifact_id": "5d1242cc-75fa-4a56-8328-e4cc10504133",
+      "state": "retained",
+      "due_at": "2026-09-15T14:30:09.839752+00:00"
+    },
+    {
+      "artifact_id": "64b81c7b-4026-49c8-835c-026b7611316b",
+      "state": "retained",
+      "due_at": "2026-12-07T14:30:09.839752+00:00"
+    },
+    {
+      "artifact_id": "9f9cef0d-f1e2-48fc-8652-cc80f1c22f72",
+      "state": "retained",
+      "due_at": "2026-09-15T14:30:09.839752+00:00"
+    },
+    {
+      "artifact_id": "aa31307c-6f43-425a-932a-1104c8a72bb8",
+      "state": "retained",
+      "due_at": "2026-12-07T14:30:09.839752+00:00"
+    },
+    {
+      "artifact_id": "c365310a-8058-469e-8972-344466c96b1f",
+      "state": "retained",
+      "due_at": "2026-09-15T14:30:09.839752+00:00"
+    },
+    {
+      "artifact_id": "c9af06d9-09b4-42f0-9ed5-37e7c8c78146",
+      "state": "retained",
+      "due_at": "2026-12-07T14:30:09.839752+00:00"
+    },
+    {
+      "artifact_id": "a2f08940-0fe3-49a2-a8f8-a4b02f5c5a66",
+      "state": "retained",
+      "due_at": "2026-12-07T14:30:10.480179+00:00"
+    },
+    {
+      "artifact_id": "4e4f15fb-aa74-4d3d-8045-9917472380ca",
+      "state": "retained",
+      "due_at": "2026-12-07T14:31:32.820090+00:00"
+    },
+    {
+      "artifact_id": "72836ee2-7c4b-4748-b652-db4b5789be4f",
+      "state": "retained",
+      "due_at": "2026-10-08T14:31:32.820090+00:00"
+    },
+    {
+      "artifact_id": "0277f35e-7505-48f4-86da-cddee3d772a5",
+      "state": "retained",
+      "due_at": "2026-12-07T14:31:33.163945+00:00"
+    },
+    {
+      "artifact_id": "13d6dafb-ee97-49f8-8cf4-6f60c17a3dc7",
+      "state": "retained",
+      "due_at": "2026-12-07T14:31:33.163945+00:00"
+    },
+    {
+      "artifact_id": "141d584c-014b-4779-9914-2c8c6144bb62",
+      "state": "retained",
+      "due_at": "2026-10-08T14:31:33.163945+00:00"
+    },
+    {
+      "artifact_id": "2a9016da-6a1a-4339-9171-639f6f3254e4",
+      "state": "retained",
+      "due_at": "2026-09-15T14:31:33.163945+00:00"
+    },
+    {
+      "artifact_id": "91a79850-7479-4c0f-b2db-58757017c570",
+      "state": "retained",
+      "due_at": "2026-09-15T14:31:33.163945+00:00"
+    },
+    {
+      "artifact_id": "af079f08-1d3e-4c80-9c45-7646d53d5f2d",
+      "state": "retained",
+      "due_at": "2026-10-08T14:31:33.163945+00:00"
+    },
+    {
+      "artifact_id": "e5eaaf17-4236-4418-b24e-192a826481fb",
+      "state": "retained",
+      "due_at": "2026-09-15T14:31:33.163945+00:00"
+    },
+    {
+      "artifact_id": "51dbf7cd-31df-43b7-9cc6-e2bd8c6adf73",
+      "state": "retained",
+      "due_at": "2026-12-07T14:31:33.726180+00:00"
+    },
+    {
+      "artifact_id": "6584ef16-f881-45fc-b39c-107051d70822",
+      "state": "retained",
+      "due_at": "2026-12-07T14:31:33.726180+00:00"
+    },
+    {
+      "artifact_id": "8faaafe5-2126-40dc-9071-90e918144881",
+      "state": "retained",
+      "due_at": "2026-09-15T14:31:33.726180+00:00"
+    },
+    {
+      "artifact_id": "a4416c71-1f8c-4f7b-953d-25ae574b3850",
+      "state": "retained",
+      "due_at": "2026-09-15T14:31:33.726180+00:00"
+    },
+    {
+      "artifact_id": "c39a0300-56ed-49fb-b1af-4a399f2b7067",
+      "state": "retained",
+      "due_at": "2026-09-15T14:31:33.726180+00:00"
+    },
+    {
+      "artifact_id": "ea42862a-f1d5-4022-84d4-957d96c9ca17",
+      "state": "retained",
+      "due_at": "2026-12-07T14:31:33.726180+00:00"
+    },
+    {
+      "artifact_id": "9c57ef28-b550-4969-b57a-14b1f97f5867",
+      "state": "retained",
+      "due_at": "2026-12-07T14:31:34.242798+00:00"
+    },
+    {
+      "artifact_id": "51e181ea-1fcf-4e1b-b4ba-b7beaa4e7669",
+      "state": "retained",
+      "due_at": "2026-12-07T23:13:52.377990+00:00"
+    },
+    {
+      "artifact_id": "746605ea-3ab5-4391-a3c8-28a88484258f",
+      "state": "retained",
+      "due_at": "2026-10-08T23:13:52.377990+00:00"
+    },
+    {
+      "artifact_id": "0846c755-b713-4826-9099-6a836be734bd",
+      "state": "retained",
+      "due_at": "2026-09-15T23:13:53.131614+00:00"
+    },
+    {
+      "artifact_id": "9e4e143a-0167-4d77-9e6e-046b87d1e2a6",
+      "state": "retained",
+      "due_at": "2026-12-07T23:13:53.131614+00:00"
+    },
+    {
+      "artifact_id": "bedd0f8e-20a8-48c9-9166-aa2373e00bdf",
+      "state": "retained",
+      "due_at": "2026-12-07T23:13:53.131614+00:00"
+    },
+    {
+      "artifact_id": "c55270df-61b1-4c2f-b006-e5e41967e411",
+      "state": "retained",
+      "due_at": "2026-09-15T23:13:53.131614+00:00"
+    },
+    {
+      "artifact_id": "d14d78a7-c0f7-4522-a12b-99dc13046209",
+      "state": "retained",
+      "due_at": "2026-10-08T23:13:53.131614+00:00"
+    },
+    {
+      "artifact_id": "dc1bd087-8964-4bd4-88c4-564b072e3229",
+      "state": "retained",
+      "due_at": "2026-10-08T23:13:53.131614+00:00"
+    },
+    {
+      "artifact_id": "f9c727a8-e350-4d70-99dd-d55492f22168",
+      "state": "retained",
+      "due_at": "2026-09-15T23:13:53.131614+00:00"
+    },
+    {
+      "artifact_id": "1d69cb55-e853-431d-9895-6bb5b2cb8739",
+      "state": "retained",
+      "due_at": "2026-09-15T23:13:55.019517+00:00"
+    },
+    {
+      "artifact_id": "26ac4957-a5e1-4d32-86a3-863c0057ab83",
+      "state": "retained",
+      "due_at": "2026-12-07T23:13:55.019517+00:00"
+    },
+    {
+      "artifact_id": "5ac1ca3c-45c0-40ba-b89a-7325c7a4d93a",
+      "state": "retained",
+      "due_at": "2026-09-15T23:13:55.019517+00:00"
+    },
+    {
+      "artifact_id": "75eb6f85-47a3-4d32-bd76-3d01bd7c448d",
+      "state": "retained",
+      "due_at": "2026-12-07T23:13:55.019517+00:00"
+    },
+    {
+      "artifact_id": "893f135a-e595-421f-854a-1d2e66666fb8",
+      "state": "retained",
+      "due_at": "2026-09-15T23:13:55.019517+00:00"
+    },
+    {
+      "artifact_id": "cf2741b7-a83c-40af-a9e0-badbdee43f02",
+      "state": "retained",
+      "due_at": "2026-12-07T23:13:55.019517+00:00"
+    },
+    {
+      "artifact_id": "1758f785-6ac3-4cb9-a9ac-67ce26d61945",
+      "state": "retained",
+      "due_at": "2026-12-07T23:13:56.192580+00:00"
+    },
+    {
+      "artifact_id": "2910646b-b645-4f9d-a323-c7f5cf1e7583",
+      "state": "retained",
+      "due_at": "2026-09-15T23:15:35.184782+00:00"
+    },
+    {
+      "artifact_id": "5ed4e878-9bdc-46b2-969e-1a71ea094402",
+      "state": "retained",
+      "due_at": "2026-12-07T23:15:35.184782+00:00"
+    },
+    {
+      "artifact_id": "7b692424-b0a7-4578-bd47-bcf020ee7aac",
+      "state": "retained",
+      "due_at": "2026-09-15T23:15:35.184782+00:00"
+    },
+    {
+      "artifact_id": "9084c5f3-8090-4f39-81f1-3b6f03f7f486",
+      "state": "retained",
+      "due_at": "2026-12-07T23:15:35.184782+00:00"
+    },
+    {
+      "artifact_id": "a0ac0c1a-bc7c-4a77-848a-fc45521e84c4",
+      "state": "retained",
+      "due_at": "2026-12-07T23:15:35.184782+00:00"
+    },
+    {
+      "artifact_id": "b420a300-7533-4ba4-bec2-232b785448e6",
+      "state": "retained",
+      "due_at": "2026-09-15T23:15:35.184782+00:00"
+    },
+    {
+      "artifact_id": "21563082-d01e-4297-b63d-7fc116504497",
+      "state": "retained",
+      "due_at": "2026-12-07T23:15:36.253477+00:00"
+    }
+  ],
+  "database_evidence": {
+    "page_bodies": 0,
+    "enrichment_results": 0,
+    "operational_records": {
+      "observations": 0,
+      "mock_deliveries": 0
+    },
+    "full_source_events": {
+      "abr": 0,
+      "qbcc": 0
+    },
+    "expired_metrics": 0,
+    "state": "preview"
+  }
+}

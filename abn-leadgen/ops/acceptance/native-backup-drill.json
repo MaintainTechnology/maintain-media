@@ -1,0 +1,25 @@
+{
+  "status": "fixture_drill_complete",
+  "drill_id": "cd81e53b-227a-413b-a197-844fd82595f1",
+  "postgres": "pg_dump (PostgreSQL) 16.15",
+  "dump_bytes": 165621,
+  "backup_path": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\backup-drills\\cd81e53b-227a-413b-a197-844fd82595f1\\snapshot.dump.fernet",
+  "ledger_path": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\backup-drills\\cd81e53b-227a-413b-a197-844fd82595f1\\latest-ledger.fernet",
+  "restore": {
+    "restore_id": "5904b67b-d312-4225-9afe-4a28b4f22c5a",
+    "state": "ledger_reconciled",
+    "outbound": "quarantined"
+  },
+  "checks": {
+    "pre_backup_optout": true,
+    "post_backup_optout": true,
+    "erasure_tombstone": true,
+    "overdue_retention": true,
+    "prior_lookup_version_matching": true,
+    "persistent_key_reload": true,
+    "outbound_quarantine": true
+  },
+  "fixture_key_custody": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\fixture-key-custody\\cd81e53b-227a-413b-a197-844fd82595f1",
+  "external_backup_expiry_and_release": "pending",
+  "production_gate": "closed"
+}

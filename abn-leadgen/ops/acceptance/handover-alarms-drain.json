@@ -1,0 +1,7 @@
+{
+  "claimed": 1,
+  "delivered_mock": 1,
+  "retry": 0,
+  "dead_letter": 0,
+  "notifications_sent": 0
+}

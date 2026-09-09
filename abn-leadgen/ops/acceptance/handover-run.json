@@ -1,0 +1,191 @@
+{
+  "schema_version": 2,
+  "run_id": "879088e2-d578-47e0-a413-cf2228cdf4f8",
+  "status": "complete",
+  "manifest_path": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\runs\\879088e2-d578-47e0-a413-cf2228cdf4f8\\77a99b4a-3599-4b41-9a71-fc754c5279ed.json",
+  "sources": {
+    "qbcc": {
+      "snapshot_id": "43c3ecfe-cef8-4f8c-8760-7ffa44674eea",
+      "request_snapshot_id": "377b185f-c7eb-417d-bcff-85c52630ab69",
+      "content_digest": "ed017566f34c8d63fbc34c005994d51ccd0dcbdd925efea4e5ffb34afd102062",
+      "cursor_version": 1,
+      "noop": true,
+      "replayed": false,
+      "events": 0,
+      "candidates": 0,
+      "validation": {
+        "source_rows": 6,
+        "normalised_rows": 3,
+        "quarantined_licences": 1,
+        "quarantined_rows": 2,
+        "category_counts": {
+          "1": 1,
+          "2": 2
+        }
+      },
+      "stage_elapsed_seconds": 0.40310219999810215,
+      "event_counts": {},
+      "qualifying_groups_by_tier": {},
+      "classification": null,
+      "alarms": []
+    },
+    "abr": {
+      "snapshot_id": "3f6eda89-b313-4f9b-9563-eb98978414fb",
+      "request_snapshot_id": "4ab9da07-53d0-48a8-a5a4-8f81f0267ae4",
+      "content_digest": "83e0edb44465778d6e6cc530575e57d383d3a7e4682cba05b2e4bbbdffafc322",
+      "cursor_version": 1,
+      "noop": true,
+      "replayed": false,
+      "events": 0,
+      "candidates": 0,
+      "validation": {
+        "source_rows": 3,
+        "declared_rows": 3,
+        "normalised_rows": 3,
+        "quarantined_records": 0,
+        "members": 1,
+        "field_fill": [
+          {
+            "abn": 1.0,
+            "status": 1.0,
+            "status_date": 1.0,
+            "entity_type": 1.0,
+            "main_name": 1.0,
+            "state": 1.0,
+            "postcode": 1.0
+          }
+        ]
+      },
+      "stage_elapsed_seconds": 0.5845114999974612,
+      "event_counts": {},
+      "qualifying_groups_by_tier": {},
+      "classification": {
+        "enabled": false,
+        "reason": "CLASSIFIER_DISABLED"
+      },
+      "alarms": []
+    }
+  },
+  "counts": {
+    "selected": 1,
+    "blocked_or_deferred": 1,
+    "live_api_calls": 0
+  },
+  "operational_summary": {
+    "window_start": "2026-07-14T23:13:55.762960+00:00",
+    "window_end_exclusive": "2026-09-08T23:13:55.762960+00:00",
+    "cohorts": [
+      {
+        "cohort_id": "028cae9a-8708-4e85-99c9-fefc3b57f3d8",
+        "tier": "A",
+        "originating_signal": "qbcc_backlog",
+        "window_start": "2026-07-14T23:13:55.762960+00:00",
+        "window_end_exclusive": "2026-09-08T23:13:55.762960+00:00",
+        "selected_groups": 1,
+        "attempts": 0,
+        "attempted_groups": 0,
+        "contacted_groups": 0,
+        "booked_groups": 0,
+        "held_groups": 0,
+        "booking_rate": null,
+        "held_rate": null
+      }
+    ],
+    "worked_seconds": 0.0,
+    "activity_records": 0,
+    "undated_or_preselection_outcomes_excluded": 0,
+    "usage_micro_aud": {
+      "brisbane_calendar_month": "2026-09",
+      "reserved": 0,
+      "settled": 0
+    },
+    "cash_costs": null,
+    "hourly_rate": null,
+    "missing_cost_categories": [
+      "hosting",
+      "storage_backups_requests_egress",
+      "enrichment_purchase_receipts",
+      "dncr",
+      "sheets_crm_licences",
+      "developer",
+      "operator_rate"
+    ],
+    "alarms": [],
+    "pilot_observation": "synthetic_only",
+    "attribution": "Fixed first selected tier/signal per worklist and canonical group; cumulative attempt increases; dated events; per-actor interval unions."
+  },
+  "enrichment": [],
+  "worklist_id": "028cae9a-8708-4e85-99c9-fefc3b57f3d8",
+  "artifacts": {
+    "html": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\reports\\879088e2-d578-47e0-a413-cf2228cdf4f8\\586b6719-a653-4d25-8cc2-394b5887c0fc\\report.html",
+    "markdown": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\reports\\879088e2-d578-47e0-a413-cf2228cdf4f8\\586b6719-a653-4d25-8cc2-394b5887c0fc\\report.md",
+    "csv": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\reports\\879088e2-d578-47e0-a413-cf2228cdf4f8\\586b6719-a653-4d25-8cc2-394b5887c0fc\\worklist.csv"
+  },
+  "artifact_digests": {
+    "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\reports\\879088e2-d578-47e0-a413-cf2228cdf4f8\\586b6719-a653-4d25-8cc2-394b5887c0fc\\report.html": "9025c1a8d6dd58b9621495f22038f2648ccec7824b88b1bd1447040dbe45b3ef",
+    "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\reports\\879088e2-d578-47e0-a413-cf2228cdf4f8\\586b6719-a653-4d25-8cc2-394b5887c0fc\\report.md": "bfe5308bafbb06422ddf538102bec6aceae3023ccb4b5972dbd6d10377aae36d",
+    "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\reports\\879088e2-d578-47e0-a413-cf2228cdf4f8\\586b6719-a653-4d25-8cc2-394b5887c0fc\\worklist.csv": "948222308f4bffc001a60fb7b80a8fe6169921c6cbf8b3db1e6703bd9e7d52dc"
+  },
+  "report_authority_digest": "1e75dee68c323e0da30526316cf5a2765c749630c9becd82284e78940ca063bd",
+  "alarms": [],
+  "runtime": "3.12.12",
+  "code_version": "0.1.0",
+  "config_digest": "427f0124175bebb5ea0fae0dfe95998ad597e288957e6c68f63ca3867c83a138",
+  "resource_sample": {
+    "sampled_peak_rss_bytes": 112447488,
+    "sample_interval_seconds": 0.1,
+    "full_scale_certified": false,
+    "heartbeat_failures": 0,
+    "elapsed_seconds": 4.025309299991932,
+    "ending_rss_bytes": 109514752,
+    "disk_free_bytes": 122730119168
+  },
+  "production_gates": "PENDING",
+  "mode": "fixture",
+  "monitor": {
+    "status": "observed",
+    "sources": [
+      {
+        "source": "abr",
+        "observation_digest": "804a14cd68485bab0ce4f44f3dd29a4410ecb6d2b1e54b6da13dc191d56b4b32",
+        "alarms": [
+          "timer_heartbeat_missed"
+        ],
+        "unknown_inputs": [
+          "source_age_days",
+          "mismatch_hours",
+          "field_fill_delta_pp",
+          "classification_delta_pp",
+          "approved_hit_rate_baseline",
+          "required_free_disk_bytes",
+          "suppression_commit_seconds",
+          "timer_last_success_at",
+          "restore_status",
+          "four_comparable_publications"
+        ]
+      },
+      {
+        "source": "qbcc",
+        "observation_digest": "429d8786e1b2f035e975679a43bb2e80aca2eb1bd1a093a1c751d4b15818d58b",
+        "alarms": [
+          "timer_heartbeat_missed"
+        ],
+        "unknown_inputs": [
+          "source_age_days",
+          "mismatch_hours",
+          "field_fill_delta_pp",
+          "classification_delta_pp",
+          "approved_hit_rate_baseline",
+          "required_free_disk_bytes",
+          "suppression_commit_seconds",
+          "timer_last_success_at",
+          "restore_status",
+          "four_comparable_publications"
+        ]
+      }
+    ],
+    "notifications_sent": 0,
+    "active_run_heartbeat_threshold_seconds": 300,
+    "inventory": "Unknown external baselines and backup/timer receipts require explicit evidence observations"
+  }
+}

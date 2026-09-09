@@ -1,0 +1,217 @@
+{
+  "schema_version": 2,
+  "run_id": "b0fbe8ea-3422-404a-84d1-39e0a55ff9df",
+  "status": "complete",
+  "manifest_path": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\runs\\b0fbe8ea-3422-404a-84d1-39e0a55ff9df\\e398825e-e989-4a7a-9d82-0514c6990c24.json",
+  "sources": {
+    "qbcc": {
+      "snapshot_id": "43c3ecfe-cef8-4f8c-8760-7ffa44674eea",
+      "request_snapshot_id": "215e8267-b7e8-4e89-b129-a6de2b3c2fde",
+      "content_digest": "ed017566f34c8d63fbc34c005994d51ccd0dcbdd925efea4e5ffb34afd102062",
+      "cursor_version": 1,
+      "noop": true,
+      "replayed": false,
+      "events": 0,
+      "candidates": 0,
+      "validation": {
+        "source_rows": 6,
+        "normalised_rows": 3,
+        "quarantined_licences": 1,
+        "quarantined_rows": 2,
+        "category_counts": {
+          "1": 1,
+          "2": 2
+        }
+      },
+      "stage_elapsed_seconds": 0.9058675999986008,
+      "event_counts": {},
+      "qualifying_groups_by_tier": {},
+      "classification": null,
+      "alarms": []
+    },
+    "abr": {
+      "snapshot_id": "65f39f28-545d-4ce6-9523-a1fa134f3594",
+      "request_snapshot_id": "8734b242-19ce-421a-bcd7-1c2e458071d1",
+      "content_digest": "83e0edb44465778d6e6cc530575e57d383d3a7e4682cba05b2e4bbbdffafc322",
+      "cursor_version": 2,
+      "noop": true,
+      "replayed": false,
+      "events": 0,
+      "candidates": 0,
+      "validation": {
+        "source_rows": 3,
+        "declared_rows": 3,
+        "normalised_rows": 3,
+        "quarantined_records": 0,
+        "members": 1,
+        "field_fill": [
+          {
+            "abn": 1.0,
+            "status": 1.0,
+            "status_date": 1.0,
+            "entity_type": 1.0,
+            "main_name": 1.0,
+            "state": 1.0,
+            "postcode": 1.0
+          }
+        ],
+        "field_fill_weighted": {
+          "abn": 1.0,
+          "status": 1.0,
+          "status_date": 1.0,
+          "entity_type": 1.0,
+          "main_name": 1.0,
+          "state": 1.0,
+          "postcode": 1.0
+        }
+      },
+      "stage_elapsed_seconds": 0.35473479999927804,
+      "event_counts": {},
+      "qualifying_groups_by_tier": {},
+      "classification": {
+        "enabled": false,
+        "reason": "CLASSIFIER_DISABLED"
+      },
+      "alarms": []
+    }
+  },
+  "counts": {
+    "selected": 1,
+    "blocked_or_deferred": 1,
+    "live_api_calls": 0
+  },
+  "operational_summary": {
+    "window_start": "2026-07-15T01:01:29.787219+00:00",
+    "window_end_exclusive": "2026-09-09T01:01:29.787219+00:00",
+    "cohorts": [
+      {
+        "cohort_id": "028cae9a-8708-4e85-99c9-fefc3b57f3d8",
+        "tier": "A",
+        "originating_signal": "qbcc_backlog",
+        "window_start": "2026-07-15T01:01:29.787219+00:00",
+        "window_end_exclusive": "2026-09-09T01:01:29.787219+00:00",
+        "selected_groups": 1,
+        "attempts": 0,
+        "attempted_groups": 0,
+        "contacted_groups": 0,
+        "booked_groups": 0,
+        "held_groups": 0,
+        "booking_rate": null,
+        "held_rate": null
+      }
+    ],
+    "cohort_costs": [
+      {
+        "cohort_id": "028cae9a-8708-4e85-99c9-fefc3b57f3d8",
+        "tier": "A",
+        "cash_costs": null,
+        "hourly_rate": null,
+        "missing_cost_categories": [
+          "developer",
+          "dncr",
+          "enrichment",
+          "hosting",
+          "operator_rate",
+          "sheets_crm_licences",
+          "storage_backups_requests_egress"
+        ]
+      }
+    ],
+    "worked_seconds": 0.0,
+    "activity_records": 0,
+    "undated_or_preselection_outcomes_excluded": 0,
+    "usage_micro_aud": {
+      "brisbane_calendar_month": "2026-09",
+      "reserved": 0,
+      "settled": 0
+    },
+    "cash_costs": null,
+    "hourly_rate": null,
+    "missing_cost_categories": [
+      "developer",
+      "dncr",
+      "enrichment",
+      "hosting",
+      "operator_rate",
+      "sheets_crm_licences",
+      "storage_backups_requests_egress"
+    ],
+    "alarms": [],
+    "pilot_observation": "synthetic_only",
+    "attribution": "Fixed first selected tier/signal per worklist and canonical group; cumulative attempt increases; dated events; per-actor interval unions."
+  },
+  "enrichment": [],
+  "worklist_id": "028cae9a-8708-4e85-99c9-fefc3b57f3d8",
+  "artifacts": {
+    "html": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\reports\\b0fbe8ea-3422-404a-84d1-39e0a55ff9df\\aa3cb68b-a4ca-4604-94e5-132c927125bd\\report.html",
+    "markdown": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\reports\\b0fbe8ea-3422-404a-84d1-39e0a55ff9df\\aa3cb68b-a4ca-4604-94e5-132c927125bd\\report.md",
+    "csv": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\reports\\b0fbe8ea-3422-404a-84d1-39e0a55ff9df\\aa3cb68b-a4ca-4604-94e5-132c927125bd\\worklist.csv"
+  },
+  "artifact_digests": {
+    "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\reports\\b0fbe8ea-3422-404a-84d1-39e0a55ff9df\\aa3cb68b-a4ca-4604-94e5-132c927125bd\\report.html": "0085e3fe6bbbc6f868c963f41483da0a1fae946e3cb89f895d708892f579ba5d",
+    "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\reports\\b0fbe8ea-3422-404a-84d1-39e0a55ff9df\\aa3cb68b-a4ca-4604-94e5-132c927125bd\\report.md": "591867d3390395db25a5a47122d7e809fd68a39ac5d24883ac6f6399eeda5ce8",
+    "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\reports\\b0fbe8ea-3422-404a-84d1-39e0a55ff9df\\aa3cb68b-a4ca-4604-94e5-132c927125bd\\worklist.csv": "919c60de218a7f53587f52efa345d8c6f1adeea72061248b6e0663ab3cf6505f"
+  },
+  "report_authority_digest": "ad3e49d5c553c2e2210e33fce03d0b5e54f92b906afa5f22c2be66703d75edea",
+  "alarms": [],
+  "runtime": "3.12.12",
+  "code_version": "0.1.0",
+  "config_digest": "427f0124175bebb5ea0fae0dfe95998ad597e288957e6c68f63ca3867c83a138",
+  "resource_sample": {
+    "sampled_peak_rss_bytes": 111435776,
+    "sample_interval_seconds": 0.1,
+    "full_scale_certified": false,
+    "heartbeat_failures": 0,
+    "elapsed_seconds": 2.73755569999048,
+    "ending_rss_bytes": 111435776,
+    "disk_free_bytes": 107242745856
+  },
+  "production_gates": "PENDING",
+  "mode": "fixture",
+  "monitor": {
+    "status": "observed",
+    "sources": [
+      {
+        "source": "abr",
+        "observation_digest": "ed6f7ddd098f83d211b435582a0a40f862216ddf74600d74daa5c65f7e2d3d20",
+        "alarms": [
+          "timer_heartbeat_missed"
+        ],
+        "unknown_inputs": [
+          "source_age_days",
+          "mismatch_hours",
+          "field_fill_delta_pp",
+          "classification_delta_pp",
+          "approved_hit_rate_baseline",
+          "required_free_disk_bytes",
+          "suppression_commit_seconds",
+          "timer_last_success_at",
+          "restore_status",
+          "four_comparable_publications"
+        ]
+      },
+      {
+        "source": "qbcc",
+        "observation_digest": "a77c5fabe46fa0ceb58ef3e3dafed53a46350f87df550ab8d8a58a0e071a3998",
+        "alarms": [
+          "timer_heartbeat_missed"
+        ],
+        "unknown_inputs": [
+          "source_age_days",
+          "mismatch_hours",
+          "field_fill_delta_pp",
+          "classification_delta_pp",
+          "approved_hit_rate_baseline",
+          "required_free_disk_bytes",
+          "suppression_commit_seconds",
+          "timer_last_success_at",
+          "restore_status",
+          "four_comparable_publications"
+        ]
+      }
+    ],
+    "notifications_sent": 0,
+    "active_run_heartbeat_threshold_seconds": 300,
+    "inventory": "Unknown external baselines and backup/timer receipts require explicit evidence observations"
+  }
+}

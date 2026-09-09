@@ -1,0 +1,12 @@
+{
+  "status": "failed",
+  "failure_type": "OutOfMemoryException",
+  "reason": "Out of Memory Error: failed to pin block of size 256.0 KiB (487.9 MiB/488.2 MiB used)",
+  "input_root": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\benchmark-3cf2633055484c90a0ea52bfc53000a1",
+  "output": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\var\\diff-recheck-e77a491a9f4541d494a708b4ec80b39a\\events.parquet",
+  "peak_spill_bytes": 4960288768,
+  "diff_code_sha256": "c7a7255e1b2a2c7e7f5b6ce6105ead59f76b3d7f2cf9198b27a7d2548989c07c",
+  "lockfile_sha256": "c7c7a58208f93368d2050b3a75daed625e5bacda8a241b9be56213f6e9552b30",
+  "full_scale_certified": false,
+  "db_wal_measured": false
+}

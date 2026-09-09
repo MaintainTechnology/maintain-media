@@ -1,0 +1,1 @@
+"""Whole-publication analytical comparison."""

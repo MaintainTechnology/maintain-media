@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "environment": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\.runtime\\frozen-install-b49ced2ba0264af589161c529a492238",
+  "log": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\ops\\acceptance\\clean-install-b49ced2ba0264af589161c529a492238.log",
+  "lockfile_sha256": "c7c7a58208f93368d2050b3a75daed625e5bacda8a241b9be56213f6e9552b30",
+  "observed_at_utc": "2026-09-08T23:41:24.7455532Z",
+  "log_sha256": "e2716b29c75fb529ef32459935a436bad023d43858b82d8d6f3d5c40160e58e5",
+  "command": "UV_PROJECT_ENVIRONMENT=<new task-local directory> uv sync --frozen; <newenv>/python -m abr_engine.cli validate-config --mode fixture"
+}

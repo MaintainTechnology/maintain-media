@@ -1,0 +1,21 @@
+{
+  "state": "prepared_not_executed_awaiting_root_GO",
+  "main_diff_sha256": "8df5488572e812c750b36780e29374cfdffba17d7587f3202fd116b37d0c105a",
+  "harness_sha256": "faaaf2f1a3604a63ae311c4c78f3d8af9715181ac68a2f6ec30f5b5583c6d3a3",
+  "candidates": [
+    {
+      "threads": 1,
+      "path": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\.runtime\\performance-thread-comparison\\events_threads_1.py",
+      "sha256": "5f72ea756a9d8a0fdef1bc7bcda96b53acabd10f6c8df25968f5467b4206a47c",
+      "sole_semantic_change": "SET threads=2 -> SET threads=1"
+    },
+    {
+      "threads": 3,
+      "path": "C:\\Users\\dalig\\Desktop\\MaintainTech\\MaintainOrg\\maintain-media\\abn-leadgen\\.runtime\\performance-thread-comparison\\events_threads_3.py",
+      "sha256": "31116f8187d6588b07a174aeb2f2de506e932b59057d33205b1f0d6cd33d8e51",
+      "sole_semantic_change": "SET threads=2 -> SET threads=3"
+    }
+  ],
+  "validation": "AST parsed; exact copied-source substitution asserted; no benchmark/test run",
+  "command": ".venv/Scripts/python.exe .runtime/performance-thread-comparison/compare.py --go"
+}

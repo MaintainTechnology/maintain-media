@@ -1,0 +1,149 @@
+@import "tailwindcss";
+
+/*
+  Maintain Media design tokens. Source of truth: DESIGN.md at the repo root.
+  Shape rule: buttons are pills, panels and media use radius-lg (20px),
+  inputs and small tiles use radius-md (14px).
+*/
+@theme {
+  --color-canvas: #061518;
+  --color-surface: #0c2a30;
+  --color-surface-2: #123a42;
+  --color-ink: #ffffff;
+  --color-ink-2: #cdd9db;
+  --color-mist: #93a7aa;
+  --color-line: rgb(255 255 255 / 0.1);
+  --color-brand: #a04dff;
+  --color-brand-300: #c79bff;
+  --color-brand-400: #b374ff;
+  --color-brand-600: #8a34f0;
+  --color-brand-deep: #3a1f6b;
+  --color-brand-dark: #08282d;
+
+  --font-sans: var(--font-albert), "Albert Sans", ui-sans-serif, system-ui,
+    sans-serif;
+  --font-display: var(--font-vela), var(--font-albert), ui-sans-serif,
+    system-ui, sans-serif;
+
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-canvas);
+    color: var(--color-ink-2);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    color: var(--color-ink);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  ::selection {
+    background: rgb(160 77 255 / 0.35);
+    color: #fff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-brand);
+    outline-offset: 3px;
+  }
+}
+
+@layer components {
+  .shell {
+    width: 100%;
+    max-width: 72rem;
+    margin-inline: auto;
+    padding-inline: clamp(1.5rem, 5vw, 2.5rem);
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.9375rem;
+    letter-spacing: 0.01em;
+    padding: 0.875rem 1.75rem;
+    transition:
+      transform 0.25s var(--ease-out-expo),
+      background-color 0.25s var(--ease-out-expo),
+      border-color 0.25s var(--ease-out-expo),
+      box-shadow 0.25s var(--ease-out-expo);
+  }
+
+  .btn:active {
+    transform: scale(0.98);
+  }
+
+  .btn-primary {
+    background: var(--color-ink);
+    color: var(--color-brand-dark);
+    box-shadow: 0 8px 28px -10px rgb(160 77 255 / 0.55);
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 36px -10px rgb(160 77 255 / 0.72);
+  }
+
+  .btn-ghost {
+    border: 1px solid rgb(255 255 255 / 0.22);
+    color: var(--color-ink);
+  }
+
+  .btn-ghost:hover {
+    border-color: rgb(199 155 255 / 0.8);
+    background: rgb(160 77 255 / 0.1);
+    transform: translateY(-2px);
+  }
+}
+
+/* Industries marquee (home page only) */
+@keyframes marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.marquee-track {
+  animation: marquee 38s linear infinite;
+}
+
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .marquee-track {
+    animation: none;
+  }
+}

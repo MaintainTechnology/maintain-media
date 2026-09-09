@@ -1,0 +1,28 @@
+[Unit]
+Description=Maintain Media ABR pipeline (fixture default)
+After=network-online.target postgresql.service
+
+[Service]
+Type=oneshot
+User=abr-engine
+Group=abr-engine
+WorkingDirectory=/opt/abn-leadgen
+RuntimeDirectory=abr-engine
+RuntimeDirectoryPreserve=yes
+StateDirectory=abr-engine
+UMask=0077
+Environment=ABR_ENGINE_MODE=fixture
+ExecStart=/usr/bin/flock -n -E 4 /run/abr-engine/pipeline.lock /opt/abn-leadgen/.venv/bin/abr-engine run --source abr
+SuccessExitStatus=4
+TimeoutStartSec=6h
+MemoryMax=2G
+CPUQuota=200%
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=strict
+ProtectHome=yes
+ReadWritePaths=/var/lib/abr-engine /run/abr-engine
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target

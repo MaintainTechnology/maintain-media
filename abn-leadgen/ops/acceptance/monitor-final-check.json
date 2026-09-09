@@ -1,0 +1,10 @@
+{
+  "command": "uv run pytest tests/integration/test_ops_monitor.py -q",
+  "result": "9 passed in 25.79s",
+  "ruff": "passed",
+  "mypy": "passed",
+  "monitor_sha256": "883a4c52e8e1e5ba400f775bdb3338c27ddefba9dfee532a440bec7324e60ad1",
+  "tests_sha256": "b7faf4f9cd30a0247153f9854c44538ed7979dd9162368285bb43532b683a0fd",
+  "latency_semantics": "Client request-to-commit duration separate; measured server commit latency unknown when absent",
+  "code_frozen_at_utc": "2026-09-08T23:23:35.0545760Z"
+}

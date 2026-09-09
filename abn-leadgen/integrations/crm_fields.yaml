@@ -1,0 +1,31 @@
+schema_version: 1
+mapping_version: fixture-v1
+mode: fixture
+live_enabled: false
+location_id: null
+provider: gohighlevel-v2
+provider_contract_checked_at: null
+sandbox_receipt: null
+identity:
+  key: group_id
+  type: uuid
+  custom_field_id: fixture_group_id
+  prohibit_endpoint_only_merge: true
+fields:
+  abn: {type: string, custom_field_id: fixture_abn, nullable: true, pattern: '^[0-9]{11}$'}
+  signal: {type: string, custom_field_id: fixture_signal, nullable: false}
+  score: {type: number, custom_field_id: fixture_score, nullable: false, minimum: 0, maximum: 100}
+  tier: {type: string, custom_field_id: fixture_tier, nullable: false, enum: [A]}
+  industry: {type: string, custom_field_id: fixture_industry, nullable: true}
+  entity_class: {type: string, custom_field_id: fixture_entity_class, nullable: true}
+  state: {type: string, custom_field_id: fixture_state, nullable: false, enum: [QLD, NSW]}
+  website: {type: string, format: uri, custom_field_id: fixture_website, nullable: true}
+  positioning_notes: {type: string, custom_field_id: fixture_positioning, nullable: true, max_length: 400}
+  basis_summary: {type: string, custom_field_id: fixture_basis, nullable: true}
+tags:
+  owned_prefix: 'maintain-media:'
+  allowed: ['maintain-media:candidate', 'maintain-media:suppressed']
+  operations: [add, remove]
+  replace_all: false
+campaign_enrolment: false
+automatic_procurement_cap_micro_aud: 0

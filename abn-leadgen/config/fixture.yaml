@@ -1,0 +1,8 @@
+mode: fixture
+database_url: postgresql://abr_fixture:abr_fixture@127.0.0.1:55432/abr_fixture
+output_dir: var
+monthly_cap_micro_aud: 150000000
+issuer: maintain-media-fixture
+audience: abr-engine-fixture
+live_credentials: {}
+capabilities: {}
