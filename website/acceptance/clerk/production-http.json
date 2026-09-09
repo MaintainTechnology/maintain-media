@@ -1,0 +1,41 @@
+{
+  "status": "passed",
+  "mode": "Local Next production server with Clerk development keys",
+  "checks": [
+    {
+      "path": "/sign-in",
+      "status": 200,
+      "cache": "private, no-store, max-age=0",
+      "robots": "noindex, nofollow, noarchive",
+      "passed": true
+    },
+    {
+      "path": "/sign-up",
+      "status": 200,
+      "cache": "private, no-store, max-age=0",
+      "robots": "noindex, nofollow, noarchive",
+      "passed": true
+    },
+    {
+      "path": "/abn-lead-gen/dashboard",
+      "status": 307,
+      "cache": "private, no-store, max-age=0",
+      "robots": "noindex, nofollow, noarchive",
+      "passed": true
+    },
+    {
+      "path": "/abn-lead-gen/access",
+      "status": 307,
+      "cache": "private, no-store, max-age=0",
+      "robots": "noindex, nofollow, noarchive",
+      "passed": true
+    },
+    {
+      "path": "/api/abn-lead-gen/dashboard",
+      "status": 401,
+      "cache": "private, no-store, max-age=0",
+      "robots": "noindex, nofollow, noarchive",
+      "passed": true
+    }
+  ]
+}

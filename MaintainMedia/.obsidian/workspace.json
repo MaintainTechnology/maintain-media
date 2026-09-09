@@ -6,6 +6,7 @@
       {
         "id": "a748df96bdcaba6b",
         "type": "tabs",
+        "dimension": 38.746630727762806,
         "children": [
           {
             "id": "64cbd9ea6fd65f0f",
@@ -26,15 +27,20 @@
       {
         "id": "58b479b6c85ba757",
         "type": "tabs",
+        "dimension": 61.2533692722372,
         "children": [
           {
             "id": "fce86470e2f2d7c7",
             "type": "leaf",
             "state": {
-              "type": "graph",
-              "state": {},
-              "icon": "lucide-git-fork",
-              "title": "Graph view"
+              "type": "markdown",
+              "state": {
+                "file": "Specs/ABR Lead Engine - Final Judge.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "ABR Lead Engine - Final Judge"
             }
           }
         ]
@@ -99,7 +105,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 359.8999938964844
+    "width": 318.5
   },
   "right": {
     "id": "7f23b376b1f4467d",
@@ -204,8 +210,12 @@
       "bases:Create new base": false
     }
   },
-  "active": "64cbd9ea6fd65f0f",
+  "active": "fce86470e2f2d7c7",
   "lastOpenFiles": [
+    "Specs/ABR Lead Engine - Explained Simply.md",
+    "Specs/ABR Lead Engine - Developer Quickstart.md",
+    "Specs/ABR Lead Engine - Build Tasks.md",
+    "Specs/ABR Lead Engine.md",
     "Specs/ABR Lead Engine - Final Review Plan.md",
     "Specs/ABR Lead Engine - Final Judge.md",
     "Specs/ABR Lead Engine - Build Contract Precision.md",
@@ -215,8 +225,6 @@
     "Specs/ABR Lead Engine - Reviewer Notes.md",
     "Specs/ABR Lead Engine - Council Review.md",
     "Specs/ABR Lead Engine - Consistency Analysis.md",
-    "Specs/ABR Lead Engine - Build Tasks.md",
-    "Specs/ABR Lead Engine - Developer Quickstart.md",
     "Specs/ABR Lead Engine - Interface Contracts.md",
     "Specs/ABR Lead Engine - Research and Decisions.md",
     "Specs/ABR Lead Engine - Data Model.md",
@@ -229,8 +237,6 @@
     "Specs/Archive/ABR Lead Engine - Explained Simply v3.5.md",
     "Specs/Archive",
     "Specs/ABR Lead Engine - Explained Simply.draft.md",
-    "Specs/ABR Lead Engine - Explained Simply.md",
-    "Specs/ABR Lead Engine.md",
     "Welcome.md",
     "Specs"
   ]

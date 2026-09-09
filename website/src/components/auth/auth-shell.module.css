@@ -1,0 +1,29 @@
+.page { min-height: 100dvh; display: grid; align-items: center; padding: clamp(1.25rem, 5vw, 4rem); background: radial-gradient(ellipse at 0 0, rgb(160 77 255 / .09), transparent 60%); }
+.shell { width: min(100%, 66rem); margin-inline: auto; }
+.logo { display: inline-flex; align-items: center; min-height: 44px; margin-bottom: clamp(2.5rem, 6vw, 5rem); }
+.layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 28rem); align-items: center; gap: clamp(2rem, 6vw, 5rem); }
+.eyebrow { color: var(--color-brand-300); font-size: .8125rem; font-weight: 700; letter-spacing: .06em; margin-bottom: 1rem; }
+.introduction h1 { font-family: var(--font-display); font-size: clamp(2.5rem, 5.6vw, 4.5rem); font-weight: 700; letter-spacing: -.055em; line-height: 1.06; max-width: 11ch; margin-bottom: 1.5rem; }
+.description { max-width: 37ch; font-size: 1.0625rem; color: var(--color-ink-2); line-height: 1.7; }
+.workspaceNote { display: flex; align-items: flex-start; gap: 1rem; padding-top: 2rem; margin-top: 2.5rem; border-top: 1px solid var(--color-line); max-width: 24rem; }
+.mark { display: grid; flex-shrink: 0; place-items: center; height: 40px; width: 40px; border: 1px solid rgb(199 155 255 / .3); border-radius: 14px; color: var(--color-brand-300); font-family: var(--font-display); font-size: 1.125rem; font-weight: 800; }
+.workspaceNote strong { display: block; font-size: .875rem; color: var(--color-ink); font-weight: 600; }
+.workspaceNote p { font-size: .8125rem; margin-top: .35rem; color: var(--color-ink-2); line-height: 1.6; }
+.formSection { min-width: 0; width: 100%; }
+.note { margin-top: 1.25rem; padding-inline: .25rem; color: var(--color-ink-2); font-size: .8125rem; line-height: 1.65; }
+.footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; column-gap: 2rem; row-gap: .75rem; margin-top: clamp(2.5rem, 6vw, 5rem); font-size: .8125rem; color: var(--color-ink-2); }
+.footer a { display: inline-flex; gap: .75rem; align-items: center; min-height: 44px; }
+.footer a:hover { color: var(--color-brand-300); }
+.loading { border: 1px solid var(--color-line); border-radius: 20px; background: var(--color-surface); min-height: 18rem; padding: 2rem; display: flex; flex-direction: column; justify-content: center; gap: 1rem; color: var(--color-ink-2); line-height: 1.7; }
+.loading button { align-self: flex-start; min-height: 44px; color: var(--color-brand-300); cursor: pointer; font-weight: 600; }
+.loading .resetButton { min-height: 48px; padding: .75rem 1.5rem; border-radius: 999px; background: var(--color-ink); color: var(--color-brand-dark); font-weight: 700; }
+.loading .resetButton:disabled { opacity: .65; cursor: wait; }
+@media (max-width: 767px) {
+  .layout { grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+  .shell { max-width: 28rem; }
+  .logo { margin-bottom: 2rem; }
+  .introduction h1 { font-size: clamp(2.25rem, 10vw, 3.25rem); max-width: 15ch; margin-bottom: 1rem; }
+  .description { font-size: .9375rem; max-width: none; }
+  .workspaceNote { display: none; }
+  .footer { margin-top: 2rem; }
+}

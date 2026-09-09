@@ -8,7 +8,9 @@ import { SmoothScroll } from "@/components/smooth-scroll";
 /** The operator workspace has its own navigation and native browser scrolling. */
 export function SiteShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const workspace = pathname === "/abn-lead-gen" || pathname.startsWith("/abn-lead-gen/");
+  const workspace = pathname === "/abn-lead-gen" || pathname.startsWith("/abn-lead-gen/")
+    || pathname === "/sign-in" || pathname.startsWith("/sign-in/")
+    || pathname === "/sign-up" || pathname.startsWith("/sign-up/");
   return (
     <>
       <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-ink focus:px-5 focus:py-2.5 focus:font-bold focus:text-brand-dark"

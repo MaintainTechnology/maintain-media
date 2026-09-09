@@ -2,6 +2,8 @@
 
 User-authorised extension, 9 September 2026. Replace the separate HTML operator interface with a genuine Next.js React dashboard at `/abn-lead-gen/dashboard`. Reuse the existing Python pipeline and fixture database. The user approved a dedicated admin sign-in because the marketing website has no identity system.
 
+**Later authorised change:** `clerk-authentication.md` supersedes this document's local-password, local-account-provisioning and no-public-signup clauses. Clerk now owns account authentication; the lead workspace remains restricted to explicitly approved administrators. Original acceptance receipts describe the earlier local-auth build.
+
 ## Requirements
 
 1. Render the dashboard as React components inside the existing Next.js website, with native website fonts, logo, colours, responsive layouts and keyboard controls. Keep marketing pages working; omit marketing navigation, footer and smooth-scroll effects from the admin workspace. Provide a return-to-website link.

@@ -7,6 +7,7 @@ import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { List, X } from "@phosphor-icons/react";
 import { navLinks } from "@/lib/site";
+import { Show, UserButton } from "@clerk/nextjs";
 
 export function Header() {
   const pathname = usePathname();
@@ -27,7 +28,7 @@ export function Header() {
           />
         </Link>
 
-        <nav aria-label="Main" className="hidden items-center gap-8 md:flex">
+        <nav aria-label="Main" className="hidden items-center gap-6 lg:flex">
           {navLinks.map((link) => {
             const active = pathname === link.href;
             return (
@@ -48,12 +49,12 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link href="/contact" className="btn btn-primary hidden md:inline-flex">
-            Start a project
-          </Link>
+          <Show when="signed-out"><div className="hidden items-center gap-4 lg:flex"><Link href="/sign-in" className="inline-flex min-h-11 items-center text-sm font-semibold text-ink-2 hover:text-brand-300">Sign in</Link><Link href="/sign-up" className="btn btn-ghost">Sign up</Link></div></Show>
+          <Show when="signed-in"><Link href="/abn-lead-gen/dashboard" className="hidden min-h-11 items-center text-sm font-semibold text-ink-2 hover:text-brand-300 lg:inline-flex">Lead workspace</Link><UserButton /></Show>
+          <Link href="/contact" className="btn btn-primary hidden xl:inline-flex">Start a project</Link>
           <button
             type="button"
-            className="rounded-md p-2 text-ink md:hidden"
+            className="rounded-md p-2 text-ink lg:hidden"
             aria-expanded={open}
             aria-controls="mobile-nav"
             aria-label={open ? "Close menu" : "Open menu"}
@@ -69,7 +70,7 @@ export function Header() {
           <motion.nav
             id="mobile-nav"
             aria-label="Mobile"
-            className="overflow-hidden border-t border-line bg-canvas md:hidden"
+            className="overflow-hidden border-t border-line bg-canvas lg:hidden"
             initial={reduce ? false : { height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={reduce ? undefined : { height: 0, opacity: 0 }}
@@ -91,6 +92,8 @@ export function Header() {
                   </Link>
                 );
               })}
+              <Show when="signed-out"><div className="mt-3 grid grid-cols-2 gap-3 border-t border-line pt-4"><Link href="/sign-in" className="btn btn-ghost">Sign in</Link><Link href="/sign-up" className="btn btn-primary">Sign up</Link></div></Show>
+              <Show when="signed-in"><Link href="/abn-lead-gen/dashboard" className="mt-3 rounded-md border-t border-line px-3 py-3 text-lg font-medium text-brand-300">Lead workspace</Link></Show>
               <Link
                 href="/contact"
                 className="btn btn-primary mt-3 w-full"

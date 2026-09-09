@@ -1,33 +1,32 @@
 import "server-only";
-import { cookies } from "next/headers";
-import {
-  ADMIN_COOKIE, AuthError, authorizeAdminRequest, readAdminConfiguration, verifyAdminToken,
-  type AdminSession,
-} from "./auth-core";
+import { auth, clerkClient } from "@clerk/nextjs/server";
+import { resolveClerkAdminAccess, requireAdminAccess, authorizeClerkRequest } from "./clerk-access-service";
+import type { AdminSession } from "./auth-core";
 
 export { AuthError } from "./auth-core";
 export type { AdminSession } from "./auth-core";
+export type { AdminAccess } from "./clerk-access-service";
 
-export async function adminAccessConfigured(): Promise<boolean> {
-  try {
-    const config = await readAdminConfiguration();
-    return config.accounts.some((account) => account.enabled && account.role === "admin");
-  } catch {
-    return false;
-  }
+/** Resolve Clerk afresh for each page/data/action/report request; never cache privileges across requests. */
+export async function getAdminAccess() {
+  return resolveClerkAdminAccess({
+    authenticate: async () => {
+      const identity = await auth();
+      return { userId: identity.userId, sessionId: identity.sessionId };
+    },
+    getSession: async (id) => (await clerkClient()).sessions.getSession(id),
+    getUser: async (id) => (await clerkClient()).users.getUser(id),
+    // The SDK/framework loads configuration; keys never leave this server-only module.
+    secret: process.env.CLERK_SECRET_KEY,
+  });
 }
 
 export async function getAdminSession(): Promise<AdminSession | null> {
-  const matches = (await cookies()).getAll(ADMIN_COOKIE);
-  if (matches.length !== 1) return null;
-  try {
-    return verifyAdminToken(matches[0].value, await readAdminConfiguration());
-  } catch (error) {
-    if (error instanceof AuthError) return null;
-    throw error;
-  }
+  const access = await getAdminAccess();
+  if (access.status === "signed-out" || access.status === "forbidden") return null;
+  return requireAdminAccess(access);
 }
 
 export async function assertAdminRequest(request: Request, mutation = false): Promise<AdminSession> {
-  return authorizeAdminRequest(request, await readAdminConfiguration(), mutation);
+  return authorizeClerkRequest(request, await getAdminAccess(), mutation);
 }

@@ -3,7 +3,7 @@ import { siteUrl } from "@/lib/site";
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: "*", allow: "/", disallow: ["/abn-lead-gen", "/api/abn-lead-gen"] },
+    rules: { userAgent: "*", allow: "/", disallow: ["/abn-lead-gen", "/api/abn-lead-gen", "/sign-in", "/sign-up", "/__clerk"] },
     sitemap: `${siteUrl}/sitemap.xml`,
   };
 }

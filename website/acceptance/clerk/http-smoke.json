@@ -1,0 +1,135 @@
+{
+  "status": "passed",
+  "checked_at": "2026-09-09T11:39:55.032Z",
+  "scope": "Signed-out HTTP access, retired-password denial, and local proxy source only. Real Clerk account creation, sign-in, admin access and sign-out are not covered.",
+  "cache_qualification": "Signed-out HTML and redirects accept Next development no-cache, must-revalidate. All private API, action and report responses require private, no-store. Production page-header behavior is not certified here.",
+  "total": 31,
+  "passed": 31,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "Public / remains accessible",
+      "status": "passed"
+    },
+    {
+      "name": "Public /services remains accessible",
+      "status": "passed"
+    },
+    {
+      "name": "Public /about remains accessible",
+      "status": "passed"
+    },
+    {
+      "name": "Public /contact remains accessible",
+      "status": "passed"
+    },
+    {
+      "name": "Clerk /sign-in page is available and private",
+      "status": "passed"
+    },
+    {
+      "name": "Clerk /sign-up page is available and private",
+      "status": "passed"
+    },
+    {
+      "name": "Existing ABN sign-in redirects to Clerk sign-in",
+      "status": "passed"
+    },
+    {
+      "name": "Workspace index redirects to dashboard",
+      "status": "passed"
+    },
+    {
+      "name": "Signed-out /abn-lead-gen/dashboard requires Clerk sign-in",
+      "status": "passed"
+    },
+    {
+      "name": "Signed-out /abn-lead-gen/access requires Clerk sign-in",
+      "status": "passed"
+    },
+    {
+      "name": "Signed-out GET /dashboard is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Signed-out HEAD /dashboard is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Signed-out GET /jobs/00000000-0000-4000-8000-000000000001 is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Signed-out GET /reports/00000000-0000-4000-8000-000000000001/html is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Signed-out GET /reports/00000000-0000-4000-8000-000000000001/csv is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Signed-out GET /reports/00000000-0000-4000-8000-000000000001/markdown is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Signed-out HEAD /reports/00000000-0000-4000-8000-000000000001/html is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Signed-out PATCH /settings is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Signed-out POST /runs is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Forged legacy cookie GET /dashboard is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Forged legacy cookie HEAD /dashboard is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Forged legacy cookie GET /jobs/00000000-0000-4000-8000-000000000001 is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Forged legacy cookie GET /reports/00000000-0000-4000-8000-000000000001/html is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Forged legacy cookie GET /reports/00000000-0000-4000-8000-000000000001/csv is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Forged legacy cookie GET /reports/00000000-0000-4000-8000-000000000001/markdown is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Forged legacy cookie HEAD /reports/00000000-0000-4000-8000-000000000001/html is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Forged legacy cookie PATCH /settings is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Forged legacy cookie POST /runs is denied before engine access",
+      "status": "passed"
+    },
+    {
+      "name": "Retired local login endpoint returns 410 without a session cookie",
+      "status": "passed"
+    },
+    {
+      "name": "Retired local logout endpoint returns 410 without a session cookie",
+      "status": "passed"
+    },
+    {
+      "name": "Next proxy declares one Clerk auto-proxy matcher after API/TRPC",
+      "status": "passed"
+    }
+  ]
+}

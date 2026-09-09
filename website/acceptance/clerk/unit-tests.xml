@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="signed-out and malformed identities cannot trigger backend account access" time="0.006334" classname="test"/>
+	<testcase name="verified identity uses current server session and user before returning a minimal admin DTO" time="0.003060" classname="test"/>
+	<testcase name="each request rechecks role and session rather than retaining cached admin privilege" time="0.002988" classname="test"/>
+	<testcase name="only an active session belonging to this verified user and session can enter" time="0.002722" classname="test"/>
+	<testcase name="expired or abandoned sessions are rejected even if a stale response says active" time="0.001267" classname="test"/>
+	<testcase name="incomplete backend session data fails closed as unavailable" time="0.002454" classname="test"/>
+	<testcase name="deleted provider records lose access and provider faults never expose raw errors" time="0.003794" classname="test"/>
+	<testcase name="a stalled auth or provider lookup returns an unavailable result within its deadline" time="0.048902" classname="test"/>
+	<testcase name="policy denials remain forbidden and do not grant access from unsafe metadata" time="0.002306" classname="test"/>
+	<testcase name="missing server CSRF secret is an unavailable configuration, not an authorized session" time="0.001290" classname="test"/>
+	<testcase name="page and request consumers preserve distinct 401, 403 and 503 failures" time="0.047630" classname="test"/>
+	<testcase name="every engine mutation requires Clerk authority, exact origin and its current CSRF token" time="0.007284" classname="test"/>
+	<testcase name="origin checking preserves normalized loopback requests and rejects host spoofing" time="0.005108" classname="test"/>
+	<testcase name="bounded JSON and private sanitized failures remain available after password removal" time="0.014649" classname="test"/>
+	<testcase name="legacy password endpoints return a retirement response without issuing or clearing sessions" time="0.001558" classname="test"/>
+	<testcase name="legacy account command exits with Clerk instructions and no provisioning side effects" time="0.356439" classname="test"/>
+	<testcase name="a revoked session with an unexpired JWT gets recovery, not a dashboard redirect loop" time="0.004960" classname="test"/>
+	<testcase name="an anonymous browser gets the actual sign-in or sign-up form" time="0.000468" classname="test"/>
+	<testcase name="a freshly verified admin can enter the dashboard" time="0.000366" classname="test"/>
+	<testcase name="a verified ordinary account enters access pending without an admin redirect" time="0.000354" classname="test"/>
+	<testcase name="provider verification failure renders a retry state with no auth widget or redirect" time="0.000693" classname="test"/>
+	<testcase name="absent or malformed verified session identity cannot authorize an admin" time="0.005071" classname="test"/>
+	<testcase name="only exact server-managed admin metadata grants access" time="0.001765" classname="test"/>
+	<testcase name="banned, locked, disabled and malformed safety flags fail closed" time="0.003395" classname="test"/>
+	<testcase name="missing user and mismatched backend identity cannot borrow another user's role" time="0.002924" classname="test"/>
+	<testcase name="admin DTO exposes only bounded labels and the derived token" time="0.003175" classname="test"/>
+	<testcase name="CSRF is stable in a session and isolated by session, user and secret" time="0.001486" classname="test"/>
+	<testcase name="missing, short or malformed server secrets fail closed without echoing a secret" time="0.000847" classname="test"/>
+	<testcase name="mutation token validation rejects omissions, tampering and a different session" time="0.064419" classname="test"/>
+	<testcase name="only explicit endpoints and methods can reach the engine" time="0.005882" classname="test"/>
+	<testcase name="engine origin cannot be a remote host, credential URL or arbitrary path" time="0.001254" classname="test"/>
+	<testcase name="mutation bodies must be bounded JSON objects" time="0.091469" classname="test"/>
+	<testcase name="dashboard hides upstream CSRF and rewrites only allowed report URLs" time="0.010164" classname="test"/>
+	<testcase name="writes use a fresh server-side token and never forward browser credentials" time="0.006351" classname="test"/>
+	<testcase name="report formats preserve downloads, masked text and protected nested links" time="0.007927" classname="test"/>
+	<testcase name="stale reports, malformed upstream and outages fail without sensitive errors" time="0.006432" classname="test"/>
+	<testcase name="uppercase UUID requests retain the report's canonical protected CSV link" time="0.003972" classname="test"/>
+	<!-- tests 37 -->
+	<!-- suites 0 -->
+	<!-- pass 37 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 1215.0907 -->
+</testsuites>

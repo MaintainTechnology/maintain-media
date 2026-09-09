@@ -1,286 +1,234 @@
+import test from "node:test";
 import assert from "node:assert/strict";
-import { createHmac, randomBytes, scryptSync } from "node:crypto";
+import { randomBytes } from "node:crypto";
+import { registerHooks } from "node:module";
 import { execFile } from "node:child_process";
-import { copyFile, mkdir, mkdtemp, readFile, rm } from "node:fs/promises";
-import { tmpdir } from "node:os";
-import path from "node:path";
-import { test } from "node:test";
-import { fileURLToPath } from "node:url";
 import { promisify } from "node:util";
-import {
-  ADMIN_COOKIE, AuthError, adminCookie, adminOrigin, authenticatePassword, authorizeAdminRequest,
-  cookieToken, issueAdminToken, loginResponse, logoutResponse, parseAdminConfiguration,
-  readAdminConfiguration, readSmallJson, verifyAdminToken, verifyPassword,
-} from "../src/lib/abn-lead-gen/auth-core.ts";
+import { fileURLToPath } from "node:url";
+import * as authCore from "../src/lib/abn-lead-gen/auth-core.ts";
 
-const password = "test-only-strong-password-2026";
-const salt = randomBytes(16);
-const hash = scryptSync(password, salt, 64, { N: 32768, r: 8, p: 3, maxmem: 64 * 1024 * 1024 });
-const account = { username: "test-admin", displayName: "Test Admin", passwordHash: `scrypt$32768$8$3$${salt.toString("hex")}$${hash.toString("hex")}`, enabled: true, role: "admin" };
-const config = { sessionSecret: randomBytes(48).toString("base64url"), accounts: [account] };
-const origin = "http://127.0.0.1:3000";
-const env = {
-  ABN_ADMIN_ACCOUNTS_JSON: process.env.ABN_ADMIN_ACCOUNTS_JSON,
-  ABN_ADMIN_SESSION_SECRET: process.env.ABN_ADMIN_SESSION_SECRET,
-  ABN_ADMIN_ORIGIN: process.env.ABN_ADMIN_ORIGIN,
-};
-
-function request(path, options = {}) {
-  return new Request(`${origin}${path}`, options);
+// The application uses Next's extensionless TypeScript resolution. This test-only loader
+// resolves the same modules for Node's native strip-types runner; authentication is never bypassed.
+registerHooks({ resolve(specifier, context, nextResolve) {
+  if (context.parentURL?.endsWith("/clerk-access-service.ts") && ["./auth-core", "./clerk-policy"].includes(specifier)) {
+    return nextResolve(`${specifier}.ts`, context);
+  }
+  return nextResolve(specifier, context);
+} });
+const { resolveClerkAdminAccess, requireAdminAccess, authorizeClerkRequest } = await import("../src/lib/abn-lead-gen/clerk-access-service.ts");
+const { AuthError, adminOrigin, assertSameOrigin, authFailure, readSmallJson, retiredPasswordAuthResponse } = authCore;
+const origin = "http://127.0.0.1:3001";
+const identity = { userId: "user_Admin123", sessionId: "sess_Current123" };
+const secret = randomBytes(32).toString("base64url");
+const makeRequest = (headers = {}, method = "PATCH") => new Request(`${origin}/api/abn-lead-gen/settings`, {
+  method, headers: { host: "127.0.0.1:3001", origin, ...headers },
+});
+function fixture() {
+  const calls = [];
+  const state = {
+    identity: { ...identity },
+    session: { id: identity.sessionId, userId: identity.userId, status: "active", expireAt: Date.now() + 60_000, abandonAt: Date.now() + 60_000 },
+    user: { id: identity.userId, banned: false, locked: false, username: "admin", fullName: "Maintain Admin", publicMetadata: { role: "admin" } },
+  };
+  const backend = {
+    authenticate: async () => { calls.push(["auth"]); return state.identity; },
+    getSession: async id => { calls.push(["session", id]); return state.session; },
+    getUser: async id => { calls.push(["user", id]); return state.user; },
+    secret,
+  };
+  return { calls, state, backend };
 }
 
-function jsonRequest(body, headers = {}) {
-  return request("/api/abn-lead-gen/auth/login", { method: "POST", headers: { "content-type": "application/json", origin, ...headers }, body: JSON.stringify(body) });
-}
+test("signed-out and malformed identities cannot trigger backend account access", async () => {
+  for (const input of [null, { userId: null, sessionId: null }, { ...identity, sessionId: null }, { ...identity, userId: "invalid" }]) {
+    const { backend, state, calls } = fixture();
+    state.identity = input;
+    assert.deepEqual(await resolveClerkAdminAccess(backend), { status: "signed-out" });
+    assert.deepEqual(calls, [["auth"]]);
+  }
+});
 
-function signedClaims(claims) {
-  const encoded = Buffer.from(JSON.stringify(claims)).toString("base64url");
-  const signature = createHmac("sha256", config.sessionSecret).update(encoded).digest("base64url");
-  return `${encoded}.${signature}`;
-}
+test("verified identity uses current server session and user before returning a minimal admin DTO", async () => {
+  const { backend, calls } = fixture();
+  const access = await resolveClerkAdminAccess(backend);
+  assert.equal(access.status, "admin");
+  assert.deepEqual(Object.keys(access.admin).sort(), ["csrfToken", "displayName", "username"]);
+  assert.equal(access.admin.displayName, "Maintain Admin");
+  assert.match(access.admin.csrfToken, /^[A-Za-z0-9_-]{43}$/);
+  assert.deepEqual(calls, [["auth"], ["session", identity.sessionId], ["user", identity.userId]]);
+  assert.equal(JSON.stringify(access).includes(secret), false);
+  assert.equal(JSON.stringify(access).includes(identity.sessionId), false);
+});
 
-test("admin authentication and request boundaries", async (t) => {
-  process.env.ABN_ADMIN_ACCOUNTS_JSON = JSON.stringify(config.accounts);
-  process.env.ABN_ADMIN_SESSION_SECRET = config.sessionSecret;
+test("each request rechecks role and session rather than retaining cached admin privilege", async () => {
+  const { backend, state, calls } = fixture();
+  assert.equal((await resolveClerkAdminAccess(backend)).status, "admin");
+  state.user.publicMetadata.role = "member";
+  assert.deepEqual(await resolveClerkAdminAccess(backend), { status: "forbidden" });
+  state.user.publicMetadata.role = "admin";
+  state.session.status = "revoked";
+  assert.deepEqual(await resolveClerkAdminAccess(backend), { status: "signed-out" });
+  assert.equal(calls.filter(([kind]) => kind === "user").length, 3);
+  assert.equal(calls.filter(([kind]) => kind === "session").length, 3);
+});
+
+test("only an active session belonging to this verified user and session can enter", async () => {
+  for (const status of ["revoked", "expired", "ended", "removed", "abandoned", "pending", "unknown", "Active"]) {
+    const { backend, state } = fixture();
+    state.session.status = status;
+    assert.equal((await resolveClerkAdminAccess(backend)).status, "signed-out");
+  }
+  for (const change of [{ id: "sess_Other123" }, { userId: "user_Other123" }]) {
+    const { backend, state } = fixture();
+    Object.assign(state.session, change);
+    assert.equal((await resolveClerkAdminAccess(backend)).status, "signed-out");
+  }
+});
+
+test("expired or abandoned sessions are rejected even if a stale response says active", async () => {
+  for (const field of ["expireAt", "abandonAt"]) {
+    const { backend, state } = fixture();
+    state.session[field] = Date.now() - 1;
+    assert.equal((await resolveClerkAdminAccess(backend)).status, "signed-out");
+  }
+});
+
+test("incomplete backend session data fails closed as unavailable", async () => {
+  for (const session of [null, {}, [], { status: "active" },
+    { id: identity.sessionId, userId: identity.userId, status: "active", expireAt: Infinity, abandonAt: Date.now() + 60_000 }]) {
+    const { backend, state } = fixture();
+    state.session = session;
+    assert.deepEqual(await resolveClerkAdminAccess(backend), { status: "unavailable", code: "ADMIN_AUTH_UNAVAILABLE" });
+  }
+});
+
+test("deleted provider records lose access and provider faults never expose raw errors", async () => {
+  for (const method of ["getSession", "getUser"]) {
+    const { backend } = fixture();
+    backend[method] = async () => { throw { status: 404, message: "private provider error" }; };
+    assert.deepEqual(await resolveClerkAdminAccess(backend), { status: "signed-out" });
+    for (const status of [401, 403, 429, 500, 503]) {
+      backend[method] = async () => { throw { status, message: `private provider error ${secret}` }; };
+      const access = await resolveClerkAdminAccess(backend);
+      assert.deepEqual(access, { status: "unavailable", code: "ADMIN_AUTH_UNAVAILABLE" });
+      assert.equal(JSON.stringify(access).includes(secret), false);
+    }
+  }
+  const { backend } = fixture();
+  backend.authenticate = async () => { throw new Error(`configuration details ${secret}`); };
+  assert.deepEqual(await resolveClerkAdminAccess(backend), { status: "unavailable", code: "ADMIN_AUTH_UNAVAILABLE" });
+});
+
+test("a stalled auth or provider lookup returns an unavailable result within its deadline", async () => {
+  for (const method of ["authenticate", "getSession", "getUser"]) {
+    const { backend } = fixture();
+    backend[method] = () => new Promise(() => {});
+    assert.deepEqual(await resolveClerkAdminAccess(backend, 10), { status: "unavailable", code: "ADMIN_AUTH_UNAVAILABLE" });
+  }
+});
+
+test("policy denials remain forbidden and do not grant access from unsafe metadata", async () => {
+  for (const changes of [
+    { id: "user_Other123" }, { banned: true }, { locked: true },
+    { publicMetadata: { role: "member" }, unsafeMetadata: { role: "admin" } },
+    { publicMetadata: { role: "admin", disabled: true } },
+  ]) {
+    const { backend, state } = fixture();
+    Object.assign(state.user, changes);
+    assert.deepEqual(await resolveClerkAdminAccess(backend), { status: "forbidden" });
+  }
+});
+
+test("missing server CSRF secret is an unavailable configuration, not an authorized session", async () => {
+  const { backend } = fixture();
+  backend.secret = undefined;
+  assert.deepEqual(await resolveClerkAdminAccess(backend), { status: "unavailable", code: "ADMIN_AUTH_NOT_CONFIGURED" });
+});
+
+test("page and request consumers preserve distinct 401, 403 and 503 failures", () => {
+  for (const [access, code, status] of [
+    [{ status: "signed-out" }, "ADMIN_SIGN_IN_REQUIRED", 401],
+    [{ status: "forbidden" }, "ADMIN_ACCESS_REQUIRED", 403],
+    [{ status: "unavailable", code: "ADMIN_AUTH_UNAVAILABLE" }, "ADMIN_AUTH_UNAVAILABLE", 503],
+  ]) {
+    assert.throws(() => requireAdminAccess(access), error => error instanceof AuthError && error.code === code && error.status === status);
+    assert.throws(() => authorizeClerkRequest(makeRequest(), access, false), { code, status });
+  }
+});
+
+test("every engine mutation requires Clerk authority, exact origin and its current CSRF token", async () => {
+  const previous = process.env.ABN_ADMIN_ORIGIN;
   delete process.env.ABN_ADMIN_ORIGIN;
-  t.after(() => {
-    for (const [key, value] of Object.entries(env)) {
-      if (value === undefined) delete process.env[key];
-      else process.env[key] = value;
+  try {
+    const { backend } = fixture();
+    const access = await resolveClerkAdminAccess(backend);
+    const valid = { "x-admin-csrf": access.admin.csrfToken };
+    assert.equal(authorizeClerkRequest(makeRequest(valid), access, true), access.admin);
+    for (const headers of [{}, { ...valid, origin: "https://evil.example" }, { ...valid, "sec-fetch-site": "cross-site" }, { "x-admin-csrf": "x".repeat(43) }]) {
+      assert.throws(() => authorizeClerkRequest(makeRequest(headers), access, true), { status: 403 });
     }
-  });
+    const read = makeRequest({ cookie: "maintain_abn_admin=legacy-cookie" }, "GET");
+    assert.throws(() => authorizeClerkRequest(read, { status: "signed-out" }), { status: 401 });
+    assert.equal(authorizeClerkRequest(read, access), access.admin);
+  } finally {
+    if (previous === undefined) delete process.env.ABN_ADMIN_ORIGIN; else process.env.ABN_ADMIN_ORIGIN = previous;
+  }
+});
 
-  await t.test("registry rejects malformed, duplicate and weak configuration", () => {
-    for (const candidate of [null, {}, { ...config, sessionSecret: "short" }, { ...config, accounts: [] },
-      { ...config, accounts: [account, account] }, { ...config, accounts: [{ ...account, passwordHash: "plaintext" }] },
-      { ...config, accounts: [{ ...account, enabled: "true" }] }]) {
-      assert.throws(() => parseAdminConfiguration(candidate), (error) => error instanceof AuthError && error.status === 503);
-    }
-    assert.deepEqual(parseAdminConfiguration(config), config);
-  });
-
-  await t.test("missing or partial environment configuration fails closed", async () => {
-    delete process.env.ABN_ADMIN_SESSION_SECRET;
-    await assert.rejects(readAdminConfiguration(), { code: "ADMIN_AUTH_NOT_CONFIGURED", status: 503 });
-    process.env.ABN_ADMIN_SESSION_SECRET = config.sessionSecret;
-  });
-
-  await t.test("signed admin cookie verifies without exposing its secret or password hash", () => {
-    const token = issueAdminToken(account, config);
-    const session = verifyAdminToken(token, config);
-    assert.equal(session.username, account.username);
-    assert.equal(session.displayName, account.displayName);
-    assert.match(session.csrfToken, /^[A-Za-z0-9_-]{43}$/);
-    assert.equal(JSON.stringify(session).includes(config.sessionSecret), false);
-    assert.equal(JSON.stringify(session).includes(account.passwordHash), false);
-    assert.equal(verifyAdminToken(token, config).csrfToken, session.csrfToken);
-    assert.notEqual(verifyAdminToken(issueAdminToken(account, config), config).csrfToken, session.csrfToken);
-  });
-
-  await t.test("malformed, forged, expired and future tokens are rejected", () => {
-    const token = issueAdminToken(account, config);
-    const claims = JSON.parse(Buffer.from(token.split(".")[0], "base64url").toString("utf8"));
-    for (const invalid of [undefined, "", "bad", "a.b", "%".repeat(4000), `${token}x`, `${token.slice(0, -1)}!`,
-      signedClaims(null), signedClaims({}), signedClaims({ ...claims, username: "other-admin" }),
-      signedClaims({ ...claims, exp: claims.iat - 1 }), signedClaims({ ...claims, exp: claims.exp + 1 }),
-      signedClaims({ ...claims, iat: claims.iat + 600, exp: claims.exp + 600 }),
-      signedClaims({ ...claims, nonce: null }), signedClaims({ ...claims, credentials: "wrong" })]) {
-      assert.equal(verifyAdminToken(invalid, config), null);
-    }
-    assert.equal(verifyAdminToken(token, config, Date.now() + 8 * 60 * 60 * 1000 + 1000), null);
-    assert.equal(verifyAdminToken(token, { ...config, sessionSecret: randomBytes(48).toString("hex") }), null);
-  });
-
-  await t.test("disabled users, removed users, changed roles and password resets revoke access", () => {
-    const token = issueAdminToken(account, config);
-    for (const accounts of [[], [{ ...account, enabled: false }], [{ ...account, role: "viewer" }],
-      [{ ...account, passwordHash: account.passwordHash.replace(/.$/, account.passwordHash.endsWith("0") ? "1" : "0") }]]) {
-      assert.equal(verifyAdminToken(token, { ...config, accounts }), null);
-    }
-    assert.throws(() => issueAdminToken({ ...account, role: "viewer" }, config), { status: 401 });
-  });
-
-  await t.test("cookie parsing rejects duplicates and does not accept similarly named cookies", () => {
-    const token = issueAdminToken(account, config);
-    assert.equal(cookieToken(request("/", { headers: { cookie: `${ADMIN_COOKIE}=${token}` } })), token);
-    assert.equal(cookieToken(request("/", { headers: { cookie: `${ADMIN_COOKIE}=first; ${ADMIN_COOKIE}=second` } })), undefined);
-    assert.equal(cookieToken(request("/", { headers: { cookie: `${ADMIN_COOKIE}_fake=${token}` } })), undefined);
-  });
-
-  await t.test("every mutation requires current admin, same origin and session-bound CSRF", () => {
-    const token = issueAdminToken(account, config);
-    const session = verifyAdminToken(token, config);
-    const validHeaders = { cookie: `${ADMIN_COOKIE}=${token}`, origin, "x-admin-csrf": session.csrfToken };
-    assert.equal(authorizeAdminRequest(request("/api/settings", { method: "PATCH", headers: validHeaders }), config, true).username, account.username);
-    assert.throws(() => authorizeAdminRequest(request("/api/settings"), config), { status: 401 });
-    for (const changed of [{ origin: "https://attacker.example" }, { origin: "" }, { "sec-fetch-site": "cross-site" },
-      { "x-admin-csrf": "" }, { "x-admin-csrf": verifyAdminToken(issueAdminToken(account, config), config).csrfToken }]) {
-      assert.throws(() => authorizeAdminRequest(request("/api/settings", { method: "PATCH", headers: { ...validHeaders, ...changed } }), config, true), { status: 403 });
-    }
-    assert.equal(authorizeAdminRequest(request("/api/dashboard", { headers: { cookie: validHeaders.cookie } }), config).username, account.username);
-  });
-
-  await t.test("cookie attributes protect JavaScript access and add Secure on HTTPS", () => {
-    const localCookie = adminCookie("token", request("/"));
-    assert.match(localCookie, /HttpOnly; SameSite=Strict; Max-Age=28800/);
-    assert.equal(localCookie.includes("Secure"), false);
-    process.env.ABN_ADMIN_ORIGIN = "https://maintainmedia.com.au";
-    assert.match(adminCookie("token", new Request("https://maintainmedia.com.au/")), /; Secure$/);
-    delete process.env.ABN_ADMIN_ORIGIN;
-    assert.match(adminCookie("", request("/"), true), /Max-Age=0/);
-    assert.throws(() => adminCookie("token", new Request("http://public.example/")), { status: 503 });
-  });
-
-  await t.test("Next internal URL normalization preserves the exact validated loopback browser origin", async () => {
+test("origin checking preserves normalized loopback requests and rejects host spoofing", () => {
+  const previous = process.env.ABN_ADMIN_ORIGIN;
+  delete process.env.ABN_ADMIN_ORIGIN;
+  try {
     for (const host of ["127.0.0.1:3001", "localhost:3001", "[::1]:3001"]) {
-      const normalized = new Request("http://localhost:3001/api/abn-lead-gen/auth/login", {
-        method: "POST", headers: { host, origin: `http://${host}`, "content-type": "application/json" },
-        body: JSON.stringify({ username: account.username, password: "wrong" }),
-      });
-      assert.equal(adminOrigin(normalized), `http://${host}`);
-      const response = await loginResponse(normalized);
-      assert.equal(response.status, 401);
+      const request = new Request("http://localhost:3001/api/abn-lead-gen/settings", { headers: { host, origin: `http://${host}` } });
+      assert.equal(adminOrigin(request), `http://${host}`);
+      assert.doesNotThrow(() => assertSameOrigin(request));
     }
     for (const host of ["evil.example:3001", "127.0.0.1.evil.example:3001", "user@localhost:3001", "localhost:3001/evil", "localhost:0"]) {
       assert.throws(() => adminOrigin(new Request("http://localhost:3001/", { headers: { host } })), { code: "ADMIN_ORIGIN_INVALID" });
     }
-    assert.equal(adminOrigin(new Request("http://localhost:3001/", {
-      headers: { host: "127.0.0.1:3001", "x-forwarded-host": "evil.example", "x-forwarded-proto": "https" },
-    })), "http://127.0.0.1:3001");
-    const mismatched = new Request("http://localhost:3001/api/abn-lead-gen/auth/login", {
-      method: "POST", headers: { host: "127.0.0.1:3001", origin: "http://localhost:3001", "content-type": "application/json" },
-      body: JSON.stringify({ username: account.username, password }),
-    });
-    assert.equal((await loginResponse(mismatched)).status, 403);
-    // Reset this real test account's failed attempts with a successful authentication.
-    await authenticatePassword(account.username, password, config);
-  });
-
-  await t.test("configured HTTPS reverse-proxy origin is canonical and rejects hostile public hosts", async () => {
+    assert.equal(adminOrigin(new Request("http://localhost:3001/", { headers: { host: "127.0.0.1:3001", "x-forwarded-host": "evil.example" } })), origin);
     process.env.ABN_ADMIN_ORIGIN = "https://maintainmedia.com.au";
-    const normalized = new Request("http://localhost:3001/api/abn-lead-gen/auth/login", {
-      method: "POST", headers: { host: "localhost:3001", origin: "https://maintainmedia.com.au", "content-type": "application/json", "x-forwarded-host": "evil.example" },
-      body: JSON.stringify({ username: account.username, password }),
-    });
-    const success = await loginResponse(normalized);
-    assert.equal(success.status, 200);
-    assert.match(success.headers.get("set-cookie"), /; Secure$/);
+    assert.doesNotThrow(() => assertSameOrigin(new Request("http://localhost:3001/", { headers: { host: "localhost:3001", origin: "https://maintainmedia.com.au" } })));
     assert.throws(() => adminOrigin(new Request("http://localhost:3001/", { headers: { host: "evil.example" } })), { code: "ADMIN_ORIGIN_INVALID" });
-    delete process.env.ABN_ADMIN_ORIGIN;
-  });
-
-  await t.test("request bodies require bounded JSON objects", async () => {
-    await assert.rejects(readSmallJson(new Request(`${origin}/`, { method: "POST", body: "x" })), { status: 415 });
-    await assert.rejects(readSmallJson(jsonRequest([])), { status: 400 });
-    await assert.rejects(readSmallJson(jsonRequest({ value: "a".repeat(4097) })), { status: 413 });
-    const malformed = request("/", { method: "POST", headers: { "content-type": "application/json" }, body: "{" });
-    await assert.rejects(readSmallJson(malformed), { status: 400 });
-  });
-
-  await t.test("sign-in rejects invalid credentials generically and issues an admin cookie", async () => {
-    const wrong = await loginResponse(jsonRequest({ username: account.username, password: "incorrect" }));
-    assert.equal(wrong.status, 401);
-    const unknown = await loginResponse(jsonRequest({ username: "unknown-admin", password: "incorrect" }));
-    assert.deepEqual(await unknown.json(), await wrong.json());
-    assert.equal(wrong.headers.get("set-cookie"), null);
-    const success = await loginResponse(jsonRequest({ username: " TEST-ADMIN ", password }));
-    assert.equal(success.status, 200);
-    assert.deepEqual(await success.json(), { ok: true });
-    assert.match(success.headers.get("set-cookie"), /^maintain_abn_admin=/);
-    assert.equal(success.headers.get("cache-control"), "no-store");
-  });
-
-  await t.test("login and logout reject cross-origin requests; logout clears a valid cookie", async () => {
-    const rejected = await loginResponse(jsonRequest({ username: account.username, password }, { origin: "https://attacker.example" }));
-    assert.equal(rejected.status, 403);
-    const token = issueAdminToken(account, config);
-    const headers = { origin, cookie: `${ADMIN_COOKIE}=${token}`, "x-admin-csrf": verifyAdminToken(token, config).csrfToken };
-    const missingCsrf = await logoutResponse(request("/logout", { method: "POST", headers: { origin, cookie: headers.cookie } }));
-    assert.equal(missingCsrf.status, 403);
-    const crossOrigin = await logoutResponse(request("/logout", { method: "POST", headers: { ...headers, origin: "https://attacker.example" } }));
-    assert.equal(crossOrigin.status, 403);
-    const success = await logoutResponse(request("/logout", { method: "POST", headers }));
-    assert.equal(success.status, 200);
-    assert.deepEqual(await success.json(), { ok: true });
-    assert.match(success.headers.get("set-cookie"), /Max-Age=0/);
-  });
-
-  await t.test("current environment account changes are checked at each request", async () => {
-    const token = issueAdminToken(account, config);
-    process.env.ABN_ADMIN_ACCOUNTS_JSON = JSON.stringify([{ ...account, enabled: false }]);
-    assert.equal(verifyAdminToken(token, await readAdminConfiguration()), null);
-    const disabled = await loginResponse(jsonRequest({ username: account.username, password }));
-    assert.equal(disabled.status, 401);
-    process.env.ABN_ADMIN_ACCOUNTS_JSON = JSON.stringify([{ ...account, role: "viewer" }]);
-    const nonAdmin = await loginResponse(jsonRequest({ username: account.username, password }));
-    assert.equal(nonAdmin.status, 401);
-    process.env.ABN_ADMIN_ACCOUNTS_JSON = JSON.stringify(config.accounts);
-  });
-
-  await t.test("throttling rejects repeated attempts and provides retry guidance", async () => {
-    const username = "throttled-admin";
-    for (let attempt = 0; attempt < 5; attempt++) {
-      await assert.rejects(authenticatePassword(username, "bad", config), { status: 401 });
-    }
-    const limited = await loginResponse(jsonRequest({ username, password: "bad" }));
-    assert.equal(limited.status, 429);
-    assert.equal(limited.headers.get("retry-after"), "900");
-  });
+  } finally {
+    if (previous === undefined) delete process.env.ABN_ADMIN_ORIGIN; else process.env.ABN_ADMIN_ORIGIN = previous;
+  }
 });
 
-test("account CLI provisions, resets and disables multiple local admins without printing credentials", async () => {
-  const temporaryRoot = await mkdtemp(path.join(tmpdir(), "maintain-admin-cli-"));
-  const scripts = path.join(temporaryRoot, "scripts");
-  await mkdir(scripts);
-  const commandPath = path.join(scripts, "admin-account.mjs");
-  await copyFile(fileURLToPath(new URL("../scripts/admin-account.mjs", import.meta.url)), commandPath);
-  const childEnvironment = { ...process.env };
-  delete childEnvironment.ABN_ADMIN_ACCOUNTS_JSON;
-  delete childEnvironment.ABN_ADMIN_SESSION_SECRET;
-  delete childEnvironment.ABN_ADMIN_NEW_PASSWORD;
-  const run = (args, additions = {}) => promisify(execFile)(process.execPath, [commandPath, ...args], {
-    cwd: temporaryRoot, env: { ...childEnvironment, ...additions }, timeout: 15000,
+test("bounded JSON and private sanitized failures remain available after password removal", async () => {
+  const jsonRequest = value => new Request(origin, { method: "POST", headers: { "content-type": "application/json" }, body: value });
+  await assert.rejects(readSmallJson(jsonRequest("[]")), { status: 400 });
+  await assert.rejects(readSmallJson(jsonRequest("{")), { status: 400 });
+  await assert.rejects(readSmallJson(jsonRequest(JSON.stringify({ value: "a".repeat(4097) }))), { status: 413 });
+  await assert.rejects(readSmallJson(new Request(origin, { method: "POST", body: "x" })), { status: 415 });
+  assert.deepEqual(await readSmallJson(jsonRequest('{"source":"abr"}')), { source: "abr" });
+  const response = authFailure(new Error(`secret=${secret}`));
+  assert.equal(response.status, 503);
+  assert.equal(JSON.stringify(await response.json()).includes(secret), false);
+  assert.match(response.headers.get("cache-control"), /private, no-store/);
+});
+
+test("legacy password endpoints return a retirement response without issuing or clearing sessions", async () => {
+  const response = retiredPasswordAuthResponse();
+  assert.equal(response.status, 410);
+  assert.equal(response.headers.get("set-cookie"), null);
+  assert.deepEqual(await response.json(), {
+    code: "CLERK_AUTH_REQUIRED",
+    message: "Local password authentication has been retired. Use Maintain Media Clerk sign-in and account controls.",
+    signInUrl: "/sign-in",
   });
-  const readConfig = async () => JSON.parse(await readFile(path.join(temporaryRoot, ".local", "admin-auth.json"), "utf8"));
-  try {
-    const created = await run(["create", "--username", "first-admin", "--name", "First Admin"]);
-    const firstConfig = parseAdminConfiguration(await readConfig());
-    const access = JSON.parse(await readFile(path.join(temporaryRoot, ".local", "admin-access.txt"), "utf8"));
-    assert.equal(access.username, "first-admin");
-    assert.equal(await verifyPassword(access.password, firstConfig.accounts[0].passwordHash), true);
-    for (const privateValue of [access.password, firstConfig.sessionSecret, firstConfig.accounts[0].passwordHash]) {
-      assert.equal(created.stdout.includes(privateValue), false);
-      assert.equal(created.stderr.includes(privateValue), false);
-    }
-    await assert.rejects(run(["create", "--username", "first-admin"]));
-    assert.deepEqual(parseAdminConfiguration(await readConfig()), firstConfig);
-    await run(["create", "--username", "second-admin"]);
-    const secondConfig = parseAdminConfiguration(await readConfig());
-    assert.equal(secondConfig.accounts.length, 2);
-    assert.equal(secondConfig.sessionSecret, firstConfig.sessionSecret);
-    const existingToken = issueAdminToken(secondConfig.accounts[0], secondConfig);
-    await run(["disable", "--username", "first-admin"]);
-    const disabled = parseAdminConfiguration(await readConfig());
-    assert.equal(disabled.accounts[0].enabled, false);
-    assert.equal(verifyAdminToken(existingToken, disabled), null);
-    await run(["reset", "--username", "first-admin"]);
-    const reset = parseAdminConfiguration(await readConfig());
-    assert.equal(reset.accounts[0].enabled, false);
-    assert.notEqual(reset.accounts[0].passwordHash, firstConfig.accounts[0].passwordHash);
-    await run(["enable", "--username", "first-admin"]);
-    const enabled = parseAdminConfiguration(await readConfig());
-    assert.equal(enabled.accounts[0].enabled, true);
-    assert.equal(verifyAdminToken(existingToken, enabled), null);
-    await assert.rejects(run(["reset", "--username", "first-admin"], { ABN_ADMIN_NEW_PASSWORD: "short" }));
-    assert.deepEqual(parseAdminConfiguration(await readConfig()), enabled);
-    const listed = await run(["list"]);
-    assert.equal(JSON.parse(listed.stdout).length, 2);
-    assert.equal(listed.stdout.includes("passwordHash"), false);
-    assert.equal(listed.stdout.includes("sessionSecret"), false);
-  } finally {
-    // The only recursive cleanup target is the unique test directory created above.
-    assert.equal(path.dirname(path.resolve(temporaryRoot)), path.resolve(tmpdir()));
-    assert.match(path.basename(temporaryRoot), /^maintain-admin-cli-/);
-    await rm(temporaryRoot, { recursive: true, force: true });
+  for (const removed of ["ADMIN_COOKIE", "issueAdminToken", "verifyAdminToken", "authenticatePassword", "readAdminConfiguration", "loginResponse", "logoutResponse"]) {
+    assert.equal(authCore[removed], undefined);
   }
+});
+
+test("legacy account command exits with Clerk instructions and no provisioning side effects", async () => {
+  await assert.rejects(promisify(execFile)(process.execPath, [fileURLToPath(new URL("../scripts/admin-account.mjs", import.meta.url)), "create", "--username", "obsolete"], { windowsHide: true }), error => {
+    assert.equal(error.code, 1);
+    assert.equal(error.stdout, "");
+    assert.match(error.stderr, /Local admin passwords have been retired/);
+    assert.match(error.stderr, /publicMetadata.role/);
+    return true;
+  });
 });

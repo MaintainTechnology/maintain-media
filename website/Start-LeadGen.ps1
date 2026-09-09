@@ -22,8 +22,8 @@ function Get-OwnedWebsite {
 
 function Get-ReadyWebsite {
   try {
-    $response = Invoke-WebRequest -UseBasicParsing -Uri "http://127.0.0.1:$Port/abn-lead-gen/sign-in" -TimeoutSec 3
-    return $response.StatusCode -eq 200 -and $response.Headers['X-Maintain-Workspace'] -eq 'abn-lead-gen'
+    $response = Invoke-WebRequest -UseBasicParsing -Uri "http://127.0.0.1:$Port/sign-in" -TimeoutSec 10
+    return $response.StatusCode -eq 200 -and $response.Headers['X-Maintain-Workspace'] -eq 'maintain-media-auth'
   } catch { return $false }
 }
 
@@ -46,9 +46,6 @@ if ($Action -eq 'stop') {
 
 New-Item -ItemType Directory -Path $runtimeDir -Force | Out-Null
 if (-not (Test-Path -LiteralPath $nextCli)) { throw 'Website dependencies are missing. Run npm ci in the website directory first.' }
-if (-not (Test-Path -LiteralPath (Join-Path $runtimeDir 'admin-auth.json')) -and -not $env:ABN_ADMIN_ACCOUNTS_JSON) {
-  throw 'Create the first admin account with npm run admin:account before opening the dashboard.'
-}
 
 # The Python helper reuses healthy owned services and safely recovers its isolated database.
 Push-Location (Join-Path (Split-Path $siteRoot -Parent) 'abn-leadgen')

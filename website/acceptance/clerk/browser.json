@@ -1,0 +1,26 @@
+{
+  "date": "2026-09-09",
+  "method": "Codex in-app browser through CUA",
+  "status": "scoped_checks_passed",
+  "origin": "http://127.0.0.1:3001",
+  "checks": [
+    "Real Clerk signup form loaded with configured social and email/phone/password fields",
+    "Real Clerk sign-in form loaded with configured social and email/phone fields",
+    "Sign-in to sign-up link navigated to the canonical signup page",
+    "Use phone and Use email controls switched the sign-in field",
+    "Empty required sign-in field prevented Continue and displayed native validation",
+    "Show password changed the empty signup password field to text and the control label to Hide password",
+    "Sign-in layout visually inspected on desktop and at 390px; no horizontal overflow",
+    "Signup layout visually inspected at 390px and measured at 360px; no horizontal overflow",
+    "Canonical title no longer duplicated Maintain Media"
+  ],
+  "not_verified": [
+    "Real account signup and verification",
+    "Google or Microsoft provider login",
+    "Phone or email verification delivery",
+    "Admin role grant and authenticated dashboard actions",
+    "Live Clerk sign-out and profile management",
+    "Safari, Firefox and assistive-technology certification"
+  ],
+  "notes": "No user account, credentials, OTPs or messages were submitted. Some browser automation capture/scroll operations timed out; they are not recorded as passed. Public page availability is covered separately by the HTTP receipt."
+}

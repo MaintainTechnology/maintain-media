@@ -1,23 +1,23 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useAuth, useClerk } from "@clerk/nextjs";
 import {
   type DashboardAdmin, type DashboardData, type LeadSource, type ReportKind,
   jobActive, safeReportURL, validDashboard, validJob, validSettings,
 } from "@/lib/abn-lead-gen/types";
 
 const API = "/api/abn-lead-gen";
-const SIGN_IN = "/abn-lead-gen/sign-in";
-const SESSION_EVENT = "maintain-media-admin-signed-out";
+const SIGN_IN = "/sign-in";
 interface DashboardState {
   data: DashboardData | null; loading: boolean; connected: boolean; saving: boolean;
-  running: boolean; signingOut: boolean; expired: boolean; error: string | null;
+  running: boolean; signingOut: boolean; expired: boolean; accessDenied: boolean; error: string | null;
   settingsError: string | null; source: LeadSource; cap: string; dirty: boolean;
   saveStatus: string; toast: string | null;
 }
 const initialState: DashboardState = {
   data: null, loading: true, connected: false, saving: false, running: false,
-  signingOut: false, expired: false, error: null, settingsError: null,
+  signingOut: false, expired: false, accessDenied: false, error: null, settingsError: null,
   source: "all", cap: "", dirty: false, saveStatus: "", toast: null,
 };
 class RequestError extends Error {
@@ -36,9 +36,7 @@ function errorMessage(code: string, fallback: string) {
   return fallback;
 }
 function incomplete(kind: string) {
-  return new RequestError(kind === "logout"
-    ? "The server did not confirm sign-out. Your unsaved settings are still available. Try signing out again."
-    : kind === "settings"
+  return new RequestError(kind === "settings"
     ? "The engine did not confirm the saved settings. Your changes are still available. Try saving again, or refresh to check the stored values."
     : kind === "runs" ? "The engine did not confirm the run status. Refresh to check its progress before trying again."
     : "The engine returned an incomplete workspace response. Choose Try again to reload. Your last loaded data and unsaved changes are still available.");
@@ -54,6 +52,9 @@ const errorCode = (body: unknown): string => {
 };
 
 export function useDashboard(admin: DashboardAdmin) {
+  const clerk = useClerk();
+  const { isLoaded, isSignedIn, sessionId } = useAuth();
+  const initialSession = useRef<string | null>(null);
   const [state, setState] = useState(initialState);
   const runtime = useRef({
     state: initialState, mounted: false, epoch: 0, generation: 0,
@@ -76,7 +77,7 @@ export function useDashboard(admin: DashboardAdmin) {
     commit({ toast: text });
     runtime.current.toast = setTimeout(() => commit({ toast: null }), 6500);
   }, [commit]);
-  const expire = useCallback((signedOut = false) => {
+  const expire = useCallback((signedOut = false, accessDenied = false) => {
     const rt = runtime.current;
     rt.generation++;
     rt.request = null;
@@ -87,8 +88,9 @@ export function useDashboard(admin: DashboardAdmin) {
     rt.controllers.forEach(controller => controller.abort());
     rt.downloads.forEach((timer, url) => { clearTimeout(timer); URL.revokeObjectURL(url); });
     rt.downloads.clear();
-    commit({ ...initialState, loading: false, expired: true,
-      error: signedOut ? "You have signed out. Sign in again to open the admin workspace." : "Your admin session has expired. Sign in again to continue." });
+    commit({ ...initialState, loading: false, expired: true, accessDenied,
+      error: accessDenied ? "Your account no longer has admin access. Contact a Maintain Media administrator to restore access."
+        : signedOut ? "You have signed out. Sign in again to open the admin workspace." : "Your account session has changed or expired. Sign in again to continue." });
   }, [commit]);
   const fetchChecked = useCallback(async (path: string, options: RequestInit = {}, format: "json" | "blob" | "none" = "none") => {
     const rt = runtime.current;
@@ -105,6 +107,7 @@ export function useDashboard(admin: DashboardAdmin) {
       if (response.status === 401) { expire(); throw new Cancelled(); }
       if (!response.ok) {
         const body = await response.json().catch(() => null);
+        if (response.status === 403 && errorCode(body) === "ADMIN_ACCESS_REQUIRED") { expire(false, true); throw new Cancelled(); }
         throw new RequestError(errorMessage(errorCode(body), response.status === 422
           ? "Check the values and try again. The usage limit must be between A$0 and A$150."
           : `The request could not be completed (${response.status}). Refresh the workspace and try again.`), [400, 403, 404, 409, 415, 422, 429].includes(response.status));
@@ -189,11 +192,9 @@ export function useDashboard(admin: DashboardAdmin) {
     const visible = () => { if (!document.hidden) void refresh(); };
     const beforeUnload = (event: BeforeUnloadEvent) => { if (rt.state.dirty) { event.preventDefault(); event.returnValue = ""; } };
     const restored = (event: PageTransitionEvent) => { if (event.persisted) window.location.reload(); };
-    const signedOut = (event: StorageEvent) => { if (event.key === SESSION_EVENT) expire(true); };
     document.addEventListener("visibilitychange", visible);
     window.addEventListener("beforeunload", beforeUnload);
     window.addEventListener("pageshow", restored);
-    window.addEventListener("storage", signedOut);
     return () => {
       rt.mounted = false; rt.epoch++; rt.loading = null; rt.queued = false;
       clearTimeout(startup); clearTimeout(rt.poll); clearTimeout(rt.toast);
@@ -203,9 +204,21 @@ export function useDashboard(admin: DashboardAdmin) {
       document.removeEventListener("visibilitychange", visible);
       window.removeEventListener("beforeunload", beforeUnload);
       window.removeEventListener("pageshow", restored);
-      window.removeEventListener("storage", signedOut);
     };
   }, [expire, refresh]);
+
+  useEffect(() => {
+    if (!isLoaded) return;
+    const timer = setTimeout(() => {
+      // Clerk broadcasts session changes across tabs. Never keep another account's loaded leads.
+      if (!isSignedIn && !state.signingOut) expire(true);
+      else if (sessionId) {
+        if (initialSession.current && initialSession.current !== sessionId) expire();
+        initialSession.current = sessionId;
+      }
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [expire, isLoaded, isSignedIn, sessionId, state.signingOut]);
 
   function editSettings(source: LeadSource, cap: string) {
     const data = runtime.current.state.data;
@@ -304,21 +317,24 @@ export function useDashboard(admin: DashboardAdmin) {
     if (rt.state.dirty && !window.confirm("Discard your unsaved settings and sign out?")) return;
     commit({ signingOut: true });
     clearTimeout(rt.poll);
+    let timeout: ReturnType<typeof setTimeout> | undefined;
     try {
-      const { body } = await fetchChecked(`${API}/auth/logout`, { method: "POST", body: "{}" }, "json");
-      if (!body || typeof body !== "object" || !("ok" in body) || body.ok !== true) {
-        throw new RequestError("The server did not confirm sign-out. Your unsaved settings are still available. Try signing out again.");
-      }
-      expire(true);
-      try { localStorage.setItem(SESSION_EVENT, String(Date.now())); } catch { /* Sign-out still succeeds when storage is unavailable. */ }
-      window.location.replace(SIGN_IN);
+      if (!clerk.loaded) throw new RequestError("Account controls are still connecting. Try again in a moment.");
+      await Promise.race([
+        clerk.signOut(() => {
+          // Only discard local drafts after Clerk confirms the session was ended.
+          expire(true);
+          window.location.replace(SIGN_IN);
+        }),
+        new Promise<never>((_, reject) => { timeout = setTimeout(() => reject(new RequestError("Account services took too long to respond. Your unsaved settings are still available. Try signing out again.")), 20000); }),
+      ]);
     } catch (error) {
-      if (!(error instanceof Cancelled)) {
-        rt.actionError = `Sign-out could not be confirmed. ${message(error)}`;
+      if (!(error instanceof Cancelled) && !rt.state.expired) {
+        rt.actionError = error instanceof RequestError ? `Sign-out could not be confirmed. ${error.message}` : "Sign-out could not be confirmed. Your unsaved settings are still available. Check your connection and try again.";
         commit({ signingOut: false, error: rt.actionError });
         void refresh();
       }
-    }
+    } finally { clearTimeout(timeout); }
   }
   return { ...state, refresh, editSettings, discardSettings, saveSettings, beginRun, openReport, logout };
 }

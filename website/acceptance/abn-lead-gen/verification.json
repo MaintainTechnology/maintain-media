@@ -1,0 +1,18 @@
+{
+  "checked_on": "2026-09-09",
+  "scope": "Maintain Media Next.js local fixture admin dashboard",
+  "url": "http://127.0.0.1:3001/abn-lead-gen/dashboard",
+  "status": "passed",
+  "independent_requirements_review": "R1-R8 passed; no material findings",
+  "automated_test_cases": { "passed": 24, "failures": 0, "errors": 0, "skipped": 0, "receipt": "unit-tests.xml" },
+  "browser_workflow_checks": { "passed": 24, "uncaught_errors": 0, "receipt": "2026-09-09T07-08-25-900Z/result.json" },
+  "final_logout_regression": { "status": "passed", "receipt": "2026-09-09T07-12-39-529Z/result.json" },
+  "public_site_navigation": { "status": "passed", "receipt": "site-shell.json" },
+  "lint": { "command": "npm run lint", "exit_code": 0 },
+  "production_build": { "command": "npm run build", "exit_code": 0, "typescript": "passed", "compile_seconds": 14.4, "typescript_minutes": 2.9 },
+  "launcher_stop_status_start": "passed; unrelated website and engine processes preserved",
+  "restored_preferences": { "default_source": "all", "monthly_cap_micro_aud": 100000000 },
+  "initial_admin_credentials": "Provisioned in ignored local file; never printed",
+  "self_assessment": { "final_score": 97, "trajectory": [82, 95, 97, 97] },
+  "live_ingestion": "not enabled"
+}

@@ -2,7 +2,7 @@
 
 Scope: [website migration specification](../../specs/abn-lead-gen-dashboard.md). This is a new authenticated React dashboard at `/abn-lead-gen/dashboard`, backed by the existing fixture engine. Prior HTML acceptance is historical context, not proof of this migration.
 
-Disposition: final browser/review cycle in progress.
+Disposition: **PASS — R1–R8 satisfied for the local fixture dashboard.** The final independent review found no remaining material authorization or workflow defect.
 
 ## Coverage
 
@@ -31,16 +31,35 @@ Disposition: final browser/review cycle in progress.
 ## Verification
 
 - [Final authentication and bridge JUnit receipt](unit-tests.xml): **24 individual test cases passed**, zero failures, errors or skips. This includes origin-normalisation/reverse-proxy regressions, token expiry/tampering/role revocation, multiple-account CLI operations and report/body/URL boundaries. Node's aggregate test count additionally counts the parent authentication group.
-- Initial production build passed and emitted dynamic dashboard/sign-in/API routes; a final build after the review fixes is pending.
+- Final **production build passed after all review fixes**, including TypeScript and all 12 static-generation entries. Dashboard, sign-in and API routes are dynamic; public marketing routes build successfully. Compilation took 14.4 seconds and TypeScript took 2.9 minutes on the shared Windows host.
 - Actual website stop/status/start drill passed on port 3001. It stopped only the verified owned website; the same engine process and its database remained available.
 - Local account configuration and the generated access file are ignored by Git; passwords were not printed in tool output or committed.
 - [Full browser receipt](2026-09-09T07-08-25-900Z/result.json): **24 checks passed**, including **12 isolated failure-recovery probes**, eight anonymous API denial checks, successful/rejected admin sign-in, all normal controls and all three actual source runs. Each double-click run test sent one admission request and completed. All three report formats and nested CSV links worked; no raw contact endpoints or upstream token were exposed.
 - [Final sign-out regression](2026-09-09T07-12-39-529Z/result.json): the failed sign-out probe additionally covers HTTP 503, malformed HTTP 200 JSON and HTTP 200 HTML after the final fix; normal sign-out still denies re-entry. No engine runs were started by this focused check. Original preferences were verified/restored. Both browser receipts record zero uncaught errors.
 - [Public-site navigation receipt](site-shell.json): mobile menu closes after navigation; Services/About/Contact retain their public header/footer and fit 390px; sign-in uses the separate admin chrome. Zero uncaught browser errors.
 - Screenshots in the full browser receipt directory cover leads, runs and setup at **1440, 820, 390 and 360px**. Root visually reviewed the desktop lead workspace and phone run cards. The user-facing in-app browser is open on the new sign-in route.
-- Final global ESLint passed. Independent source review has cleared R1–R7; final production build is the remaining R8 gate.
+- Final global ESLint passed. The independent reviewer accepted all R1–R8 after the final test and build results. [Verification summary](verification.json).
 
 The saved source/budget preferences are restored to the existing values, **both sources and A$100**. The latest actual fixture run is complete. The private initial account is ready and its access file remains Git-ignored.
+
+## Self-assessment
+
+Scores are retrospective assessments of the review stages using the rubric written before this migration was built; a material defect fails the gate regardless of score.
+
+| Review stage | Score | Result |
+|---|---:|---|
+| First integrated build | 82/100 | Sign-in Origin mismatch and asynchronous confirmation/draft issues required fixes. |
+| Normal workflows and initial resilience checks | 95/100 | Real runs, settings and reports passed; malformed sign-out confirmation remained. |
+| After final sign-out fix and targeted regression | 97/100 | All identified control failures resolved. |
+| Final independent review, lint and production build | 97/100 | No further material findings; score unchanged. |
+
+| Rubric | Score | Remaining deduction |
+|---|---:|---|
+| Complete workflow parity | 30/30 | None within the requested fixture workflows. |
+| Admin authorization and data boundaries | 24/25 | Throttling and session operations are designed for one Node process; multi-instance operations need shared infrastructure. |
+| Failure recovery and operational clarity | 19/20 | Provisioned-machine launcher/recovery is verified; a fresh-machine installation has not been certified. |
+| Native design, responsive layout and accessibility | 14/15 | Chromium, keyboard and reduced-motion checks passed; no screen-reader or Safari/Firefox certification. |
+| Tests, build and handover | 10/10 | Executed checks, provisioning, launcher and evidence are recorded. |
 
 ## Operational boundaries
 

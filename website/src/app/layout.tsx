@@ -1,7 +1,9 @@
+import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata, Viewport } from "next";
 import { albertSans, velaSans } from "./fonts";
 import "./globals.css";
 import { SiteShell } from "@/components/site-shell";
+import { clerkAppearance } from "@/components/auth/clerk-appearance";
 import { siteName, siteUrl } from "@/lib/site";
 
 const designContract = `<!--
@@ -50,12 +52,21 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${albertSans.variable} ${velaSans.variable} antialiased`}
     >
       <body className="flex min-h-dvh flex-col">
-        <div
-          aria-hidden
-          className="hidden"
-          dangerouslySetInnerHTML={{ __html: designContract }}
-        />
-        <SiteShell>{children}</SiteShell>
+        <ClerkProvider
+          signInUrl="/sign-in"
+          signUpUrl="/sign-up"
+          signInForceRedirectUrl="/abn-lead-gen/dashboard"
+          signUpForceRedirectUrl="/abn-lead-gen/dashboard"
+          afterSignOutUrl="/sign-in"
+          appearance={clerkAppearance}
+        >
+          <div
+            aria-hidden
+            className="hidden"
+            dangerouslySetInnerHTML={{ __html: designContract }}
+          />
+          <SiteShell>{children}</SiteShell>
+        </ClerkProvider>
       </body>
     </html>
   );
