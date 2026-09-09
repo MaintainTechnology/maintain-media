@@ -4,6 +4,11 @@
 
 brand
 
+## Website
+
+<https://www.maintainmedia.com.au> — the public Maintain Media site. Any brand change made
+here in the design system should be reflected there, and vice versa.
+
 ## Users
 
 Maintain Media's internal team, designers, marketers, and contractors who produce branded
