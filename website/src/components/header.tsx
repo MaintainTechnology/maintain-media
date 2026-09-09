@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { List, X } from "@phosphor-icons/react";
 import { navLinks } from "@/lib/site";
@@ -12,10 +12,6 @@ export function Header() {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
-
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
 
   return (
     <header className="sticky top-0 z-50 border-b border-line bg-canvas/85 backdrop-blur-md">

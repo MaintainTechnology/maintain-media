@@ -22,11 +22,12 @@ export function StatCounter({
 
   useEffect(() => {
     const el = numberRef.current;
-    if (!el || !inView) return;
+    if (!el) return;
     if (reduce) {
       el.textContent = value.toFixed(decimals);
       return;
     }
+    if (!inView) return;
     const controls = animate(0, value, {
       duration: 1.4,
       ease: [0.16, 1, 0.3, 1],
@@ -40,7 +41,8 @@ export function StatCounter({
   return (
     <div ref={rootRef}>
       <div className="font-display text-4xl font-extrabold tracking-tight text-ink md:text-5xl">
-        <span ref={numberRef}>{reduce ? value.toFixed(decimals) : "0"}</span>
+        {/* Keep server and first client render identical; the effect applies the motion preference. */}
+        <span ref={numberRef}>0</span>
         <span className="text-brand">{suffix}</span>
       </div>
       <div className="mt-2 text-[0.95rem] text-mist">{label}</div>

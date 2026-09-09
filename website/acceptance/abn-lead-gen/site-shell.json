@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "checked_at": "2026-09-09T07:10:58.952Z",
+  "checks": [
+    "Public mobile menu closes after navigation",
+    "Services, About and Contact retain header/footer and fit390px",
+    "Admin sign-in has dedicated chrome"
+  ],
+  "browser_errors": []
+}

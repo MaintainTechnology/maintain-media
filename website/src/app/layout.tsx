@@ -1,9 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { albertSans, velaSans } from "./fonts";
 import "./globals.css";
-import { Header } from "@/components/header";
-import { Footer } from "@/components/footer";
-import { SmoothScroll } from "@/components/smooth-scroll";
+import { SiteShell } from "@/components/site-shell";
 import { siteName, siteUrl } from "@/lib/site";
 
 const designContract = `<!--
@@ -57,18 +55,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           className="hidden"
           dangerouslySetInnerHTML={{ __html: designContract }}
         />
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[60] focus:rounded-full focus:bg-ink focus:px-5 focus:py-2.5 focus:font-bold focus:text-brand-dark"
-        >
-          Skip to content
-        </a>
-        <SmoothScroll />
-        <Header />
-        <main id="main" className="flex-1">
-          {children}
-        </main>
-        <Footer />
+        <SiteShell>{children}</SiteShell>
       </body>
     </html>
   );
