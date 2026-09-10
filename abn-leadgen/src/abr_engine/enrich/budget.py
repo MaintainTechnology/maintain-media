@@ -38,6 +38,15 @@ def reserve(conn, *, operation_id: UUID, now: datetime, amount: int, tariff: dic
     if not 0 <= (now.date() - fx_date).days <= 30:
         raise BudgetError("Stale FX")
     digest = hashlib.sha256(json.dumps({"amount": amount, "tariff": tariff}, sort_keys=True).encode()).hexdigest()
+    # The live dashboard and every paid reservation serialize this policy read.
+    # Lowering the limit stops new spend; existing reservations remain accounted for.
+    lock(conn, "budget-policy")
+    preferences = conn.execute("SELECT value FROM system_state WHERE name='live_dashboard_settings'").fetchone()
+    if preferences:
+        stored_cap = preferences["value"].get("monthly_cap_micro_aud") if isinstance(preferences["value"], dict) else None
+        if type(stored_cap) is not int or not 0 <= stored_cap <= 150_000_000:
+            raise BudgetError("BUDGET_POLICY_INVALID")
+        cap = min(cap, stored_cap)
     lock(conn, "budget-operation:" + str(operation_id))
     prior = conn.execute("SELECT * FROM budget_reservation WHERE operation_id=%s", (operation_id,)).fetchone()
     if prior:

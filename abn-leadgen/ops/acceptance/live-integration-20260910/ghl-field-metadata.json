@@ -1,0 +1,91 @@
+{
+  "contact_calls": 0,
+  "fields": {
+    "abn": {
+      "id": "rm7UiYsYhH2fChW1MGiK",
+      "key": "contact.abn_engine_abn",
+      "name": "ABN Engine ABN",
+      "type": "TEXT"
+    },
+    "basis_summary": {
+      "id": "MChuJxvDxfoQiRZdRBqV",
+      "key": "contact.abn_engine_basis_summary",
+      "name": "ABN Engine Basis Summary",
+      "type": "LARGE_TEXT"
+    },
+    "channel": {
+      "id": "0q4wFakPGqj01PqpgRjG",
+      "key": "contact.abn_engine_channel",
+      "name": "ABN Engine Channel",
+      "type": "TEXT"
+    },
+    "contact_id": {
+      "id": "VuHeNqML8gboG9z25bri",
+      "key": "contact.abn_engine_contact_id",
+      "name": "ABN Engine Contact ID",
+      "type": "TEXT"
+    },
+    "entity_class": {
+      "id": "f6ZAmrDiSeAuT2wkysia",
+      "key": "contact.abn_engine_entity_class",
+      "name": "ABN Engine Entity Class",
+      "type": "TEXT"
+    },
+    "group_id": {
+      "id": "C17XY6QzLsYssEnb1gUz",
+      "key": "contact.abn_engine_group_id",
+      "name": "ABN Engine Group ID",
+      "type": "TEXT"
+    },
+    "industry": {
+      "id": "L5J9lpkOlj4rmcs43XYj",
+      "key": "contact.abn_engine_industry",
+      "name": "ABN Engine Industry",
+      "type": "TEXT"
+    },
+    "positioning_notes": {
+      "id": "L8ftHWfbcXNV5p9LmSES",
+      "key": "contact.abn_engine_positioning_notes",
+      "name": "ABN Engine Positioning Notes",
+      "type": "LARGE_TEXT"
+    },
+    "score": {
+      "id": "vlb0Tx8aXtfTxBtUzHhk",
+      "key": "contact.abn_engine_score",
+      "name": "ABN Engine Score",
+      "type": "NUMERICAL"
+    },
+    "signal": {
+      "id": "g8p49CsBxET78RdmC398",
+      "key": "contact.abn_engine_signal",
+      "name": "ABN Engine Signal",
+      "type": "TEXT"
+    },
+    "state": {
+      "id": "tGj8frSWWapsCN9iuWnC",
+      "key": "contact.abn_engine_state",
+      "name": "ABN Engine State",
+      "type": "TEXT"
+    },
+    "tier": {
+      "id": "Mzt5Ijo1zFWAmhdllO5f",
+      "key": "contact.abn_engine_tier",
+      "name": "ABN Engine Tier",
+      "type": "TEXT"
+    },
+    "website": {
+      "id": "bwgTvekr4J2Y4mMAr14L",
+      "key": "contact.abn_engine_website",
+      "name": "ABN Engine Website",
+      "type": "TEXT"
+    }
+  },
+  "folder_assignment_verified": false,
+  "group_field_id": "C17XY6QzLsYssEnb1gUz",
+  "location_id": "xHZFHMOE476t5CxY9vCG",
+  "observed_at": "2026-09-10T16:54:18.740829+00:00",
+  "pending": null,
+  "release_approved": false,
+  "status": "metadata_installed",
+  "version": 1
+}

@@ -1,0 +1,62 @@
+{
+  "status": "blocked",
+  "checked_at": "2026-09-10T14:43:07.149812+00:00",
+  "configured_mode": "fixture",
+  "target_mode": "pilot",
+  "database_authority_available": false,
+  "checks": [
+    {
+      "capability": "collection",
+      "status": "blocked",
+      "approved_gates": [],
+      "missing_gates": [
+        "G1",
+        "G2",
+        "G3",
+        "G7"
+      ],
+      "blockers": [
+        "LIVE_PIPELINE_NOT_CONNECTED",
+        "LIVE_DASHBOARD_NOT_CONNECTED",
+        "TARGET_ENVIRONMENT_NOT_CONFIGURED",
+        "CAPABILITY_DISABLED",
+        "DATABASE_AUTHORITY_UNAVAILABLE",
+        "GATE_G1_CLOSED",
+        "GATE_G2_CLOSED",
+        "GATE_G3_CLOSED",
+        "GATE_G7_CLOSED"
+      ]
+    },
+    {
+      "capability": "crm",
+      "status": "blocked",
+      "approved_gates": [],
+      "missing_gates": [
+        "G1",
+        "G3",
+        "G5",
+        "G7"
+      ],
+      "blockers": [
+        "LIVE_CRM_DRAIN_NOT_CONNECTED",
+        "LIVE_SUPPRESSION_PROPAGATION_NOT_CONNECTED",
+        "TARGET_ENVIRONMENT_NOT_CONFIGURED",
+        "CAPABILITY_DISABLED",
+        "DATABASE_AUTHORITY_UNAVAILABLE",
+        "GATE_G1_CLOSED",
+        "GATE_G3_CLOSED",
+        "GATE_G5_CLOSED",
+        "GATE_G7_CLOSED"
+      ]
+    }
+  ],
+  "outreach": "outside_part_1",
+  "production_installed": false,
+  "next_steps": [
+    "Supply the approved AU host and restricted service/storage identities.",
+    "Record actual current G1/G2/G3/G5/G7 evidence for the chosen pilot capabilities.",
+    "Connect real pipeline, dashboard, vendor write-back and suppression, then verify together.",
+    "Start the measured QBCC pilot only after a usable authorised worklist is available.",
+    "Require four measured QBCC weeks and the G6 owner decision before live ABR expansion."
+  ]
+}

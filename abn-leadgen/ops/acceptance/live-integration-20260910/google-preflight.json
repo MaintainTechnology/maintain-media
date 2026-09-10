@@ -1,0 +1,23 @@
+{
+  "checked_date": "2026-09-10",
+  "method": "Google Drive connector get_profile and get_file_metadata; no spreadsheet row reads",
+  "spreadsheet_id": "1-PEySaH7AAod3hoFqZZf7zMYMWyQ3qIAWQzxnrq6K58",
+  "spreadsheet_title": "ABN Leads Gen",
+  "owner_email": "jeph@quotemax.com.au",
+  "expected_operator_email": "jeph@quotemax.com.au",
+  "connected_profile_email": "anant@nextgenerationmedicine.co",
+  "connected_profile_matches": false,
+  "source_visibility_status": "permission_metadata_available",
+  "public_permission": {"type": "anyone", "role": "writer", "allowFileDiscovery": false},
+  "private_sheet_verified": false,
+  "status": "blocked",
+  "blockers": ["WRONG_GOOGLE_ACCOUNT_CONNECTED", "PUBLIC_LINK_EDITING_ENABLED"],
+  "writes_performed": 0,
+  "business_rows_read": 0,
+  "notifications_sent": 0,
+  "required_next_steps": [
+    "Use the owner account jeph@quotemax.com.au to change general access to Restricted.",
+    "Connect the intended operator account and verify named reviewer permissions.",
+    "Install the standalone operator-owned Apps Script and verify genuine editor identity."
+  ]
+}

@@ -1,14 +1,10 @@
-"""Version-bound human approval and durable mock-provider reconciliation.
-
-Live provider activation deliberately remains closed until G5's actual mapping/account exists.
-The provider protocol exercises uncertainty without inventing vendor duplicate semantics.
-"""
+"""Version-bound human approval and durable, account-bound CRM reconciliation."""
 import copy
 import json
 import re
 from datetime import timedelta
 from pathlib import Path
-from typing import Protocol
+from typing import Protocol, cast
 from urllib.parse import urlparse
 from uuid import uuid4
 
@@ -126,7 +122,8 @@ class MockCRM:
 
 
 def projection(conn, service, row) -> tuple[dict, dict]:
-    mapping = load_field_mapping()
+    from abr_engine.export.live_contract import selected_mapping
+    mapping = selected_mapping(conn, service)
     lead = service.lead(conn, row["lead_id"])
     group_id = service.canonical_group(conn, lead["group_id"])
     family = service.group_family(conn, group_id)
@@ -169,13 +166,14 @@ def approve(conn, service, data, actor):
     if row["selected_tier"] != "A":
         raise DomainError("ONLY_SELECTED_TIER_A", 409)
     payload, versions = projection(conn, service, row)
-    if service.settings.mode != "fixture":
-        raise DomainError("CRM_SANDBOX_MAPPING_PENDING", 409)
+    from abr_engine.export.live_contract import selected_mapping
+    mapping = selected_mapping(conn, service)
+    location = "fixture" if service.settings.mode == "fixture" else mapping["location_id"]
     outbox_id = uuid4()
     outbox = conn.execute("INSERT INTO crm_outbox(outbox_id,row_id,location_id,lead_id,approved_version,actor_id,payload_digest,versions,state,desired_payload_encrypted) "
-                          "VALUES(%s,%s,'fixture',%s,%s,%s,%s,%s,'pending',%s) "
+                          "VALUES(%s,%s,%s,%s,%s,%s,%s,%s,'pending',%s) "
                           "ON CONFLICT(location_id,row_id,approved_version) DO UPDATE SET actor_id=crm_outbox.actor_id RETURNING *",
-                          (outbox_id, row["row_id"], row["lead_id"], row["version"], actor, digest(payload), Jsonb(json_safe(versions)),
+                          (outbox_id, row["row_id"], location, row["lead_id"], row["version"], actor, digest(payload), Jsonb(json_safe(versions)),
                            service.keys.encrypt(json.dumps(payload, sort_keys=True)))).fetchone()
     conn.execute("UPDATE worklist_row SET approval_state='approved' WHERE row_id=%s", (row["row_id"],))
     service.audit(conn, actor, "crm_approved", outbox["outbox_id"])
@@ -183,6 +181,13 @@ def approve(conn, service, data, actor):
 
 
 def _current(conn, service, row, desired) -> bool:
+    from abr_engine.export.live_contract import selected_mapping
+    try:
+        mapping = selected_mapping(conn, service)
+    except DomainError:
+        return False
+    if row["location_id"] != ("fixture" if service.settings.mode == "fixture" else mapping["location_id"]):
+        return False
     work = conn.execute("SELECT * FROM worklist_row WHERE row_id=%s", (row["row_id"],)).fetchone()
     if not work or work["approval_state"] != "approved" or work["version"] != row["approved_version"]:
         return False
@@ -196,6 +201,8 @@ def _current(conn, service, row, desired) -> bool:
 def _remote_matches(remote, desired) -> bool:
     if remote.get("group_id") != desired["group_id"]:
         raise DomainError("CRM_REMOTE_IDENTITY_CONFLICT", 409)
+    if "provider_dnd" in remote and remote["provider_dnd"] is not True:
+        return False
     fields = remote.get("payload", {})
     for key, value in desired.items():
         if key == "tags":
@@ -238,8 +245,9 @@ def _claim(settings, service, outbox_id):
 
 def _dispatch(settings, service, claim, operation, remote_id):
     """Persist exact pending operation and recheck authority immediately before external write."""
-    validate_projection_mapping(claim["desired"], load_field_mapping())
     with transaction(settings) as conn:
+        from abr_engine.export.live_contract import selected_mapping
+        validate_projection_mapping(claim["desired"], selected_mapping(conn, service))
         service.authority(conn)
         row = conn.execute("SELECT * FROM crm_outbox WHERE outbox_id=%s FOR UPDATE", (claim["outbox_id"],)).fetchone()
         if row is None:
@@ -259,7 +267,7 @@ def _dispatch(settings, service, claim, operation, remote_id):
     return True
 
 
-def _finish(settings, service, claim, state, remote_id=None, *, dispatched=False):
+def _finish(settings, service, claim, state, remote_id=None, *, dispatched=False, retry_after=0):
     with transaction(settings) as conn:
         service.authority(conn)
         row = conn.execute("SELECT * FROM crm_outbox WHERE outbox_id=%s FOR UPDATE", (claim["outbox_id"],)).fetchone()
@@ -288,7 +296,7 @@ def _finish(settings, service, claim, state, remote_id=None, *, dispatched=False
                              "ON CONFLICT(location_id,group_id) DO UPDATE SET remote_id=EXCLUDED.remote_id,verified_at=now()",
                              (row["location_id"], claim["desired"]["group_id"], remote_id))
         conn.execute("UPDATE crm_outbox SET state=%s,remote_id=COALESCE(%s,remote_id),next_attempt_at=%s,lease_owner=NULL,lease_until=NULL WHERE outbox_id=%s",
-                     (state, remote_id, now + timedelta(seconds=min(300, 2 ** row["attempts"])) if state in {"retry", "uncertain"} else None, row["outbox_id"]))
+                     (state, remote_id, now + timedelta(seconds=max(min(86_400, retry_after), min(300, 2 ** row["attempts"]))) if state in {"retry", "uncertain"} else None, row["outbox_id"]))
         service.audit(conn, "crm-worker", "crm_" + state, row["outbox_id"])
         return {"outbox_id": row["outbox_id"], "state": state}
 
@@ -325,14 +333,44 @@ def drain_one(settings, service, provider: CRMProvider, outbox_id):
     Existing groups must match the desired projection or receive an idempotent verified update.
     Suppression can commit during any provider call; completion records its follow-up race.
     """
-    if settings.mode != "fixture" or service.settings.mode != "fixture":
-        raise DomainError("LIVE_CRM_DISABLED", 409)
+    if settings.mode != service.settings.mode:
+        raise DomainError("CRM_ENVIRONMENT_MISMATCH", 409)
+    live = settings.mode != "fixture"
+    from abr_engine.export.gohighlevel import GoHighLevel
+    if not live and isinstance(provider, GoHighLevel):
+        raise DomainError("FIXTURE_LIVE_PROVIDER_FORBIDDEN", 409)
+    if live:
+        from abr_engine.export.live_contract import live_contract
+        if type(provider) is not GoHighLevel:
+            raise DomainError("LIVE_CRM_PROVIDER_REQUIRED", 409)
+        live_provider = cast(GoHighLevel, provider)
+        with transaction(settings) as conn:
+            config, _, _ = live_contract(conn, service, removal_only=True)
+            if live_provider.config != config:
+                raise DomainError("CRM_PROVIDER_CONFIG_CHANGED", 409)
     claim, state = _claim(settings, service, outbox_id)
     if claim is None:
         return {"outbox_id": outbox_id, "state": state}
+    if live:
+        def current_read():
+            with transaction(settings) as conn:
+                config, _, _ = live_contract(conn, service, removal_only=claim["reconcile_only"])
+                if live_provider.config != config or claim["location_id"] != config.location_id:
+                    raise DomainError("CRM_PROVIDER_CONFIG_CHANGED", 409)
+        def current_write():
+            current_read()
+            with transaction(settings) as conn:
+                service.authority(conn)
+                row = conn.execute("SELECT * FROM crm_outbox WHERE outbox_id=%s FOR UPDATE", (outbox_id,)).fetchone()
+                if (not row or row["state"] != "inflight" or row["lease_owner"] != claim["owner"]
+                        or not row["lease_until"] or row["lease_until"] <= service.now(conn)
+                        or not _current(conn, service, row, claim["desired"])):
+                    raise DomainError("CRM_WRITE_AUTHORITY_CHANGED", 409)
+        live_provider.read_guard, live_provider.write_guard = current_read, current_write
     desired = claim["desired"]
     remote_id = None
     dispatched = False
+    retry_after = 0
     try:
         matches = provider.find_group(desired["group_id"])
         if len(matches) > 1:
@@ -368,6 +406,22 @@ def drain_one(settings, service, provider: CRMProvider, outbox_id):
         state = "succeeded" if _remote_matches(provider.fetch(remote_id), desired) else "uncertain"
     except DomainError:
         state = "blocked"
-    except OSError:
+    except OSError as exc:
         state = "uncertain" if dispatched or claim["operation_kind"] in {"create", "update"} else "retry"
-    return _finish(settings, service, claim, state, remote_id, dispatched=dispatched)
+        retry_after = getattr(exc, "retry_after", 0)
+    finally:
+        if live:
+            live_provider.read_guard = live_provider.write_guard = None
+    return _finish(settings, service, claim, state, remote_id, dispatched=dispatched, retry_after=retry_after)
+
+
+def drain_live_one(settings, service, outbox_id, *, transport=None, environ=None):
+    """No ambient mock fallback. Secrets are injected by the service environment."""
+    from abr_engine.export.gohighlevel import GoHighLevel
+    from abr_engine.export.live_contract import live_contract
+    if settings.mode == "fixture":
+        raise DomainError("LIVE_MODE_REQUIRED", 409)
+    with transaction(settings) as conn:
+        config, _, _ = live_contract(conn, service, removal_only=True)
+    with GoHighLevel.from_environment(config, transport=transport, environ=environ) as provider:
+        return drain_one(settings, service, provider, outbox_id)

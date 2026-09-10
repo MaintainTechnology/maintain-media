@@ -101,12 +101,14 @@ class GoHighLevel:
 
     def __init__(self, config: GHLConfig, token: SecretStr, *,
                  write_guard: Callable[[], None] | None = None,
+                 read_guard: Callable[[], None] | None = None,
                  transport: httpx.BaseTransport | None = None,
                  sleep: Callable[[float], None] = time.sleep):
         raw_token = token.get_secret_value()
         if not raw_token or any(c.isspace() for c in raw_token):
             raise DomainError("GHL_TOKEN_MISSING_OR_INVALID", 503)
         self.config, self.write_guard, self.sleep = config, write_guard, sleep
+        self.read_guard = read_guard
         self.client = httpx.Client(base_url=BASE_URL, timeout=httpx.Timeout(15, connect=5),
             follow_redirects=False, trust_env=False, transport=transport,
             headers={"Authorization": "Bearer " + raw_token, "Version": config.api_version,
@@ -134,6 +136,8 @@ class GoHighLevel:
             raise DomainError("GHL_PATH_INVALID", 409)
         attempts = 1 if mutation else 3
         for attempt in range(attempts):
+            if not mutation and self.read_guard is not None:
+                self.read_guard()
             if mutation:
                 if not self.config.allow_writes or self.write_guard is None:
                     raise DomainError("GHL_WRITES_NOT_CERTIFIED", 409)

@@ -1,0 +1,58 @@
+{
+  "checked_at": "2026-09-10T18:07:11.8683029Z",
+  "source_manifest_sha256": "63d60911fe6fa6ef24d5f025dc5018e39ae577ed3602937f2d292ad6fa214c7b",
+  "source_archive_sha256": "35e18b312aa0f7634e8d62a549709c3211bbd9bf5d88648ac6189fc23a64ce6f",
+  "source_file_count": 153,
+  "previous_release_preserved": "/opt/abn-leadgen-live-20260911-004-previous",
+  "migration_count": 26,
+  "migration_026_sha256": "2bb8177f451ca304b9c0d09be20d6779088da250e63afee67d7e0b88e1e49e5c",
+  "runtime_queue_privileges": [
+    "SELECT",
+    "UPDATE"
+  ],
+  "runtime_gate_writes": false,
+  "independent_scheduler_tests_passed": 20,
+  "combined_scheduler_tests_passed": 79,
+  "key_retention_tests_passed": 7,
+  "installed_backup_units": 7,
+  "disabled_backup_timers": [
+    "abr-engine-backup-daily.timer",
+    "abr-engine-backup-ledger.timer",
+    "abr-engine-backup-expiry.timer"
+  ],
+  "private_work_directory_mode": "0700 abr-engine:abr-engine",
+  "negative_missing_authority_check": {
+    "status": "held",
+    "exit_code": 3,
+    "code": "BACKUP_OPERATION_FAILED",
+    "authority_document_present": false,
+    "local_failure_alarm_exit_code": 0,
+    "expected_test_failed_state_reset": true
+  },
+  "active_api_service": true,
+  "active_timers": [
+    "abr-engine-worker.timer",
+    "abr-engine-control.timer",
+    "abr-engine-qbcc-review-cleanup.timer"
+  ],
+  "authenticated_runtime_status": 200,
+  "lead_count": 0,
+  "release_gate_record_count": 0,
+  "ledger_generation": 1,
+  "ledger_acknowledged_generation": 0,
+  "mode": "pilot",
+  "outreach": "disabled",
+  "cache_control": "no-store",
+  "browser_clerk_login_verified": false,
+  "external_notifications_verified": false,
+  "production_backup_accepted": false,
+  "final_unit_tests_passed": 495,
+  "final_unit_test_warnings": 2,
+  "native_linux_lock_checks": {
+    "concurrent_publishers_refused": true,
+    "killed_publisher_recovered": true,
+    "independent_capture_lock": true,
+    "database_accessed": false,
+    "provider_operations": 0
+  }
+}

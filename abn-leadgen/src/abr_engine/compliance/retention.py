@@ -6,7 +6,9 @@ An old backup alone cannot prove that all more recent opt-outs have been replaye
 
 import hashlib
 import json
+import re
 from calendar import monthrange
+from contextvars import ContextVar
 from datetime import datetime, timedelta
 from pathlib import Path
 from uuid import uuid4
@@ -16,10 +18,41 @@ from psycopg.types.json import Jsonb
 
 from abr_engine.control.service import DomainError, json_safe
 
+_RESTORE_RECONCILING = ContextVar("abr_restore_reconciling", default=False)
 
-def _execute_gate(service):
-    if service.settings.mode != "fixture":
+
+def _execute_gate(conn, service, *, now=None, restoring=False):
+    """Collection withdrawal cannot veto separately approved finite deletion."""
+    if service.settings.mode == "fixture":
+        return
+    if not service.settings.capabilities.get("retention"):
         raise DomainError("RETENTION_POLICY_RELEASE_PENDING", 403)
+    from abr_engine.compliance.policy import gate_reasons
+    from abr_engine.ingest.qbcc_review import _configured
+    _configured(service.settings, collection=False)
+    if not service.keys.path or not service.keys.wrapping_key:
+        raise DomainError("MANAGED_KEY_STORE_REQUIRED", 403)
+    service.authority(conn)
+    current = service.now(conn)
+    if now is not None and (now.tzinfo is None or now > current + timedelta(seconds=1)):
+        raise DomainError("RETENTION_FUTURE_TIME_FORBIDDEN", 403)
+    reasons = gate_reasons(conn, service.settings, "retention", current)
+    if reasons:
+        raise DomainError(reasons[0], 403)
+    policy = service.current_policy(conn)
+    retention = policy["settings"].get("retention", {}) if policy else {}
+    if (not policy or policy["scope"] != service.settings.mode or policy["state"] != "approved"
+        or not policy["approved_at"] <= current < policy["expires_at"]
+        or not str(policy["evidence_ref"]).strip() or not str(policy["actor_id"]).strip()
+        or retention.get("approved") is not True or retention.get("schedule_version") != "abr-v4-defaults"
+        or not isinstance(retention.get("evidence_sha256"), str)
+        or not re.fullmatch(r"[0-9a-f]{64}", retention["evidence_sha256"])):
+        raise DomainError("RETENTION_POLICY_RELEASE_PENDING", 403)
+    flags = {row["name"]: row["value"] for row in conn.execute("SELECT name,value FROM system_state WHERE name IN ('restore_quarantine','key_compromised')")}
+    if service.keys.compromised or flags.get("key_compromised"):
+        raise DomainError("AUTHORITY_QUARANTINED", 503)
+    if flags.get("restore_quarantine") and not ((restoring or _RESTORE_RECONCILING.get()) and retention.get("restore_enabled") is True):
+        raise DomainError("AUTHORITY_QUARANTINED", 503)
 
 
 def _months(value, count):
@@ -72,6 +105,7 @@ def _evidence(conn, service, lead_id, contacts):
         ).fetchall(),
         "identity": conn.execute("SELECT * FROM domain_identity WHERE lead_id=%s", (lead_id,)).fetchall(),
         "licence": conn.execute("SELECT * FROM licence_review WHERE lead_id=%s", (lead_id,)).fetchall(),
+        "qbcc_source_reviews": conn.execute("SELECT * FROM qbcc_source_review WHERE lead_id=%s", (lead_id,)).fetchall(),
         "basis": conn.execute(
             "SELECT b.* FROM contact_basis b JOIN contact_record c USING(contact_id) WHERE c.lead_id=%s",
             (lead_id,),
@@ -125,11 +159,12 @@ def _profile_held(conn, group_id):
       (h.object_type='provenance' AND h.object_id IN(SELECT p.provenance_id::text FROM collection_provenance p JOIN lead_entity l USING(lead_id) WHERE l.group_id=%s))
       OR (h.object_type='contact' AND h.object_id IN(SELECT c.contact_id::text FROM contact_record c JOIN lead_entity l USING(lead_id) WHERE l.group_id=%s))
       OR (h.object_type='enrichment_operation' AND h.object_id IN(SELECT o.operation_id::text FROM enrichment_operation o JOIN enrichment_attempt a USING(attempt_id) JOIN lead_entity l USING(lead_id) WHERE l.group_id=%s))
-      LIMIT 1""", (group_id,)*3).fetchone())
+      OR (h.object_type='qbcc_review' AND h.object_id IN(SELECT r.review_id::text FROM qbcc_source_review r JOIN lead_entity l USING(lead_id) WHERE l.group_id=%s))
+      LIMIT 1""", (group_id,)*4).fetchone())
 
 
 def erase_profile(conn, service, group_id, *, actor="compliance", now=None):
-    _execute_gate(service)
+    _execute_gate(conn, service, now=now)
     service.authority(conn)
     now = now or service.now(conn)
     if now.tzinfo is None:
@@ -174,6 +209,7 @@ def erase_profile(conn, service, group_id, *, actor="compliance", now=None):
         conn.execute("DELETE FROM contact_record WHERE lead_id=%s", (lead_id,))
         conn.execute("DELETE FROM domain_identity WHERE lead_id=%s", (lead_id,))
         conn.execute("DELETE FROM licence_review WHERE lead_id=%s", (lead_id,))
+        conn.execute("DELETE FROM qbcc_source_review WHERE lead_id=%s", (lead_id,))
         conn.execute(
             "DELETE FROM outcome_event WHERE row_id IN(SELECT row_id FROM worklist_row WHERE lead_id=%s)",
             (lead_id,),
@@ -205,7 +241,7 @@ def retention_run(conn, service, *, now, execute=False):
             "artifacts": artifact_retention(conn, service, now=now, execute=False),
             "database_evidence": minimise_database_evidence(conn, service, now=now, execute=False),
         }
-    _execute_gate(service)
+    _execute_gate(conn, service, now=now)
     results, held = [], []
     for row in rows:
         if _profile_held(conn, row["group_id"]):
@@ -234,7 +270,7 @@ def minimise_database_evidence(conn, service, *, now, execute=False):
     """Finite ordinary captures and full source events; metrics contain no identity."""
     service.authority(conn)
     if execute:
-        _execute_gate(service)
+        _execute_gate(conn, service, now=now)
     from abr_engine.ops.pilot_facts import expire_metrics
     pilot_metrics = expire_metrics(conn, now=now, execute=execute)
     page_predicate = """p.capture_erased_at IS NULL AND p.collected_at<=%s
@@ -244,6 +280,18 @@ def minimise_database_evidence(conn, service, *, now, execute=False):
         WHERE (h.object_type='group' AND h.object_id=l.group_id::text)
            OR (h.object_type='provenance' AND h.object_id=p.provenance_id::text))"""
     cutoff = now - timedelta(days=90)
+    qbcc_review_predicate = """r.created_at<=%s
+      AND NOT EXISTS(SELECT 1 FROM worklist_row w WHERE w.lead_id=r.lead_id)
+      AND NOT EXISTS(SELECT 1 FROM action_intent a WHERE a.lead_id=r.lead_id AND a.state='consumed')
+      AND NOT EXISTS(SELECT 1 FROM retention_hold h LEFT JOIN lead_entity l ON l.lead_id=r.lead_id WHERE
+        (h.object_type='qbcc_review' AND h.object_id=r.review_id::text)
+        OR (h.object_type='snapshot' AND h.object_id=r.snapshot_id::text)
+        OR (h.object_type='group' AND h.object_id=l.group_id::text))"""
+    qbcc_reviews = conn.execute("SELECT count(*) n FROM qbcc_source_review r WHERE " + qbcc_review_predicate, (cutoff,)).fetchone()["n"]
+    if execute:
+        conn.execute("SET LOCAL abr.retention_delete='on'")
+        conn.execute("DELETE FROM qbcc_source_review r WHERE " + qbcc_review_predicate, (cutoff,))
+        conn.execute("SET LOCAL abr.retention_delete='off'")
     cost_hold = "NOT EXISTS(SELECT 1 FROM retention_hold h WHERE h.object_type='cost_statement' AND h.object_id=c.statement_id::text)"
     cost_receipts = conn.execute("SELECT count(*) n FROM cost_statement c WHERE encrypted_evidence IS NOT NULL AND imported_at<=%s AND " + cost_hold, (cutoff,)).fetchone()["n"]
     cost_metrics = conn.execute("SELECT count(*) n FROM cost_statement c WHERE period_end<=%s AND " + cost_hold, (_months(now, -24),)).fetchone()["n"]
@@ -336,6 +384,7 @@ def minimise_database_evidence(conn, service, *, now, execute=False):
         )
     return {
         "page_bodies": pages,
+        "qbcc_source_reviews": qbcc_reviews,
         "expired_pilot_metrics": pilot_metrics,
         "enrichment_results": operations,
         "merge_evidence": merges,
@@ -352,7 +401,7 @@ def artifact_retention(conn, service, *, now, execute=False):
     """Delete only explicitly classified, verified manifest-owned single files."""
     service.authority(conn)
     if execute:
-        _execute_gate(service)
+        _execute_gate(conn, service, now=now)
     from abr_engine.ops.promotion import source_lock_key
     from abr_engine.pipeline import safe_root
 
@@ -421,7 +470,7 @@ def artifact_retention(conn, service, *, now, execute=False):
                 "UPDATE artifact_manifest SET state='deleting',deletion_reason='finite_retention' WHERE artifact_id=%s",
                 (row["artifact_id"],),
             )
-            if row["snapshot_id"]:
+            if row["snapshot_id"] and row.get("artifact_class") == "snapshot":
                 cleared = conn.execute(
                     "UPDATE source_cursor SET snapshot_id=NULL,version=version+1 WHERE snapshot_id=%s RETURNING source",
                     (row["snapshot_id"],),
@@ -454,11 +503,11 @@ def artifact_retention(conn, service, *, now, execute=False):
     return results
 
 
-def export_ledger(conn, service) -> str:
+def export_ledger(conn, service, *, exported_at=None) -> str:
     service.authority(conn)
     payload = {
         "version": 1,
-        "exported_at": service.now(conn).isoformat(),
+        "exported_at": (exported_at or service.now(conn)).isoformat(),
         "groups": conn.execute("SELECT * FROM business_group").fetchall(),
         "aliases": conn.execute("SELECT * FROM suppression_alias").fetchall(),
         "restrictions": conn.execute(
@@ -479,7 +528,7 @@ def restore_quarantine(conn):
 
 
 def replay_ledger(conn, service, encrypted: str, *, expected_digest: str, latest_watermark: str):
-    _execute_gate(service)
+    _execute_gate(conn, service, restoring=True)
     service.authority(conn)
     quarantined = conn.execute("SELECT value FROM system_state WHERE name='restore_quarantine'").fetchone()
     if not quarantined["value"]:
@@ -548,16 +597,20 @@ def replay_ledger(conn, service, encrypted: str, *, expected_digest: str, latest
             )
             conn.execute(query, values)
     service.keys.validate_dependencies(conn)
-    for deleted in payload["deletions"]:
-        if deleted["primary_done_at"]:
-            erase_profile(conn, service, deleted["group_id"])
-    for group in payload["groups"]:
-        if service.restricted(conn, group["group_id"]):
-            for lead in conn.execute(
-                "SELECT lead_id FROM lead_entity WHERE group_id=%s", (group["group_id"],)
-            ).fetchall():
-                service.invalidate(conn, lead["lead_id"])
-    overdue = retention_run(conn, service, now=service.now(conn), execute=True)
+    restore_token = _RESTORE_RECONCILING.set(True)
+    try:
+        for deleted in payload["deletions"]:
+            if deleted["primary_done_at"]:
+                erase_profile(conn, service, deleted["group_id"])
+        for group in payload["groups"]:
+            if service.restricted(conn, group["group_id"]):
+                for lead in conn.execute(
+                    "SELECT lead_id FROM lead_entity WHERE group_id=%s", (group["group_id"],)
+                ).fetchall():
+                    service.invalidate(conn, lead["lead_id"])
+        overdue = retention_run(conn, service, now=service.now(conn), execute=True)
+    finally:
+        _RESTORE_RECONCILING.reset(restore_token)
     receipt_id = uuid4()
     conn.execute(
         "INSERT INTO restore_receipt VALUES(%s,%s,clock_timestamp(),'reconciled',%s)",

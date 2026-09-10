@@ -4,6 +4,11 @@ User-authorised extension, 9 September 2026. Replace the separate HTML operator 
 
 **Later authorised change:** `clerk-authentication.md` supersedes this document's local-password, local-account-provisioning and no-public-signup clauses. Clerk now owns account authentication; the lead workspace remains restricted to explicitly approved administrators. Original acceptance receipts describe the earlier local-auth build.
 
+**10 September hosting extension:** `vercel-engine-connection.md` authorises the
+existing Maintain Technology Vercel deployment and explicit HTTPS service transport.
+It supersedes the same-host-only and no-public-website boundaries below. Fixture
+labels, admin authority and separate live release gates remain required.
+
 ## Requirements
 
 1. Render the dashboard as React components inside the existing Next.js website, with native website fonts, logo, colours, responsive layouts and keyboard controls. Keep marketing pages working; omit marketing navigation, footer and smooth-scroll effects from the admin workspace. Provide a return-to-website link.

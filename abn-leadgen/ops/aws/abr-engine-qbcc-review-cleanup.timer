@@ -1,0 +1,12 @@
+[Unit]
+Description=Expire only owned seven-day QBCC review staging
+Conflicts=abr-live-qbcc-review-cleanup.timer
+
+[Timer]
+OnCalendar=*-*-* 03:05:00 UTC
+Persistent=true
+AccuracySec=30s
+Unit=abr-engine-qbcc-review-cleanup.service
+
+[Install]
+WantedBy=timers.target

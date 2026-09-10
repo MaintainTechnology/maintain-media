@@ -66,7 +66,14 @@ export function authorizeClerkAdmin(
   }
   const username = label(user.username) ?? identity.userId;
   const name = [label(user.firstName), label(user.lastName)].filter(Boolean).join(" ");
+  const assigned = user.publicMetadata.leadGenScopes;
+  const allowed = new Set(["reviewer", "owner", "compliance"]);
+  if (assigned !== undefined && (!Array.isArray(assigned) || assigned.some(scope => typeof scope !== "string" || !allowed.has(scope)))) {
+    throw new ClerkPolicyError("ADMIN_ACCESS_REQUIRED", 403);
+  }
   return {
+    actorId: identity.userId,
+    scopes: ["admin", "operator", ...new Set(assigned as string[] | undefined)],
     username,
     displayName: label(user.fullName) ?? label(name) ?? username,
     csrfToken: createClerkCsrfToken(identity, secret),

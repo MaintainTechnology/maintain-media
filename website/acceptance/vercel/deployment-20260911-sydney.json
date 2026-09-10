@@ -1,0 +1,74 @@
+{
+  "checked_at": "2026-09-10T16:39:28.3865139Z",
+  "deployment_id": "dpl_387fws7PqGeZ5fHhPstMwZWbK5w4",
+  "deployment_url": "website-buue0iii5-maintain-technology.vercel.app",
+  "target": "production",
+  "state": "READY",
+  "aliases": [
+    "www.maintainmedia.com.au",
+    "website-iota-ruddy-35.vercel.app",
+    "maintainmedia.com.au",
+    "website-maintain-technology.vercel.app"
+  ],
+  "configured_regions": [
+    "syd1"
+  ],
+  "all_lambda_count": 60,
+  "all_lambda_regions": [
+    "arn1",
+    "bom1",
+    "cdg1",
+    "cle1",
+    "cpt1",
+    "dub1",
+    "fra1",
+    "gru1",
+    "hkg1",
+    "hnd1",
+    "iad1",
+    "icn1",
+    "kix1",
+    "lhr1",
+    "pdx1",
+    "sfo1",
+    "sin1",
+    "syd1",
+    "yul1"
+  ],
+  "verified_runtime_regions": [
+    {
+      "path": "abn-lead-gen/dashboard",
+      "regions": [
+        "syd1"
+      ],
+      "runtime": "nodejs24.x"
+    },
+    {
+      "path": "sign-in/[[...sign-in]]",
+      "regions": [
+        "syd1"
+      ],
+      "runtime": "nodejs24.x"
+    },
+    {
+      "path": "sign-up/[[...sign-up]]",
+      "regions": [
+        "syd1"
+      ],
+      "runtime": "nodejs24.x"
+    },
+    {
+      "path": "api/abn-lead-gen/[...path]",
+      "regions": [
+        "syd1"
+      ],
+      "runtime": "nodejs24.x"
+    }
+  ],
+  "region_check": "failed",
+  "expected_runtime_region": "syd1",
+  "data_collection_enabled": false,
+  "provider_mutations": false,
+  "supersedes_deployment": "dpl_7uWBC43DakjtS6GA6f945eHRSVXi",
+  "source_digest": "96bc200bfa70911591fdc7f7a00cf7450c610712d71692c9c5db1918d1a96dff"
+}

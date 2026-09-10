@@ -1,0 +1,31 @@
+{
+    admin off
+    servers {
+        protocols h1 h2
+    }
+}
+
+abn-engine.maintainmedia.com.au {
+    header {
+        Cache-Control "no-store"
+        X-Content-Type-Options "nosniff"
+        X-Robots-Tag "noindex, nofollow"
+        Strict-Transport-Security "max-age=31536000"
+        -Server
+    }
+    @engine path /health /api/* /v1/* /unsubscribe/*
+    handle @engine {
+        request_body {
+            max_size 2MB
+        }
+        reverse_proxy 127.0.0.1:8766 {
+            transport http {
+                dial_timeout 5s
+                response_header_timeout 45s
+            }
+        }
+    }
+    handle {
+        respond "Not found" 404
+    }
+}

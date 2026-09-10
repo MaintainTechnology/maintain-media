@@ -1,0 +1,12 @@
+[Unit]
+Description=Run separately approved finite ABN retention
+Conflicts=abr-live-retention.timer
+
+[Timer]
+OnCalendar=*-*-* 03:20:00 UTC
+Persistent=true
+AccuracySec=30s
+Unit=abr-engine-retention.service
+
+[Install]
+WantedBy=timers.target

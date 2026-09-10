@@ -11,6 +11,8 @@ export class AuthError extends Error {
 }
 
 export type AdminSession = {
+  actorId?: string;
+  scopes?: string[];
   username: string;
   displayName: string;
   csrfToken: string;

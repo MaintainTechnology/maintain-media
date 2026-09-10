@@ -66,7 +66,9 @@ test("admin DTO exposes only bounded labels and the derived token", () => {
     ...user, primaryEmailAddress: { emailAddress: "private@example.test" },
     privateMetadata: { secret: "private value" }, unsafeMetadata: { role: "member" },
   }, secret);
-  assert.deepEqual(Object.keys(session).sort(), ["csrfToken", "displayName", "username"]);
+  assert.deepEqual(Object.keys(session).sort(), ["actorId", "csrfToken", "displayName", "scopes", "username"]);
+  assert.equal(session.actorId, identity.userId);
+  assert.deepEqual(session.scopes, ["admin", "operator"]);
   assert.equal(session.username, "maintain-admin");
   assert.equal(session.displayName, "Maintain Admin");
   assert.match(session.csrfToken, /^[A-Za-z0-9_-]{43}$/);
@@ -77,6 +79,14 @@ test("admin DTO exposes only bounded labels and the derived token", () => {
   assert.equal(authorizeClerkAdmin(identity, { ...user, fullName: "  Full Name  " }, secret).displayName, "Full Name");
   const invalidLabels = { ...user, username: "x".repeat(201), firstName: "na\nme", lastName: null, fullName: "\0" };
   assert.equal(authorizeClerkAdmin(identity, invalidLabels, secret).displayName, identity.userId);
+});
+
+test("review authority is an explicit current server-managed assignment", () => {
+  assert.deepEqual(authorizeClerkAdmin(identity, { ...user, unsafeMetadata: { leadGenScopes: ["owner"] } }, secret).scopes, ["admin", "operator"]);
+  assert.deepEqual(authorizeClerkAdmin(identity, { ...user, publicMetadata: { role: "admin", leadGenScopes: ["reviewer"] } }, secret).scopes, ["admin", "operator", "reviewer"]);
+  for (const leadGenScopes of ["reviewer", ["sender"], ["admin"], [null], ["Reviewer"]]) {
+    assert.throws(() => authorizeClerkAdmin(identity, { ...user, publicMetadata: { role: "admin", leadGenScopes } }, secret), denied);
+  }
 });
 
 test("CSRF is stable in a session and isolated by session, user and secret", () => {

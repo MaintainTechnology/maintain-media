@@ -1,0 +1,27 @@
+{
+  "checked_at": "2026-09-10T17:42:29.2768976Z",
+  "status": "owned_bucket_inspected",
+  "bucket": "maintain-media-abn-backup-052530979168-983c39eb",
+  "region": "ap-southeast-2",
+  "matching_checks": [
+    "public_access_block",
+    "ownership_controls",
+    "lifecycle",
+    "bucket_policy",
+    "versioning",
+    "private_policy"
+  ],
+  "mismatch": {
+    "field": "encryption",
+    "path": "/Rules/0",
+    "difference": "extra_fields",
+    "count": 1
+  },
+  "bucket_mutations": 0,
+  "publisher_mutations": 0,
+  "object_operations": 0,
+  "host_operations": 0,
+  "bootstrap_removed": true,
+  "s3_revocation_verified": true,
+  "normalization_changed": false
+}

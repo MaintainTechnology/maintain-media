@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-09-10T13:26:22.5756102Z",
+  "app_id": "app_3J5CahJ3ZoQlWkUPqenwuPfc9KH",
+  "instance": "production",
+  "user_id": "user_3J8dBsvcl9AGXTGOCbAzjYIH9sU",
+  "email": "jeph@quotemax.com.au",
+  "primary_email_verified": true,
+  "previous_public_metadata": {},
+  "stored_role": "admin",
+  "user_authorisation": "User identified this exact signed-in account in response to enabling dashboard admin access",
+  "scope": "Clerk metadata role update and independent readback; no user session was impersonated",
+  "agent_browser_dashboard_verified": false,
+  "user_confirmed_dashboard_open": true,
+  "user_confirmation_recorded_at": "2026-09-10T13:28:18.8071533Z"
+}

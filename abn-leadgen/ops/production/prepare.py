@@ -264,6 +264,8 @@ RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
     units = {}
     # An ABR timer cannot be accidentally enabled from a QBCC-only pilot bundle.
     for source in (("abr", "qbcc") if plan.mode == "production" else ("qbcc",)):
+        source_command = (f"{cli} live-schedule-weekly --config {plan.config_path}" if source == "qbcc"
+                          else f"{cli} run --source {source} --config {plan.config_path} --mode {plan.mode}")
         units[f"abr-live-{source}.service"] = f"""# Prepared code tree: {tree_sha256}; uninstalled and release-gated.
 [Unit]
 Description=Maintain Media {source.upper()} controlled source run
@@ -273,7 +275,7 @@ Wants=network-online.target
 [Service]
 Type=oneshot
 {common}ExecStartPre={preflight}
-ExecStart=/usr/bin/flock -n -E 4 /run/abr-engine/pipeline.lock {cli} run --source {source} --config {plan.config_path} --mode {plan.mode}
+ExecStart=/usr/bin/flock -n -E 4 /run/abr-engine/pipeline.lock {source_command}
 SuccessExitStatus=4
 TimeoutStartSec=6h
 MemoryMax=2G

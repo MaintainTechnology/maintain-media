@@ -21,7 +21,7 @@ from abr_engine.db import transaction
 from abr_engine.export.crm import approve
 
 
-def create_app(settings: Settings | None = None) -> FastAPI:
+def create_app(settings: Settings | None = None, *, authenticate_request=None) -> FastAPI:
     settings = settings or load_settings()
     service = Service(settings, load_keys(settings))
     app = FastAPI(title="Maintain Media Lead Engine", version="1.0", docs_url=None, redoc_url=None, openapi_url=None)
@@ -73,7 +73,8 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         return response
 
     def actor_for(request, scopes):
-        actor = authenticate(request.headers.get("authorization"), service)
+        actor = (authenticate_request(request) if authenticate_request is not None
+                 else authenticate(request.headers.get("authorization"), service))
         if "bridge" in actor.scopes:
             # No mapping/secret supplied means fail closed. Fixture tests may explicitly configure it.
             bridge = getattr(app.state, "bridge", {})
@@ -358,6 +359,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
                 service.suppress(c, {"group_id": row["group_id"], "reason": "unsubscribe", "source": "unsubscribe_link"}, "unsubscribe", uuid4())
         return {"message": "Your request has been recorded if this link identifies a contact."}
 
+    # Live extensions share these transaction, scope, rate and idempotency boundaries.
+    app.state.actor_for = actor_for
+    app.state.mutate = mutate
     return app
 
 

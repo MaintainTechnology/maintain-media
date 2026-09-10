@@ -1,0 +1,45 @@
+{
+  "checked_at": "2026-09-10T16:56:16.5455132Z",
+  "account": "052530979168",
+  "region": "ap-southeast-2",
+  "instance": "maintain-media-abn-engine",
+  "source_manifest_sha256": "fce7c862196a6bc65096b5377bdc5a2ed4f2eef58728300a6584394a48eab0a6",
+  "source_archive_sha256": "9b5e31ff7fcb2f8b0bf415b555c25626e215b92bbe863ba16659aa8b74c67b04",
+  "source_file_count": 142,
+  "previous_release_preserved": "/opt/abn-leadgen-live-20260911-001-previous",
+  "schema_migrations": 25,
+  "dependency_lock_unchanged": true,
+  "linux_offline_tests_passed": 106,
+  "linux_offline_test_warnings": 2,
+  "schedule_unit_verification_passed": true,
+  "active_service": "abr-engine-api.service",
+  "enabled_timers": [
+    "abr-engine-worker.timer",
+    "abr-engine-control.timer",
+    "abr-engine-qbcc-review-cleanup.timer"
+  ],
+  "installed_disabled_timers": [
+    "abr-engine-qbcc-weekly.timer",
+    "abr-engine-retention.timer"
+  ],
+  "review_staging_preview": {
+    "status": "preview",
+    "runs": [],
+    "decrypted_records": 0
+  },
+  "review_staging_execution_exit_status": 0,
+  "worker_and_control_exit_status": 0,
+  "authenticated_transport_http_status": 200,
+  "authenticated_transport_mode": "pilot",
+  "authenticated_transport_lead_count": 0,
+  "authenticated_transport_cache_control": "no-store",
+  "browser_clerk_login_verified": false,
+  "ghl_token_installed": true,
+  "ghl_token_services_restarted": true,
+  "ghl_contact_calls": 0,
+  "source_capabilities_enabled": [],
+  "release_approvals_created": 0,
+  "outreach": "disabled",
+  "off_host_backup_installed": false,
+  "ip_reserved_static": false
+}

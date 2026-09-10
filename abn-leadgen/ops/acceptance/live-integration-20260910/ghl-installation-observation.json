@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "status": "credential_and_empty_field_preparation_verified",
+  "recorded_at": "2026-09-10T16:53:40Z",
+  "observation_source": "Root operator's actual local receiver success and actual typed metadata installer read-back in this task",
+  "location_id": "xHZFHMOE476t5CxY9vCG",
+  "credential_installation_reported_successful": true,
+  "credential_value_recorded": false,
+  "credential_storage": "Separate current-user DPAPI recovery record outside the repository; root-only new server environment file",
+  "server_environment_file": "/etc/abr-engine/ghl.env",
+  "service_dropins_prepared": [
+    "abr-engine-api.service",
+    "abr-engine-worker.service",
+    "abr-engine-control.service"
+  ],
+  "services_started_by_credential_installer": false,
+  "services_reloaded_by_credential_installer": false,
+  "installed_scope_observation": [
+    "locations.readonly",
+    "locations/customFields.readonly",
+    "locations/customFields.write"
+  ],
+  "temporary_field_write_scope_removal_verified": false,
+  "folder_assignment_verified": false,
+  "actual_field_readback": {
+    "observed_at": "2026-09-10T16:52:15.751138+00:00",
+    "field_count": 13,
+    "pinned_group_field_id": "C17XY6QzLsYssEnb1gUz",
+    "pending_create": null,
+    "contact_calls": 0,
+    "receipt": "ghl-field-metadata.json",
+    "receipt_sha256": "c181c179b4f8fdebc237b103c2f7620a8167b30dfdf4045aa79131d1a735dc04"
+  },
+  "form_defect_and_fix": {
+    "defect": "Referrer-Policy no-referrer causes native form POST Origin:null, rejected before escrow",
+    "fix": "Referrer-Policy same-origin; exact Host, Origin and CSRF checks retained",
+    "native_chromium_legacy_case": "403, null Origin, zero synthetic acceptances",
+    "native_chromium_fixed_case": "200 result after form submission, exact origin, one synthetic acceptance",
+    "actual_new_token_subsequently_accepted": true
+  },
+  "engineering_checks": {
+    "tests_passed": 89,
+    "tests_failed": 0,
+    "tests_skipped": 0,
+    "duration_seconds": 36.26,
+    "junit": "ghl-setup-tests-20260911.xml",
+    "junit_sha256": "e8e69bacb3e4c6e11f464de30c8e3fdbd126026ef137fdb752f8b8fe42361ab2",
+    "ruff": "passed",
+    "mypy_platform_appropriate": "passed",
+    "synthetic_tokens_only_in_tests": true,
+    "independent_review": "remote durability findings fixed; remaining boundaries reviewed clean"
+  },
+  "source_sha256": {
+    "ops/aws/provision_ghl.py": "7189e58ea63fbdbf87a13befb02a20782df8c1aaf45a764682cbc104693156bf",
+    "ops/aws/provision_ghl_client.py": "a22ec94b8c1fd3e91b5ef43a9b8a93e607baa0eeae0c1f50eea6d3ada8c2baa5",
+    "ops/aws/provision_ghl_fields.py": "79efd876282d99ec3019f2590f4d83722a19673d1e1c15f5353e3a708eba2704"
+  },
+  "source_or_privacy_approval_created": false,
+  "vendor_processing_countries_approved": false,
+  "contact_scope_or_workflow_isolation_certified": false,
+  "real_business_data_written": false,
+  "g5_certified": false,
+  "outreach_enabled": false,
+  "scope_note": "Non-authoritative installation observation, not the approval-bound GHL installation manifest. Credential and field readiness do not prove safe contact collision, automation isolation, suppression/retry behavior or lawful vendor disclosure."
+}

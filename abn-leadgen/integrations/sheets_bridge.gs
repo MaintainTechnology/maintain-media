@@ -1,5 +1,5 @@
 /** Private Sheet bridge v1. Install only after G5 sandbox certification.
- * Script properties: ENABLED=false, API_BASE_URL, SERVICE_TOKEN, BRIDGE_SECRET.
+ * Script properties: ENABLED=false, API_BASE_URL, SERVICE_SIGNING_KEY, BRIDGE_SECRET.
  * Server must validate signed editor context, body digest, timestamp freshness and
  * assigned actor scopes; service credentials alone must not impersonate reviewers.
  * Installable edit trigger uses onWorklistEdit; repair trigger uses repairPendingEdits
@@ -100,21 +100,43 @@ function signedRequest_(method, path, body, actor, key) {
   if (properties.getProperty('ENABLED') !== 'true') throw new Error('Bridge release gate closed');
   const base = properties.getProperty('API_BASE_URL');
   const secret = properties.getProperty('BRIDGE_SECRET');
-  const token = properties.getProperty('SERVICE_TOKEN');
-  if (!base || !/^https:\/\/[^/@]+$/.test(base) || !secret || !token) throw new Error('Invalid protected configuration');
+  const signingKey = properties.getProperty('SERVICE_SIGNING_KEY');
+  if (!base || !/^https:\/\/[^/@]+$/.test(base) || !secret || !signingKey ||
+      secret.length < 32 || signingKey.length < 32 || secret === signingKey) throw new Error('Invalid protected configuration');
   const timestamp = new Date().toISOString();
-  const raw = JSON.stringify(body);
+  const raw = method.toUpperCase() === 'GET' ? '' : JSON.stringify(body);
+  const token = serviceToken_(method, path, raw, actor, signingKey, properties);
   const canonical = [method.toUpperCase(), path, timestamp, actor, key, raw].join('\n');
   const bytes = Utilities.computeHmacSha256Signature(canonical, secret, Utilities.Charset.UTF_8);
   const signature = bytes.map(value => ('0' + ((value + 256) % 256).toString(16)).slice(-2)).join('');
-  const response = UrlFetchApp.fetch(base + path, {method: method, contentType: 'application/json', payload: raw,
+  const options = {method: method, contentType: 'application/json',
     followRedirects: false, muteHttpExceptions: true, headers: {
       Authorization: 'Bearer ' + token, 'Idempotency-Key': key, 'X-Request-ID': Utilities.getUuid(),
       'X-Bridge-Actor': actor, 'X-Bridge-Timestamp': timestamp, 'X-Bridge-Signature': signature
-    }});
+    }};
+  if (method.toUpperCase() !== 'GET') options.payload = raw;
+  const response = UrlFetchApp.fetch(base + path, options);
   const status = response.getResponseCode();
   if (status < 200 || status >= 300) throw new Error(status === 409 ? 'Revision conflict' : 'Control request failed');
   return JSON.parse(response.getContentText());
+}
+
+function serviceToken_(method, path, raw, actor, signingKey, properties) {
+  const encode = value => Utilities.base64EncodeWebSafe(value, Utilities.Charset.UTF_8).replace(/=+$/, '');
+  const digest = Utilities.computeDigest(Utilities.DigestAlgorithm.SHA_256, raw, Utilities.Charset.UTF_8)
+    .map(value => ('0' + ((value + 256) % 256).toString(16)).slice(-2)).join('');
+  const now = Math.floor(Date.now() / 1000);
+  const sheetId = properties.getProperty('WORKLIST_SHEET_ID');
+  const spreadsheetId = properties.getProperty('SPREADSHEET_ID');
+  if (!spreadsheetId || !/^(0|[1-9][0-9]*)$/.test(sheetId || '') || !Number.isSafeInteger(Number(sheetId))) {
+    throw new Error('Bridge workbook identity missing');
+  }
+  const claims = {iss: 'maintain-media-sheets', aud: 'abr-engine-sheets', sub: 'private-worklist-bridge',
+    iat: now, exp: now + 60, method: method.toUpperCase(), path: path, body_sha256: digest,
+    editor: actor, spreadsheet_id: spreadsheetId, sheet_id: Number(sheetId)};
+  const unsigned = encode(JSON.stringify({alg: 'HS256', typ: 'JWT'})) + '.' + encode(JSON.stringify(claims));
+  const signature = Utilities.computeHmacSha256Signature(unsigned, signingKey, Utilities.Charset.UTF_8);
+  return unsigned + '.' + Utilities.base64EncodeWebSafe(signature).replace(/=+$/, '');
 }
 
 function submit_(pending) {

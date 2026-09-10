@@ -1,14 +1,70 @@
 # Production preparation and host acceptance
 
-This directory prepares a reproducible, uninstalled systemd bundle. It does not create a server,
-approve evidence, migrate a database, read private credential files, send alerts or enable a live
-adapter. The existing fixture units in `../systemd/` are unchanged.
+This directory contains the separate manifest, systemd-bundle and host-acceptance
+preparer. Its `render` and `check` commands do not install their output, create
+approval records, migrate a database or enable adapters. The existing fixture
+units in `../systemd/` are unchanged. Prepared bundles and historical acceptance
+receipts must not be mistaken for the current installed service.
 
-**Current result: live deployment is blocked.** No AU host, storage contract or real backup provider
-has been supplied. The current CLI also reports live pipeline/dashboard, ABR generation mapping,
-CRM drain and suppression propagation implementation blockers. `serve --mode pilot|production`
-still refuses nonfixture execution. These templates deliberately use the guarded CLI; running
-uvicorn directly to bypass that refusal is not a deployment solution.
+For the next real-data step, see the beginner-facing
+[first live QBCC worklist brief](first-live-qbcc.md): supplied accounts, the exact
+owner/adviser decision, and the technical checks the developer handles.
+
+**Current result, checked 11 September 2026 (Manila): the live pilot runtime is
+installed and responding, while business-data activation remains gated.** The
+AWS Sydney host has PostgreSQL, private runtime configuration, the authenticated
+API and TLS installed. Release 005 records an authenticated runtime HTTP 200,
+an active API plus worker/control/review-cleanup timers, zero leads, no enabled
+source capabilities and no created release approvals. See
+[`live-service-release-005-20260911.json`](../acceptance/aws/live-service-release-005-20260911.json)
+and the preceding installation receipts. Those checks verify the signed transport;
+a fresh end-to-end staff Clerk browser login is not certified by that receipt.
+
+QBCC pipeline, dashboard, CRM drain and suppression wiring now exist. The guarded
+legacy `serve` command is still fixture-only; the installed nonfixture service
+uses the dedicated `live-serve` command. Direct uvicorn invocation is unnecessary
+and must not bypass its configuration and authentication setup. ABR expansion
+mapping, the measured QBCC pilot and its later expansion decision remain separate
+unverified work.
+
+Google's protected private worklist and matching server/script connection keys
+are installed and read back. Its script stays disabled, with no active reader
+registry or live pull. GHL's dedicated credential and all 13 empty mapped fields
+are installed; folder assignment and removal of temporary field-write permission
+are verified. Only metadata read scopes remain. See
+[`LIVE-INSTALLATION.md`](../../integrations/LIVE-INSTALLATION.md) for the actual
+receipts and remaining staff, collision, workflow and suppression tests.
+
+The real backup CLI and S3 transport are installed. At **2026-09-10 18:05:38 UTC**
+(11 September, 02:05 Manila), the actual Sydney storage probe encrypted a random
+test value, uploaded it, downloaded and decrypted it successfully, then deleted
+the exact test object and verified absence. It accessed no database or business
+data. The private bucket, scoped publisher, host files and permissions are
+installed; the bucket has public access blocked, no version history and a 34-day
+lifecycle rule. See
+[`backup-storage-installation-20260911.json`](../acceptance/aws/backup-storage-installation-20260911.json).
+This is verified storage preparation, **not an accepted production backup**.
+
+Release 005 also applied migration 026 with runtime queue privileges limited to
+`SELECT/UPDATE` and no gate-write permission. Seven backup units are installed;
+all three backup timers (daily, ledger and expiry) remain **disabled**. The manual
+missing-authority check correctly held with exit 3; its local failure alarm exited
+0 and the expected test failure state was reset. This verifies refusal and local
+alarm recording, not external alert delivery or detection of a stopped timer.
+The ledger baseline is generation 1, acknowledged generation 0.
+The final release receipt records 495 passing unit tests with two deprecation
+warnings. Native Linux checks also verified rejection of concurrent publishers,
+recovery after a publisher process was killed and an independent capture lock;
+those lock checks accessed neither the database nor the provider.
+
+The private backup key is protected by current-user Windows DPAPI in Codex's
+virtualized Windows profile; the canonical custody path was confirmed by the
+operator. It is not on the Sydney source host. Independent custody recovery and
+recovery of engine wrapping/encryption and retained lookup keys remain unproved.
+Source/privacy/vendor records, approved backup authority, a real quarantined
+restore, measured recovery loss/interval, stopped-timer monitoring, external
+alerts, current-control recovery, matching accuracy, capacity and the measured
+QBCC pilot remain release requirements. Prepared configuration is not approval.
 
 ## Prepare a reviewable bundle
 
@@ -52,8 +108,11 @@ directory links.
 
 ## Provisioned-host installation sequence
 
-This sequence is for the developer on the explicitly selected AU host after its access is supplied.
-It is documentation, not an installation receipt. Do not run it against an inferred host.
+This is the preparer's generic gated-bundle sequence for a confirmed AU host,
+not a report that all steps are outstanding or a replacement for the installed
+`abr-engine-*` service procedure. Use the dated receipts above to establish what
+is already installed before applying a new bundle. Do not run it against an
+inferred host or replace an active service from these examples.
 
 1. Provision the dedicated non-root `abr-engine` identity, Python 3.12, PostgreSQL 16, systemd,
    locked dependencies and a root-owned `/opt/abn-leadgen` release. Provision private writable
@@ -71,7 +130,7 @@ It is documentation, not an installation receipt. Do not run it against an infer
    needed private database/control flows. Never expose the loopback engine port publicly.
 4. Run the approved schema migration with exact `db migrate --config ... --mode pilot` arguments
    only against the confirmed new/private target database. Establish the machine-readable gates
-   from real owner evidence and complete the outstanding live implementation/contract work.
+   from real owner evidence and complete the outstanding account/activation contracts.
    A YAML mode/capability switch alone never satisfies this step.
 5. Copy the reviewed bundle plan and manifest to their declared private paths. Re-run the preparer
    as the actual service identity. It checks the current host, systemd/Python/PostgreSQL, code/plan
@@ -89,9 +148,11 @@ It is documentation, not an installation receipt. Do not run it against an infer
 The pilot bundle includes weekly Monday QBCC discovery, UTC, with persistent catch-up. It omits
 ABR units entirely. **Start the QBCC pilot first.** A separately compiled production plan adds
 six-hour ABR discovery and must pass the four measured QBCC weeks and current G6 expansion decision.
-The API remains private on 8766 and uses `serve`; it cannot start until its nonfixture implementation
-and TLS/identity deployment contract exist. The website's current fixture bridge on 8767 does not
-become a live dashboard through these templates.
+This preparer's API template still targets the guarded legacy `serve` entry point;
+it is not the installed live API unit. The installed service uses `live-serve` on
+loopback behind the authenticated HTTPS deployment. Do not install the legacy
+template over it or use the old 8767 fixture page as evidence of a live connection.
+Worker/control timer activity does not by itself authorize source discovery.
 
 The monitor calls `alarms check` once per minute. Its `check --scope monitor` verifies only the
 declared host, runtime and immutable/private paths; expired policy, backup or capacity evidence
@@ -114,18 +175,33 @@ actual private config path. This command handles only the managed seven-day QBCC
 and interrupted-intake cleanup; it enforces owned artifact paths, holds and managed configuration
 itself. The host/integrity preflight lets cleanup run when collection approvals have expired.
 It does not admit candidates, advance accepted source state or enable the general retention unit.
-The generated files remain uninstalled; no cleanup is executed while preparing a bundle.
+Rendering these particular files does not install or execute them. The separately
+installed `abr-engine-qbcc-review-cleanup.timer` is recorded in release 005; do not
+add a duplicate cleanup schedule from this generic bundle.
 
 ## Backup creation, verification and restore
 
-No production backup-create command exists in the engine today. `backup drill` is intentionally
-fixture-only; these units never call it in a live mode. The chosen AU backup provider must create
-encrypted database and immutable artifact backups, maintain an independent current suppression/
-erasure ledger and enforce deletion by 35 days. Keep encryption/wrapping/retired lookup keys in
-separate managed custody. Evidence and restoration need the actual provider and account; inventing
-a backup receipt would not make the system recoverable.
+The implemented `ops/aws/backup_cli.py` provides `create`, `ledger`, `expire` and
+`restore`. It creates an actual PostgreSQL dump and verified artifact archive,
+encrypts before upload, uses the private Sydney S3 transport and verifies object
+read-back. The independent ledger operation captures suppression/erasure state;
+restore keeps a fresh isolated cluster quarantined. Release 005 includes the
+transactional ledger queue and disabled backup scheduling units. See
+[`backup-operations.md`](../aws/backup-operations.md) for the full command,
+authority, custody and recovery contracts. The older `backup drill` remains
+fixture-only and is not the production create command.
 
-An external approved backup job writes a restricted JSON receipt to `backup_receipt_path`. The
+Actual bucket/identity installation and the encrypted random-value
+upload/read-back/decrypt/deletion check now have dated evidence. They do not prove
+database or artifact recovery. Approved authority and independent custody
+recovery, scheduled execution, acknowledged newer restriction ledgers, measured
+recovery loss/interval, stopped-timer detection and a quarantined restore still
+need evidence. Retain
+wrapping/encryption material and all required lookup-key versions in separate
+managed custody; do not put the backup private key on the source host. Expiry
+must be checked against the 35-day limit, including interruptions and retries.
+
+The approved backup operation writes a restricted JSON receipt to `backup_receipt_path`. The
 `BackupReceipt` schema in `prepare.py` is the executable contract. It requires the deployment and
 backup UUIDs; `status:complete`; `country:AU`; `encryption:encrypted_separate_key_custody`;
 `completed_at`, `expires_at`, `ledger_watermark`; provider evidence; and exactly one encrypted
@@ -139,12 +215,14 @@ the newest ledger. Keep the independent ledger current between daily backups.
 /opt/abn-leadgen/.venv/bin/python /opt/abn-leadgen/ops/production/prepare.py verify-backup --plan /etc/abr-engine/deployment-plan.json --receipt /var/lib/abr-engine/receipts/latest-backup.json
 ```
 
-The hourly backup-check timer validates receipt structure, deployment binding, component coverage,
+This preparer's hourly backup-check timer validates receipt structure, deployment binding, component coverage,
 24-hour freshness and 35-day maximum retention. **It does not create a backup, fetch a remote
 object, verify encryption or prove a restore.** Its `receipt_valid` status is intentionally narrower
 than deployment readiness. Missing/stale receipts fail the unit; configured redacted operations
 delivery must independently report that failure once its adapter is approved. The actual backup
 job must use the same systemd scheduler, not a second cron schedule.
+The separately installed backup timers remain disabled; their presence and the
+manual negative check are not proof of unattended execution or outside alerts.
 
 Restore into a fresh isolated AU quarantine with user evidence access and outward actions closed.
 Verify backup digests/provider receipts, restore database and artifacts, import the latest independent
@@ -158,6 +236,10 @@ owners. This package cannot certify those absent observations.
 
 Run `uv run --frozen pytest tests/unit/test_production_preparation.py -q` for the closed-plan,
 gated-unit, backup receipt, host mismatch, revision drift and release-check fail-closed regressions.
-No test provisions a server, reads a real credential file, contacts providers or installs systemd.
-Actual Linux `systemd-analyze verify`, service-account access, timer timing, encrypted remote
-backup/restore, egress and live pilot remain separate pending acceptance evidence.
+These preparer tests do not provision a server, read a real credential file,
+contact providers or install systemd. Actual host/runtime and integration setup
+receipts now exist, as linked above. They do not certify this generic generated
+bundle, backup schedule/ledger durability, encrypted remote backup/restore,
+complete egress/capacity acceptance or the measured live pilot. Keep the historical
+fixture and preparation receipts unchanged and record each later observation
+against its exact deployed release.

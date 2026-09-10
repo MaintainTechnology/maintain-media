@@ -1,0 +1,11 @@
+[Unit]
+Description=Check pending ABN restrictions and CRM recovery every 15 seconds
+
+[Timer]
+OnBootSec=20s
+OnUnitInactiveSec=15s
+AccuracySec=1s
+Unit=abr-engine-control.service
+
+[Install]
+WantedBy=timers.target

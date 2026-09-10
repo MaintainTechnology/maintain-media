@@ -115,7 +115,9 @@ def test_pilot_cannot_enable_abr_and_all_live_services_are_explicitly_gated():
     for name in ("qbcc", "retention", "api"):
         unit = units[f"abr-live-{name}.service"]
         assert "ExecStartPre=" in unit and " --scope monitor" not in unit
-        assert "--config /etc/abr-engine/config.yaml --mode pilot" in unit
+        assert "--config /etc/abr-engine/config.yaml" in unit
+        if name != "qbcc":
+            assert "--mode pilot" in unit
         assert "User=abr-engine" in unit and "ProtectSystem=strict" in unit
     assert "--scope monitor" in units["abr-live-monitor.service"]
     assert "alarms check --config" in units["abr-live-monitor.service"]
@@ -128,7 +130,10 @@ def test_pilot_cannot_enable_abr_and_all_live_services_are_explicitly_gated():
     assert "00,06,12,18:00:00 UTC" in production["abr-live-abr.timer"]
     for name in ("abr", "qbcc"):
         assert "/usr/bin/flock -n -E 4 /run/abr-engine/pipeline.lock" in production[f"abr-live-{name}.service"]
-        assert "--mode production" in production[f"abr-live-{name}.service"]
+        if name == "abr":
+            assert "--mode production" in production[f"abr-live-{name}.service"]
+        else:
+            assert "live-schedule-weekly --config /etc/abr-engine/config.yaml" in production[f"abr-live-{name}.service"]
 
 
 @pytest.mark.parametrize("mode", ["pilot", "production"])

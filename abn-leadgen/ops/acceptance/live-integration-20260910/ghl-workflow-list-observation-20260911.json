@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "status": "bounded_readonly_workflow_list_observation",
+  "recorded_at": "2026-09-10T17:55:01.534841+00:00",
+  "observed_on": "2026-09-11",
+  "observation_timezone": "Asia/Manila",
+  "observation_source": "Root operator reported visible authenticated GHL UI in the owner browser; reviewer subagent could not access that browser surface and records the operator observation only.",
+  "location_id": "xHZFHMOE476t5CxY9vCG",
+  "location_name": "Maintain Media",
+  "list_filter": "All workflows",
+  "search": "blank",
+  "home_visible_folders": [
+    "Marketing Workflows"
+  ],
+  "inspected_folder": "Marketing Workflows",
+  "page_number_observed": 1,
+  "page_size": 10,
+  "visible_workflow_count": 6,
+  "workflows": [
+    {
+      "title_as_reported_by_operator": "1.New Lead Nurture(Fast5)-ClaimOffer",
+      "status": "Draft",
+      "total_enrolled": 0,
+      "active_enrolled": 0
+    },
+    {
+      "title_as_reported_by_operator": "2.AppointmentConfirmation+Reminders",
+      "status": "Draft",
+      "total_enrolled": 0,
+      "active_enrolled": 0
+    },
+    {
+      "title_as_reported_by_operator": "3.ApptNoShow",
+      "status": "Draft",
+      "total_enrolled": 0,
+      "active_enrolled": 0
+    },
+    {
+      "title_as_reported_by_operator": "4.NewSale-SendReviewRequest",
+      "status": "Draft",
+      "total_enrolled": 0,
+      "active_enrolled": 0
+    },
+    {
+      "title_as_reported_by_operator": "5.Long-TermNurture",
+      "status": "Draft",
+      "total_enrolled": 0,
+      "active_enrolled": 0
+    },
+    {
+      "title_as_reported_by_operator": "6.StaleLeads",
+      "status": "Draft",
+      "total_enrolled": 0,
+      "active_enrolled": 0
+    }
+  ],
+  "pagination_end_verified": false,
+  "pagination_note": "Only page 1 was observed. The next-page control was not explicitly disabled in accessibility output; account-global completeness is not inferred.",
+  "trigger_definitions_opened": false,
+  "execution_history_opened": false,
+  "contacts_read_or_written": 0,
+  "workflows_or_scopes_changed": false,
+  "messages_sent": 0,
+  "entire_account_inventory_verified": false,
+  "workflow_isolation_verified": false,
+  "g5_certified": false,
+  "contact_test_authorized_by_this_observation": false,
+  "remaining_unknowns": [
+    "complete current account workflow inventory and pagination",
+    "actual trigger definitions and action chains",
+    "other automation, external integrations and campaign behavior",
+    "account-specific exclusions or positive eligibility before outbound actions",
+    "fresh inventory and approved isolated test before any contact write"
+  ],
+  "scope_note": "Draft list status and zero aggregate enrolments are useful setup facts. They do not prove that creating/changing a contact or tag is safe across the account, and do not replace source/privacy/vendor approvals."
+}

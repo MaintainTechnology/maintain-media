@@ -9,7 +9,7 @@
     "lint": "eslint",
     "admin:account": "node scripts/admin-account.mjs",
     "test:auth": "node --experimental-strip-types --test tests/admin-auth.test.mjs tests/clerk-policy.test.mjs tests/clerk-auth-entry.test.mjs",
-    "test:bridge": "node --experimental-strip-types --test tests/leadgen-bridge.test.mjs",
+    "test:bridge": "node --conditions=react-server --experimental-strip-types --test tests/leadgen-bridge.test.mjs",
     "test:leadgen": "node scripts/check-abn-dashboard.cjs"
   },
   "dependencies": {

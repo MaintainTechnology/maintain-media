@@ -33,3 +33,64 @@ All extension hooks checked: .specify/extensions.yml absent; pre/post hooks skip
 Constitution skill was used for the constitution only, then the independently requested
 specification/planning stages followed. No template source file was edited.
 User explicitly requested assessment and improvement, so analysis remediation is authorised.
+
+## Execution addendum — 11 September 2026
+
+The prior table and document scores remain the historical 9 September snapshot.
+The later user request explicitly authorised the Next.js admin dashboard and the
+Australian service deployment. That instruction extends the earlier plan's
+HTML-only interface scope; it does not approve source collection, contact, vendor
+processing or a commercial pilot result.
+
+The current implementation now includes the protected Next.js dashboard and real
+Python API, current reviewer identity, durable gated QBCC intake/acceptance/review,
+bounded website collection, outcome and suppression controls, separate Sheets
+authority, live vendor workers, maintenance scheduling and encrypted backup/restore
+tools. The Sydney service is installed with HTTPS, private database authentication
+and 26 migrations. Unauthenticated dashboard access was rejected, and an approved
+actor's signed server request reached the real empty pilot database. The private
+Google worklist and disabled bridge were installed in the owner's account. Their
+matching server/Apps Script keys and actual endpoint are now verified, while the
+reader registry and live pull remain disabled. GHL's 13 empty fields and folder
+were verified; its installed credential currently grants only metadata reads.
+No contact or business-data disclosure was enabled by those installations.
+
+Runtime release 005 is installed with 153 source files. Three recovery/cleanup
+timers are enabled; weekly source admission and retention remain disabled. The
+user approved a US$5/month one-bucket backup setup allowance. That private Sydney
+bucket and scoped publisher are now installed. The actual encrypted random-value
+upload/read-back/decrypt/delete-absence probe passed at 2026-09-10T18:05:38Z,
+without database or business-data access. Migration 026 and seven backup units
+are installed, with all three backup timers disabled. A missing-authority test
+held and recorded a local alarm. Independent custody recovery, production
+backup/restore, measured recovery loss, stopped-timer monitoring and external
+alerts remain unverified. The spending decision and successful storage probe do
+not satisfy backup authority or actual database-restore gates.
+
+The website production build and 57 frontend checks passed on Node 24. The existing
+Vercel project now serves release `dpl_387fws7PqGeZ5fHhPstMwZWbK5w4` on the public
+domain, with 12 passed signed-out HTTP checks. Its dashboard and API functions were
+verified in Sydney after the first release's region mismatch was corrected. Clerk
+middleware remains globally replicated, so the full request path is not claimed
+to stay in Australia. A signed-in staff browser verification remains pending.
+Installation and passing tests do not satisfy source, privacy, vendor, restore or
+pilot gates.
+
+This was a bounded status reconciliation using the converge skill's traceability
+and incomplete-task rules, not a new assertion that all 43 requirements passed.
+Prerequisite resolution selected `specs/001-abr-lead-engine`; the extension hook
+file remained absent. The constitution, current task obligations and deployment
+receipts were checked. Existing T065/T071 already cover the remaining live
+integration gaps, so no duplicate convergence phase was appended.
+
+There are **63 completed tasks out of 71**. No new checkbox was closed in this
+addendum. The eight open tasks are T041, T051, T053, T055, T058, T062, T065 and T071.
+They retain the classification sample, elapsed pilot outcomes, scheduler recovery,
+capacity, release approvals, hosted CI restore, and full live integration evidence
+required by their original descriptions. The local schedule/maintenance tests and
+host installation reduce those gaps but do not complete all of their obligations.
+
+See [[ABR Lead Engine - Implementation Status#Deployment addendum — 11 September 2026|the dated implementation addendum]]
+for the exact installed components, receipts and remaining work. Full-spec
+convergence and production acceptance remain incomplete; no score replaces a
+missing acceptance result.

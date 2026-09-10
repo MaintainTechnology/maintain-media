@@ -65,7 +65,8 @@ class KeyStore:
         rows = conn.execute(
             "SELECT key_version FROM suppression_alias UNION SELECT key_version FROM suppression_event "
             "WHERE key_version IS NOT NULL UNION SELECT key_version FROM lead_source_link "
-            "UNION SELECT token_key_version AS key_version FROM contact_record"
+            "UNION SELECT token_key_version AS key_version FROM contact_record "
+            "UNION SELECT key_version FROM qbcc_source_review"
         ).fetchall()
         required = {row["key_version"] for row in rows} | self.dependencies
         if required - self.lookup_keys.keys():
@@ -82,11 +83,14 @@ class KeyStore:
         if any(version in previous and previous[version] != value for version, value in fingerprints.items()):
             self.compromised = True
             raise ValueError("Authority frozen: lookup material changed under a known version")
-        conn.execute(
-            "INSERT INTO system_state(name,value) VALUES('lookup_key_fingerprints',%s) "
-            "ON CONFLICT(name) DO UPDATE SET value=EXCLUDED.value",
-            (Jsonb(previous | fingerprints),),
-        )
+        # Validation of an unchanged registered set is genuinely read-only. This
+        # preserves authority checks inside a coherent read-only backup snapshot.
+        if not registered or previous | fingerprints != previous:
+            conn.execute(
+                "INSERT INTO system_state(name,value) VALUES('lookup_key_fingerprints',%s) "
+                "ON CONFLICT(name) DO UPDATE SET value=EXCLUDED.value",
+                (Jsonb(previous | fingerprints),),
+            )
 
     def save(self, path: Path | None = None):
         """Atomically persist an encrypted envelope; wrapping key lives outside the file.
@@ -179,8 +183,9 @@ class KeyStore:
             "SELECT (SELECT count(*) FROM suppression_alias WHERE key_version=%s) + "
             "(SELECT count(*) FROM suppression_event WHERE key_version=%s) + "
             "(SELECT count(*) FROM lead_source_link WHERE key_version=%s) + "
-            "(SELECT count(*) FROM contact_record WHERE token_key_version=%s) AS n",
-            (version, version, version, version),
+            "(SELECT count(*) FROM contact_record WHERE token_key_version=%s) + "
+            "(SELECT count(*) FROM qbcc_source_review WHERE key_version=%s) AS n",
+            (version, version, version, version, version),
         ).fetchone()["n"]
         if count or version in self.dependencies:
             raise ValueError("Retained restrictions depend on this lookup key")

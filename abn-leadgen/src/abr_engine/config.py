@@ -19,11 +19,18 @@ class Settings(BaseModel):
     issuer: str = "maintain-media-fixture"
     audience: str = "abr-engine-fixture"
     live_credentials: dict[str, str] = Field(default_factory=dict, repr=False)
+    # Omitted capabilities, including website_collection, stay disabled.
     capabilities: dict[str, bool] = Field(default_factory=dict)
     key_file: Path | None = None
+    ghl_config_file: Path | None = None
+    ghl_installation_file: Path | None = None
+    sheets_bridge_file: Path | None = None
 
     @model_validator(mode="after")
     def enforce_boundary(self):
+        for path in (self.ghl_config_file, self.ghl_installation_file, self.sheets_bridge_file):
+            if path is not None and not path.is_absolute():
+                raise ValueError("Live vendor configuration paths must be absolute")
         db = urlparse(self.database_url)
         if self.mode == "fixture":
             if (db.scheme != "postgresql" or db.hostname not in {"127.0.0.1", "::1"}

@@ -1,0 +1,34 @@
+[Unit]
+Description=Run separately approved finite ABN retention
+After=postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=oneshot
+Slice=abr-engine.slice
+User=abr-engine
+Group=abr-engine
+WorkingDirectory=/opt/abn-leadgen
+Environment=PYTHONPATH=/opt/abn-leadgen/src
+Environment=PYTHONDONTWRITEBYTECODE=1
+EnvironmentFile=/etc/abr-engine/runtime.env
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_UNIX
+ReadWritePaths=/var/lib/abr-engine
+TasksMax=64
+LimitNOFILE=2048
+ExecStart=/opt/abn-leadgen/.venv/bin/python -m abr_engine.cli live-maintenance --kind retention --execute --config /etc/abr-engine/pilot.yaml
+TimeoutStartSec=30min
+MemoryMax=2G

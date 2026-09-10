@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "status": "copyable_new_key_reveal_fix_verified",
+  "recorded_at": "2026-09-10T17:23:34.945549+00:00",
+  "observed_problem": "The owner handoff reported that password controls yielded empty values; Google refused the attempted empty property values. No successful Google key save was observed at that point.",
+  "change": "Only explicitly revealed NEW setup values now use read-only text controls. The initial page has no keys. Existing own encrypted material is reused on retry.",
+  "engineering_checks": {
+    "passed": 21,
+    "failed": 0,
+    "skipped": 0,
+    "duration_seconds": 25.75,
+    "junit": "sheets-copyable-reveal-tests-20260911.xml",
+    "native_browser": "Synthetic fresh Chromium context confirms empty initial page, exact generated pair in read-only text after explicit reveal, cleared final page and no key-bearing form body.",
+    "ruff": "passed",
+    "mypy": "passed"
+  },
+  "source_sha256": {
+    "ops/aws/provision_sheets_client.py": "331042a45b01d7e2f94b5f3ca7694c49a768e83c7a8766bf69f66b1bce594a42",
+    "ops/aws/test_provision_sheets_client.py": "f21f44be9d19becb12c1bbbaf6c04893373b315db26a7696309881f825ba91a9",
+    "ops/aws/sheets_setup_browser.cjs": "3da56628b4ff5631f6ab2e0f5ca64e5662af9b3046d49e3652dc639db789f26b"
+  },
+  "junit_sha256": "2472f02714ea1ec580af2fe3569e48e8a98fb6cc626d5c5b312b031ef64dd526",
+  "root_operation_observation": {
+    "source": "Root operator report in this task",
+    "host_key_preparation_succeeded": true,
+    "own_pair_escrowed": true,
+    "google_key_transfer_verified": false,
+    "script_enabled": false
+  },
+  "credentials_generated_or_read_by_this_test_run": false,
+  "real_key_values_recorded": false,
+  "provider_operations_by_reviewer": false,
+  "keys_rotated": false,
+  "approval_or_activation_evidence": false,
+  "scope_note": "Engineering regression and a bounded root report only. Actual Google save and matching read-back need a later operator observation."
+}

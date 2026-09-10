@@ -57,6 +57,22 @@ Scope `reviewer`; body `{row_id,expected_version,decision: approve|reject,reason
 
 `POST /relevance-assessments` requires reviewer scope and `{contact_id,channel:email,campaign_id,template_id,content_sha256,policy_version,state:pass|fail|unknown,role_evidence_id,reason,expected_contact_revision}`. Server derives reviewer identity/time, validates evidence belongs to that exact contact, and appends assessment_seq/current pointer while holding group then endpoint locks. Return201 `{assessment_id,assessment_seq,expires_at}`; invalid evidence422/stale revision409. Expiry is earliest of24h or current basis/identity/policy expiry. Later fail/unknown supersedes prior pass and invalidates pending intents. Phone requests reject this email-only assessment route with422; phone uses approved script/calling policy.
 
+### Website collection admission (live dashboard)
+
+`POST /v1/website-collections` requires the assigned `reviewer` role and the
+existing dated site-terms and current exact-domain identity/licence evidence.
+Before loading private job inputs or contacting the website, both capabilities
+must be enabled: `collection` with its current G1/G2/G3/G7, and
+`website_collection` with separately scoped current G1/G3/G7. An omitted
+`website_collection` setting is false. Its G1 owner/qualified-adviser decision
+must expressly cover website source use and address harvesting under R27; the
+reviewer's `terms_permit` field cannot replace that decision or change policy.
+Admission is repeated before/after DNS and every HTTP request and before contact
+writes. A queued request whose approval is withdrawn is held, its encrypted
+request is removed, and no new contacts are saved. Read-only job receipts remain
+available to authorized staff so they can see the hold. A permitted collection
+creates unverified evidence only; it does not establish contact permission.
+
 ### POST /action-intents and POST /action-intents/{id}/consume
 
 Scope `sender` or authorized operator call-check. Create body `{lead_id,contact_id,channel,campaign_id,template_id,content_sha256,relevance_assessment_id?,script_policy_version?,expected_contact_revision,recipient_timezone}`. Email requires a stored exact current reviewer relevance assessment ID; reject caller-provided relevance booleans/actor assertions or an obsolete assessment. Phone requires current script_policy_version and uses no email basis/relevance row. Server derives group UUID and authenticated actor, confirms approved content/required fields, applicable policy, suppression and expiry. Phone checks latest wash, verified timezone and call window/holiday calendar. Unknown policy/timezone ->deny. Return `{intent_id,state:pending|denied,expires_at,reason_codes}`; pending lasts at most60seconds and is **not permission to send**.

@@ -111,6 +111,20 @@ Record full-suite results and exact revision separately. Actual PostgreSQL const
 | `capabilities` | Empty mapping; fixture rejects enabled capabilities |
 | `key_file` | None in fixture; live modes require an absolute externally managed key-store path |
 
+`collection` permits only its approved business-source purpose. It does not enable
+website contact collection. `website_collection` is separately disabled when omitted
+or false; enabling it requires current G1/G3/G7 records whose exact scope is
+`website_collection`, plus the existing `collection` capability and G1/G2/G3/G7.
+The website G1 decision must cover the actual website source, address-harvesting
+assessment, necessity, notices and retention under R27. A reviewer providing a
+website URL or accepting site terms cannot supply this owner/adviser approval.
+The collector rechecks both scopes before and after DNS and every HTTP request,
+and before writing contact evidence. Latest expired/withdrawn evidence blocks an
+already queued job; it removes that job's encrypted request without creating contacts.
+Identity/licence checks and individual site terms remain additional requirements.
+`release-check` includes separate website runtime observations when that capability
+is enabled; leaving it off does not add website approval requirements to QBCC intake.
+
 Configuration is YAML-backed; do not assume arbitrary environment variables override it. CLI common options and any environment loader added in the final implementation must be documented with command evidence. Windows PostgreSQL helper sets `PGPASSWORD` inside its child-process environment to the known fixture password only. Never put live credentials in source, reports, logs, Sheets cells or this README.
 
 Human permissions are explicit: owners approve policy and release; developers administer infrastructure but have no automatic marketing-review authority; trained reviewers assess evidence and approve eligible selected tier A CRM rows; operators record outcomes, request immediate suppression and perform authorised live checks; compliance administers erasure/evidence; a separately certified sender consumes a fresh action decision. A service credential cannot invent an editor's human scope.

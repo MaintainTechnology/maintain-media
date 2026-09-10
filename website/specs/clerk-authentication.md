@@ -2,6 +2,12 @@
 
 User-authorised change, 9 September 2026. This supersedes the local-password and no-public-signup clauses of `abn-lead-gen-dashboard.md`. Existing lead-engine functionality and admin-only access remain required.
 
+The later `vercel-engine-connection.md` extension authorises deployment to the
+existing Maintain Technology Vercel project and a separate authenticated HTTPS
+engine transport. It supersedes this document's earlier no-public-deployment and
+same-host transport boundaries, while preserving the Clerk application and admin
+authority. Live source/release gates remain separate.
+
 ## Requirements
 
 1. Use the Clerk CLI to connect this existing Next.js/npm website to application `app_3J5CahJ3ZoQlWkUPqenwuPfc9KH`. Update/install the CLI, authenticate before initialisation, run init with the explicit application, and run doctor. Do not inspect or print existing environment files or credentials. Prefer development/test instance for local use; preserve production configuration.

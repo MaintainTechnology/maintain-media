@@ -1,0 +1,18 @@
+# Intentionally incomplete: actual GHL account sandbox observations are required.
+# This file's SHA256 becomes the approved crm/G5 evidence hash only after verification.
+schema_version: 1
+provider: gohighlevel
+environment: pilot
+location_id: xHZFHMOE476t5CxY9vCG
+config_sha256: REPLACE_WITH_EXACT_NONSECRET_GHL_CONFIG_SHA256
+approved_by: REPLACE_WITH_G5_ACTOR_ID
+verified_at: null
+expires_at: null
+checks:
+  metadata: {passed: false, evidence_ref: '', evidence_sha256: ''}
+  group_search: {passed: false, evidence_ref: '', evidence_sha256: ''}
+  uncertain_create: {passed: false, evidence_ref: '', evidence_sha256: ''}
+  suppression_clear: {passed: false, evidence_ref: '', evidence_sha256: ''}
+  workflow_isolation: {passed: false, evidence_ref: '', evidence_sha256: ''}
+  unrelated_tags: {passed: false, evidence_ref: '', evidence_sha256: ''}
+  processor_countries: {passed: false, evidence_ref: '', evidence_sha256: ''}

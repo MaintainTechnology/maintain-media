@@ -1,0 +1,16 @@
+{
+  "schema": "abr-backup-spend-decision-v1",
+  "recorded_at": "2026-09-10T16:59:56.5107216Z",
+  "decision": "approved",
+  "decision_source": "User reply: Approve the backup storage budget",
+  "account_id": "052530979168",
+  "region": "ap-southeast-2",
+  "bucket": "maintain-media-abn-backup-052530979168-983c39eb",
+  "monthly_budget_usd": 5,
+  "maximum_bytes": 100000000000,
+  "uses_available_aws_credit": true,
+  "billing_hard_stop": false,
+  "plan_sha256": "ee5f4349d2a0506d49664dfe47174cba43311be68086216f525fec65bb94f9c8",
+  "scope": "one private encrypted Sydney backup bucket and its scoped installation identity",
+  "source_privacy_vendor_release_approval": false
+}

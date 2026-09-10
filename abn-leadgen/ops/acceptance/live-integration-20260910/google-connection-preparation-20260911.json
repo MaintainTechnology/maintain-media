@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "status": "google_connection_prepared_and_disabled",
+  "recorded_at": "2026-09-10T17:26:33.614840+00:00",
+  "observed_on": "2026-09-11",
+  "observation_timezone": "Asia/Manila",
+  "observation_source": "Root operator completed the authenticated owner browser handoff and reported exact saved-property match results in this task. This subagent recorded no key values and performed no provider operations.",
+  "owner_email": "jeph@quotemax.com.au",
+  "spreadsheet_id": "1-PEySaH7AAod3hoFqZZf7zMYMWyQ3qIAWQzxnrq6K58",
+  "sheet_id": 2107750955,
+  "script_id": "1DzYHoVQ_X2_CoC6Dw4LaTXaXAYPRWBH2qPc34rEpY8nKtOGJFR2ZOmdn",
+  "api_base_url": "https://abn-engine.maintainmedia.com.au",
+  "server_preparation": {
+    "same_own_dpapi_pair_reused": true,
+    "keys_rotated": false,
+    "environment_installed": "/etc/abr-engine/sheets.env",
+    "environment_root_only": true,
+    "api_environment_loaded_by_root": true,
+    "draft_registry": "/etc/abr-engine/sheets-bridge.pending.yaml",
+    "draft_registry_enabled": false,
+    "approval_evidence_or_actor_scopes_added": false,
+    "settings_sheets_bridge_file_set": false
+  },
+  "google_saved_property_readback": {
+    "property_count": 8,
+    "saved_values_readonly": true,
+    "SERVICE_SIGNING_KEY": {
+      "matches_prepared_pair": true,
+      "length": 64
+    },
+    "BRIDGE_SECRET": {
+      "matches_prepared_pair": true,
+      "length": 64
+    },
+    "keys_distinct": true,
+    "ENABLED": "false",
+    "API_BASE_URL_matches_fixed_origin": true,
+    "INSTALLER_EMAIL_matches_owner": true,
+    "SPREADSHEET_ID_matches_fixed_workbook": true,
+    "WORKLIST_SHEET_ID_matches_fixed_tab": true,
+    "original_six_properties_preserved": true
+  },
+  "handoff_cleanup": {
+    "local_display_clear_selected": true,
+    "private_browser_bindings_cleared": true,
+    "google_tab_navigated_away_from_secret_settings": true,
+    "key_values_printed_or_recorded": false
+  },
+  "prior_sharing_observation": {
+    "workbook": "Restricted; owner only",
+    "script": "Restricted; owner only",
+    "receipt": "google-installation.json"
+  },
+  "live_pull_enabled": false,
+  "real_business_rows_published": false,
+  "release_or_vendor_approval_created": false,
+  "g5_certified": false,
+  "remaining_acceptance": [
+    "source and privacy decision",
+    "Google account/vendor countries and disclosure approval",
+    "approved dated reader registry and scoped current release evidence",
+    "genuine editor identity and write-back tests",
+    "sorted/stale/duplicate/replayed edit handling in the actual account",
+    "measured opt-out propagation and outage recovery",
+    "gated real worklist pull"
+  ],
+  "engineering_receipts": [
+    "sheets-key-preparation-engineering.json",
+    "sheets-copyable-reveal-fix.json"
+  ],
+  "scope_note": "This is actual disabled technical connection preparation, not live staff-workflow certification or an approval registry. Earlier receipts accurately describe earlier incomplete stages."
+}

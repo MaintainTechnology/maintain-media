@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "status": "reviewed_and_tested_preparation_code",
+  "recorded_at": "2026-09-10T17:13:41Z",
+  "live_key_installation_verified_by_this_receipt": false,
+  "prior_owner_observation": {
+    "source": "Root operator's authenticated Google Script Properties UI read-back in this task",
+    "api_base_url": "https://abn-engine.maintainmedia.com.au",
+    "known_property_count": 6,
+    "enabled": "false",
+    "other_five_original_properties_preserved": true,
+    "new_signing_or_bridge_keys_installed_at_that_observation": false
+  },
+  "fixed_targets": {
+    "host": "ubuntu@3.104.119.142",
+    "owner": "jeph@quotemax.com.au",
+    "spreadsheet_id": "1-PEySaH7AAod3hoFqZZf7zMYMWyQ3qIAWQzxnrq6K58",
+    "sheet_id": 2107750955,
+    "script_id": "1DzYHoVQ_X2_CoC6Dw4LaTXaXAYPRWBH2qPc34rEpY8nKtOGJFR2ZOmdn",
+    "environment": "/etc/abr-engine/sheets.env",
+    "disabled_draft_registry": "/etc/abr-engine/sheets-bridge.pending.yaml",
+    "api_dropin": "/etc/systemd/system/abr-engine-api.service.d/75-maintain-media-sheets.conf"
+  },
+  "engineering_checks": {
+    "combined_tests_passed": 155,
+    "tests_failed": 0,
+    "tests_skipped": 0,
+    "duration_seconds": 59.88,
+    "junit": "staff-credential-setup-tests-20260911.xml",
+    "junit_sha256": "21eac5aad1ba694c6b72efc9167a573501a8362ad2051d084b930af9e27fa84e",
+    "ruff": "passed",
+    "mypy_platform_appropriate": "passed",
+    "native_chromium": "Initial Google setup DOM contains no keys; exact-origin explicit reveal matches the synthetic pair; clearing removes values; no key values in form request bodies. GHL old/new referrer behavior also rechecked.",
+    "actual_windows_dpapi_acl": "Both separate synthetic credential stores passed current-user-only encryption and non-replacement tests",
+    "remote_publication_tests": "Synthetic Linux owner/mode emulation with real file identities and hard links; interrupted writes and changed-content replay tested",
+    "independent_review": "Root reviewed Google client/wrapper; integration reviewer checked shared publisher and requested per-file input-content hash binding, now fixed"
+  },
+  "source_sha256": {
+    "ops/aws/provision_sheets.py": "4edd771cc8ec452df55f3083d63178dd854ecb46a8510995fb81ba04c00be06e",
+    "ops/aws/provision_sheets_client.py": "fa732378304dcaf87a6301637fbd788312160bfb829bf8feda098377a457aa89",
+    "ops/aws/provision_private_files.py": "954fdb21274533273aaca0b7bfd2663fdae760602f8d758e20c5f8102d0b0b06",
+    "ops/aws/provision_ghl_client.py": "1d6ba5cf16068fba2ccfef9c19cf0d963f9dff681d2bb0322c45e34358d9da4a"
+  },
+  "no_secret_values_recorded": true,
+  "script_or_registry_activation_performed": false,
+  "settings_path_changed": false,
+  "actor_scopes_granted": false,
+  "vendor_or_source_approval_created": false,
+  "real_business_data_written": false,
+  "g5_certified": false,
+  "scope_note": "This is an engineering observation. Actual server key installation and owner Google transfer require their own subsequent read-back. This receipt does not authorize or prove live worklist disclosure, genuine editor delivery, suppression latency or vendor approval."
+}

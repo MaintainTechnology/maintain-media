@@ -1,0 +1,15 @@
+{
+  "observed_at": "2026-09-10T17:09:28.4026916Z",
+  "instance": "maintain-media-abn-engine",
+  "region": "ap-southeast-2",
+  "aws_cli_version": "2.36.42",
+  "executable": "/usr/local/bin/aws",
+  "install_directory": "/usr/local/aws-cli",
+  "installer_source": "https://awscli.amazonaws.com/v2/install.sh",
+  "reviewed_installer_sha256": "80f4b79b35bb5c427261e8e9f0fd6959ad3513a697f6e37d823959a72cb654dc",
+  "package": "awscli-exe-linux-x86_64-2.36.42.zip",
+  "gpg_signature_verified": true,
+  "public_key_fingerprint": "FB5DB77FD5C118B80511ADA8A6310ACC4672475C",
+  "installer_exit_status": 0,
+  "provider_credentials_configured": false
+}

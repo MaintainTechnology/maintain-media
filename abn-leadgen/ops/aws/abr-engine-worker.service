@@ -1,0 +1,35 @@
+[Unit]
+Description=Recover Maintain Media ABN jobs and pending restrictions
+After=network-online.target postgresql.service
+Requires=postgresql.service
+
+[Service]
+Type=oneshot
+Slice=abr-engine.slice
+User=abr-engine
+Group=abr-engine
+WorkingDirectory=/opt/abn-leadgen
+Environment=PYTHONPATH=/opt/abn-leadgen/src
+Environment=PYTHONDONTWRITEBYTECODE=1
+EnvironmentFile=/etc/abr-engine/runtime.env
+ExecStart=/opt/abn-leadgen/.venv/bin/python -m abr_engine.cli live-worker-tick --config /etc/abr-engine/pilot.yaml --lane source
+TimeoutStartSec=50min
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+RestrictRealtime=true
+LockPersonality=true
+CapabilityBoundingSet=
+RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6
+ReadWritePaths=/var/lib/abr-engine
+IPAddressDeny=10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16 100.64.0.0/10 fc00::/7 fe80::/10
+MemoryMax=6G
+TasksMax=128
+LimitNOFILE=4096

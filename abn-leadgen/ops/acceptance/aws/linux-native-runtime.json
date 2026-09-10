@@ -1,0 +1,1 @@
+{"status": "offline_native_runtime_verified", "python": "3.12.3", "source_root": "/opt/abn-leadgen", "versions": {"duckdb": "1.5.5", "pyarrow": "25.0.1", "lxml": "6.1.3", "psycopg": "3.3.5", "cryptography": "50.0.1", "fastapi": "0.141.1", "uvicorn": "0.52.4"}}

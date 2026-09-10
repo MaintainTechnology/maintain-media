@@ -1,0 +1,32 @@
+{
+  "checked_at": "2026-09-10T17:21:53.4120614Z",
+  "account": "052530979168",
+  "region": "ap-southeast-2",
+  "instance": "maintain-media-abn-engine",
+  "source_manifest_sha256": "269def990c1d7cb0b912e84091ebee02729e4ba871627dc101ce7d7349e86ada",
+  "source_archive_sha256": "678880d20392b461e5138c64daa4094e8853e0fef7d299db4dc63be337586cd3",
+  "source_file_count": 149,
+  "previous_release_preserved": "/opt/abn-leadgen-live-20260911-002-previous",
+  "dependency_lock_unchanged": true,
+  "linux_offline_tests_passed": 106,
+  "linux_offline_test_warnings": 2,
+  "backup_cli_imports_passed": true,
+  "production_receipt_contract_imports_passed": true,
+  "active_api_service": true,
+  "active_timers": [
+    "abr-engine-worker.timer",
+    "abr-engine-control.timer",
+    "abr-engine-qbcc-review-cleanup.timer"
+  ],
+  "authenticated_runtime_status": 200,
+  "mode": "pilot",
+  "lead_count": 0,
+  "cache_control": "no-store",
+  "browser_clerk_login_verified": false,
+  "sheets_server_keys_installed": true,
+  "sheets_script_key_transfer_verified": false,
+  "source_capabilities_enabled": [],
+  "backup_capability_enabled": false,
+  "release_approvals_created": 0,
+  "outreach": "disabled"
+}

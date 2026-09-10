@@ -1,0 +1,46 @@
+{
+  "observed_at": "2026-09-10T13:48:56Z",
+  "scope": "Read-only AWS account and Lightsail catalogue preflight; not a deployment receipt",
+  "aws_cli_version": "2.36.42",
+  "installer_signature": "Valid Amazon Web Services, Inc.",
+  "profile": "maintain-media-deploy",
+  "account_id_suffix": "9168",
+  "identity_type": "root",
+  "authentication": "User-approved AWS CLI browser login with locally managed temporary credentials",
+  "account_plan": {
+    "type": "FREE",
+    "status": "ACTIVE",
+    "remaining_credit_usd": 100.0,
+    "expiration": "2027-03-10T13:43:25.427000Z"
+  },
+  "lightsail_region": "ap-southeast-2",
+  "available_zones": ["ap-southeast-2a", "ap-southeast-2b", "ap-southeast-2c"],
+  "existing_regional_instances": 0,
+  "proposed_bundle": {
+    "id": "large_3_2",
+    "active": true,
+    "platform": "LINUX_UNIX",
+    "base_monthly_usd": 44.0,
+    "ram_gb": 8,
+    "vcpu": 2,
+    "disk_gb": 160,
+    "public_ipv4_count": 1,
+    "proposed_blueprint": "ubuntu_24_04"
+  },
+  "successful_read_operations": [
+    "sts:GetCallerIdentity",
+    "freetier:GetAccountPlanState",
+    "lightsail:GetBundles",
+    "lightsail:GetRegions",
+    "lightsail:GetInstances",
+    "lightsail:GetBlueprints"
+  ],
+  "cloud_resources_created": false,
+  "iam_identities_created": false,
+  "plan_upgraded": false,
+  "provisioning_permission_verified": false,
+  "engine_capacity_verified": false,
+  "spending_allowance_approved": false,
+  "dedicated_deployment_identity_ready": false,
+  "live_engine_ready": false
+}

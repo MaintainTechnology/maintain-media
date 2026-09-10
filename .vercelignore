@@ -1,0 +1,27 @@
+# This project builds website/. Keep all other workspace data off the deployment.
+*
+!website
+!website/**
+website/.env*
+website/**/.env*
+website/.local
+website/.local/**
+website/.vercel
+website/.vercel/**
+website/.next
+website/.next/**
+website/node_modules
+website/node_modules/**
+website/acceptance
+website/acceptance/**
+website/tests
+website/tests/**
+website/specs
+website/specs/**
+website/scripts
+website/scripts/**
+website/*.log
+website/*.tsbuildinfo
+website/*.ps1
+website/*.cmd
+website/AGENTS.md

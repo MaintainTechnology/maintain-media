@@ -1,0 +1,36 @@
+{
+  "observed_at": "2026-09-10T16:56:16.5036310Z",
+  "location_id": "xHZFHMOE476t5CxY9vCG",
+  "location_name": "Maintain Media",
+  "private_integration_id": "6aa2dcbeb5521118febbe93d",
+  "private_integration_name": "Maintain Media ABN Lead Gen",
+  "new_token_installed_on_sydney_service": true,
+  "new_token_custody": "separate_current_user_dpapi",
+  "token_display_closed": true,
+  "metadata_api_readback": "13_fields_verified",
+  "field_folder": "Maintain Media ABN Lead Gen",
+  "folder_assignment_verified": true,
+  "folder_assignment_field_count": 13,
+  "folder_assignment_evidence": "GHL rendered table: 1 - 13 of 13, all rows show the named folder; Fields moved success message",
+  "final_scopes": [
+    "locations.readonly",
+    "locations/customFields.readonly"
+  ],
+  "temporary_custom_field_write_scope_removed": true,
+  "final_scope_evidence": "Reopened saved integration editor and read back two scopes",
+  "metadata_read_after_scope_reduction": "passed",
+  "contact_access_granted": false,
+  "contacts_read_or_written": 0,
+  "global_duplicate_settings_changed": false,
+  "workflow_settings_changed": false,
+  "runtime_crm_capability_enabled": false,
+  "vendor_or_release_approval_created": false,
+  "remaining_acceptance": [
+    "vendor and disclosure approval",
+    "current installation contract",
+    "collision behavior",
+    "workflow isolation",
+    "suppression readback",
+    "gated contact sync"
+  ]
+}

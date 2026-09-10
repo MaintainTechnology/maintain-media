@@ -1,0 +1,12 @@
+[Unit]
+Description=Admit one gated QBCC job for the current UTC week
+Conflicts=abr-live-qbcc.timer abr-engine-qbcc.timer
+
+[Timer]
+OnCalendar=Mon *-*-* 00:00:00 UTC
+Persistent=true
+AccuracySec=30s
+Unit=abr-engine-qbcc-weekly.service
+
+[Install]
+WantedBy=timers.target

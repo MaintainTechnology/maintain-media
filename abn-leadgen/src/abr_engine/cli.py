@@ -228,6 +228,72 @@ def serve(port: int = 8766, config: Path | None = None, mode: str = "fixture"):
     uvicorn.run(create_app(settings), host="127.0.0.1", port=port, access_log=False)
 
 
+@app.command("live-serve")
+def live_serve(config: Annotated[Path, typer.Option("--config")], port: int = 8766):
+    """Serve the actual private DB on loopback behind the managed HTTPS proxy."""
+    import uvicorn
+
+    from abr_engine.live.application import build_application
+
+    if not 1024 <= port <= 65535:
+        raise typer.BadParameter("An unprivileged loopback port is required")
+    if config.suffix not in {".yaml", ".yml"} or config.name.startswith(".env"):
+        raise typer.BadParameter("Explicit YAML configuration required")
+    try:
+        application = build_application(load_settings(config))
+    except (ValueError, OSError, psycopg.Error, DomainError):
+        output({"status": "blocked", "code": "LIVE_APPLICATION_CONFIGURATION_UNAVAILABLE"})
+        raise typer.Exit(2) from None
+    uvicorn.run(application, host="127.0.0.1", port=port, workers=1, access_log=False,
+                proxy_headers=False, server_header=False, limit_concurrency=32,
+                timeout_keep_alive=5)
+
+
+@app.command("live-worker-tick")
+def live_worker_tick(config: Annotated[Path, typer.Option("--config")], lane: str = "all"):
+    """Run one bounded recovery tick against explicitly configured live authority."""
+    from abr_engine.live.application import worker_tick
+
+    if config.suffix not in {".yaml", ".yml"} or config.name.startswith(".env"):
+        raise typer.BadParameter("Explicit YAML configuration required")
+    guarded(lambda: worker_tick(load_settings(config), lane_group=lane))
+
+
+@app.command("live-schedule-weekly")
+def live_schedule_weekly(config: Annotated[Path, typer.Option("--config")]):
+    """Admit the current Monday UTC QBCC job once; the source worker executes it."""
+    from abr_engine.ingest.common import SourceError
+    from abr_engine.live.schedule import submit_weekly
+
+    if config.suffix not in {".yaml", ".yml"} or config.name.startswith(".env"):
+        raise typer.BadParameter("Explicit YAML configuration required")
+    def operation():
+        try:
+            return submit_weekly(load_settings(config))
+        except SourceError as error:
+            return {"status": "held", "code": error.code}
+    guarded(operation)
+
+
+@app.command("live-maintenance")
+def live_maintenance(config: Annotated[Path, typer.Option("--config")],
+                     kind: Annotated[str, typer.Option("--kind")], execute: bool = False):
+    """Preview or execute scoped live maintenance using current database time."""
+    from abr_engine.ingest.common import SourceError
+    from abr_engine.live.schedule import maintenance
+
+    if config.suffix not in {".yaml", ".yml"} or config.name.startswith(".env"):
+        raise typer.BadParameter("Explicit YAML configuration required")
+    if kind not in {"review-staging", "retention"}:
+        raise typer.BadParameter("Choose review-staging or retention")
+    def operation():
+        try:
+            return maintenance(load_settings(config), kind=kind, execute=execute)
+        except SourceError as error:
+            return {"status": "held", "code": error.code}
+    guarded(operation)
+
+
 @work_app.command("build")
 def worklist_build(week: str, config: Path | None = None, mode: str = "fixture", json: bool = False):
     from datetime import date

@@ -338,7 +338,7 @@ def cleanup_qbcc_review(settings: Settings, *, run_id: UUID | None = None, execu
     """Recover/expire only this intake's owned artifacts, without reading records.
 
     Collection approval expiry cannot veto deletion. Managed key/restore authority
-    and explicit --execute remain required; general live retention stays closed.
+    and explicit --execute remain required; general retention has its separate policy gate.
     A caller must install a daily invocation on the approved service host.
     """
     _configured(settings, collection=False)
@@ -462,7 +462,7 @@ def cleanup_qbcc_review(settings: Settings, *, run_id: UUID | None = None, execu
         "kind": "qbcc_review_cleanup",
         "execute": execute,
         "runs": results,
-        "automatic_schedule_installed": False,
+        "schedule_installation": "operator_managed",
         "decrypted_records": 0,
     }
 

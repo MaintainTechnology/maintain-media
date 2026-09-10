@@ -1,0 +1,50 @@
+{
+  "checked_at": "2026-09-10T18:55:18.1001616Z",
+  "deployment_id": "dpl_8tttW1nB4a1ueUqebriQBnm29ETB",
+  "state": "READY",
+  "aliases": [
+    "www.maintainmedia.com.au",
+    "website-iota-ruddy-35.vercel.app",
+    "maintainmedia.com.au",
+    "website-maintain-technology.vercel.app"
+  ],
+  "non_middleware_function_count": 59,
+  "all_non_middleware_functions_sydney": true,
+  "separate_global_middleware": [
+    "arn1",
+    "bom1",
+    "cdg1",
+    "cle1",
+    "cpt1",
+    "dub1",
+    "fra1",
+    "gru1",
+    "hkg1",
+    "hnd1",
+    "iad1",
+    "icn1",
+    "kix1",
+    "lhr1",
+    "pdx1",
+    "sfo1",
+    "sin1",
+    "syd1",
+    "yul1"
+  ],
+  "source_digest": "bd030ab084cbcec0eff11cc89eabe57f9100b68d781efa538fd7b0ed7c0b58c9",
+  "source_files": 73,
+  "prior_deployment": "dpl_ECidyyeAsUSrwEMbKJjoEPe7ru4T",
+  "node_major": 24,
+  "frontend_checks_passed": 72,
+  "local_build_and_typecheck": "passed",
+  "cloud_build_and_typecheck": "passed",
+  "scoped_lint": "passed",
+  "source_changes": [
+    "dashboard.tsx",
+    "dashboard.module.css",
+    "readiness.ts"
+  ],
+  "separate_website_collection_guidance": true,
+  "business_collection_enabled": false,
+  "fresh_clerk_login_verified": false
+}

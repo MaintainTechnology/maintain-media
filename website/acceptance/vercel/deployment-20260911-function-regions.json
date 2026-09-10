@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "checked_at": "2026-09-10T16:41:38.4071587Z",
+  "project_id": "prj_0jiFRBJLqKpgwyClzI4bl1qn1a12",
+  "scope": "maintain-technology",
+  "deployment_id": "dpl_387fws7PqGeZ5fHhPstMwZWbK5w4",
+  "deployment_url": "website-buue0iii5-maintain-technology.vercel.app",
+  "custom_domain": "https://www.maintainmedia.com.au",
+  "state": "READY",
+  "source_digest": "96bc200bfa70911591fdc7f7a00cf7450c610712d71692c9c5db1918d1a96dff",
+  "node_version": "24.x",
+  "dashboard_api_auth_route_region_check": "passed",
+  "verified_routes": [
+    {
+      "path": "abn-lead-gen/dashboard",
+      "regions": [
+        "syd1"
+      ],
+      "runtime": "nodejs24.x"
+    },
+    {
+      "path": "sign-in/[[...sign-in]]",
+      "regions": [
+        "syd1"
+      ],
+      "runtime": "nodejs24.x"
+    },
+    {
+      "path": "sign-up/[[...sign-up]]",
+      "regions": [
+        "syd1"
+      ],
+      "runtime": "nodejs24.x"
+    },
+    {
+      "path": "api/abn-lead-gen/[...path]",
+      "regions": [
+        "syd1"
+      ],
+      "runtime": "nodejs24.x"
+    }
+  ],
+  "other_non_middleware_function_outputs": 55,
+  "all_non_middleware_function_regions": [
+    "syd1"
+  ],
+  "global_component": {
+    "path": "_middleware",
+    "runtime": "nodejs24.x",
+    "deployed_regions": [
+      "arn1",
+      "bom1",
+      "cdg1",
+      "cle1",
+      "cpt1",
+      "dub1",
+      "fra1",
+      "gru1",
+      "hkg1",
+      "hnd1",
+      "iad1",
+      "icn1",
+      "kix1",
+      "lhr1",
+      "pdx1",
+      "sfo1",
+      "sin1",
+      "syd1",
+      "yul1"
+    ],
+    "source": "website/src/proxy.ts",
+    "role": "Clerk middleware",
+    "calls_lead_engine_directly": false
+  },
+  "entire_request_path_australian_only": false,
+  "processing_country_approval": "pending",
+  "full_live_acceptance": "incomplete",
+  "signed_in_browser_verified": false,
+  "http_check_receipt": "dpl_387fws7PqGeZ5fHhPstMwZWbK5w4-http.json",
+  "provider_mutations": false
+}

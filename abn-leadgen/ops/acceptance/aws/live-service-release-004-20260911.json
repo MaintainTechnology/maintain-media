@@ -1,0 +1,32 @@
+{
+  "checked_at": "2026-09-10T17:33:12.8112749Z",
+  "account": "052530979168",
+  "region": "ap-southeast-2",
+  "instance": "maintain-media-abn-engine",
+  "source_manifest_sha256": "3ca70c9b2f3eb8fbdc76cee29eee081dfd16e3d0dfcb0357a70a23180014d04d",
+  "source_archive_sha256": "7fec040f11e3c6c5d78e5289c0c235a8726c640e79007ebcae0f09b0c32863f8",
+  "source_file_count": 149,
+  "previous_release_preserved": "/opt/abn-leadgen-live-20260911-003-previous",
+  "dependency_lock_unchanged": true,
+  "change": "Strict S3 missing-object codes and exact-prefix absence reconciliation",
+  "focused_store_probe_tests_passed": 20,
+  "previous_unchanged_linux_offline_tests_passed": 106,
+  "backup_cli_imports_passed": true,
+  "production_receipt_contract_imports_passed": true,
+  "active_api_service": true,
+  "active_timers": [
+    "abr-engine-worker.timer",
+    "abr-engine-control.timer",
+    "abr-engine-qbcc-review-cleanup.timer"
+  ],
+  "authenticated_runtime_status": 200,
+  "mode": "pilot",
+  "lead_count": 0,
+  "cache_control": "no-store",
+  "browser_clerk_login_verified": false,
+  "sheets_script_key_transfer_verified": true,
+  "source_capabilities_enabled": [],
+  "backup_capability_enabled": false,
+  "release_approvals_created": 0,
+  "outreach": "disabled"
+}

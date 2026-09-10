@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "status": "private_worklist_installed_live_sync_disabled",
+  "installation_completed_at": "2026-09-10T16:06:14Z",
+  "observation_source": "Root operator's authenticated Google browser UI and read-back in this task",
+  "owner_email": "jeph@quotemax.com.au",
+  "spreadsheet_id": "1-PEySaH7AAod3hoFqZZf7zMYMWyQ3qIAWQzxnrq6K58",
+  "spreadsheet_general_access": "Restricted",
+  "spreadsheet_named_people": ["jeph@quotemax.com.au"],
+  "worklist_tab": {
+    "name": "ABN Worklist",
+    "sheet_id": 2107750955,
+    "protected": true,
+    "headers_verified_range": "A1:AC1",
+    "headers": [
+      "row_id", "worklist_id", "lead_id", "group_id", "row_version", "generated_at",
+      "signal", "tier", "score", "business_name", "safe_contact_view", "gate_label",
+      "gate_checked_at", "next_action", "opener", "status", "attempts", "invitation_state",
+      "occurred_at", "save_state", "invitation_evidence_ref", "notes", "source", "source_age",
+      "source_published_at", "signal_description", "reasons", "gate_expires_at", "policy_version"
+    ],
+    "business_rows_written": 0,
+    "original_abn_tab_preserved": true
+  },
+  "standalone_script": {
+    "title": "Maintain Media ABN Worklist Bridge",
+    "project_id": "1DzYHoVQ_X2_CoC6Dw4LaTXaXAYPRWBH2qPc34rEpY8nKtOGJFR2ZOmdn",
+    "url": "https://script.google.com/home/projects/1DzYHoVQ_X2_CoC6Dw4LaTXaXAYPRWBH2qPc34rEpY8nKtOGJFR2ZOmdn/edit",
+    "general_access": "Restricted",
+    "named_people": ["jeph@quotemax.com.au"],
+    "other_editors_or_viewers": 0,
+    "local_bundle": "integrations/maintain_media_standalone.gs",
+    "local_bundle_sha256": "cadaa3ad361d880e883ba45b6a14f1a85e0aa52a834d176fd3d0adca4ea0a807",
+    "google_source_equal_after_crlf_normalization": true,
+    "completed_function": "prepareMaintainMediaWorklist"
+  },
+  "installed_triggers": [
+    {"handler": "installedWorklistEdit", "event": "ON_EDIT", "source": "SPREADSHEETS"},
+    {"handler": "repairPendingEdits", "event": "CLOCK", "source": "CLOCK"}
+  ],
+  "script_properties_read_back": {
+    "ENABLED": "false",
+    "INSTALLER_EMAIL": "jeph@quotemax.com.au",
+    "ALLOWED_EDITOR_EMAILS": "[\"jeph@quotemax.com.au\"]",
+    "SPREADSHEET_ID": "1-PEySaH7AAod3hoFqZZf7zMYMWyQ3qIAWQzxnrq6K58",
+    "WORKLIST_SHEET_ID": "2107750955"
+  },
+  "only_five_nonsecret_properties_present": true,
+  "service_endpoint_configured": false,
+  "signing_or_bridge_secrets_installed": false,
+  "live_pull_triggers_enabled": false,
+  "genuine_editor_api_writeback_verified": false,
+  "live_suppression_latency_verified": false,
+  "processor_country_and_terms_approval_supplied": false,
+  "g5_certified": false,
+  "source_or_privacy_approval_created": false,
+  "outreach_enabled": false,
+  "scope_note": "This proves the private empty Google worklist and disabled bridge installation. It does not approve or prove live business-data disclosure, live API calls, staff edit delivery, vendor processing countries, or GHL installation."
+}

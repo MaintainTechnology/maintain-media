@@ -1,0 +1,21 @@
+{
+  "recorded_at": "2026-09-10T14:06:18Z",
+  "source": "Explicit user reply after account preflight and exact server proposal",
+  "user_reply": "Yes, please go ahead and use the AWS credit.",
+  "approved": {
+    "instance_count": 1,
+    "region": "ap-southeast-2",
+    "bundle_id": "large_3_2",
+    "blueprint_id": "ubuntu_24_04",
+    "base_monthly_usd": 44,
+    "use_existing_credit": true,
+    "keep_account_plan": "FREE",
+    "scoped_deployment_access_setup": true
+  },
+  "paid_plan_upgrade_approved": false,
+  "additional_servers_approved": false,
+  "paid_backup_storage_addons_approved": false,
+  "live_source_release_approved_by_this_reply": false,
+  "deployment_status": "Approved instance created in Sydney; host foundation verified; dormant engine source and locked dependencies installed and tested; temporary IAM identity revoked and removed",
+  "execution_receipt": "server-deployment.json"
+}

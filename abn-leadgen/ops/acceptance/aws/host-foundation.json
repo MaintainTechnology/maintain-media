@@ -1,0 +1,61 @@
+{
+  "status": "host_foundation_verified",
+  "checks": [
+    {
+      "name": "ubuntu_24_04_root_systemd",
+      "status": "passed"
+    },
+    {
+      "name": "bootstrap_host_and_operator",
+      "status": "passed"
+    },
+    {
+      "name": "existing_admin_key_metadata",
+      "status": "passed"
+    },
+    {
+      "name": "python_and_postgresql_runtime",
+      "status": "passed"
+    },
+    {
+      "name": "locked_nonlogin_service_identity",
+      "status": "passed"
+    },
+    {
+      "name": "private_empty_application_directories",
+      "status": "passed"
+    },
+    {
+      "name": "single_owned_postgresql_cluster",
+      "status": "passed"
+    },
+    {
+      "name": "loopback_postgresql_and_no_application_data",
+      "status": "passed"
+    },
+    {
+      "name": "effective_ssh_key_only_policy",
+      "status": "passed"
+    },
+    {
+      "name": "operator_only_ssh_firewall",
+      "status": "passed"
+    },
+    {
+      "name": "no_engine_services_or_public_application_ports",
+      "status": "passed"
+    }
+  ],
+  "checked_at": "2026-09-10T14:36:03.007961+00:00",
+  "hostname": "ip-172-26-6-66",
+  "observed_resources": {
+    "free_state_disk_bytes": 162764267520,
+    "physical_memory_bytes": 8197779456
+  },
+  "capacity_certified": false,
+  "live_engine_enabled": false,
+  "source_collection_enabled": false,
+  "backups_installed": false,
+  "second_ssh_login_verified": false,
+  "scope": "Fresh Ubuntu foundation only; no AWS placement, live data, backup, capacity or release certification."
+}

@@ -1,0 +1,96 @@
+{
+  "checked_at": "2026-09-10T13:20:07.915Z",
+  "origin": "https://www.maintainmedia.com.au",
+  "status": "passed",
+  "scope": "Deployed public/auth HTTP routes and signed-out access denial only. Does not certify signed-in admin workflows, an engine connection or live lead data.",
+  "total": 17,
+  "passed": 17,
+  "failed": 0,
+  "checks": [
+    {
+      "name": "Denied GET /dashboard",
+      "status": "passed",
+      "http_status": 401
+    },
+    {
+      "name": "Denied GET /jobs/00000000-0000-4000-8000-000000000001",
+      "status": "passed",
+      "http_status": 401
+    },
+    {
+      "name": "Denied GET /reports/00000000-0000-4000-8000-000000000001/csv",
+      "status": "passed",
+      "http_status": 401
+    },
+    {
+      "name": "Denied GET /reports/00000000-0000-4000-8000-000000000001/html",
+      "status": "passed",
+      "http_status": 401
+    },
+    {
+      "name": "Denied GET /reports/00000000-0000-4000-8000-000000000001/markdown",
+      "status": "passed",
+      "http_status": 401
+    },
+    {
+      "name": "Denied HEAD /dashboard",
+      "status": "passed",
+      "http_status": 401
+    },
+    {
+      "name": "Denied HEAD /reports/00000000-0000-4000-8000-000000000001/html",
+      "status": "passed",
+      "http_status": 401
+    },
+    {
+      "name": "Denied PATCH /settings",
+      "status": "passed",
+      "http_status": 401
+    },
+    {
+      "name": "Denied POST /runs",
+      "status": "passed",
+      "http_status": 401
+    },
+    {
+      "name": "Public /",
+      "status": "passed",
+      "http_status": 200
+    },
+    {
+      "name": "Public /about",
+      "status": "passed",
+      "http_status": 200
+    },
+    {
+      "name": "Public /contact",
+      "status": "passed",
+      "http_status": 200
+    },
+    {
+      "name": "Public /services",
+      "status": "passed",
+      "http_status": 200
+    },
+    {
+      "name": "Public /sign-in",
+      "status": "passed",
+      "http_status": 200
+    },
+    {
+      "name": "Public /sign-up",
+      "status": "passed",
+      "http_status": 200
+    },
+    {
+      "name": "Signed-out /abn-lead-gen/access",
+      "status": "passed",
+      "http_status": 307
+    },
+    {
+      "name": "Signed-out /abn-lead-gen/dashboard",
+      "status": "passed",
+      "http_status": 307
+    }
+  ]
+}

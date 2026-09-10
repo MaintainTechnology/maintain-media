@@ -4,35 +4,41 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useAuth, useClerk } from "@clerk/nextjs";
 import {
   type DashboardAdmin, type DashboardData, type LeadSource, type ReportKind,
-  jobActive, safeReportURL, validDashboard, validJob, validSettings,
+  jobActive, safeReportURL, validDashboard, validJob, validSettings, validMutationReceipt,
 } from "@/lib/abn-lead-gen/types";
 
 const API = "/api/abn-lead-gen";
 const SIGN_IN = "/sign-in";
 interface DashboardState {
-  data: DashboardData | null; loading: boolean; connected: boolean; saving: boolean;
+  data: DashboardData | null; loading: boolean; connected: boolean; configurationRequired: boolean; saving: boolean;
   running: boolean; signingOut: boolean; expired: boolean; accessDenied: boolean; error: string | null;
   settingsError: string | null; source: LeadSource; cap: string; dirty: boolean;
   saveStatus: string; toast: string | null;
 }
 const initialState: DashboardState = {
-  data: null, loading: true, connected: false, saving: false, running: false,
+  data: null, loading: true, connected: false, configurationRequired: false, saving: false, running: false,
   signingOut: false, expired: false, accessDenied: false, error: null, settingsError: null,
   source: "all", cap: "", dirty: false, saveStatus: "", toast: null,
 };
 class RequestError extends Error {
-  constructor(message: string, readonly definitive = false) { super(message); }
+  constructor(message: string, readonly definitive = false, readonly code = "") { super(message); }
 }
 class Cancelled extends Error {}
 function errorMessage(code: string, fallback: string) {
   if (code === "ENGINE_UNAVAILABLE") return "The lead engine is unavailable. Check your connection and try again. If this continues, ask the administrator to start the engine.";
-  if (code === "ENGINE_CONFIGURATION_INVALID") return "The website’s engine connection needs setup. Ask the administrator to check the engine configuration, then try again.";
+  if (code === "ENGINE_CONFIGURATION_INVALID") return "The lead engine is not connected to this website yet. Open Setup & settings to see what is needed. Runs, settings and reports will become available after the engine connection is configured.";
+  if (code === "ENGINE_AUTHENTICATION_FAILED") return "The website could not verify its private connection to the lead engine. Your staff sign-in is still active. Ask the administrator to check the engine connection, then choose Try again.";
   if (code === "ENGINE_INVALID_RESPONSE") return "The engine returned an incomplete response. Your loaded data and unsaved changes are still available. Try again.";
   if (/STALE|AUTHORITY.*CHANGED/.test(code)) return "This report needs to be refreshed. Run the demo again to create a report using current review decisions.";
   if (/EXPIRED|ERASED|DELETED/.test(code)) return "This report has expired or was removed. Refresh the workspace to see available records.";
   if (/RUN.*ACTIVE/.test(code)) return "A run is already in progress. You can follow it in Run history.";
   if (/CSRF/.test(code)) return "Your dashboard session changed. Reload the page, then try again.";
   if (code === "REPORT_NOT_FOUND") return "This run has no report available yet. Refresh the run history after processing finishes.";
+  if (code === "REVISION_CONFLICT" || code === "IDEMPOTENCY_CONFLICT") return "Another change was saved first. Refresh the business and review its latest values before saving again.";
+  if (code === "FORBIDDEN") return "Your account needs an explicitly assigned reviewer role for this action. Ask your administrator to update your access.";
+  if (/GATE|CAPABILITY_DISABLED|POLICY_NOT_CURRENT/.test(code)) return "This action is blocked until the required approval evidence is recorded. Open Setup & settings to see the current requirements.";
+  if (code === "RUN_WORKER_UNAVAILABLE") return "The source run worker is not configured. Ask the administrator to complete the source worker setup.";
+  if (code === "QBCC_PILOT_SOURCE_REQUIRED") return "This phase runs the QBCC source. Choose QBCC in Setup, save the setting, and try again. Broader ABR processing needs the later pilot approval.";
   return fallback;
 }
 function incomplete(kind: string) {
@@ -64,6 +70,7 @@ export function useDashboard(admin: DashboardAdmin) {
     controllers: new Set<AbortController>(),
     downloads: new Map<string, ReturnType<typeof setTimeout>>(),
     request: null as { request_id: string; source: LeadSource } | null,
+    pendingWrites: new Map<string, string>(),
     actionError: null as string | null,
   });
   const commit = useCallback((patch: Partial<DashboardState>) => {
@@ -81,6 +88,7 @@ export function useDashboard(admin: DashboardAdmin) {
     const rt = runtime.current;
     rt.generation++;
     rt.request = null;
+    rt.pendingWrites.clear();
     rt.queued = false;
     rt.actionError = null;
     clearTimeout(rt.poll);
@@ -110,7 +118,7 @@ export function useDashboard(admin: DashboardAdmin) {
         if (response.status === 403 && errorCode(body) === "ADMIN_ACCESS_REQUIRED") { expire(false, true); throw new Cancelled(); }
         throw new RequestError(errorMessage(errorCode(body), response.status === 422
           ? "Check the values and try again. The usage limit must be between A$0 and A$150."
-          : `The request could not be completed (${response.status}). Refresh the workspace and try again.`), [400, 403, 404, 409, 415, 422, 429].includes(response.status));
+          : `The request could not be completed (${response.status}). Refresh the workspace and try again.`), [400, 403, 404, 409, 415, 422, 429].includes(response.status), errorCode(body));
       }
       // Keep the abort deadline active while reading the body, not just until headers arrive.
       let body: unknown = null;
@@ -132,7 +140,22 @@ export function useDashboard(admin: DashboardAdmin) {
   const request = useCallback(async (endpoint: string, options?: RequestInit): Promise<unknown> => {
     const rt = runtime.current;
     const epoch = rt.epoch;
+    const mutation = options?.method && !["GET", "HEAD"].includes(options.method);
+    const live = rt.state.data && rt.state.data.mode !== "fixture";
+    let cacheKey: string | undefined;
+    if (mutation && live && options) {
+      cacheKey = `${endpoint}:${options.body ?? ""}`;
+      let key = rt.pendingWrites.get(cacheKey);
+      if (!key) {
+        const data = typeof options.body === "string" ? JSON.parse(options.body) : {};
+        key = typeof data.request_id === "string" ? data.request_id : crypto.randomUUID();
+        rt.pendingWrites.set(cacheKey, key!);
+      }
+      options = { ...options, headers: { ...options.headers, "Idempotency-Key": key! } };
+    }
     const { body } = await fetchChecked(`${API}/${endpoint}`, options, "json");
+    if (cacheKey && !validMutationReceipt(endpoint, body)) throw new RequestError("The engine did not confirm the saved change. Your retry will use the same request identity. Refresh to check the current state before trying again.");
+    if (cacheKey) rt.pendingWrites.delete(cacheKey);
     if (!rt.mounted || epoch !== rt.epoch || rt.state.expired) throw new Cancelled();
     return body;
   }, [fetchChecked]);
@@ -163,14 +186,14 @@ export function useDashboard(admin: DashboardAdmin) {
           const previous = rt.state.data?.active_job;
           const clean = !rt.state.dirty;
           if (rt.request && [data.active_job, data.latest_job].some(job => job?.job_id === rt.request?.request_id && job?.source === rt.request?.source)) rt.request = null;
-          commit({ data, connected: true, error: explicit ? null : rt.actionError,
+          commit({ data, connected: true, configurationRequired: false, error: explicit ? null : rt.actionError,
             ...(clean ? { source: data.settings.default_source, cap: (data.settings.monthly_cap_micro_aud / 1e6).toFixed(2) } : {}) });
           if (explicit) rt.actionError = null;
           if (jobActive(previous) && data.latest_job?.state === "complete") notify("Run complete. Your latest leads and reports are ready.");
           else if (explicit) notify("Workspace refreshed.");
         } catch (error) {
           if (error instanceof Cancelled) break;
-          commit({ connected: false, error: message(error) });
+          commit({ connected: false, configurationRequired: error instanceof RequestError && ["ENGINE_CONFIGURATION_INVALID", "ENGINE_AUTHENTICATION_FAILED"].includes(error.code), error: message(error) });
         } finally {
           if (rt.mounted && rt.epoch === epoch && !rt.state.expired) commit({ loading: false });
         }
@@ -178,7 +201,7 @@ export function useDashboard(admin: DashboardAdmin) {
     })().finally(() => {
       if (rt.epoch !== epoch) return;
       rt.loading = null;
-      if (!rt.mounted || rt.state.expired || rt.state.signingOut) return;
+      if (!rt.mounted || rt.state.expired || rt.state.signingOut || rt.state.configurationRequired) return;
       rt.poll = setTimeout(() => { if (!document.hidden) void refreshLoop(); }, !rt.state.connected ? 10000 : jobActive(rt.state.data?.active_job) ? 2500 : 30000);
     });
     return rt.loading;
@@ -222,7 +245,7 @@ export function useDashboard(admin: DashboardAdmin) {
 
   function editSettings(source: LeadSource, cap: string) {
     const data = runtime.current.state.data;
-    if (!data || runtime.current.state.saving) return;
+    if (!data || !runtime.current.state.connected || runtime.current.state.saving || runtime.current.state.signingOut) return;
     const dirty = source !== data.settings.default_source || cap === "" || !Number.isFinite(Number(cap)) || Math.round(Number(cap) * 1e6) !== data.settings.monthly_cap_micro_aud;
     commit({ source, cap, dirty, settingsError: null, saveStatus: dirty ? "Unsaved changes" : "" });
   }
@@ -233,7 +256,7 @@ export function useDashboard(admin: DashboardAdmin) {
   async function saveSettings() {
     const rt = runtime.current;
     const current = rt.state;
-    if (!current.data || !current.dirty || current.saving || current.expired) return;
+    if (!current.data || !current.connected || !current.dirty || current.saving || current.expired || current.signingOut) return;
     if (!/^(?:\d+)(?:\.\d{1,2})?$/.test(current.cap) || Number(current.cap) < 0 || Number(current.cap) > 150) {
       commit({ settingsError: "Enter an amount from A$0 to A$150, with no more than two decimal places." });
       return;
@@ -255,7 +278,7 @@ export function useDashboard(admin: DashboardAdmin) {
   async function beginRun() {
     const rt = runtime.current;
     const current = rt.state;
-    if (!current.data || current.running || current.saving || current.expired || jobActive(current.data.active_job)) return;
+    if (!current.data || !current.connected || current.running || current.saving || current.expired || current.signingOut || jobActive(current.data.active_job)) return;
     rt.request ||= { request_id: crypto.randomUUID(), source: current.data.settings.default_source };
     commit({ running: true, error: null });
     rt.actionError = null;
@@ -268,7 +291,7 @@ export function useDashboard(admin: DashboardAdmin) {
       commit({ data: { ...rt.state.data!, active_job: job } });
       rt.request = null;
       window.location.hash = "runs";
-      notify(job.state === "complete" ? "Your run is complete. The reports are ready." : "Demo run started. Follow its progress here.");
+      notify(job.state === "complete" ? "Your run is complete. Refresh to see its results." : current.data.mode === "fixture" ? "Demo run started. Follow its progress here." : "Source run started. Follow its progress here.");
     } catch (error) {
       if (!(error instanceof Cancelled)) failure = message(error);
       if (error instanceof RequestError && error.definitive) rt.request = null;
@@ -281,7 +304,7 @@ export function useDashboard(admin: DashboardAdmin) {
     }
   }
   async function openReport(url: string, kind: ReportKind) {
-    if (!safeReportURL(url) || runtime.current.state.expired) return;
+    if (!safeReportURL(url) || !runtime.current.state.connected || runtime.current.state.expired || runtime.current.state.signingOut) return;
     const reportWindow = kind === "html" ? window.open("about:blank", "_blank") : null;
     if (reportWindow) { reportWindow.opener = null; reportWindow.document.title = "Opening report"; reportWindow.document.body.textContent = "Checking this report…"; }
     try {
@@ -336,6 +359,6 @@ export function useDashboard(admin: DashboardAdmin) {
       }
     } finally { clearTimeout(timeout); }
   }
-  return { ...state, refresh, editSettings, discardSettings, saveSettings, beginRun, openReport, logout };
+  return { ...state, refresh, editSettings, discardSettings, saveSettings, beginRun, openReport, logout, request };
 }
 export type DashboardController = ReturnType<typeof useDashboard>;

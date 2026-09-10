@@ -52,7 +52,9 @@ test("verified identity uses current server session and user before returning a 
   const { backend, calls } = fixture();
   const access = await resolveClerkAdminAccess(backend);
   assert.equal(access.status, "admin");
-  assert.deepEqual(Object.keys(access.admin).sort(), ["csrfToken", "displayName", "username"]);
+  assert.deepEqual(Object.keys(access.admin).sort(), ["actorId", "csrfToken", "displayName", "scopes", "username"]);
+  assert.equal(access.admin.actorId, identity.userId);
+  assert.deepEqual(access.admin.scopes, ["admin", "operator"]);
   assert.equal(access.admin.displayName, "Maintain Admin");
   assert.match(access.admin.csrfToken, /^[A-Za-z0-9_-]{43}$/);
   assert.deepEqual(calls, [["auth"], ["session", identity.sessionId], ["user", identity.userId]]);

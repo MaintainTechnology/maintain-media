@@ -1,0 +1,14 @@
+# Non-secret template. It is intentionally rejected until actual installation is verified.
+# Matching secret values belong only in the service environment and owner-only Script Properties.
+schema_version: 1
+enabled: false
+spreadsheet_id: 1-PEySaH7AAod3hoFqZZf7zMYMWyQ3qIAWQzxnrq6K58
+sheet_id: 0 # Replace with the exact observed worklist tab ID; do not assume zero.
+owner_email: jeph@quotemax.com.au
+approved_by: REPLACE_AFTER_PRIVATE_WORKBOOK_AND_ACTOR_TESTS
+evidence_ref: REPLACE_WITH_ACTUAL_INSTALLATION_RECEIPT
+evidence_sha256: REPLACE_WITH_RECEIPT_SHA256
+verified_at: null
+expires_at: null
+editors:
+  jeph@quotemax.com.au: [operator, reviewer, compliance]

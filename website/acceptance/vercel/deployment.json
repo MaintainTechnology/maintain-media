@@ -1,0 +1,20 @@
+{
+  "checked_at": "2026-09-10T13:22:14.4263233Z",
+  "team": "maintain-technology",
+  "team_id": "team_gYhhisBKAi13MDy31JjETCJK",
+  "plan": "pro",
+  "project": "website",
+  "project_id": "prj_0jiFRBJLqKpgwyClzI4bl1qn1a12",
+  "root_directory": "website",
+  "node_version": "24.x",
+  "deployment_id": "dpl_79jQ4GMb5gyUvXEwFq28WMUAb7Fp",
+  "deployment_url": "website-f8pfn7ufd-maintain-technology.vercel.app",
+  "custom_domain": "https://www.maintainmedia.com.au",
+  "observed_function_region": "syd1",
+  "build_region": "iad1",
+  "admin_origin": "https://www.maintainmedia.com.au",
+  "previous_deployment_id": "dpl_5tVHBUQ6WHRS8Zzn3BJrwG9osqAV",
+  "previous_deployment_url": "website-8lak6boop-maintain-technology.vercel.app",
+  "engine_connected": false,
+  "live_data_enabled": false
+}

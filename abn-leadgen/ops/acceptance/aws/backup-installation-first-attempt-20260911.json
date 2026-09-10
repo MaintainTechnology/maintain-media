@@ -1,0 +1,16 @@
+{
+  "checked_at": "2026-09-10T17:36:54.2681741Z",
+  "status": "held",
+  "code": "BUCKET_CONFIGURATION_READBACK_MISMATCH",
+  "bucket": "maintain-media-abn-backup-052530979168-983c39eb",
+  "deployment_id": "983c39eb-aaf2-4fb5-81af-d39d29de9568",
+  "provisioning_id": "91d1b732-b2f3-4bb4-9909-ecb6733c5dc7",
+  "bucket_state": "tagged",
+  "publisher_state": "new",
+  "bootstrap_removed": true,
+  "bootstrap_revocation_verified": true,
+  "host_installed": false,
+  "production_backup_created": false,
+  "source_capabilities_enabled": [],
+  "approvals_created": false
+}

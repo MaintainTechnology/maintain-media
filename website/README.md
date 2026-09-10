@@ -80,7 +80,56 @@ After creating your first account, Clerk's [Dashboard](https://dashboard.clerk.c
 
 For a managed Node deployment, set `ABN_ADMIN_ORIGIN` to the exact HTTPS website origin and configure the production instance's Clerk keys through the hosting environment. Current admin authority is checked through Clerk's backend on protected requests, so provider availability and API limits apply. Public website navigation remains public. The prior `ABN_ADMIN_ACCOUNTS_JSON` and `ABN_ADMIN_SESSION_SECRET` configuration no longer grants access.
 
-The current server bridge reaches only a co-located loopback engine, default `ABN_ENGINE_ORIGIN=http://127.0.0.1:8767`. It does not forward browser credentials or expose the engine's CSRF token. It checks the current admin session on every endpoint and masks report contacts through the existing engine authority checks. **Deploying Next.js to a remote host does not give it access to this Windows computer's engine.** Live sources and externally hosted engine authentication remain separate release work; do not publish the loopback engine port.
+Local development uses a co-located loopback engine, default `ABN_ENGINE_ORIGIN=http://127.0.0.1:8767`. The bridge checks the current admin session on every endpoint and preserves the engine's report authority. Browser credentials and the upstream CSRF token are never forwarded to the wrong side of the bridge.
+
+## Maintain Technology Vercel deployment
+
+The existing **Maintain Technology** Pro team owns project **website** (root directory
+`website`), serving **https://www.maintainmedia.com.au**. Clerk sign-in is `/sign-in`;
+the approved-admin workspace is `/abn-lead-gen/dashboard`. GoDaddy retains domain
+registration and DNS. The Vercel application is configured for Sydney functions
+through `vercel.json`; that setting alone is not an all-vendor residency approval.
+
+Production needs the existing Clerk production variables and
+`ABN_ADMIN_ORIGIN=https://www.maintainmedia.com.au`. Configure values through the
+Vercel environment UI/CLI; do not copy secrets into source, arguments or receipts.
+
+Hosted deployments deliberately refuse the local engine fallback. An administrator
+can still sign in and see the disconnected workspace, with unavailable actions
+disabled. To connect a separately approved gateway, provision these **server-only**
+variables:
+
+- `ABN_ENGINE_TRANSPORT=remote`
+- `ABN_ENGINE_ORIGIN`: exact public HTTPS origin, standard port443, without a path
+- `ABN_ENGINE_TOKEN`: at least32 random bytes encoded as base64url or hex; the
+  accepted syntax is43–256 letters/digits/underscore/hyphen characters
+
+The matching receiver and its isolated fixture tests are described in
+[`../abn-leadgen/ops/gateway/README.md`](../abn-leadgen/ops/gateway/README.md).
+This transport currently supports the existing fixture contract only. It does
+not install a server, admit live sources, or replace `/v1` operator permissions.
+The user has confirmed no Australian engine server exists yet. T071's live
+worklist/integration requirements and its release gates remain open.
+
+Deploy from the **repository root**, where `.vercelignore` restricts the upload to
+website application files and excludes credentials, local data, vault, engine,
+tests and acceptance records:
+
+```powershell
+vercel deploy --dry --json --project website --scope maintain-technology
+vercel deploy --prod --skip-domain --yes --project website --scope maintain-technology --regions syd1
+```
+
+Inspect the candidate release for a successful build before promoting that exact
+deployment with `vercel promote <deployment-url> --scope maintain-technology --yes`.
+Record the prior production deployment for rollback. The protected candidate URL
+is not a substitute for checking Clerk on the configured custom domain.
+
+From `website/`, run `node scripts/check-hosted-dashboard.mjs` after promotion.
+It checks the live public/auth routes and signed-out denial without reading keys
+or submitting business actions. Real signed-in admin operations, public gateway
+TLS and live data need separate acceptance evidence. The scoped requirements and
+rubric are in [`specs/vercel-engine-connection.md`](specs/vercel-engine-connection.md).
 
 ## Dashboard verification
 

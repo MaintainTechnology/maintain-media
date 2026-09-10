@@ -1,0 +1,6 @@
+[Unit]
+Description=Shared memory bound for Maintain Media engine services
+
+[Slice]
+MemoryMax=6G
+TasksMax=256

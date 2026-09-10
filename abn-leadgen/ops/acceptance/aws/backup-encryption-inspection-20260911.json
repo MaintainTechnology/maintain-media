@@ -1,0 +1,31 @@
+{
+  "checked_at": "2026-09-10T17:46:40.1348057Z",
+  "status": "owned_bucket_inspected",
+  "bucket": "maintain-media-abn-backup-052530979168-983c39eb",
+  "region": "ap-southeast-2",
+  "matching_checks": [
+    "public_access_block",
+    "ownership_controls",
+    "lifecycle",
+    "bucket_policy",
+    "versioning",
+    "private_policy"
+  ],
+  "encryption": {
+    "default_algorithm": "AES256",
+    "default_extra_fields_count": 0,
+    "bucket_key_enabled": false,
+    "blocked_types": [
+      "SSE-C"
+    ],
+    "unknown_rule_fields_count": 0
+  },
+  "observed_extra_setting": "BlockedEncryptionTypes.EncryptionType=[SSE-C]",
+  "bucket_mutations": 0,
+  "object_operations": 0,
+  "host_operations": 0,
+  "bootstrap_removed": true,
+  "s3_revocation_verified": true,
+  "official_schema": "https://docs.aws.amazon.com/AmazonS3/latest/API/API_BlockedEncryptionTypes.html",
+  "normalization_changed": false
+}

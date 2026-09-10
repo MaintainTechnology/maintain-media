@@ -1,0 +1,448 @@
+{
+  "checked_at": "2026-09-10T13:22:56.4176768Z",
+  "deployment_id": "dpl_79jQ4GMb5gyUvXEwFq28WMUAb7Fp",
+  "git_base": "da6850035fce191c6eba3a6e446168e00ee4b047",
+  "scope": "Deployed source file list and content hashes compared with current local website; environment files excluded before hashing",
+  "total": 73,
+  "mismatches": 0,
+  "files": [
+    {
+      "path": "website/.gitignore",
+      "deployed_sha1": "4ea6b8ab4994e6dc0088d1ea824f6743cd87f929",
+      "local_sha1": "4ea6b8ab4994e6dc0088d1ea824f6743cd87f929",
+      "match": true
+    },
+    {
+      "path": "website/CLAUDE.md",
+      "deployed_sha1": "c140473a3a5fbe89301c99d9d0d1b76c5971f2c3",
+      "local_sha1": "c140473a3a5fbe89301c99d9d0d1b76c5971f2c3",
+      "match": true
+    },
+    {
+      "path": "website/README.md",
+      "deployed_sha1": "e5012fed3eb69dc04b2785a2abaae924a7025ca4",
+      "local_sha1": "e5012fed3eb69dc04b2785a2abaae924a7025ca4",
+      "match": true
+    },
+    {
+      "path": "website/eslint.config.mjs",
+      "deployed_sha1": "44d5bed565a8dd284af3e17f3b16a1c752008d0e",
+      "local_sha1": "44d5bed565a8dd284af3e17f3b16a1c752008d0e",
+      "match": true
+    },
+    {
+      "path": "website/next-env.d.ts",
+      "deployed_sha1": "915946e261450f4fb6aab2ca862c8b440b748240",
+      "local_sha1": "915946e261450f4fb6aab2ca862c8b440b748240",
+      "match": true
+    },
+    {
+      "path": "website/next.config.ts",
+      "deployed_sha1": "5c46480904719a0eedcfc747603a6f9a2645ba94",
+      "local_sha1": "5c46480904719a0eedcfc747603a6f9a2645ba94",
+      "match": true
+    },
+    {
+      "path": "website/package-lock.json",
+      "deployed_sha1": "cb2e069b1c584e0985255a5096a48c28e2febf70",
+      "local_sha1": "cb2e069b1c584e0985255a5096a48c28e2febf70",
+      "match": true
+    },
+    {
+      "path": "website/package.json",
+      "deployed_sha1": "1a278f04975394f0a6c0bb98181762c539b9ce48",
+      "local_sha1": "1a278f04975394f0a6c0bb98181762c539b9ce48",
+      "match": true
+    },
+    {
+      "path": "website/postcss.config.mjs",
+      "deployed_sha1": "8f8be689e9af58f80351df6e6b551146822f42a4",
+      "local_sha1": "8f8be689e9af58f80351df6e6b551146822f42a4",
+      "match": true
+    },
+    {
+      "path": "website/public/brand/logo-darkbg.svg",
+      "deployed_sha1": "ec22a2eeacc8e3946cc72a43b58510494709dc60",
+      "local_sha1": "ec22a2eeacc8e3946cc72a43b58510494709dc60",
+      "match": true
+    },
+    {
+      "path": "website/public/brand/logo-lightbg.svg",
+      "deployed_sha1": "dc50b9cb0b147acd3474b22a7d57daf8dc293c9b",
+      "local_sha1": "dc50b9cb0b147acd3474b22a7d57daf8dc293c9b",
+      "match": true
+    },
+    {
+      "path": "website/public/brand/mountain-forms.webp",
+      "deployed_sha1": "bf6da97f240f708c32060d8e137e85cf36757993",
+      "local_sha1": "bf6da97f240f708c32060d8e137e85cf36757993",
+      "match": true
+    },
+    {
+      "path": "website/public/brand/mountain.svg",
+      "deployed_sha1": "95fcf87675577920e36a01074dc6959bf453a26b",
+      "local_sha1": "95fcf87675577920e36a01074dc6959bf453a26b",
+      "match": true
+    },
+    {
+      "path": "website/src/app/abn-lead-gen/access/page.tsx",
+      "deployed_sha1": "37ec9710797955fa744c372f639b1698ab18bc6f",
+      "local_sha1": "37ec9710797955fa744c372f639b1698ab18bc6f",
+      "match": true
+    },
+    {
+      "path": "website/src/app/abn-lead-gen/dashboard/page.tsx",
+      "deployed_sha1": "6df384b9ca3a104a12b9c45479a7c2ca5ade2795",
+      "local_sha1": "6df384b9ca3a104a12b9c45479a7c2ca5ade2795",
+      "match": true
+    },
+    {
+      "path": "website/src/app/abn-lead-gen/layout.tsx",
+      "deployed_sha1": "9e5ab1e973bd05eaaf2fdf6cf60f1b6821c1bce3",
+      "local_sha1": "9e5ab1e973bd05eaaf2fdf6cf60f1b6821c1bce3",
+      "match": true
+    },
+    {
+      "path": "website/src/app/abn-lead-gen/page.tsx",
+      "deployed_sha1": "bd2c9fb89315189a3ef4c4d9ff237ff4474430c1",
+      "local_sha1": "bd2c9fb89315189a3ef4c4d9ff237ff4474430c1",
+      "match": true
+    },
+    {
+      "path": "website/src/app/abn-lead-gen/sign-in/page.tsx",
+      "deployed_sha1": "b04f0e2f00e37442dbc66720e5076134e83af208",
+      "local_sha1": "b04f0e2f00e37442dbc66720e5076134e83af208",
+      "match": true
+    },
+    {
+      "path": "website/src/app/about/page.tsx",
+      "deployed_sha1": "f932332430d936067627f6715559572062a7e592",
+      "local_sha1": "f932332430d936067627f6715559572062a7e592",
+      "match": true
+    },
+    {
+      "path": "website/src/app/api/abn-lead-gen/[...path]/route.ts",
+      "deployed_sha1": "b16fed896c63d8f54fffd38d6c82b2bc5be811b6",
+      "local_sha1": "b16fed896c63d8f54fffd38d6c82b2bc5be811b6",
+      "match": true
+    },
+    {
+      "path": "website/src/app/api/abn-lead-gen/auth/login/route.ts",
+      "deployed_sha1": "7ed0c0e1b04e1e4919281514464138ffe36f7df1",
+      "local_sha1": "7ed0c0e1b04e1e4919281514464138ffe36f7df1",
+      "match": true
+    },
+    {
+      "path": "website/src/app/api/abn-lead-gen/auth/logout/route.ts",
+      "deployed_sha1": "7ed0c0e1b04e1e4919281514464138ffe36f7df1",
+      "local_sha1": "7ed0c0e1b04e1e4919281514464138ffe36f7df1",
+      "match": true
+    },
+    {
+      "path": "website/src/app/contact/actions.ts",
+      "deployed_sha1": "aa818c95f43b595e4cda81d7807fb853561bba21",
+      "local_sha1": "aa818c95f43b595e4cda81d7807fb853561bba21",
+      "match": true
+    },
+    {
+      "path": "website/src/app/contact/page.tsx",
+      "deployed_sha1": "8ad783f2d9be7be5f78fc6fde1f3b706c91a4096",
+      "local_sha1": "8ad783f2d9be7be5f78fc6fde1f3b706c91a4096",
+      "match": true
+    },
+    {
+      "path": "website/src/app/fonts.ts",
+      "deployed_sha1": "4f1655b17bb6d8e4401591309199701a61b32d9e",
+      "local_sha1": "4f1655b17bb6d8e4401591309199701a61b32d9e",
+      "match": true
+    },
+    {
+      "path": "website/src/app/globals.css",
+      "deployed_sha1": "d0f83622f357ddc0f6c73f8ebd0797db0d40ca1e",
+      "local_sha1": "d0f83622f357ddc0f6c73f8ebd0797db0d40ca1e",
+      "match": true
+    },
+    {
+      "path": "website/src/app/icon.svg",
+      "deployed_sha1": "ffe58d2e5bc33c16d90e553202efc3a5da4050ec",
+      "local_sha1": "ffe58d2e5bc33c16d90e553202efc3a5da4050ec",
+      "match": true
+    },
+    {
+      "path": "website/src/app/layout.tsx",
+      "deployed_sha1": "d238c0bb3d9c992b602d71e56285ba61c4864c24",
+      "local_sha1": "d238c0bb3d9c992b602d71e56285ba61c4864c24",
+      "match": true
+    },
+    {
+      "path": "website/src/app/not-found.tsx",
+      "deployed_sha1": "8b21ef071a15c9ad4ce0e3aa4875038a84c526f5",
+      "local_sha1": "8b21ef071a15c9ad4ce0e3aa4875038a84c526f5",
+      "match": true
+    },
+    {
+      "path": "website/src/app/opengraph-image.tsx",
+      "deployed_sha1": "672989d149b997b9986473fa258375c396376507",
+      "local_sha1": "672989d149b997b9986473fa258375c396376507",
+      "match": true
+    },
+    {
+      "path": "website/src/app/page.tsx",
+      "deployed_sha1": "862fee6e522422afc3b746303da3fa0b438ec3f1",
+      "local_sha1": "862fee6e522422afc3b746303da3fa0b438ec3f1",
+      "match": true
+    },
+    {
+      "path": "website/src/app/robots.ts",
+      "deployed_sha1": "024bd1694cb55310bf2a7fcf008277dc71bc70a0",
+      "local_sha1": "024bd1694cb55310bf2a7fcf008277dc71bc70a0",
+      "match": true
+    },
+    {
+      "path": "website/src/app/services/page.tsx",
+      "deployed_sha1": "305cfe45616047fd7686e110907548e5566ee286",
+      "local_sha1": "305cfe45616047fd7686e110907548e5566ee286",
+      "match": true
+    },
+    {
+      "path": "website/src/app/sign-in/[[...sign-in]]/page.tsx",
+      "deployed_sha1": "6ba67c7605c6fa0e2e80100d6867d2e14cfeca5f",
+      "local_sha1": "6ba67c7605c6fa0e2e80100d6867d2e14cfeca5f",
+      "match": true
+    },
+    {
+      "path": "website/src/app/sign-up/[[...sign-up]]/page.tsx",
+      "deployed_sha1": "3d78e5785a0e86f7751ff018220fa8341e64757a",
+      "local_sha1": "3d78e5785a0e86f7751ff018220fa8341e64757a",
+      "match": true
+    },
+    {
+      "path": "website/src/app/sitemap.ts",
+      "deployed_sha1": "09ee4c682005a36bd7522cd1a6612f425a5ba5ff",
+      "local_sha1": "09ee4c682005a36bd7522cd1a6612f425a5ba5ff",
+      "match": true
+    },
+    {
+      "path": "website/src/components/abn-lead-gen/dashboard.module.css",
+      "deployed_sha1": "2ab44d18c471e22e389f6a30a4aa2a4b64cc33d8",
+      "local_sha1": "2ab44d18c471e22e389f6a30a4aa2a4b64cc33d8",
+      "match": true
+    },
+    {
+      "path": "website/src/components/abn-lead-gen/dashboard.tsx",
+      "deployed_sha1": "9820a17b5610b80e81f4b18a03d65075c588ff9c",
+      "local_sha1": "9820a17b5610b80e81f4b18a03d65075c588ff9c",
+      "match": true
+    },
+    {
+      "path": "website/src/components/abn-lead-gen/use-dashboard.ts",
+      "deployed_sha1": "ad8a84e0baa10f493c5695181600aac16d98182a",
+      "local_sha1": "ad8a84e0baa10f493c5695181600aac16d98182a",
+      "match": true
+    },
+    {
+      "path": "website/src/components/auth/auth-entry.tsx",
+      "deployed_sha1": "4b172c7e551cb8ef250ad93666e1b09dc941b880",
+      "local_sha1": "4b172c7e551cb8ef250ad93666e1b09dc941b880",
+      "match": true
+    },
+    {
+      "path": "website/src/components/auth/auth-form.tsx",
+      "deployed_sha1": "2ed6be8218883e17e829a2088b4b5f10cb9637dc",
+      "local_sha1": "2ed6be8218883e17e829a2088b4b5f10cb9637dc",
+      "match": true
+    },
+    {
+      "path": "website/src/components/auth/auth-shell.module.css",
+      "deployed_sha1": "a120a388c5b2490ea2af35117704c92505a27aa6",
+      "local_sha1": "a120a388c5b2490ea2af35117704c92505a27aa6",
+      "match": true
+    },
+    {
+      "path": "website/src/components/auth/auth-shell.tsx",
+      "deployed_sha1": "8139f3885993635ab3de87fc4c1d5ee79877bf30",
+      "local_sha1": "8139f3885993635ab3de87fc4c1d5ee79877bf30",
+      "match": true
+    },
+    {
+      "path": "website/src/components/auth/clerk-appearance.ts",
+      "deployed_sha1": "19514e4f7955a1b372ec5b32717d21b868a504ed",
+      "local_sha1": "19514e4f7955a1b372ec5b32717d21b868a504ed",
+      "match": true
+    },
+    {
+      "path": "website/src/components/auth/session-recovery.tsx",
+      "deployed_sha1": "3c6e33c14d12e6f86a922b565f3420c961b597ff",
+      "local_sha1": "3c6e33c14d12e6f86a922b565f3420c961b597ff",
+      "match": true
+    },
+    {
+      "path": "website/src/components/contact-form.tsx",
+      "deployed_sha1": "4f1736fa5b9db24ef1d6ed506c00088d0ec85a39",
+      "local_sha1": "4f1736fa5b9db24ef1d6ed506c00088d0ec85a39",
+      "match": true
+    },
+    {
+      "path": "website/src/components/cta-band.tsx",
+      "deployed_sha1": "aaac2d814c394d72fd606f0d5069cedc45374039",
+      "local_sha1": "aaac2d814c394d72fd606f0d5069cedc45374039",
+      "match": true
+    },
+    {
+      "path": "website/src/components/footer.tsx",
+      "deployed_sha1": "79517cccbef018d9d9804874deb184383c977b59",
+      "local_sha1": "79517cccbef018d9d9804874deb184383c977b59",
+      "match": true
+    },
+    {
+      "path": "website/src/components/header.tsx",
+      "deployed_sha1": "635de7020b855000c8c8520d2d530b6d82eb8078",
+      "local_sha1": "635de7020b855000c8c8520d2d530b6d82eb8078",
+      "match": true
+    },
+    {
+      "path": "website/src/components/home-hero.tsx",
+      "deployed_sha1": "21d40bbceabdbe62dde3106607622fba56c0d32b",
+      "local_sha1": "21d40bbceabdbe62dde3106607622fba56c0d32b",
+      "match": true
+    },
+    {
+      "path": "website/src/components/mark.tsx",
+      "deployed_sha1": "6a73f038e3ad340236f25cffe9b62b4a978bbce7",
+      "local_sha1": "6a73f038e3ad340236f25cffe9b62b4a978bbce7",
+      "match": true
+    },
+    {
+      "path": "website/src/components/marquee.tsx",
+      "deployed_sha1": "8aaefe646d50654b062dfafbe708b48fce40fdad",
+      "local_sha1": "8aaefe646d50654b062dfafbe708b48fce40fdad",
+      "match": true
+    },
+    {
+      "path": "website/src/components/process-stack.tsx",
+      "deployed_sha1": "fa8584f22655b7a7ebcf5eb3ebc0fced5f98c930",
+      "local_sha1": "fa8584f22655b7a7ebcf5eb3ebc0fced5f98c930",
+      "match": true
+    },
+    {
+      "path": "website/src/components/reveal.tsx",
+      "deployed_sha1": "e9f5ce871cd310e70e9c6d4347f0a39c2fd9b890",
+      "local_sha1": "e9f5ce871cd310e70e9c6d4347f0a39c2fd9b890",
+      "match": true
+    },
+    {
+      "path": "website/src/components/site-shell.tsx",
+      "deployed_sha1": "f40f88613ea6b067fd00658f40999e395b66edcb",
+      "local_sha1": "f40f88613ea6b067fd00658f40999e395b66edcb",
+      "match": true
+    },
+    {
+      "path": "website/src/components/smooth-scroll.tsx",
+      "deployed_sha1": "19fa0e5274a999fe2d1216259d8268db7d436b24",
+      "local_sha1": "19fa0e5274a999fe2d1216259d8268db7d436b24",
+      "match": true
+    },
+    {
+      "path": "website/src/components/stat-counter.tsx",
+      "deployed_sha1": "4272219a563dd2ebb45136fa0921602b086917f4",
+      "local_sha1": "4272219a563dd2ebb45136fa0921602b086917f4",
+      "match": true
+    },
+    {
+      "path": "website/src/fonts/AlbertSans-Italic-VariableFont_wght.ttf",
+      "deployed_sha1": "771c0c91a68a04a53c650a8682d5d40f25cb254d",
+      "local_sha1": "771c0c91a68a04a53c650a8682d5d40f25cb254d",
+      "match": true
+    },
+    {
+      "path": "website/src/fonts/AlbertSans-VariableFont_wght.ttf",
+      "deployed_sha1": "b4bcca157e52fdaba0b315afe3378d9ddba6e1dc",
+      "local_sha1": "b4bcca157e52fdaba0b315afe3378d9ddba6e1dc",
+      "match": true
+    },
+    {
+      "path": "website/src/fonts/VelaSans-Bold.otf",
+      "deployed_sha1": "e09740859708e17363219d1294b166bf7c85f7d2",
+      "local_sha1": "e09740859708e17363219d1294b166bf7c85f7d2",
+      "match": true
+    },
+    {
+      "path": "website/src/fonts/VelaSans-ExtraBold.otf",
+      "deployed_sha1": "3931d6700ea8632464120747b77f74bf60bf179d",
+      "local_sha1": "3931d6700ea8632464120747b77f74bf60bf179d",
+      "match": true
+    },
+    {
+      "path": "website/src/fonts/VelaSans-SemiBold.otf",
+      "deployed_sha1": "36e3d8fec2287e7bee4618abf0b94101935c6d0a",
+      "local_sha1": "36e3d8fec2287e7bee4618abf0b94101935c6d0a",
+      "match": true
+    },
+    {
+      "path": "website/src/lib/abn-lead-gen/auth-core.ts",
+      "deployed_sha1": "743aa74bc37ed6db8efef7f850a6f0b404f8a9ff",
+      "local_sha1": "743aa74bc37ed6db8efef7f850a6f0b404f8a9ff",
+      "match": true
+    },
+    {
+      "path": "website/src/lib/abn-lead-gen/auth-entry.ts",
+      "deployed_sha1": "16bdbe9515269c8160e714855e5daea237467c48",
+      "local_sha1": "16bdbe9515269c8160e714855e5daea237467c48",
+      "match": true
+    },
+    {
+      "path": "website/src/lib/abn-lead-gen/auth.ts",
+      "deployed_sha1": "1b8a6d578125fba90ae8c02453e27978b2e97d4f",
+      "local_sha1": "1b8a6d578125fba90ae8c02453e27978b2e97d4f",
+      "match": true
+    },
+    {
+      "path": "website/src/lib/abn-lead-gen/bridge.ts",
+      "deployed_sha1": "673ac1a96a703f3e777ddcd378b881094357a17c",
+      "local_sha1": "673ac1a96a703f3e777ddcd378b881094357a17c",
+      "match": true
+    },
+    {
+      "path": "website/src/lib/abn-lead-gen/clerk-access-service.ts",
+      "deployed_sha1": "f4cd642fbd8c84319d88e5fa52c3f244ea71a4fd",
+      "local_sha1": "f4cd642fbd8c84319d88e5fa52c3f244ea71a4fd",
+      "match": true
+    },
+    {
+      "path": "website/src/lib/abn-lead-gen/clerk-policy.ts",
+      "deployed_sha1": "77d422dbf1c79eec91654fab0767ef0ab8cb6d75",
+      "local_sha1": "77d422dbf1c79eec91654fab0767ef0ab8cb6d75",
+      "match": true
+    },
+    {
+      "path": "website/src/lib/abn-lead-gen/types.ts",
+      "deployed_sha1": "6b509e197e247ca2a9af074c71a57e5e07b9d322",
+      "local_sha1": "6b509e197e247ca2a9af074c71a57e5e07b9d322",
+      "match": true
+    },
+    {
+      "path": "website/src/lib/site.ts",
+      "deployed_sha1": "eea977c0c259d0ba835f9b14c9f29e9da0d12c2b",
+      "local_sha1": "eea977c0c259d0ba835f9b14c9f29e9da0d12c2b",
+      "match": true
+    },
+    {
+      "path": "website/src/proxy.ts",
+      "deployed_sha1": "4567acc870b80d41f64d8e1f53cba87161359c20",
+      "local_sha1": "4567acc870b80d41f64d8e1f53cba87161359c20",
+      "match": true
+    },
+    {
+      "path": "website/tsconfig.json",
+      "deployed_sha1": "27dded29dc880f958ee67c9ed276fb2b1412f515",
+      "local_sha1": "27dded29dc880f958ee67c9ed276fb2b1412f515",
+      "match": true
+    },
+    {
+      "path": "website/vercel.json",
+      "deployed_sha1": "d41fbb1fad294a80e6f93abf3178cfe56deb68ae",
+      "local_sha1": "d41fbb1fad294a80e6f93abf3178cfe56deb68ae",
+      "match": true
+    }
+  ]
+}

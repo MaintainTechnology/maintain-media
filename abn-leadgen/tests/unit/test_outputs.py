@@ -212,11 +212,16 @@ const sheet={getSheetId:()=>8,getLastColumn:()=>headers.length,getLastRow:()=>ro
   getRange:(r,c,n=1,m=1)=>({getRow:()=>r,getColumn:()=>c,getSheet:()=>sheet,getNumRows:()=>n,getNumColumns:()=>m,
     getValues:()=>rows.slice(r-1,r-1+n).map(row=>row.slice(c-1,c-1+m)),setValue:value=>{rows[r-1][c-1]=value;}})};
 let calls=[], failSuppression=false;
-const props={ENABLED:'true',API_BASE_URL:'https://fixture.test',SERVICE_TOKEN:'fixture-token',BRIDGE_SECRET:'fixture-secret'};
+const props={ENABLED:'true',API_BASE_URL:'https://fixture.test',
+  SERVICE_SIGNING_KEY:'synthetic-signing-material-'+'a'.repeat(32),BRIDGE_SECRET:'synthetic-hmac-material-'+'b'.repeat(32),
+  SPREADSHEET_ID:'synthetic-private-workbook',WORKLIST_SHEET_ID:'8'};
 const properties={getProperty:key=>props[key],getProperties:()=>props,setProperty:(key,value)=>{props[key]=value;},deleteProperty:key=>{delete props[key];}};
 const context={PropertiesService:{getScriptProperties:()=>properties},
   SpreadsheetApp:{openById:()=>({getSheets:()=>[sheet]})},
-  Utilities:{getUuid:()=>crypto.randomUUID(),Charset:{UTF_8:'utf8'},computeHmacSha256Signature:(body,secret)=>Array.from(crypto.createHmac('sha256',secret).update(body).digest())},
+  Utilities:{getUuid:()=>crypto.randomUUID(),Charset:{UTF_8:'utf8'},DigestAlgorithm:{SHA_256:'sha256'},
+    base64EncodeWebSafe:value=>Buffer.from(typeof value==='string'?value:Uint8Array.from(value)).toString('base64url'),
+    computeDigest:(_,value)=>Array.from(crypto.createHash('sha256').update(value).digest()),
+    computeHmacSha256Signature:(body,secret)=>Array.from(crypto.createHmac('sha256',secret).update(body).digest())},
   UrlFetchApp:{fetch:(url,options)=>{calls.push({url,options});const suppress=url.endsWith('/suppressions');return {getResponseCode:()=>suppress&&failSuppression?503:200,getContentText:()=>JSON.stringify(suppress?{receipt_id:'receipt',committed_at:'2026-09-08T01:00:00Z'}:{row_id:target,version:2})};}},console};
 vm.createContext(context);vm.runInContext(fs.readFileSync(process.argv[1],'utf8'),context);
 const generatedSheet=JSON.parse(fs.readFileSync(process.argv[2],'utf8'));
@@ -228,11 +233,23 @@ assert(calls[0].url.endsWith('/v1/suppressions'));
 assert(calls[1].url.endsWith('/v1/worklist-rows/'+target));
 assert.strictEqual(rows[1][4],7);assert.strictEqual(rows[2][4],2);
 const call=calls[0], h=call.options.headers;
-const canonical=['POST','/v1/suppressions',h['X-Bridge-Timestamp'],pending.actor,pending.suppressionKey,call.options.payload].join('\n'.replace('\\n','\n'));
 // Construct with actual newlines independently of bridge implementation.
-const expected=crypto.createHmac('sha256','fixture-secret').update(['POST','/v1/suppressions',h['X-Bridge-Timestamp'],pending.actor,pending.suppressionKey,call.options.payload].join(String.fromCharCode(10))).digest('hex');
+const expected=crypto.createHmac('sha256',props.BRIDGE_SECRET).update(['POST','/v1/suppressions',h['X-Bridge-Timestamp'],pending.actor,pending.suppressionKey,call.options.payload].join(String.fromCharCode(10))).digest('hex');
 assert.strictEqual(h['X-Bridge-Signature'],expected);
-assert.strictEqual(h.Authorization,'Bearer fixture-token');
+for(const request of calls) {
+  const token=request.options.headers.Authorization.slice('Bearer '.length), parts=token.split('.');
+  assert.strictEqual(parts.length,3);
+  assert.strictEqual(parts[2],crypto.createHmac('sha256',props.SERVICE_SIGNING_KEY).update(parts[0]+'.'+parts[1]).digest('base64url'));
+  const header=JSON.parse(Buffer.from(parts[0],'base64url').toString()),claims=JSON.parse(Buffer.from(parts[1],'base64url').toString());
+  assert.strictEqual(header.alg,'HS256'); assert.strictEqual(claims.iss,'maintain-media-sheets');
+  assert.strictEqual(claims.aud,'abr-engine-sheets'); assert.strictEqual(claims.sub,'private-worklist-bridge');
+  assert.strictEqual(claims.editor,pending.actor); assert.strictEqual(claims.spreadsheet_id,props.SPREADSHEET_ID);
+  assert.strictEqual(claims.sheet_id,8); assert.strictEqual(claims.method,request.options.method.toUpperCase());
+  assert.strictEqual(claims.path,new URL(request.url).pathname);
+  assert.strictEqual(claims.body_sha256,crypto.createHash('sha256').update(request.options.payload).digest('hex'));
+  assert.strictEqual(claims.exp-claims.iat,60); assert(claims.iat<=Math.floor(Date.now()/1000));
+  assert(claims.exp>Math.floor(Date.now()/1000));
+}
 calls=[];failSuppression=true;
 assert.throws(()=>context.submit_(pending));assert.strictEqual(calls.length,1);
 assert(props['pending:'+pending.eventId]);assert(rows[2][5].startsWith('Do not contact;'));
