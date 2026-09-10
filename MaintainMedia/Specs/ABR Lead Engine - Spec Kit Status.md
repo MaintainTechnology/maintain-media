@@ -27,7 +27,7 @@ The user subsequently authorised building and running the application in `abn-le
 | implement | Python package, PostgreSQL controls, source/worker/report pipelines and fixture recovery | Implemented locally; full production acceptance pending |
 | converge | Post-implementation assessment of43FRs,17story scenarios,7technical criteria,8plan decisions and5principles | T060–T065 added; build/review fixes follow; external gates remain open |
 
-The [converge skill](C:/Users/dalig/Desktop/MaintainTech/MaintainOrg/maintain-media/.agents/skills/speckit-converge/SKILL.md) was applied after implement, as required. Build and independent read-only review roles alternate; a score never substitutes for a missing requirement. No full-spec production PASS is asserted while required external evidence remains absent.
+The [converge skill](.agents/skills/speckit-converge/SKILL.md) was applied after implement, as required. Build and independent read-only review roles alternate; a score never substitutes for a missing requirement. No full-spec production PASS is asserted while required external evidence remains absent.
 
 All extension hooks checked: .specify/extensions.yml absent; pre/post hooks skipped.
 Constitution skill was used for the constitution only, then the independently requested

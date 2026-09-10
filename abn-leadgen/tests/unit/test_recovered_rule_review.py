@@ -1,6 +1,5 @@
 """Recovered patterns are review inputs, never a production approval."""
 
-import hashlib
 import json
 
 import pytest
@@ -18,7 +17,7 @@ def test_recovered_corpus_has_exact_order_and_remains_unapproved():
     assert len(rules.rules) == decision["rule_count"] == 30
     assert [r.rule_id for r in rules.rules] == [f"legacy-{n:02}" for n in range(1, 31)]
     assert [r.rule_id for r in rules.rules] == decision["ordered_rule_ids"]
-    assert hashlib.sha256(RULE_PATH.read_bytes()).hexdigest() == decision["rule_file_digest"]
+    assert rules.digest == decision["rule_file_digest"]
     assert decision["status"] == "pending" and decision["owner_approved_at"] is None
     assert decision["precision_sample_count"] == 0
     assert rules.fixture_only and not rules.production_approved

@@ -28,6 +28,18 @@ for filename, title in {
 }.items():
     MAPPING[FEATURE / filename] = 'ABR Lead Engine - ' + title
 
+def digest(path):
+    """SHA-256 over newline-canonical bytes.
+
+    Git rewrites line endings per checkout, so hashing a text file's raw bytes
+    yields one digest on a Windows working tree and another on Linux CI for the
+    very same content. Canonicalising to LF keeps recorded digests portable.
+    """
+    data = path.read_bytes()
+    if b'\0' in data:  # Binary evidence is hashed exactly as stored.
+        return hashlib.sha256(data).hexdigest()
+    return hashlib.sha256(data.replace(b'\r\n', b'\n')).hexdigest()
+
 def transformed(source, body):
     def link(match):
         label, target = match.groups()
@@ -39,19 +51,24 @@ def transformed(source, body):
         if title:
             return '[[' + title + '|' + label + ']]'
         if resolved.is_file():
-            return '[' + label + '](' + resolved.as_posix() + ')'
+            # Repo-relative: an absolute path bakes this checkout's location into
+            # the mirrored note, so every other checkout reads it as drift.
+            try:
+                return '[' + label + '](' + resolved.relative_to(ROOT).as_posix() + ')'
+            except ValueError:
+                return match.group(0)  # Outside the repository; leave as written.
         return match.group(0)  # Proposed application paths remain plainly documented.
     return re.sub(r'\[([^\]\n]+)\]\(([^)\n]+)\)', link, body)
 
 def render(source):
     body = source.read_text(encoding='utf-8-sig')
-    digest = hashlib.sha256(source.read_bytes()).hexdigest()
+    source_digest = digest(source)
     title = MAPPING[source]
     meta = '\n'.join([
         '---', 'title: ' + json.dumps(title), 'project: Maintain Media',
         'version: "4.0"' if 'Archive' not in title else 'version: "3.5"',
         'synced: 2026-09-09', 'source: ' + json.dumps(source.relative_to(ROOT).as_posix()),
-        'source_sha256: ' + digest, 'tags: [abr-lead-engine, maintain-media]', '---',
+        'source_sha256: ' + source_digest, 'tags: [abr-lead-engine, maintain-media]', '---',
         '> Synced from the repository; local document links adapted for Obsidian.',
         '> [[ABR Lead Engine - Build Hub|Open the build hub]]', '',
     ])

@@ -13,7 +13,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -28,7 +28,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -43,7 +43,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -58,7 +58,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -73,7 +73,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -88,7 +88,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -103,7 +103,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -118,7 +118,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -133,7 +133,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -148,7 +148,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -163,7 +163,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -178,7 +178,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -193,7 +193,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -208,7 +208,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -223,7 +223,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -238,7 +238,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -253,7 +253,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -268,7 +268,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -283,7 +283,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -298,7 +298,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -313,7 +313,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -328,7 +328,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -343,7 +343,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -358,7 +358,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -373,7 +373,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -388,7 +388,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -403,7 +403,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -418,7 +418,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -433,7 +433,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -448,7 +448,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -463,7 +463,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -478,7 +478,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -493,7 +493,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -508,7 +508,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -523,7 +523,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -538,7 +538,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -553,7 +553,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -568,7 +568,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -583,7 +583,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -598,7 +598,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -621,7 +621,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -636,7 +636,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -651,7 +651,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -666,7 +666,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -681,7 +681,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -696,7 +696,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -711,7 +711,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -726,7 +726,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -741,7 +741,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -764,7 +764,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -787,7 +787,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -810,7 +810,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -825,7 +825,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -848,7 +848,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -863,7 +863,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -878,7 +878,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -901,7 +901,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -916,7 +916,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/verify-eb8385d049dc4342ba0531603b17d623/result.json",
-          "sha256": "1892ef5f89da6443e29c5f045b21a3345a930aba491249a3d12ae3d26b10ac14",
+          "sha256": "6b4cbee8d0bedfdafa5957372f46691fec3a9c4d67c446b421a69e576e1cf404",
           "command": "uv run python ops/verify.py",
           "result": "Passed: frozen install, Ruff, mypy, vault/docs and 408 pytest cases; 0 failed/errors/skipped; source unchanged"
         }
@@ -936,7 +936,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/live-sources/final-verification-v2/result.json",
-          "sha256": "9af1f32eb7dc182f5241b81cd3a68bb5125de8788bae431e92fc04ae99fda014",
+          "sha256": "6b4815c565bb8e48bc3ca83b969de3cbc029ecbb6eada14545d51984a3b46e2f",
           "command": "uv run --frozen python ops/acceptance/live-sources/verify_live.py",
           "result": "641 tests passed, zero failures/errors/skips; Ruff and mypy passed; application and Python test source unchanged. Synthetic/local verification only, not live installation."
         }
@@ -948,7 +948,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/live-sources/final-verification-v2/result.json",
-          "sha256": "9af1f32eb7dc182f5241b81cd3a68bb5125de8788bae431e92fc04ae99fda014",
+          "sha256": "6b4815c565bb8e48bc3ca83b969de3cbc029ecbb6eada14545d51984a3b46e2f",
           "command": "uv run --frozen python ops/acceptance/live-sources/verify_live.py",
           "result": "641 tests passed, zero failures/errors/skips; Ruff and mypy passed; application and Python test source unchanged. Synthetic/local verification only, not live installation."
         }
@@ -960,7 +960,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/live-sources/final-verification-v2/result.json",
-          "sha256": "9af1f32eb7dc182f5241b81cd3a68bb5125de8788bae431e92fc04ae99fda014",
+          "sha256": "6b4815c565bb8e48bc3ca83b969de3cbc029ecbb6eada14545d51984a3b46e2f",
           "command": "uv run --frozen python ops/acceptance/live-sources/verify_live.py",
           "result": "641 tests passed, zero failures/errors/skips; Ruff and mypy passed; application and Python test source unchanged. Synthetic/local verification only, not live installation."
         }
@@ -972,7 +972,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/live-sources/final-verification-v2/result.json",
-          "sha256": "9af1f32eb7dc182f5241b81cd3a68bb5125de8788bae431e92fc04ae99fda014",
+          "sha256": "6b4815c565bb8e48bc3ca83b969de3cbc029ecbb6eada14545d51984a3b46e2f",
           "command": "uv run --frozen python ops/acceptance/live-sources/verify_live.py",
           "result": "641 tests passed, zero failures/errors/skips; Ruff and mypy passed; application and Python test source unchanged. Synthetic/local verification only, not live installation."
         }
@@ -984,7 +984,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/live-sources/final-verification-v2/result.json",
-          "sha256": "9af1f32eb7dc182f5241b81cd3a68bb5125de8788bae431e92fc04ae99fda014",
+          "sha256": "6b4815c565bb8e48bc3ca83b969de3cbc029ecbb6eada14545d51984a3b46e2f",
           "command": "uv run --frozen python ops/acceptance/live-sources/verify_live.py",
           "result": "641 tests passed, zero failures/errors/skips; Ruff and mypy passed; application and Python test source unchanged. Synthetic/local verification only, not live installation."
         }
@@ -996,7 +996,7 @@
       "evidence": [
         {
           "path": "abn-leadgen/ops/acceptance/live-sources/final-verification-v2/result.json",
-          "sha256": "9af1f32eb7dc182f5241b81cd3a68bb5125de8788bae431e92fc04ae99fda014",
+          "sha256": "6b4815c565bb8e48bc3ca83b969de3cbc029ecbb6eada14545d51984a3b46e2f",
           "command": "uv run --frozen python ops/acceptance/live-sources/verify_live.py",
           "result": "641 tests passed, zero failures/errors/skips; Ruff and mypy passed; application and Python test source unchanged. Synthetic/local verification only, not live installation."
         }

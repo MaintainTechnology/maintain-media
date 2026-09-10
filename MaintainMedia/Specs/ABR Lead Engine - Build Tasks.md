@@ -4,7 +4,7 @@ project: Maintain Media
 version: "4.0"
 synced: 2026-09-09
 source: "specs/001-abr-lead-engine/tasks.md"
-source_sha256: 0f5715dcf77a97b9fdd675b748b6674cce79f26eb32dea5ad3eacaf119b45553
+source_sha256: aa608d524e357bbd691c82f287b401c17693353994d7e3b6164fd61179805045
 tags: [abr-lead-engine, maintain-media]
 ---
 > Synced from the repository; local document links adapted for Obsidian.
@@ -133,7 +133,7 @@ Assessed 2026-09-09 after the authorised fixture implementation. Inventory:43FRs
 
 ## Executed status closure
 
-Final local verification: 408 tests passed, no failures/errors/skips; frozen install, Ruff, mypy and vault checks passed. 58 of 65 local engineering tasks are complete. The seven remaining tasks above retain their original obligations and are explicitly pending/partial in `task-evidence.json`. The [final build review](C:/Users/dalig/Desktop/MaintainTech/MaintainOrg/maintain-media/abn-leadgen/ops/acceptance/release-review.md) separates local engineering 92/100 from incomplete full-spec acceptance.
+Final local verification: 408 tests passed, no failures/errors/skips; frozen install, Ruff, mypy and vault checks passed. 58 of 65 local engineering tasks are complete. The seven remaining tasks above retain their original obligations and are explicitly pending/partial in `task-evidence.json`. The [final build review](abn-leadgen/ops/acceptance/release-review.md) separates local engineering 92/100 from incomplete full-spec acceptance.
 
 ## Phase 10: Convergence
 

@@ -1,6 +1,22 @@
 import type { NextConfig } from "next";
 import path from "node:path";
 
+// clerkMiddleware() throws per request when its keys are missing, and the proxy
+// matcher covers every page, so an unset key returns 500 for the whole site while
+// the build still succeeds. Fail the production build instead of shipping that.
+if (process.env.NODE_ENV === "production") {
+  const missing = ["NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY", "CLERK_SECRET_KEY"].filter(
+    (key) => !process.env[key],
+  );
+  if (missing.length) {
+    throw new Error(
+      `Missing Clerk environment variables: ${missing.join(", ")}. Set them on the ` +
+        "deployment (Vercel > Project > Settings > Environment Variables, Production) " +
+        "and redeploy; without them every request 500s.",
+    );
+  }
+}
+
 const nextConfig: NextConfig = {
   devIndicators: false,
   // Preserve 127.0.0.1 in Clerk's internal rewrite; Next's localhost normalization

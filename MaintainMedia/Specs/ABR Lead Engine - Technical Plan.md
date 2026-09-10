@@ -4,7 +4,7 @@ project: Maintain Media
 version: "4.0"
 synced: 2026-09-09
 source: "specs/001-abr-lead-engine/plan.md"
-source_sha256: 4203607d7ed0a209aebf241a62e90bad0d3e6e7389d2d45000e1efbd95a12fa6
+source_sha256: 0c1aa6883c182e8b8c28108662ee78153b7f82947f47e2b312eee78ce0d018ed
 tags: [abr-lead-engine, maintain-media]
 ---
 > Synced from the repository; local document links adapted for Obsidian.
@@ -105,7 +105,7 @@ Business-group UUIDs are all retained relational restriction/CRM/deletion keys. 
 
 Full-scale preflight accounts for current/prior/staged Parquet, promoted-lead database indexes/WAL, spill, downloads, backup/restore space plus 25 GiB headroom. An 8 GB/80 GB VPS is a candidate only. Start DuckDB at two threads with bounded spill and process-level limits; its 512 MiB buffer limit does not cap total RSS. Measure ingest/diff RSS <=2 GiB, 60-second representative 20.5M-row diff including output as stretch target, and <=6-hour full processing. A failed target requires profiling/capacity changes or an approved requirement amendment. Retention/deletion and backup limits are in [[ABR Lead Engine - Data Model|data-model.md]].
 
-Implementation tuning,9September2026: the initial two-thread baseline was compared with one- and three-thread diff variants. The selected diff now uses three threads with400k-row partitions and the same512MB/8GB buffer/spill limits. Exact event values matched the reference. The three-thread observations were58.4 and104.0 seconds, versus116.5 seconds for the paired two-thread confirmation. These variable local results support the implementation choice without certifying consistent60-second performance, full XML processing or the target AU host. See [performance evidence](C:/Users/dalig/Desktop/MaintainTech/MaintainOrg/maintain-media/abn-leadgen/ops/acceptance/performance-thread-review.md); R36 targets and release obligations remain unchanged.
+Implementation tuning,9September2026: the initial two-thread baseline was compared with one- and three-thread diff variants. The selected diff now uses three threads with400k-row partitions and the same512MB/8GB buffer/spill limits. Exact event values matched the reference. The three-thread observations were58.4 and104.0 seconds, versus116.5 seconds for the paired two-thread confirmation. These variable local results support the implementation choice without certifying consistent60-second performance, full XML processing or the target AU host. See [performance evidence](abn-leadgen/ops/acceptance/performance-thread-review.md); R36 targets and release obligations remain unchanged.
 
 ## Delivery sequence and gates
 

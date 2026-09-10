@@ -48,7 +48,10 @@ def load_rules(path: Path, *, production: bool = False, decision: dict | None = 
         or not value["version"]
     ):
         raise SourceError("INVALID_RULE_SCHEMA")
-    digest = hashlib.sha256(raw).hexdigest()
+    # Newline-canonical: the corpus is a text file whose line endings Git rewrites per
+    # checkout, so hashing raw bytes would read a Windows working tree and a Linux
+    # deployment as different corpora and disable the classifier on one of them.
+    digest = hashlib.sha256(raw.replace(b"\r\n", b"\n")).hexdigest()
     rules = []
     for row in value["rules"]:
         if (

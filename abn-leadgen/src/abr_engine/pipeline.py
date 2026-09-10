@@ -8,6 +8,7 @@ import json
 import os
 import platform
 import shutil
+import sys
 import threading
 import time
 import zipfile
@@ -70,7 +71,9 @@ def process_lock(path: Path):
             stream.flush()
         stream.seek(0)
         try:
-            if os.name == "nt":
+            # sys.platform, not os.name: type checkers narrow on it, so the
+            # Windows-only msvcrt branch is skipped when checking on Linux.
+            if sys.platform == "win32":
                 import msvcrt
 
                 msvcrt.locking(stream.fileno(), msvcrt.LK_NBLCK, 1)
@@ -85,7 +88,7 @@ def process_lock(path: Path):
     finally:
         if acquired:
             stream.seek(0)
-            if os.name == "nt":
+            if sys.platform == "win32":
                 import msvcrt
 
                 msvcrt.locking(stream.fileno(), msvcrt.LK_UNLCK, 1)

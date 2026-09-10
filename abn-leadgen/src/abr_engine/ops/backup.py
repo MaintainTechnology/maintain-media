@@ -8,6 +8,7 @@ import os
 import shutil
 import socket
 import subprocess
+import sys
 from pathlib import Path
 from urllib.parse import urlparse
 from uuid import uuid4
@@ -28,13 +29,18 @@ MAX_DUMP_BYTES = 64 * 1024 * 1024
 
 
 def _native(binary: Path, name: str, *args, background=False):
-    executable = binary / (name + (".exe" if os.name == "nt" else ""))
+    # sys.platform, not os.name: type checkers narrow on an `if` against it, so the
+    # Windows-only members below are skipped when checking on Linux.
+    executable = binary / (name + (".exe" if sys.platform == "win32" else ""))
     if not executable.is_file():
         raise DomainError("POSTGRES_NATIVE_RUNTIME_UNAVAILABLE", 503)
     env = {**os.environ, "PGPASSWORD": "abr_fixture", "PGCONNECT_TIMEOUT": "5"}
+    creationflags = 0
+    if sys.platform == "win32":
+        creationflags = subprocess.CREATE_NO_WINDOW
     try:
         result = subprocess.run([str(executable), *map(str, args)], env=env, shell=False,
-            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
+            creationflags=creationflags,
             stdout=subprocess.DEVNULL if background else subprocess.PIPE,
             stderr=subprocess.DEVNULL if background else subprocess.PIPE, timeout=45, check=False)
     except subprocess.TimeoutExpired:

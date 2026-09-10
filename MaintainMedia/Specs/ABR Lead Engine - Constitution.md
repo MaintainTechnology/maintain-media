@@ -4,7 +4,7 @@ project: Maintain Media
 version: "4.0"
 synced: 2026-09-09
 source: ".specify/memory/constitution.md"
-source_sha256: 2882b8eab828583568af1b81c4f37f8adcd52b9b8bf66c77b73a96bf05ac2459
+source_sha256: cfc5df0fcb6010fbd2c42ce2c895d9071450461d42804ec616d9d9848a91c5e3
 tags: [abr-lead-engine, maintain-media]
 ---
 > Synced from the repository; local document links adapted for Obsidian.

@@ -77,7 +77,7 @@ a tightly defined contract for a separately approved sending/calling system.
 
 On 9 September 2026 the user approved the recovered 30 trade categories, the listed
 geography, QBCC Categories 1–2 and the 60-business weekly limit as the targeting
-direction. The [decision record](C:/Users/dalig/Desktop/MaintainTech/MaintainOrg/maintain-media/abn-leadgen/ops/acceptance/live-sources/targeting-approval-2026-09-09.json)
+direction. The [decision record](abn-leadgen/ops/acceptance/live-sources/targeting-approval-2026-09-09.json)
 preserves that scope. Other defaults remain planning decisions; collection/privacy,
 vendor, accuracy-review and release approvals are separate.
 Any change has an owner, reason, date, version and affected tests in the decision register.
@@ -173,7 +173,7 @@ between snapshots, not necessarily occurring that week.
 **R9 — Deterministic classification and reviewed rules.** Preserve the intended 30 legacy trade
 rules only after their exact source is recovered and reviewed. On 9 September 2026,
 `deliverables/abr/extract_new_abns.py` was present and all 30 ordered literal rules were
-recovered without executing that script. The [review packet](C:/Users/dalig/Desktop/MaintainTech/MaintainOrg/maintain-media/abn-leadgen/ops/acceptance/live-sources/rules-approval-packet.md)
+recovered without executing that script. The [review packet](abn-leadgen/ops/acceptance/live-sources/rules-approval-packet.md)
 records hashes, behavioural differences and the user's targeting-direction approval.
 Production precision review remains pending. Synthetic fixtures enable engineering tests;
 production classification stays disabled until

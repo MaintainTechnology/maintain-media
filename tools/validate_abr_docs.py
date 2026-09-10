@@ -1,6 +1,5 @@
 """Check document integrity; deliberately does not claim application validation."""
 from pathlib import Path
-import hashlib
 import json
 import re
 import sys
@@ -31,7 +30,7 @@ if completed:
             for item in entry['evidence']:
                 evidence_path = (root / item['path']).resolve()
                 if (not evidence_path.is_relative_to(root) or not evidence_path.is_file() or
-                    hashlib.sha256(evidence_path.read_bytes()).hexdigest() != item['sha256'] or
+                    vault.digest(evidence_path) != item['sha256'] or
                     not item.get('command') or not item.get('result')):
                     errors.append('Invalid or changed task evidence: ' + task)
         if set(ledger['tasks']) != set(taskids):

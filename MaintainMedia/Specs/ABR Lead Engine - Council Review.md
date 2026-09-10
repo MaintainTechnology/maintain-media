@@ -20,8 +20,8 @@ Independent judge: **7.8/10**. Two independent Codex reviews scored the source 7
 Weighted judge dimensions: correctness/evidence6.8(25%), requirements8.6(20%), architecture8.2(20%),
 privacy/security/operations7.6(20%), scope/traceability8.1(15%).
 
-[Original judge](C:/Users/dalig/Desktop/MaintainTech/MaintainOrg/maintain-media/llm-council/runs/20260908-abr-baseline-2/judge.md)
-and [merged review plan](C:/Users/dalig/Desktop/MaintainTech/MaintainOrg/maintain-media/llm-council/runs/20260908-abr-baseline-2/final-plan.md).
+[Original judge](llm-council/runs/20260908-abr-baseline-2/judge.md)
+and [merged review plan](llm-council/runs/20260908-abr-baseline-2/final-plan.md).
 
 ## Method and limitations
 

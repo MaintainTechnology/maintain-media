@@ -4,7 +4,7 @@ project: Maintain Media
 version: "4.0"
 synced: 2026-09-09
 source: "specs/001-abr-lead-engine/analysis.md"
-source_sha256: f90d8c6050a612fdfcea8db3cc40fce598374b2834251a24208ccf9081e1f3c2
+source_sha256: 23d0564919b0ee207ef13bd17db3acc5284046e168f066c3fd155c5bf59c4072
 tags: [abr-lead-engine, maintain-media]
 ---
 > Synced from the repository; local document links adapted for Obsidian.

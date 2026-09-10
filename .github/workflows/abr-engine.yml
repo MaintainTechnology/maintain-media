@@ -27,6 +27,11 @@ jobs:
       ABR_FIXTURE_PG_BIN: /usr/lib/postgresql/16/bin
     steps:
       - uses: actions/checkout@v4
+      - name: Fetch ABR fixture archives from Git LFS
+        # The ABR source fixtures are .zip files held in LFS; a plain checkout leaves
+        # pointer stubs and every fixture ingest holds on an unreadable archive.
+        # Scoped on purpose: `lfs: true` would pull all ~327MB the repository stores.
+        run: git lfs pull --include="abn-leadgen/tests/fixtures/abr/*.zip"
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12.12'
@@ -36,9 +41,20 @@ jobs:
       - run: python -m pip install uv==0.11.20
       - run: sudo apt-get update && sudo apt-get install -y postgresql-16
       - run: uv run python ops/verify.py
+      - name: Collect fixture cluster startup logs
+        # The backup drill's pg_ctl failure reason only exists in the cluster log,
+        # which lives in pytest's temp dir and is otherwise discarded with the runner.
+        if: failure()
+        run: |
+          mkdir -p ops/acceptance/cluster-logs
+          find /tmp/pytest-of-runner -name postgres.log -print0 2>/dev/null |
+            xargs -0 -I{} -n1 sh -c 'cp "$1" "ops/acceptance/cluster-logs/$(echo "$1" | tr "/" "_")"' _ {}
+          ls -l ops/acceptance/cluster-logs || true
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: offline-acceptance
-          path: abn-leadgen/ops/acceptance/verify-*
+          path: |
+            abn-leadgen/ops/acceptance/verify-*
+            abn-leadgen/ops/acceptance/cluster-logs
           retention-days: 30

@@ -4,7 +4,7 @@ project: Maintain Media
 version: "4.0"
 synced: 2026-09-09
 source: "specs/001-abr-lead-engine/checklists/security-and-readiness.md"
-source_sha256: 0b270953846b38257217973c1c00b2c4d2e518df0a49b5ccd0de77e0c005e5c0
+source_sha256: 6c1b5e200de6f3f43d209c60de7bb13641049243aa741198a6cad00e3cf3efde
 tags: [abr-lead-engine, maintain-media]
 ---
 > Synced from the repository; local document links adapted for Obsidian.

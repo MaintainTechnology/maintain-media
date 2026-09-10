@@ -12,7 +12,7 @@ tags: [abr-lead-engine, maintain-media]
 
 # Build validation quickstart — specification v4.0
 
-The authorised application is in `abn-leadgen/`. The [README](C:/Users/dalig/Desktop/MaintainTech/MaintainOrg/maintain-media/abn-leadgen/README.md) is the executed command reference and [[ABR Lead Engine - Implementation Status|implementation status]] separates local evidence from pending release requirements. Do not substitute live ABR records, websites, API credentials or CRM locations for synthetic fixtures.
+The authorised application is in `abn-leadgen/`. The [README](abn-leadgen/README.md) is the executed command reference and [[ABR Lead Engine - Implementation Status|implementation status]] separates local evidence from pending release requirements. Do not substitute live ABR records, websites, API credentials or CRM locations for synthetic fixtures.
 
 ## Prerequisites
 
