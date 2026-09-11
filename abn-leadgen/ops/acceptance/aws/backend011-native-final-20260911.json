@@ -1,0 +1,22 @@
+{
+  "status": "passed",
+  "stats": {
+    "tests": 416,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "elapsed_seconds": 174.929,
+  "source_manifest_sha256": "862d7c83255aa537eebce401e428729e273e2326e18b6b284f835bd930178313",
+  "scope": "final synthetic isolated PostgreSQL16 and offline HTTP transports on Sydney Linux host",
+  "uid": 999,
+  "interfaces": [
+    "lo"
+  ],
+  "live_database_access": false,
+  "external_network_available": false,
+  "fixture_database_stopped": true,
+  "xml_file": "ops/acceptance/aws/backend011-native-final-20260911.xml",
+  "xml_sha256": "7a1cb27868d9e7b2200f83778e68e527b5d3b806db2bde751c73964b7ad758e6",
+  "recorded_at": "2026-09-11T04:08:47.607566+00:00"
+}

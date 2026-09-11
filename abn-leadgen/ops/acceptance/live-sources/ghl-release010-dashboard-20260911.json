@@ -1,0 +1,67 @@
+{
+  "http_status": 200,
+  "mode": "pilot",
+  "outreach": "disabled",
+  "summary": {
+    "total_leads": 1,
+    "selected": 0,
+    "needs_review": 1,
+    "last_run_at": "2026-09-11 00:50:09.364609+00:00"
+  },
+  "setup": [
+    {
+      "id": "engine",
+      "label": "Australian engine",
+      "status": "connected",
+      "detail": "Connected to the actual private database. No demonstration businesses are added."
+    },
+    {
+      "id": "collection",
+      "label": "Business source collection",
+      "status": "approved",
+      "detail": "Current capability evidence is recorded."
+    },
+    {
+      "id": "website_collection",
+      "label": "Website contact collection",
+      "status": "approved",
+      "detail": "Phone numbers only, from manually reviewed own-business websites, for internal research."
+    },
+    {
+      "id": "crm",
+      "label": "GoHighLevel hand-off",
+      "status": "approved",
+      "detail": "Current capability evidence is recorded."
+    },
+    {
+      "id": "abr",
+      "label": "Broader ABR discovery",
+      "status": "blocked",
+      "detail": "Required evidence: CAPABILITY_DISABLED"
+    },
+    {
+      "id": "worker",
+      "label": "Source run worker",
+      "status": "connected",
+      "detail": "Uses the same approved source pipeline as the server schedule."
+    }
+  ],
+  "sources": [
+    {
+      "source": "qbcc",
+      "status": "accepted",
+      "last_success_at": "2026-09-11 00:02:58.781511+00:00",
+      "source_published_at": "2026-05-18T05:14:43.785988"
+    },
+    {
+      "source": "abr",
+      "status": "not_collected",
+      "last_success_at": null,
+      "source_published_at": null
+    }
+  ],
+  "cache_control": "no-store",
+  "unsigned_http_status": 401,
+  "verified_at": "2026-09-11T02:19:39.723250+00:00",
+  "release": "010"
+}

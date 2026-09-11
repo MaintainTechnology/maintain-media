@@ -1,0 +1,21 @@
+{
+  "archive": "release.tar.gz",
+  "archive_sha256": "af6e8bc00ae00430c4f8a9c6b81e1456574f8889189c1df957b552e97b70c8ae",
+  "file_count": 164,
+  "manifest_sha256": "0cc571deaf555420b582a82571aa730c3b57f5e75a43b8eac21244d44d547c48",
+  "output": "C:\\Users\\dalig\\AppData\\Local\\MaintainMedia\\aws\\releases\\abn-live-20260911-011-r29-final",
+  "prepare_sha256": "7d8832095a31e6f1239a3353b039a7d3fc738c6d529390bc8caa9020772902fe",
+  "runtime": "dormant",
+  "schema": "abr-dormant-release-v1",
+  "uv_lock_sha256": "c7c7a58208f93368d2050b3a75daed625e5bacda8a241b9be56213f6e9552b30",
+  "validation_archive_sha256": "4940acb5a0774e26633f8ec6697ad4aa5a0ef71c2588edaca6ed8301edbbb6dd",
+  "validation_files": 92,
+  "validation_manifest_sha256": "94befdf69cb432593c1bfad3e511a65bd78639dc30b0f0b437cad40c80e39cbb",
+  "status": "staged_unactivated_reopened_for_logical_run_storage_accounting",
+  "current_release": "010",
+  "staged_at": "2026-09-11T03:59:24.402496+00:00",
+  "systemd_verify": "passed",
+  "syntax": "passed",
+  "services_changed": false,
+  "source_runs": 0
+}

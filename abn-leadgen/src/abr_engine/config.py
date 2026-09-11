@@ -25,10 +25,11 @@ class Settings(BaseModel):
     ghl_config_file: Path | None = None
     ghl_installation_file: Path | None = None
     sheets_bridge_file: Path | None = None
+    abr_config_file: Path | None = None
 
     @model_validator(mode="after")
     def enforce_boundary(self):
-        for path in (self.ghl_config_file, self.ghl_installation_file, self.sheets_bridge_file):
+        for path in (self.ghl_config_file, self.ghl_installation_file, self.sheets_bridge_file, self.abr_config_file):
             if path is not None and not path.is_absolute():
                 raise ValueError("Live vendor configuration paths must be absolute")
         db = urlparse(self.database_url)

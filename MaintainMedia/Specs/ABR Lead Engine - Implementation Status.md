@@ -4,17 +4,138 @@ project: Maintain Media
 version: "4.0"
 synced: 2026-09-09
 source: "specs/001-abr-lead-engine/implementation-status.md"
-source_sha256: 18decbce231e1a73cd905c561b99f99315a593e562dfd2b9c5dab7eaf7ca76b5
+source_sha256: 7ae4ff1791c76febf0773dbbf7b7d6c110ebae5591e273b293702478dc282314
 tags: [abr-lead-engine, maintain-media]
 ---
 > Synced from the repository; local document links adapted for Obsidian.
 > [[ABR Lead Engine - Build Hub|Open the build hub]]
 
-> **Latest deployment, 11 September 2026:** release 006 is installed and verified;
-> real business-data activation remains closed. See
-> [[ABR Lead Engine - Activation Follow-up 2026-09-11|Current activation status and remaining decisions]].
-
 # ABR Lead Engine implementation status
+
+## Live pilot update — 11 September 2026
+
+**Release 010 is running with real QBCC data, verified phone-only website
+collection and the guarded GoHighLevel account enabled. This is a limited
+internal-research pilot; no real business has been handed off to GHL.**
+The separate delegated-owner decisions admit the QBCC, reviewed website and
+individually approved phone-only CRM scopes until **24 September 2026,
+23:18:20 UTC**. They do not represent Jon's signature, adviser approval,
+individual lead approval or permission to contact.
+
+The [actual activation](abn-leadgen/ops/acceptance/aws/ghl-dnd-pilot-activation-receipt-20260911.json)
+added only four CRM gates in 009b; the later source-only 010 repair added two G7
+revisions. The [current host readback](abn-leadgen/ops/acceptance/aws/cleanup010-host-20260911.json)
+confirms 25 gates, two unchanged policies, 26 migrations and **one business,
+two phone contacts, zero selected worklist rows, zero CRM outbox entries and
+zero remote CRM identities**. The [current signed dashboard](abn-leadgen/ops/acceptance/live-sources/ghl-release010-dashboard-20260911.json)
+reports approved GHL setup with HTTP 200/no-store; unsigned access returns 401.
+The actual Sydney service credential also [verified the intended account](abn-leadgen/ops/acceptance/aws/ghl-sydney-account-verification-20260911.json)
+at 01:52:26 UTC without performing a mutation.
+
+Release 010 fixes a cleanup selection defect found after account activation:
+completed accepted source intake had been treated as abandoned review staging,
+causing a protective `INTAKE_NOT_UNREFERENCED` hold. Nothing was deleted.
+The [reviewed fix](abn-leadgen/ops/acceptance/live-sources/qbcc-cleanup-lifecycle-fix-20260911.json)
+passed 28 focused checks; unknown/inconsistent acceptance still holds, and
+ordinary finite retention is unchanged. The [actual 010 cleanup](abn-leadgen/ops/acceptance/aws/cleanup010-actual-operation-20260911.json)
+completed successfully at 02:18:58 UTC without decrypting records or deleting
+accepted files. Retention completed successfully at 02:18:59 UTC. The host
+verified all three accepted source artifacts against their ledger hashes/sizes.
+Its API is active, and the latest worker/control/cleanup/retention runs all
+succeeded. This does not certify future expiry or a business-data restore.
+The [current role check](abn-leadgen/ops/acceptance/live-sources/ghl-release010-reviewer-controls-20260911.json)
+confirms reviewer/admin access, hides CRM controls from an admin without reviewer
+scope and denies a non-admin operator. Approval stays disabled for the unselected
+business. The probe submitted no approval and exported no business.
+
+The [actual GHL contract test](abn-leadgen/ops/acceptance/live-integration-20260910/ghl-live-account-contract-20260911.json)
+used two labelled synthetic contacts and removed both. Mapping, group search,
+duplicate protection, DND, clearing and unrelated-tag preservation passed.
+Delayed provider indexing was observed and reconciled without another create;
+release 009b also safely fetches a known update ID when search is empty. Every
+mutation checks current local authority and the reviewed all-Draft workflow
+inventory. Six workflows remained Draft with zero enrolments after the test.
+This does not certify a real production outbox transfer or future administrator changes.
+
+**The next real-hand-off blocker is engineering as well as evidence.** The live
+DNCR receipt-format adapter is unfinished: `compliance.wash.import_receipt()`
+rejects nonfixture receipts with `VENDOR_RECEIPT_MAPPING_PENDING`. After that
+adapter is built and tested, a phone still needs genuine current clearance,
+verification/locality and the business's qualification, selected tier A worklist
+row and version-bound reviewer approval. GHL activation supplies none of these.
+Do Not Disturb stays enabled and gives no permission to call or send messages.
+
+The [limited vendor decision](abn-leadgen/ops/acceptance/live-integration-20260910/ghl-dnd-pilot-delegated-owner-20260911.json)
+records US storage and US/India service/support, with unknown provider-backup
+expiry and other stated vendor unknowns. It is not an Australian-only processing
+or legal compliance claim. Separate removal authority remains finite through
+10 September 2027, 23:18:20 UTC; it does not extend CRM acquisition.
+
+The [accepted QBCC import](abn-leadgen/ops/acceptance/live-sources/qbcc-live-release007-result-20260911.json)
+contains **11,034 discovery records**. Bulk licence status remains UNKNOWN and
+the import created no automatic candidates. **One business** subsequently passed
+a genuine current-licence and website-identity review. Its
+[first live website job](abn-leadgen/ops/acceptance/live-sources/website-phone-first-live-result-20260911.json)
+was verified complete at 00:50:49 UTC on 11 September: **four pages, six requests, two landline
+contacts and zero extracted email contacts**. Both
+[private evidence readbacks](abn-leadgen/ops/acceptance/live-sources/website-phone-private-evidence-readback-20260911.json)
+matched the reviewed contact page. It still needs contact-permission review;
+`export_eligible=false`, selected worklist count 0 and outreach disabled.
+
+The [website activation receipt](abn-leadgen/ops/acceptance/aws/website-phone-pilot-activation-20260911.json)
+records only mobile/landline collection, separately controlled retention and the
+scoped expiry. Ordinary page evidence can incidentally contain email text; no
+email contacts were extracted. Google Sheet publishing, automatic email harvesting,
+broader ABR and outreach remain disabled. GHL is separately enabled at account
+level, with zero real transfers. Collection does not establish call
+permission or a current Do Not Call Register check.
+
+The [current website deployment](website/acceptance/vercel/ghl-handoff-deployment-20260911.json)
+is `dpl_4uugYiVhLyYZgKVeVMta1Wxcb7HZ`: READY, 74 uploaded files, 65 Sydney function
+outputs and global Clerk middleware. Forty focused UI checks, lint, types, cloud
+build and public/signed-out HTTP checks passed. The [updated public notice](website/acceptance/vercel/ghl-handoff-notice-readback-20260911.json)
+was read back. These receipts do not certify a fresh signed-in staff browser
+journey or Australian-only processing. Backend evidence records
+[106 distinct local cases](abn-leadgen/ops/acceptance/live-sources/ghl-backend-review-20260911.json),
+[107 core plus 74 GHL checks on isolated Sydney Linux](abn-leadgen/ops/acceptance/aws/backend009b-offline-tests-20260911.json),
+and 32 activation-helper checks with independent review.
+
+### How to use the current page
+
+1. Open [the dashboard](https://www.maintainmedia.com.au/abn-lead-gen/dashboard) and sign in with your approved account. Licence, website and evidence reviews need the separately assigned reviewer role.
+2. In **Latest leads**, select the reviewed business. Open **Review phone evidence** → **Open private captured evidence**. The completed collection still needs permission review; repeating the collection does not clear that restriction.
+3. To review another business, scroll to **QBCC source review** → **Load source records**. Use the linked current licence checker and save the exact business/status evidence and check time. Only a matching eligible business becomes a lead.
+4. Select the lead → **Review the business website identity**. Save its checked domain, decision and two independent evidence references.
+5. Open **Collect phone details from the reviewed website**. Supply the checked HTTPS homepage ending in `/`, the site-terms evidence and review time. Tick the permission box only after checking the terms, then choose **Collect reviewed phone details**. Follow the saved job status and inspect its evidence.
+6. Open **GoHighLevel hand-off** for the business. With no selected row, it should show **Not selected for hand-off**. Do not treat Setup's approved connection as individual approval. Once the missing live DNCR adapter and genuine contact/qualification checks are completed, only an eligible selected tier A row can receive **Approve this business for hand-off**. A queued result is not a completed transfer; the worker must return **Hand-off verified** after provider readback.
+
+**T071 remains open.** The live DNCR adapter, eligible selected worklist, real GHL
+outbox/suppression timing, disabled Google workflow and measured pilot remain
+unfinished. Independent custody recovery, accepted business-data backup/quarantined
+restore, capacity, recovery targets and external monitoring remain incomplete.
+The 100-business classifier review and unfinished live ABR feed concern later ABR
+expansion; they are not prerequisites for this first QBCC-only intake. The
+[full-tool review](abn-leadgen/ops/production/live-completion.md) records
+**87/100**, trajectory **57 → 72 → 77 → 82 → 85 → 87**. The latest two-point gain is
+below the existing three-point meaningful-improvement threshold; no full-spec
+pass or 9.0–10 application rating is claimed, nor that further work cannot
+materially improve the score.
+
+The earlier [post-collection host receipt](abn-leadgen/ops/acceptance/aws/website-phone-release008-host-20260911.json)
+verified release 008 and a retention run from **00:54:15 to 00:54:18 UTC**: exit 0,
+`primary_retention_complete`, no holds. Two encrypted contacts and two private
+captures remain; queued website payloads, archives and action intents are all 0.
+The current 010 host readback confirms the API, source/control recovery,
+review-staging cleanup and retention schedule are active. Weekly QBCC admission
+and all three backup timers remain disabled.
+This is evidence of the current run, not future expiry performance, external
+deletion, backup acceptance or a completed recovery drill.
+
+## Historical implementation snapshot — 9 September 2026
+
+The sections below preserve their original dated evidence and claims. Earlier
+zero-data, fixture-only and closed-activation statements are superseded by the
+verified pilot update above; historical scores are unchanged.
 
 Specification v4.0; execution update9September2026. The user's later request authorises the application at `abn-leadgen/`, with Python package `abr_engine`. It preserves R1â€“R43 and the Part1 exclusions. The original Council9.3/10 assessed documents; it is not the implementation score.
 
@@ -84,127 +205,3 @@ failures/errors/skips, plus Ruff and mypy for 60 application modules and the
 production preparer. Application and Python test source hashes stayed unchanged.
 These synthetic/local checks do not establish real-data acceptance, installed
 accounts, a running AU production service or elapsed pilot outcomes.
-
-## Deployment addendum — 11 September 2026
-
-This dated addendum supersedes the earlier statements that no Australian service
-or private Google worklist has been installed. The original 9 September snapshot,
-its source hash and historical scores above are preserved. It does not declare a
-completed live pilot or change any approval.
-
-The Python service is now running on the Maintain Media AWS host in Sydney at
-[the engine health page](https://abn-engine.maintainmedia.com.au/health). The
-installation receipt verifies public DNS, a valid HTTPS certificate, the private
-PostgreSQL database using local peer authentication, and the installed application
-schema. The deployment operator confirmed all 26 migrations. Runtime keys are
-stored outside the repository, with a separate encrypted Windows recovery copy.
-The API and the separate source/control recovery timers are running. Release 005
-contains 153 manifest-bound source files and migration 026's transactional
-restriction-ledger queue. Runtime queue privileges are limited to SELECT/UPDATE;
-approval-gate writes remain denied. The source
-worker, control worker and seven-day review-staging cleanup timers are enabled.
-The weekly QBCC admission and retention timers are installed but disabled.
-
-The health request returned 200. A dashboard request without authentication
-returned 401. A short, request-bound service assertion for the current approved
-Clerk actor returned 200 with pilot mode, zero leads and zero selected businesses.
-The response was marked no-store. This verifies the server connection; it does not
-verify a human's signed-in production browser session. Source capabilities remain
-closed, and no source rows or release approvals were created by provisioning.
-
-The implemented Next.js page at `/abn-lead-gen/dashboard` now has a real database
-API, durable run receipts, current licence/website review, conflict-aware outcomes,
-explicit CRM approval and immediate do-not-contact controls. It preserves the real
-Clerk actor and explicit reviewer scope. An empty live database is displayed as
-empty. Closed source or vendor approvals are shown as blocked, with no fixture
-substitution. Bounded website collection leaves contact permission and email
-verification unknown until their separate evidence is supplied.
-
-The website passed a production build on Node 24.21.0, 50 authentication/bridge
-tests, seven dashboard tests and scoped application linting. The frozen upload
-contains only 72 approved website files, bound to the existing Maintain Technology
-Vercel project. The remote origin and pilot transport variables are installed.
-The published production release is `dpl_387fws7PqGeZ5fHhPstMwZWbK5w4`, aliased to
-[the Maintain Media dashboard](https://www.maintainmedia.com.au/abn-lead-gen/dashboard).
-All 12 public and signed-out GET/HEAD checks passed. Private pages redirect to
-sign-in; private API requests without authentication are rejected before reaching
-the engine. A signed-in staff browser journey remains unverified.
-
-The first release's runtime region check found the dashboard/API in `iad1` despite
-the configuration naming Sydney. The deployment operator corrected this with the
-CLI's explicit Sydney region option. Independent inspection of the new release
-confirmed all 59 non-middleware function outputs in `syd1`, including the dashboard,
-private API, sign-in and sign-up. The Clerk `_middleware` component is replicated
-globally. Therefore the entire request/authentication path is not claimed to be
-Australian-only; Vercel and Clerk processing-country approvals remain separate.
-
-The private Google Sheet is installed under `jeph@quotemax.com.au`, with Restricted
-sharing and no other named readers. It has a protected, empty **ABN Worklist** tab
-with all 29 headers. The original tab was preserved. The separate Apps Script was
-saved, authorised and read back against the local source. Its edit and repair
-triggers exist. The real HTTPS endpoint and two new matching keys are now installed
-in the server and the owner's Apps Script properties. The owner verified all eight
-saved properties and both key matches without recording key values. Its `ENABLED`
-property remains false; the draft reader registry has no approved roles/evidence,
-and the API registry setting remains unset. No genuine editor write-back,
-suppression latency or live business-data disclosure has been verified. This is a
-private installation with synchronisation still disabled.
-
-The GHL integration is installed for the Maintain Media location, with 13 empty
-field definitions and their named folder verified in the actual account. Its new
-credential is in separate encrypted custody and on the Sydney service. The saved
-integration now has only location and field-metadata read permissions; the
-temporary field-write permission was removed and metadata reads passed again.
-No contact permissions, contact writes or workflow changes were made. Collision,
-workflow isolation, opt-out propagation, installation approval and actual contact
-synchronisation remain incomplete.
-
-The user separately approved a US$5/month allowance for one private Sydney backup
-bucket and a decimal 100 GB application storage cap. That spending decision does
-not approve business-data backups or provide an AWS billing hard stop. The actual
-private bucket, scoped publisher and restricted host files are installed. At
-2026-09-10T18:05:38Z, an encrypted random-value upload/download/decrypt/delete-
-absence check passed without accessing a database or business data. Seven backup
-units are installed; all three backup timers remain disabled. Missing authority
-correctly held a manual test and raised a local alarm. External alert delivery
-and stopped-timer monitoring remain unverified. The Windows DPAPI private-key
-copy is in Codex's virtualized profile; independent custody recovery, a real
-quarantined database restore and current backup authority are still required.
-No production backup is accepted by the storage-probe receipt.
-
-The source acceptance/review, bounded website collection, durable source worker,
-weekly admission, separately gated retention, and encrypted backup/restore code
-have additional positive, negative and recovery tests. Earlier preparation and
-release-003 checks included 106 local schedule/maintenance cases, 106 selected
-native Linux cases, and separate Windows suites of 507 unit and 376 integration
-checks. Release 005 records 495 passing final unit tests, two deprecation warnings,
-79 combined scheduler checks, seven retained-key checks and native Linux lock
-contention/process-death recovery checks. These counts describe separate suites and
-must not be added as if every case were unique. These are engineering results; source collection approval,
-real vendor processing and the measured pilot remain separate.
-
-Evidence for this checkpoint:
-
-- [Australian installation receipt](../../abn-leadgen/ops/acceptance/aws/live-service-install-20260911.json).
-- [Current runtime release 005 receipt](../../abn-leadgen/ops/acceptance/aws/live-service-release-005-20260911.json).
-- [Private Google installation receipt](../../abn-leadgen/ops/acceptance/live-integration-20260910/google-installation.json).
-- [Google matching-key connection preparation](../../abn-leadgen/ops/acceptance/live-integration-20260910/google-connection-preparation-20260911.json).
-- [GHL field and restricted-scope verification](../../abn-leadgen/ops/acceptance/live-integration-20260910/ghl-browser-installation-20260911.json).
-- [Backup spending decision](../../abn-leadgen/ops/acceptance/aws/backup-spend-approval-20260911.json).
-- [Actual private storage installation and encrypted probe](../../abn-leadgen/ops/acceptance/aws/backup-storage-installation-20260911.json).
-- [Backup coordinator checks](../../abn-leadgen/ops/acceptance/aws/backup-coordinator-final-20260911.xml).
-- [Schedule and maintenance checks](../../abn-leadgen/ops/acceptance/live-sources/live-schedule-tests-20260911.xml).
-- [Live dashboard contract and limits](../../website/specs/live-abn-dashboard.md).
-- [Frozen website upload and Node 24 checks](../../website/specs/production-upload-2026-09-11.md).
-- [Published function-region inspection](../../website/acceptance/vercel/deployment-20260911-function-regions.json).
-- [Published public/auth HTTP checks](../../website/acceptance/vercel/dpl_387fws7PqGeZ5fHhPstMwZWbK5w4-http.json).
-
-T071 remains open. The remaining acceptance includes approved source/privacy and
-processing-location records, the real 100-business classification review, enabled
-and tested Google synchronisation, real GHL contact and suppression verification,
-actual business-data backup and quarantined restore evidence, independent custody
-recovery, measured recovery loss/interval, target-host capacity, stopped-timer
-monitoring and external alerts, a real staff browser journey, and the measured pilot. Full ABR
-expansion remains conditional. Sending messages and making calls remain outside
-this build. Current source and vendor gates must be met before collecting or
-disclosing business records.

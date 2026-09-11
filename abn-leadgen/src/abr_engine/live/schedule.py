@@ -12,6 +12,8 @@ from abr_engine.control.service import DomainError, Service
 from abr_engine.db import transaction
 from abr_engine.ingest.common import SourceError
 from abr_engine.ingest.qbcc_review import _configured, cleanup_qbcc_review
+from abr_engine.live.abr_cleanup import reconcile_attempts
+from abr_engine.live.artifact_retention import run_artifact_retention
 from abr_engine.live.runtime import QBCCRuntime
 
 ACTOR = "scheduler:qbcc-weekly-v1"
@@ -49,9 +51,20 @@ def maintenance(settings, *, kind: str, execute=False):
             result = cleanup_qbcc_review(settings, execute=execute)
         else:
             service = Service(settings, load_keys(settings))
+            # Neither namespace reconciliation nor full-file hashing may hold
+            # the staff control lock. Each final file action re-admits authority.
+            namespaces = reconcile_attempts(settings, execute=execute)
+            with transaction(settings) as conn:
+                now = Service.now(conn)
+            artifacts = run_artifact_retention(service, now=now, execute=execute)
             with transaction(settings) as conn:
                 service.personal_data_access(conn)
-                result = retention_run(conn, service, now=Service.now(conn), execute=execute)
+                result = retention_run(conn, service, now=Service.now(conn), execute=execute, skip_artifacts=True)
+            result['artifacts'] = artifacts
+            result['abr_namespaces'] = namespaces
+            if (namespaces['status'] in {'held', 'complete_with_holds'}
+                    or any(item['state'] == 'held' for item in artifacts)):
+                result['status'] = 'complete_with_holds'
         held = result["status"] in {"held", "complete_with_holds"}
         return {"status": "held" if held else "complete" if execute else "preview",
             "operation": kind, "execute": execute, "result": result,

@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-09-11T00:33:01.0300708+00:00",
+  "url": "https://www.maintainmedia.com.au/business-research-notice",
+  "status": 200,
+  "deployment_id": "dpl_Ex1sbMr6Ti2KxpqZybQhzisU5Enj",
+  "source_digest": "88970d86a256e3dd16822cc5ebe316be090aa61dcce1a8829314c25c38beb82e",
+  "checks": {
+    "title": true,
+    "phone_only": true,
+    "contact": true,
+    "retention": true,
+    "no_archive": true,
+    "limitations": true
+  }
+}

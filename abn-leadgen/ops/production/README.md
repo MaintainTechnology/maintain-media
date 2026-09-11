@@ -6,19 +6,63 @@ approval records, migrate a database or enable adapters. The existing fixture
 units in `../systemd/` are unchanged. Prepared bundles and historical acceptance
 receipts must not be mistaken for the current installed service.
 
-For the next real-data step, see the beginner-facing
-[first live QBCC worklist brief](first-live-qbcc.md): supplied accounts, the exact
-owner/adviser decision, and the technical checks the developer handles.
+**Current result, checked 11 September 2026 (Manila): release 008 is running with
+real QBCC records and a completed, manually reviewed phone-only website collection.**
+The separate delegated-owner pilot decisions authorise the limited QBCC and
+website research scopes until **24 September 2026, 23:18:20 UTC**. They are not a
+general production approval or a qualified adviser's certification.
 
-**Current result, checked 11 September 2026 (Manila): the live pilot runtime is
-installed and responding, while business-data activation remains gated.** The
-AWS Sydney host has PostgreSQL, private runtime configuration, the authenticated
-API and TLS installed. Release 005 records an authenticated runtime HTTP 200,
-an active API plus worker/control/review-cleanup timers, zero leads, no enabled
-source capabilities and no created release approvals. See
+The QBCC import accepted **11,034 discovery records** with UNKNOWN bulk licence
+status and **no automatic qualification**. One business subsequently passed a
+genuine current-licence and website-identity review. Its live website job was verified
+complete at 00:50:49 UTC on 11 September: **four pages, six requests, two landline contacts
+and zero extracted email contacts**. Both private evidence readbacks matched the
+reviewed contact page. The business still needs contact-permission review:
+`export_eligible=false`, selected worklist count 0 and outreach disabled.
+
+The live page is [ABN Lead Gen](https://www.maintainmedia.com.au/abn-lead-gen/dashboard).
+Vercel release `dpl_Ex1sbMr6Ti2KxpqZybQhzisU5Enj` is READY with 74 uploaded files,
+65 Sydney function outputs and global Clerk middleware. Its build/types and 12
+public/signed-out HTTP checks passed. The public
+[business research notice](https://www.maintainmedia.com.au/business-research-notice)
+returned 200. This does not certify a fresh signed-in staff browser journey or
+Australian-only processing.
+
+To use it:
+
+1. Open the dashboard and sign in with your approved Maintain Media account. Review actions require the separately assigned reviewer role.
+2. In **Latest leads**, select the reviewed business. Open **Review phone evidence**, then **Open private captured evidence** to inspect what was saved. A completed collection does not mean permission to call; do not rerun it to clear that restriction.
+3. For another business, scroll to **QBCC source review** and choose **Load source records**. Open the linked licence checker, check the exact business and current status, then save the evidence and check time. Only a matching eligible business becomes a lead.
+4. Select that lead and open **Review the business website identity**. Record its domain, checked decision and two independent evidence references, then choose **Save identity review**.
+5. Open **Collect phone details from the reviewed website**. Enter the checked HTTPS homepage ending in `/`, record the site's terms evidence and review time, tick the explicit permission box, then choose **Collect reviewed phone details**. Follow its saved job status and inspect the evidence. Do not tick the box without checking the terms.
+
+Evidence: [accepted QBCC import](../acceptance/live-sources/qbcc-live-release007-result-20260911.json),
+[website activation](../acceptance/aws/website-phone-pilot-activation-20260911.json),
+[first live website result](../acceptance/live-sources/website-phone-first-live-result-20260911.json),
+[private evidence readback](../acceptance/live-sources/website-phone-private-evidence-readback-20260911.json),
+and [website deployment](../../../website/acceptance/vercel/website-phone-deployment-20260911.json).
+The [first live QBCC brief](first-live-qbcc.md) gives the wider operating context.
+
+Google/GHL hand-off, automatic email harvesting, ABR expansion and outreach remain
+disabled. The measured pilot, independent key recovery, accepted business-data
+backup/restore and other full-production checks remain incomplete.
+
+The [post-collection host receipt](../acceptance/aws/website-phone-release008-host-20260911.json)
+verifies a retention run from **00:54:15 to 00:54:18 UTC**, exit 0,
+`primary_retention_complete`, with no holds. The API, source/control recovery,
+review-staging cleanup and retention schedule are active. Weekly QBCC admission
+and all three backup timers remain disabled. The host records two encrypted
+contacts, two private captures, no remaining queued website payloads, no archives
+and no action intents. This confirms the current retention run, not future expiry
+performance, external deletion, backup acceptance or a completed recovery drill.
+
+## Earlier installation checkpoint — release 005
+
+The following installation details and test counts preserve the earlier checkpoint.
+Its zero-data and closed-capability observations are superseded by release 008
+above. The original
 [`live-service-release-005-20260911.json`](../acceptance/aws/live-service-release-005-20260911.json)
-and the preceding installation receipts. Those checks verify the signed transport;
-a fresh end-to-end staff Clerk browser login is not certified by that receipt.
+remains historical evidence, not the latest activation state.
 
 QBCC pipeline, dashboard, CRM drain and suppression wiring now exist. The guarded
 legacy `serve` command is still fixture-only; the installed nonfixture service
@@ -61,10 +105,11 @@ The private backup key is protected by current-user Windows DPAPI in Codex's
 virtualized Windows profile; the canonical custody path was confirmed by the
 operator. It is not on the Sydney source host. Independent custody recovery and
 recovery of engine wrapping/encryption and retained lookup keys remain unproved.
-Source/privacy/vendor records, approved backup authority, a real quarantined
+Wider source/privacy/vendor records, approved backup authority, a real quarantined
 restore, measured recovery loss/interval, stopped-timer monitoring, external
 alerts, current-control recovery, matching accuracy, capacity and the measured
-QBCC pilot remain release requirements. Prepared configuration is not approval.
+QBCC pilot remain full-production requirements. The scoped decisions above do not
+pass those wider requirements. Prepared configuration is not approval.
 
 ## Prepare a reviewable bundle
 

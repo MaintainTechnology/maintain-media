@@ -1,0 +1,34 @@
+{
+  "release": "010",
+  "status": "cleanup010_installed_services_stopped",
+  "source_manifest_sha256": "608bcbcb881f2787db2f6f408e666c5e3debe0d4a59760085e62d3c4aa1c5660",
+  "technical_evidence_sha256": "6612d43c21a20821c29ad234bf26fad0776df8a01ae7b51cadbaba8da94f1706",
+  "configuration_sha256": "5aa20561d01da70059d0c9ff41a6c9cdc41b458db1d7eb0f7b5fc22217b6af2d",
+  "policy_changed": false,
+  "configuration_changed": false,
+  "provider_calls": 0,
+  "individual_approvals_created": 0,
+  "new_gates": 2,
+  "services_started": false,
+  "source_activation": {
+    "status": "live_source_activated",
+    "source_manifest_sha256": "608bcbcb881f2787db2f6f408e666c5e3debe0d4a59760085e62d3c4aa1c5660",
+    "previous_release_preserved": "/opt/abn-leadgen-live-20260911-009b-previous",
+    "services_started": false
+  },
+  "counts": {
+    "release_gate": 25,
+    "policy": 2,
+    "schema_migration": 26,
+    "lead_entity": 1,
+    "contact_record": 2,
+    "source_snapshot": 1,
+    "source_cursor": 1,
+    "worklist_row": 0,
+    "crm_outbox": 0,
+    "crm_identity": 0
+  },
+  "previous_gates_preserved": 23,
+  "policies_preserved": 2,
+  "verified_at": "2026-09-11T02:17:43.871375+00:00"
+}

@@ -46,3 +46,49 @@ def gate_reasons(conn, settings: Settings, capability: str, now: datetime) -> li
     for prerequisite in REQUIRED_CAPABILITIES.get(capability, ()):
         reasons.extend(gate_reasons(conn, settings, prerequisite, now))
     return list(dict.fromkeys(reasons))
+
+
+def website_collection_policy(conn, settings: Settings, now: datetime) -> dict:
+    """Current live phone-only purpose, bound to the exact website G1 evidence."""
+    reasons = gate_reasons(conn, settings, "website_collection", now)
+    if not reasons:
+        reasons = gate_reasons(conn, settings, "retention", now)
+    closed = {"allowed_channels": [], "expires_at": None, "reason_codes": reasons}
+    if reasons:
+        return closed
+    policy = conn.execute("SELECT * FROM policy ORDER BY approved_at DESC,version DESC LIMIT 1").fetchone()
+    authority = conn.execute(
+        "SELECT evidence_sha256 FROM release_gate WHERE environment=%s AND scope='website_collection' "
+        "AND gate_name='G1' ORDER BY revision DESC LIMIT 1", (settings.mode,),
+    ).fetchone()
+    policy_settings = policy["settings"] if policy and isinstance(policy["settings"], dict) else {}
+    purpose = policy_settings.get("website_collection", {})
+    retention = policy_settings.get("retention", {})
+    valid = False
+    if isinstance(purpose, dict):
+        try:
+            expiry = datetime.fromisoformat(purpose.get("expires_at", ""))
+            channels = purpose.get("allowed_channels")
+            valid = bool(
+                policy and policy["state"] == "approved" and policy["scope"] == settings.mode
+                and policy["approved_at"] <= now < policy["expires_at"]
+                and isinstance(policy["evidence_ref"], str) and policy["evidence_ref"].strip()
+                and isinstance(policy["actor_id"], str) and policy["actor_id"].strip()
+                and purpose.get("approved") is True
+                and isinstance(channels, list) and len(channels) == 2
+                and set(channels) == {"mobile", "landline"}
+                and expiry.tzinfo is not None and now < expiry <= policy["expires_at"]
+                and isinstance(purpose.get("evidence_sha256"), str)
+                and re.fullmatch(r"[0-9a-f]{64}", purpose["evidence_sha256"])
+                and authority and purpose["evidence_sha256"] == authority["evidence_sha256"]
+                and isinstance(retention, dict) and retention.get("approved") is True
+                and retention.get("schedule_version") == "abr-v4-defaults"
+                and retention.get("retain_selected_evidence") is False
+                and isinstance(retention.get("evidence_sha256"), str)
+                and re.fullmatch(r"[0-9a-f]{64}", retention["evidence_sha256"])
+            )
+        except (TypeError, ValueError):
+            pass
+    if not valid:
+        return {**closed, "reason_codes": ["WEBSITE_COLLECTION_POLICY_REQUIRED"]}
+    return {"allowed_channels": ["mobile", "landline"], "expires_at": expiry.isoformat(), "reason_codes": []}

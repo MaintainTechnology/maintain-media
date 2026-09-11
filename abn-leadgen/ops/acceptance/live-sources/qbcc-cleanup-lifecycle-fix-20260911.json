@@ -1,0 +1,73 @@
+{
+  "checked_at": "2026-09-11T02:10:41.771Z",
+  "status": "repair_verified_and_staged",
+  "scope": "Cleanup lifecycle selection only; production activation and post-cutover service results are separate.",
+  "observed_problem": {
+    "operation": "review-staging",
+    "reason": "INTAKE_NOT_UNREFERENCED",
+    "cause": "A coherent accepted and completed QBCC intake was still selected as abandoned review staging.",
+    "accepted_files_deleted": 0
+  },
+  "repair": {
+    "runtime_path": "src/abr_engine/ingest/qbcc_review.py",
+    "runtime_sha256": "9b4b98c9e92b51d49f4d8c3c7ed39d8ab0def725614cf293be9a5b309904464a",
+    "candidate_exclusion": "Only complete state with accepted intake lifecycle and a coherent true/QBCC/complete acceptance receipt.",
+    "missing_or_inconsistent_receipt": "still checked and held",
+    "abandoned_staging_retention_days": 7,
+    "ordinary_raw_and_snapshot_retention": "unchanged",
+    "database_permissions_or_gates_changed": false
+  },
+  "verification": {
+    "pre_fix_regression": "failed as expected: accepted durable source returned held",
+    "post_fix_tests": 28,
+    "postgresql_cases": 22,
+    "cli_unit_cases": 6,
+    "ruff": "passed",
+    "mypy": "passed",
+    "independent_read_only_source_review": "passed",
+    "independent_repeat_test_run": {
+      "reviewer": "live_integrations",
+      "passed": 13,
+      "seconds": 90.82,
+      "scope": "Repeated subset of the focused PostgreSQL cases; not added to the 28 distinct passing cases."
+    },
+    "cases": [
+      "accepted referenced source is skipped in preview and execute, before and after seven days, without modifying bytes/run/cursor",
+      "expired unreferenced staging is removed beside an accepted source",
+      "unknown/missing/inconsistent lifecycle or acceptance receipt remains held",
+      "accepted no-op files retain their existing ordinary classes and can be deleted by separately approved finite retention without changing the accepted cursor"
+    ],
+    "test_file": "tests/integration/test_live_scheduled_operations.py",
+    "test_file_sha256": "1ae1b19997a4581863434d5fd54d81b03d60c49663e2bf505efb5863287d704d",
+    "reports": [
+      {
+        "path": "qbcc-cleanup-lifecycle-tests-20260911.xml",
+        "passed": 20,
+        "sha256": "d3121772274d6377287f1a0b53911ca9bde9a80e0fe268a1b6d1d4c3beb9351e"
+      },
+      {
+        "path": "qbcc-cleanup-additional-tests-20260911.xml",
+        "passed": 2,
+        "sha256": "4468d3a987832cf9f8e2c7089ee6aa3c775d49c63938e9ab3f909cc23f4c0019"
+      },
+      {
+        "path": "qbcc-cleanup-cli-tests-20260911.xml",
+        "passed": 6,
+        "sha256": "c8c5c2f843ae049a6928589f65c90d380540cf443d0bf52a83049396528916a2"
+      }
+    ]
+  },
+  "release": {
+    "name": "010",
+    "archive_sha256": "5c4e3794745433686a48ad440a1852711a78a846b63a29cd8e67caf588370cbd",
+    "manifest_sha256": "608bcbcb881f2787db2f6f408e666c5e3debe0d4a59760085e62d3c4aa1c5660",
+    "file_count": 153,
+    "changed_files_against_009b": [
+      "src/abr_engine/ingest/qbcc_review.py"
+    ],
+    "crm_and_dashboard_sources_unchanged": true,
+    "uv_lock_unchanged": true,
+    "staging_receipt": "../aws/backend010-staging-20260911.json",
+    "host_activation_performed": false
+  }
+}

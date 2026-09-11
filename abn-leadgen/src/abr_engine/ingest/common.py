@@ -22,11 +22,20 @@ def canonical_json(value: Any) -> str:
     return json.dumps(value, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
 
 
-def digest_file(path: Path) -> str:
+def digest_file(path: Path, *, check=None) -> str:
     sha = hashlib.sha256()
+    since_check = 0
+    if check is not None:
+        check()
     with path.open("rb") as stream:
         for block in iter(lambda: stream.read(1024 * 1024), b""):
             sha.update(block)
+            since_check += len(block)
+            if check is not None and since_check >= 64 * 1024**2:
+                check()
+                since_check = 0
+    if check is not None:
+        check()
     return sha.hexdigest()
 
 

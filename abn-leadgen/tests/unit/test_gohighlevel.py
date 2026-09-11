@@ -16,6 +16,7 @@ from abr_engine.export.gohighlevel import (
     GHLRetryableError,
     GoHighLevel,
     retry_seconds,
+    workflow_inventory_digest,
 )
 
 
@@ -23,7 +24,9 @@ from abr_engine.export.gohighlevel import (
 def config():
     ids = {name: "field_" + name for name in FIELD_NAMES}
     return GHLConfig(location_id="location_1", mapping_version="reviewed-2026-09-09",
-                     field_ids=ids, group_search_field="customFields.field_group_id")
+                     field_ids=ids, group_search_field="customFields.field_group_id",
+                     allowed_channels=["email", "phone"],
+                     workflow_inventory_sha256=workflow_inventory_digest({"workflows": []}, "location_1"))
 
 
 @pytest.fixture
@@ -45,8 +48,12 @@ def contact(config, payload, **updates):
 
 
 def provider(config, handler, **kwargs):
+    def with_inventory(request):
+        if request.url.path == "/workflows/":
+            return httpx.Response(200, json={"workflows": []})
+        return handler(request)
     return GoHighLevel(config, SecretStr("synthetic-not-a-real-token"),
-                       transport=httpx.MockTransport(handler), sleep=lambda _: None, **kwargs)
+                       transport=httpx.MockTransport(with_inventory), sleep=lambda _: None, **kwargs)
 
 
 def test_readonly_metadata_preflight_never_promises_production(config):
@@ -162,7 +169,7 @@ def test_create_is_dnd_and_readback_verified_even_with_sparse_response(config, p
                   write_guard=lambda: guards.append(True)) as client:
         assert client.create(payload["group_id"], payload, str(uuid4())) == "remote_1"
     assert seen == [("POST", "/contacts/"), ("GET", "/contacts/remote_1")]
-    assert len(guards) == 1
+    assert len(guards) == 2
 
 
 @pytest.mark.parametrize("mode", ["timeout", "server_error", "rate_limit", "redirect", "bad_json"])
@@ -221,6 +228,8 @@ def test_update_preserves_unrelated_tags_and_checks_guard_before_each_mutation(c
         if request.method == "PUT":
             assert "tags" not in body and body["dnd"] is True
             assert body["name"] is None and body["phone"] is None and body["email"] is None
+            assert body["firstName"] is body["lastName"] is None
+            assert "companyName" not in body
             assert [x for x in body["customFields"] if x["fieldValue"] is not None] == [
                 {"id": config.field_ids["group_id"], "fieldValue": payload["group_id"]}]
         else:
@@ -232,7 +241,7 @@ def test_update_preserves_unrelated_tags_and_checks_guard_before_each_mutation(c
         client.update("remote_1", stopped, str(uuid4()))
     assert seen == [("GET", "/contacts/remote_1"), ("PUT", "/contacts/remote_1"),
                     ("DELETE", "/contacts/remote_1/tags"), ("POST", "/contacts/remote_1/tags")]
-    assert len(guards) == 3
+    assert len(guards) == 6
 
 
 def test_authority_revocation_between_update_and_tag_change_stops(config, payload):
@@ -240,7 +249,7 @@ def test_authority_revocation_between_update_and_tag_change_stops(config, payloa
     seen, checks = [], []
     def guard():
         checks.append(True)
-        if len(checks) > 1:
+        if len(checks) > 2:
             raise DomainError("APPROVAL_REVOKED", 409)
     def handler(request):
         seen.append(request.method)
@@ -304,3 +313,82 @@ def test_candidate_business_name_must_be_bounded_plain_text(config, payload, bus
           pytest.raises(DomainError, match="GHL_CANDIDATE_INVALID")):
         client.create(payload["group_id"], payload, str(uuid4()))
     assert not calls
+
+
+def workflow(**updates):
+    return {"id": "workflow_1", "locationId": "location_1", "status": "draft",
+            "version": 2, "updatedAt": "2026-09-11T00:00:00Z", **updates}
+
+
+@pytest.mark.parametrize("response", [
+    {}, {"workflows": None}, {"workflows": [], "nextPage": 2},
+    {"workflows": [workflow(locationId="other")]},
+    {"workflows": [workflow(), workflow()]},
+    {"workflows": [workflow(version=True)]}, {"workflows": [workflow(version=0)]},
+    {"workflows": [workflow(updatedAt="2026-09-11")]},
+    {"workflows": [workflow(status="published")]}, {"workflows": [workflow(status="unknown")]},
+])
+def test_workflow_inventory_rejects_incomplete_or_active_account(response):
+    with pytest.raises(DomainError, match="GHL_WORKFLOW"):
+        workflow_inventory_digest(response, "location_1")
+
+
+def test_workflow_digest_is_order_and_timestamp_representation_stable():
+    first = {"workflows": [workflow(), workflow(id="workflow_2")]}
+    second = {"workflows": [workflow(id="workflow_2", updatedAt="2026-09-11T00:00:00+00:00"),
+                            workflow(name="Unhashed private name")], "traceId": "not_authority"}
+    assert workflow_inventory_digest(first, "location_1") == workflow_inventory_digest(second, "location_1")
+
+
+@pytest.mark.parametrize("response,code", [
+    ({"workflows": [workflow()]}, "GHL_WORKFLOW_INVENTORY_CHANGED"),
+    ({"workflows": [workflow(status="published")]}, "GHL_WORKFLOW_NOT_ISOLATED"),
+    ({"workflows": [], "nextPage": 2}, "GHL_WORKFLOW_INVENTORY_INVALID"),
+])
+def test_workflow_guard_prevents_any_mutation(config, payload, response, code):
+    seen = []
+    def handler(request):
+        seen.append((request.method, request.url.path))
+        assert request.url.params["locationId"] == config.location_id
+        return httpx.Response(200, json=response)
+    with (GoHighLevel(config.model_copy(update={"allow_writes": True}), SecretStr("synthetic-token"),
+                      transport=httpx.MockTransport(handler), write_guard=lambda: None) as client,
+          pytest.raises(DomainError, match=code)):
+        client.create(payload["group_id"], payload, str(uuid4()))
+    assert seen == [("GET", "/workflows/")]
+
+
+def test_phone_only_contract_refuses_email_before_any_http(config, payload):
+    calls = []
+    with (provider(config.model_copy(update={"allow_writes": True, "allowed_channels": ["phone"]}),
+                   lambda request: calls.append(request), write_guard=lambda: None) as client,
+          pytest.raises(DomainError, match="GHL_CHANNEL_NOT_APPROVED")):
+        client.create(payload["group_id"], payload, str(uuid4()))
+    assert calls == []
+
+
+@pytest.mark.parametrize("change", [{"allowed_channels": []}, {"allowed_channels": ["phone", "phone"]},
+    {"allowed_channels": ["sms"]}, {"workflow_inventory_sha256": None}])
+def test_live_write_configuration_requires_explicit_scope_and_inventory(config, change):
+    with pytest.raises(ValidationError):
+        GHLConfig.model_validate({**config.model_dump(), "allow_writes": True, **change})
+
+
+@pytest.mark.parametrize("name", [None, "", "absent"])
+def test_fetch_recovers_provider_split_name_without_unrelated_company(config, payload, name):
+    raw = contact(config, payload, firstName="Synthetic", lastName="Company", companyName="Unrelated account company")
+    if name == "absent":
+        raw.pop("name")
+    else:
+        raw["name"] = name
+    with provider(config, lambda _: httpx.Response(200, json={"contact": raw})) as client:
+        assert client.fetch("remote_1")["payload"]["business_name"] == payload["business_name"]
+
+
+def test_fetch_does_not_hide_remaining_split_name_after_incomplete_clear(config, payload):
+    raw = contact(config, payload, name=None, firstName="Synthetic", lastName=None)
+    with provider(config, lambda _: httpx.Response(200, json={"contact": raw})) as client:
+        assert client.fetch("remote_1")["payload"]["business_name"] == "Synthetic"
+    raw.update(firstName="", lastName="", companyName="Unrelated account company")
+    with provider(config, lambda _: httpx.Response(200, json={"contact": raw})) as client:
+        assert client.fetch("remote_1")["payload"]["business_name"] is None

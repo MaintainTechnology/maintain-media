@@ -160,6 +160,43 @@ def test_unknown_create_without_match_never_blindly_creates_again(crm_case):
     assert provider.calls == 1
 
 
+@pytest.mark.parametrize("known_state", ["current", "missing", "conflict"])
+def test_uncertain_update_with_empty_search_reads_known_identity_never_creates(crm_case, known_state):
+    class DelayedIndex(MockCRM):
+        updated = False
+        creates = 0
+
+        def find_group(self, group_id):
+            return [] if self.updated else super().find_group(group_id)
+
+        def update(self, remote_id, payload, request_id):
+            super().update(remote_id, payload, request_id)
+            self.updated = True
+            raise TimeoutError("Synthetic successful update response loss")
+
+        def create(self, group_id, payload, request_id):
+            self.creates += 1
+            return super().create(group_id, payload, request_id)
+
+        def fetch(self, remote_id):
+            if self.updated and known_state == "missing":
+                raise DomainError("GHL_REQUEST_REJECTED", 409)
+            if self.updated and known_state == "conflict":
+                return {"group_id": str(uuid4()), "payload": {}}
+            return super().fetch(remote_id)
+
+    provider = DelayedIndex()
+    group = str(crm_case["lead"]["group_id"])
+    provider.records["existing"] = {"group_id": group, "payload": {"group_id": group,
+        "business_name": "Old synthetic projection", "tags": []}}
+    assert drain(crm_case, provider)["state"] == "uncertain"
+    assert stored(crm_case)["remote_id"] == "existing"
+    retry_now(crm_case)
+    assert drain(crm_case, provider)["state"] == ("succeeded" if known_state == "current" else "blocked")
+    assert provider.creates == 0 and provider.calls == 1 and len(provider.records) == 1
+    assert stored(crm_case)["operation_kind"] == "update"
+
+
 def test_suppression_can_commit_during_provider_lookup_and_prevents_dispatch(crm_case):
     class SuppressDuringLookup(MockCRM):
         def find_group(self, group_id):

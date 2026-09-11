@@ -1,0 +1,57 @@
+{
+  "kind": "local_engineering_test_evidence",
+  "recorded_at": "2026-09-11T01:38:33.870717+00:00",
+  "unique_current_cases": 106,
+  "remaining_nonpassing_cases": [],
+  "runs": [
+    {
+      "path": "ops/acceptance/live-sources/ghl-phone-workflow-tests-20260911.xml",
+      "sha256": "3f1a50523c687874be24933ac72bf660cae4c546a771a6d5b08bc2afb9b16c1f",
+      "tests": 96,
+      "passed": 95,
+      "failed": 1,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "ops/acceptance/live-sources/ghl-phone-positive-tests-20260911.xml",
+      "sha256": "2747b69c45fa295ed84b6da937fa3cae9cebf8bfa1a5676727ab157abf757692",
+      "tests": 1,
+      "passed": 1,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "ops/acceptance/live-sources/ghl-provider-name-tests-20260911.xml",
+      "sha256": "cf5bac17e4cbb7e4bb16704f87ef8b63c036288db18a48f9694af4a351fed636",
+      "tests": 62,
+      "passed": 62,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "path": "ops/acceptance/live-sources/ghl-search-delay-tests-20260911.xml",
+      "sha256": "8679b235bd84230799e3f79567637a600d351d74918663f0f7172e5e89a5a182",
+      "tests": 6,
+      "passed": 6,
+      "failed": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ],
+  "resolution": "The earlier wash regression attempted to update append-only evidence. Its corrected test appends isolated fixture observations and passed. Runtime was unchanged by that test fix. The final provider-name suite reran all GHL transport units and PostgreSQL create/suppression after the observed provider-shape change.",
+  "sources": {
+    "src/abr_engine/export/gohighlevel.py": "7c5073171fd660ffe322ab956edeb68d6d5816529c3f455083ffe58ebd8b6092",
+    "src/abr_engine/export/live_contract.py": "b415f495969c28d1a66e867dc4ffe038e4a1a83c361848a2c9a7cef488eab8a5",
+    "src/abr_engine/export/crm.py": "955a6c16cb523bae73701b889f42583d63037c90294f4b52ed17c55a2f91618b",
+    "src/abr_engine/live/dashboard.py": "ac3f1d6c4190c75395b8c28a728731d7dbe69a5e01d7d007099695ddb6675a3e"
+  },
+  "scope_limits": [
+    "No provider call was made by these tests.",
+    "Synthetic local evidence is not a live installation or individual contact approval.",
+    "Live DNCR receipt-format implementation and genuine per-phone wash remain separate requirements."
+  ],
+  "search_index_recovery": "Six PostgreSQL checks passed after the observed provider index delay: create uncertainty retains backoff and no second create; a known update ID is fetched and group-verified, with missing or conflicting records held. No runtime provider call was made by these tests."
+}

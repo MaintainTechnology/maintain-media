@@ -58,6 +58,8 @@ class ABRMapping:
     success_values: tuple[str, ...] = ("false",)
     fixture_only: bool = True
     approved_evidence: str | None = None
+    parser_version: str = PARSER_VERSION
+    record_format: str = "fixture"
     root_error_attribute: str = "error"
     required_fields: tuple[str, ...] = (
         "abn",
@@ -294,9 +296,21 @@ def parse_xml(
     baseline_field_fill: dict[str, float] | None = None,
     production: bool = False,
     member_name: str | None = None,
+    authority=None,
+    progress=None,
 ) -> ParsedMember:
     mapping = mapping or ABRMapping.fixture()
     mapping.validate(production)
+    if mapping.record_format == "abr-public-v1":
+        from .abr_public import parse_public_xml
+
+        return parse_public_xml(
+            path, output_dir, mapping=mapping, batch_size=batch_size,
+            max_record_bytes=max_record_bytes, baseline_field_fill=baseline_field_fill,
+            member_name=member_name, authority=authority, progress=progress,
+        )
+    if mapping.record_format != "fixture":
+        raise SourceError("SOURCE_MAPPING_UNAPPROVED")
     if not 1 <= batch_size <= 50000 or max_record_bytes < 1024:
         raise ValueError("invalid batch/record bound")
     path, output_dir = Path(path), Path(output_dir)
@@ -316,6 +330,8 @@ def parse_xml(
     first = last = None
     stack = []
     try:
+        if authority is not None:
+            authority()
         with path.open("rb") as stream:
             reader = _BoundedReader(stream, max_record_bytes)
             for event, element in iterparse(
@@ -370,8 +386,12 @@ def parse_xml(
                     count += 1
                     batch.append(row)
                     if len(batch) >= batch_size:
+                        if authority is not None:
+                            authority()
                         writer.write_table(pa.Table.from_pylist(batch, schema=SCHEMA))
                         batch.clear()
+                        if progress is not None:
+                            progress({"phase": "parsing", "record_count": count})
                     reader.record_start = reader.total
                 elif len(stack) == 2:
                     raise SourceError("UNKNOWN_ROOT_CHILD")

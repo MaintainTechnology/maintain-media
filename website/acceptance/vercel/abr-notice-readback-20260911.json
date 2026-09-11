@@ -1,0 +1,12 @@
+{
+  "checked_at": "2026-09-11T02:49:29.511Z",
+  "deployment_id": "dpl_64YdrjBDNwaqKZEHa6zHrMTEkMXo",
+  "url": "https://www.maintainmedia.com.au/business-research-notice",
+  "http_status": 200,
+  "body_bytes": 41044,
+  "body_sha256": "64f7819cbe5b8c92771941cb77236e7c47d05888940b5aefba2883e1479755c0",
+  "checks_passed": 21,
+  "source_sha256": "43d0747bc65c304861bd0d244dfe30bd0c8cf37550fde257227d0f0475bcc8ad",
+  "source_manifest_sha256": "13149a8b61edd8463fd90da3c0c67f54813d80ccaf35641c06880566d8d72c47",
+  "scope": "Public notice GET only; no authenticated browser flow, personal-data intake or gates enabled."
+}

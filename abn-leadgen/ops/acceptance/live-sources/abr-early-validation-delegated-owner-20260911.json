@@ -1,0 +1,180 @@
+{
+  "decision_id": "abr-early-validation-delegated-owner-20260911",
+  "amendment_version": "1.0.0",
+  "product_baseline_version": "4.0",
+  "recorded_at": "2026-09-11T02:40:20Z",
+  "effective_at": "2026-09-11T02:40:20Z",
+  "expires_at": "2026-09-24T23:18:20Z",
+  "status": "approved_with_limits_under_delegated_authority",
+  "source_purpose_approved": true,
+  "authorising_actor": "user in the current Codex task",
+  "decision_recorded_by": "Codex acting under the user's express delegation",
+  "authorization_evidence": {
+    "source": "current Codex task user instruction",
+    "summary": "The user explicitly directed broader ABR discovery to proceed now without waiting for Jon and delegated the decision to Codex. This record approves early private source validation, complete baseline acquisition, comparison and matching-quality review; it does not invent completed commercial or technical evidence.",
+    "is_verbatim_quote": false,
+    "jon_approval_claimed": false,
+    "earlier_targeting_approval_extended_by_implication": false,
+    "prior_source_website_and_ghl_decisions_changed": false
+  },
+  "scope": "Manual, time-limited public ABN Lookup bulk acquisition and authenticated internal validation of complete source publications, an initial baseline, later coherent comparison and non-operational rule-accuracy samples",
+  "purpose": "Establish a trustworthy public business-register change feed and assess the recovered trade-name matching rules before operational ABR lead qualification. The first complete publication is a baseline with zero new-business events, not a list of newly formed businesses.",
+  "business_identity": {
+    "trading_name": "Maintain Media",
+    "registered_legal_entity": null,
+    "registered_abn": null,
+    "independent_verification": "not_obtained"
+  },
+  "adviser_status": "not_obtained",
+  "legal_compliance_certified": false,
+  "commercial_sequencing_amendment": {
+    "supersedes": "R38 / FR-038 and G6's prior four-week-before-live-ABR order for this named early validation scope only",
+    "decision": "Permit early ABR internal validation and baseline/comparison work alongside the unfinished QBCC commercial pilot, rather than require four elapsed measured weeks before source engineering may use genuine data",
+    "four_week_pilot_completed": false,
+    "meetings_or_business_value_proved": false,
+    "measured_pilot_still_required": "The four-week QBCC outcome measurement and later cohort/cost assessment remain open product acceptance work; record the actual start and denominators when usable authorised worklists and a trained operator exist",
+    "g6_evidence_meaning": "A current scoped early-sequencing owner decision, not fabricated pilot results or a general expansion/capacity certificate",
+    "automatic_rollover_or_renewal": false
+  },
+  "official_sources_reviewed": [
+    {
+      "title": "ABN Lookup - Bulk extract",
+      "url": "https://abr.business.gov.au/Tools/BulkExtract",
+      "checked_on": "2026-09-11",
+      "observation": "Official page read directly: public extract is published weekly in XML; it lists ABN, status/date, entity type, legal/business/trading names, main-business state/postcode, corporate identifiers, GST and DGR attributes. It does not list phone or email data.",
+      "sha256": null,
+      "hash_status": "Browser/web text review only; exact response bytes were not saved or hashed"
+    },
+    {
+      "title": "Data.gov.au - ABN Bulk Extract",
+      "url": "https://www.data.gov.au/data/dataset/abn-bulk-extract",
+      "dataset_id": "5bd7fcab-e315-42cb-8daf-50b7efc2027e",
+      "checked_on": "2026-09-11",
+      "observation": "Official indexed dataset/resource descriptions identify Creative Commons Attribution 3.0 Australia. The already saved 9 September catalogue independently records that dataset-specific licence. Current direct web fetches of the data.gov.au resource pages/readme returned HTTP403, so present PDF/XSD contents, payload hashes, inner fields and generation are not claimed verified here.",
+      "dataset_licence": "CC BY 3.0 Australia",
+      "portal_footer_licence_not_substituted": true,
+      "historical_catalogue_evidence": "abn-leadgen/ops/acceptance/live-sources/catalogue-abr.json",
+      "historical_catalogue_file_sha256": "45f9824b312674ce5752ac9fa69318897a85e3acc0cf1ce81a5f5a465f8a5543",
+      "historical_observation_at": "2026-09-09T12:19:16.239711+00:00",
+      "historical_metadata_sha256": "0b1e091e922b3228bc275e415b852c51102c76e4eee15a29f0273dcb9adbac3a",
+      "current_payload_verified": false
+    },
+    {
+      "title": "Creative Commons - Attribution 3.0 Australia",
+      "url": "https://creativecommons.org/licenses/by/3.0/au/",
+      "checked_on": "2026-09-11",
+      "observation": "The deed permits reuse and adaptation including commercially, subject to attribution, licence linking, change indication and no implied endorsement. It expressly does not guarantee all needed privacy or other rights.",
+      "sha256": null,
+      "hash_status": "Official web text read; no exact response-byte hash recorded"
+    },
+    {
+      "title": "ABN Lookup - Disclaimer",
+      "url": "https://abr.business.gov.au/Home/Disclaimer",
+      "checked_on": "2026-09-11",
+      "observation": "Official disclaimer does not guarantee accuracy, currency or completeness and recommends other-source verification. A listed ABN is not proof of continuing existence or commercial viability.",
+      "sha256": null,
+      "hash_status": "Official web text read; no exact response-byte hash recorded"
+    }
+  ],
+  "source_limits": {
+    "source": "Public ABN Lookup bulk extract linked by the official ABN Lookup page and data.gov.au dataset",
+    "government_only_abr_explorer_or_nonpublic_data_allowed": false,
+    "third_party_mirrors_or_address_lists_allowed": false,
+    "source_signup_or_new_credentials_required_by_this_decision": false,
+    "refresh": "Manual requests only during this decision; no new six-hour polling or automatic register download timer is authorised merely by this document",
+    "publication_count_or_zip_count_assumed": false,
+    "complete_publication_required": true,
+    "fields_retained_in_analytical_projection": ["ABN", "ABN status and its effective date", "entity type and documented derived entity class", "legal/main name", "business and trading names with source type, including retained OTN solely for faithful source comparison rather than classification", "main-business state and postcode", "GST status and effective date", "canonical name and semantic hashes", "source member, content/publication identity and observation timestamps"],
+    "raw_incidental_fields": "The finite raw archive can also contain corporate identifier, DGR and other legitimate public fields. Validate the actual source schema but do not silently add those unused values to promoted profiles or downstream outputs.",
+    "prohibited_inferences": ["registration date is incorporation or trading start", "a first baseline record is a newly registered business", "GST or ABN status proves revenue, active trading, fit or contact permission", "a name match proves the actual trade", "missing or unfamiliar source values mean active"],
+    "contacts_from_bulk": "No phone, email, street address or private government data is sought or inferred from this public field set"
+  },
+  "personal_information_and_necessity": {
+    "acknowledgement": "Legal and business names, ABNs and state/postcode can identify sole traders or other individuals. Public availability and the copyright licence are not consent or a finding that all privacy obligations are satisfied.",
+    "whole_register_necessity": "A complete coherent source is needed to validate the publication and establish a correct future whole-set comparison; loading only apparent target-name matches would conceal cancellations, disappearances and name changes. Retain the full raw/analytical input only for its bounded validation/comparison purpose.",
+    "minimisation": "Expose only bounded authenticated validation views and private review samples. Do not materialise every baseline business as a lead or publish the register. Internal target sampling retains the approved QLD/NSW2450-2490 direction; no new geography or trade taxonomy is approved.",
+    "adviser_or_applicability_determination": "Not obtained; the user explicitly delegates this narrow owner decision and accepts the recorded limits, without a legal compliance certification"
+  },
+  "notice_strategy": {
+    "public_notice_url": "https://www.maintainmedia.com.au/business-research-notice",
+    "required_update": "Add the ABN Lookup bulk source, registration fields, validation/baseline/comparison purpose, possible personal names, finite retention, existing private architecture/country limits and current request contact",
+    "publication_status_at_decision": "ABR-specific update pending separate deployment/readback evidence",
+    "before_live_collection": "Verify the ABR-specific public update before source-row acquisition is admitted; this document approves its source purpose now but does not assert the pending notice is already live",
+    "source_request_and_privacy_contact": "jon@maintainaudits.com.au",
+    "contact_basis": "Existing published Maintain Media website contact; no new mailbox or message delivery verified",
+    "individual_notice_sent": false,
+    "individual_awareness_or_app5_sufficiency_certified": false,
+    "attribution": "Source: Australian Business Register, ABN Lookup Bulk Extract, CC BY 3.0 Australia. Records normalised and compared by Maintain Media; no government endorsement. Link the source and licence and retain the actual publication/retrieval time."
+  },
+  "matching_review": {
+    "existing_rule_source": "deliverables/abr/extract_new_abns.py",
+    "source_lf_sha256": "483be2cad12aa3efa04902ccd440d4eba4854a0b54f796e34f221adb15363858",
+    "recovered_rule_file": "abn-leadgen/config/rules.review.yaml",
+    "rule_file_lf_sha256": "9625be5ed9a7c0c751e34a70a8cfbb6787d6d13b7fd76642587e79fc1f8b29db",
+    "rule_count": 30,
+    "targeting_direction_previously_approved": true,
+    "production_rule_approval_claimed": false,
+    "reviewed_real_record_count_at_decision": 0,
+    "minimum_classified_sample": 100,
+    "sampling": "Start with four genuine classified examples for each of the first ten rules and three for each remaining rule; stratify BN/MAIN/TRD, target geography and overlap cases. Expand sparse/ambiguous strata rather than invent an observation. Add negative/unclassified checks separately.",
+    "ground_truth": "An attributable reviewer independently verifies actual trade using genuine permitted evidence, records source/observed date and marks match, false positive or unresolved. A rule output, guessed name meaning or synthetic fixture is not independent truth. Unresolved records do not count as passing reviews.",
+    "threshold": "More than10percent false positives blocks the affected rule pending review. Report per-rule and overall denominators; do not dilute a failing rule in an overall average.",
+    "receipt_contract": "Bind private review rows and computed aggregate result to the coherent source snapshot, actual parser/mapping, exact ordered rule IDs and LF rule hash, reviewer/date, evidence references and regression-suite digest. Preserve zero/pending until actual review; setting precision_sample_count=100 alone is insufficient.",
+    "validation_only_phase": "Shadow classification may prepare a private accuracy sample with clearly labelled unapproved predictions. It must not create eligible leads, enrich businesses, select worklist rows or disclose ABR-derived records to vendors.",
+    "qualification_admission": "Operational ABR classification/qualification requires actual R9 review and a separate exact-release admission of that phase. This collection-purpose and G6 sequencing decision does not certify the100-record result or individual business eligibility."
+  },
+  "permitted_architecture": {
+    "engine_and_source_storage": "Existing private AWS Sydney service and encrypted-at-rest storage, ap-southeast-2",
+    "dashboard": "Existing Maintain Technology Vercel deployment with Sydney server functions",
+    "identity": "Existing Maintain Media Clerk authentication; Clerk middleware remains global",
+    "internal_access": "Existing authenticated admin jeph@quotemax.com.au and separately assigned reviewer scopes; admin access may occur outside Australia",
+    "vendor_support_and_global_processing_countries": "Not fully verified; accepted under this new delegation for the existing architecture and bounded public-register validation purpose",
+    "all_processing_australian_claimed": false,
+    "new_vendor_approved": false,
+    "google_sheets_abr_disclosure_allowed": false,
+    "ghl_abr_disclosure_allowed": false,
+    "public_record_publication_or_resale_allowed": false
+  },
+  "retention": {
+    "schedule_version": "abr-v4-defaults",
+    "raw_archive_max_days": 30,
+    "analytical_snapshot_max_days": 90,
+    "abandoned_unreferenced_staging_max_days": 7,
+    "private_accuracy_samples_max_days": 90,
+    "no_baseline_lead_profiles_created": true,
+    "retain_selected_evidence": false,
+    "seven_year_archive_authorised": false,
+    "finite_deletion_authority_expires_at": "2027-09-10T23:18:20Z",
+    "suppression": "Retain only minimum matchable restriction tokens/aliases needed to honour objections and prevent erased values returning. Do not use source replay as permission to recreate an erased profile.",
+    "holds": "Only attributable, scoped holds with reason, owner and review date; no general indefinite hold",
+    "authority_expiry_effect": "Stop new ABR acquisition at the existing September24 expiry. Continue authorised finite deletion through the existing deletion-authority expiry; no automatic extension.",
+    "enforcement": "Record any needed append-only ABR retention-policy continuation and exact-release retention evidence separately, preserving both existing policy records and their website phone/no-seven-year limits. A retained accepted cursor does not waive the finite artifact expiry."
+  },
+  "g3_pilot_disposition": {
+    "accepted": "Existing evidenced Sydney encryption, private access and managed-key controls for recoverable public-source validation, subject to a fresh bounded capacity admission",
+    "full_scale_capacity_verified": false,
+    "capacity_requirement": "Measure available space and remaining downloads, staging/current/prior Parquet, bounded spill, database/WAL and backup/recovery allocations plus existing25GiB headroom before full acquisition. Keep bounded streaming and the2GiB process-RSS target; any changed bound needs its own technical disposition, not an invented benchmark pass.",
+    "deferred": ["independent recovery-key custodian certification", "full production database restore and disaster-recovery acceptance"],
+    "risk_accepted_under_delegation": "A host/key loss may require re-downloading the public register and repeating validation/manual reviews; no recovery readiness claim and no collection after loss of current restriction authority",
+    "production_backup_approved": false,
+    "general_production_g3_pass": false
+  },
+  "separate_admission_requirements": [
+    "Current abr capability evidence: G1 for this source purpose, G2 for actual source/parser/phase evidence, G3 for bounded host capacity and access, G6 for this early-sequencing decision, and G7 for the exact installed release",
+    "A technically enforced validation-only phase while operational classifier approval is pending; no source/marketing or whole-tool readiness inferred from the capability flag",
+    "Fresh official catalogue/licence/XSD/readme checks; exact permitted source URLs, immutable response/content evidence and no bypass of403/429 or access controls",
+    "All required archive/member inventory, CRC/hash/length/safety/count/enum/uniqueness checks, authentic inner-generation coherence and metadata reread; fixture-only mapping and invented generation fields cannot admit live data",
+    "Atomic baseline/cursor and whole-set diff with zero baseline events, no-op semantics, mixed-generation rejection, held unfamiliar records and recovery tests",
+    "Live ABR-specific notice readback, finite retention implementation/admission and actual bounded capacity measurement before source rows are collected",
+    "Genuine100-record matching review and a new technical phase admission before operational ABR qualification; no invented industry truth, reviewer signature, commercial results or contact permission"
+  ],
+  "excluded_by_this_decision": ["automatic source schedule", "government-only or non-public ABR data", "third-party data purchases or mirrors", "automatic ABR lead qualification before precision review", "automatic website discovery or phone/email extraction from ABR rows", "paid enrichment", "ABR-derived Google Sheets or GHL disclosure", "individual CRM approval", "email_action", "phone_action", "SMS, social messages or contact-form submissions", "campaign enrolment", "public dataset republication or resale", "full production backups"],
+  "prior_qbcc_website_and_ghl_capabilities_changed": false,
+  "targeting_or_rule_order_changed": false,
+  "database_gate_records_created_by_this_document": false,
+  "collection_executed_by_this_document": false,
+  "measured_pilot_completed": false,
+  "full_production_release": false,
+  "affected_requirements": ["R1-R9 / FR-001-FR-009", "R27 / FR-027", "R29-R30", "R36-R38 / FR-036-FR-038", "R40-R41", "G1/G2/G3/G6/G7 abr", "applicable finite-retention continuation"],
+  "unaffected_requirements": "Source completeness/coherence, authentic evidence, current suppression, UNKNOWN states, genuine rule precision, tier/geography/weekly caps, individual contact and vendor gates and uncompleted general recovery/commercial acceptance remain authoritative"
+}

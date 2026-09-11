@@ -1,0 +1,33 @@
+{
+  "checked_at": "2026-09-11T00:51:50Z",
+  "private_evidence_reads": 2,
+  "checks": [
+    {
+      "provenance_id": "6d439607-a1ad-4cb0-bfa5-75ca6f710665",
+      "capture_text_present": true,
+      "matching_reviewed_contact_page": true,
+      "expected_public_office_phones_in_capture": true,
+      "keys": [
+        "capture_text",
+        "captured_at",
+        "provenance_id",
+        "sha256",
+        "source_url"
+      ]
+    },
+    {
+      "provenance_id": "ac2c13f0-1f21-4e6f-b6a3-4c21541016fd",
+      "capture_text_present": true,
+      "matching_reviewed_contact_page": true,
+      "expected_public_office_phones_in_capture": true,
+      "keys": [
+        "capture_text",
+        "captured_at",
+        "provenance_id",
+        "sha256",
+        "source_url"
+      ]
+    }
+  ],
+  "business_details_omitted": true
+}

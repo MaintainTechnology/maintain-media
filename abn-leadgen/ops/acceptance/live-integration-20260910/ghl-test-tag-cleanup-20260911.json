@@ -1,0 +1,13 @@
+{
+  "observed_at": "2026-09-11T01:42:18.351686+00:00",
+  "location_id": "xHZFHMOE476t5CxY9vCG",
+  "task_created_tag": "abn-installation-test-preserve-20260911",
+  "task_created_tag_id": "GuPOsXFvtl7WAWzdGgp1",
+  "removed_through_authenticated_browser": true,
+  "before_total_tags": 6,
+  "after_total_tags": 5,
+  "engine_candidate_and_suppressed_tags_retained": true,
+  "existing_customer_tags_preserved": true,
+  "contact_deletion_evidence": "ghl-account-contract-journal-20260911.json",
+  "provider_recoverable_deleted_item_or_backup_erasure_claimed": false
+}

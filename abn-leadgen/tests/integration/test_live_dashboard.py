@@ -64,6 +64,12 @@ def test_real_stored_business_is_visible_and_optout_commits_with_clerk_actor(liv
     assert data["summary"]["total_leads"] == 1
     assert data["leads"][0]["business_name"] == "Synthetic acceptance builder"
     assert data["leads"][0]["reason_codes"] == ["NO_CONTACT"]
+    assert data["leads"][0]["crm_handoff"] is None
+    signed, _ = headers("/api/dashboard", scopes=["admin", "reviewer"])
+    reviewed = client.get("/api/dashboard", headers=signed).json()["leads"][0]["crm_handoff"]
+    assert reviewed["state"] == "not_selected"
+    assert reviewed["can_approve"] is reviewed["can_reject"] is False
+    assert set(reviewed["reason_codes"]) == {"ONLY_SELECTED_TIER_A", "CAPABILITY_DISABLED"}
     payload = {"lead_id": str(lead["lead_id"]), "reason": "unsubscribe", "source": "staff_dashboard",
                "requested_at": "2026-09-01T00:00:00Z"}
     key = str(uuid4())

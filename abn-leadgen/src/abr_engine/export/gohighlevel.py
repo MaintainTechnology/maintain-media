@@ -8,6 +8,7 @@ write guard, automatic credential discovery, contact upsert, or create retry.
 from __future__ import annotations
 
 import copy
+import hashlib
 import json
 import os
 import random
@@ -45,6 +46,8 @@ class GHLConfig(BaseModel):
     field_ids: dict[str, str]
     token_env: str = Field(default="ABR_GHL_TOKEN", pattern=r"^ABR_GHL_[A-Z0-9_]+$")
     allow_writes: bool = False
+    allowed_channels: list[Literal["email", "phone"]] = Field(default_factory=list)
+    workflow_inventory_sha256: str | None = Field(default=None, pattern=r"^[0-9a-f]{64}$")
     # Account contract must have a real custom-field search receipt before writes.
     group_search_field: str
 
@@ -58,6 +61,9 @@ class GHLConfig(BaseModel):
             raise ValueError("GHL field IDs must be unique real account IDs")
         if self.group_search_field != "customFields." + self.field_ids["group_id"]:
             raise ValueError("GHL search must use the mapped group identity field")
+        if len(set(self.allowed_channels)) != len(self.allowed_channels) or (
+                self.allow_writes and (not self.allowed_channels or not self.workflow_inventory_sha256)):
+            raise ValueError("Live writes require explicit channels and reviewed workflow inventory")
         return self
 
 
@@ -88,6 +94,38 @@ def retry_seconds(value: str | None, *, now: datetime | None = None) -> int:
         return min(86_400, max(0, int((instant - (now or datetime.now(UTC))).total_seconds())))
     except (ValueError, TypeError, OverflowError):
         return 0
+
+
+def workflow_inventory_digest(data: dict, location_id: str) -> str:
+    """Hash the documented complete account inventory, never names or API trace IDs.
+
+    A pagination/unknown response envelope cannot demonstrate completeness. This
+    check is deliberately limited to the reviewed all-draft account installation.
+    """
+    items = data.get("workflows")
+    if (set(data) - {"workflows", "traceId"} or not isinstance(items, list)
+            or len(items) > 1000):
+        raise DomainError("GHL_WORKFLOW_INVENTORY_INVALID", 409)
+    records, identifiers = [], set()
+    for item in items:
+        if (not isinstance(item, dict) or not isinstance(item.get("id"), str)
+                or not ID_RE.fullmatch(item["id"]) or item["id"] in identifiers
+                or item.get("locationId") != location_id or type(item.get("version")) is not int
+                or item["version"] < 1):
+            raise DomainError("GHL_WORKFLOW_INVENTORY_INVALID", 409)
+        if item.get("status") != "draft":
+            raise DomainError("GHL_WORKFLOW_NOT_ISOLATED", 409)
+        try:
+            updated = datetime.fromisoformat(item["updatedAt"])
+            if updated.tzinfo is None:
+                raise ValueError("Aware provider timestamp required")
+        except (KeyError, ValueError, TypeError):
+            raise DomainError("GHL_WORKFLOW_INVENTORY_INVALID", 409) from None
+        identifiers.add(item["id"])
+        records.append({"id": item["id"], "locationId": location_id, "status": "draft",
+                        "version": item["version"], "updatedAt": updated.astimezone(UTC).isoformat()})
+    canonical = json.dumps(sorted(records, key=lambda item: item["id"]), sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(canonical.encode()).hexdigest()
 
 
 class GoHighLevel:
@@ -142,6 +180,10 @@ class GoHighLevel:
                 if not self.config.allow_writes or self.write_guard is None:
                     raise DomainError("GHL_WRITES_NOT_CERTIFIED", 409)
                 self.write_guard()
+                self.verify_workflow_isolation()
+                # Inventory I/O may span a withdrawal. Recheck current local
+                # authority immediately before this individual provider write.
+                self.write_guard()
             try:
                 with self.client.stream(method, path, json=body, params=params,
                         headers={"X-Request-ID": str(UUID(request_id))} if request_id else None) as response:
@@ -172,6 +214,16 @@ class GoHighLevel:
                     raise GHLRetryableError("GHL_TRANSPORT_UNCERTAIN") from None
                 self.sleep((2 ** attempt) + random.uniform(0, .25))
         raise GHLRetryableError("GHL_UNAVAILABLE")
+
+    def verify_workflow_isolation(self) -> str:
+        expected = self.config.workflow_inventory_sha256
+        if not expected:
+            raise DomainError("GHL_WORKFLOW_INVENTORY_REQUIRED", 409)
+        data = self._request("GET", "/workflows/", params={"locationId": self.config.location_id})
+        actual = workflow_inventory_digest(data, self.config.location_id)
+        if actual != expected:
+            raise DomainError("GHL_WORKFLOW_INVENTORY_CHANGED", 409)
+        return actual
 
     @staticmethod
     def _id(value) -> str:
@@ -260,8 +312,16 @@ class GoHighLevel:
         tags = contact.get("tags")
         if not isinstance(tags, list) or any(not isinstance(tag, str) for tag in tags):
             raise DomainError("GHL_REMOTE_TAGS_INVALID", 409)
+        # The pinned provider's actual GET can omit name and return only the
+        # first/last fields it derived from our original name write. Do not use
+        # fullNameLowerCase or an unrelated account companyName as identity.
+        names = [contact.get(key) for key in ("name", "firstName", "lastName")]
+        if any(value is not None and not isinstance(value, str) for value in names):
+            raise DomainError("GHL_REMOTE_FIELDS_INVALID", 409)
+        business_name = names[0] if names[0] and names[0].strip() else (
+            " ".join(value.strip() for value in names[1:] if value and value.strip()) or None)
         payload = {**fields, "group_id": group_id,
-            "business_name": contact.get("name"), "endpoint": contact.get(channel) if channel else None,
+            "business_name": business_name, "endpoint": contact.get(channel) if channel else None,
             "tags": tags, "custom_field_map_version": self.config.mapping_version,
             "custom_fields": [{"id": self.config.field_ids[name], "value": fields[name]}
                                for name in sorted(MAPPED_FIELDS)] + [
@@ -278,6 +338,8 @@ class GoHighLevel:
         if not stopped and (payload.get("tier") != "A" or payload.get("channel") not in {"email", "phone"}
                             or not isinstance(payload.get("endpoint"), str) or not payload["endpoint"]):
             raise DomainError("GHL_CANDIDATE_INVALID", 409)
+        if not stopped and payload.get("channel") not in self.config.allowed_channels:
+            raise DomainError("GHL_CHANNEL_NOT_APPROVED", 409)
         if not stopped and (not isinstance(payload.get("business_name"), str)
                             or not payload["business_name"].strip() or len(payload["business_name"]) > 300):
             raise DomainError("GHL_CANDIDATE_INVALID", 409)
@@ -323,6 +385,8 @@ class GoHighLevel:
                 "phone": payload.get("endpoint") if payload.get("channel") == "phone" else None,
                 "customFields": [{"id": self.config.field_ids[name], "fieldValue": values[name]}
                                  for name in sorted(FIELD_NAMES)]}
+        if stopped:
+            body.update(firstName=None, lastName=None)
         if creating:
             body.update(locationId=self.config.location_id, source="Maintain Media reviewed candidate",
                         tags=sorted(set(tags) & OWNED_TAGS))

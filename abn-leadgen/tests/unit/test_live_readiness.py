@@ -59,7 +59,7 @@ def test_pilot_does_not_claim_abr_or_need_elapsed_pilot_expansion_gate():
     assert "G6" not in {g for c in pilot["checks"] for g in c["missing_gates"]}
     abr = next(check for check in production["checks"] if check["capability"] == "abr")
     assert "G6" in abr["missing_gates"]
-    assert "LIVE_ABR_GENERATION_MAPPING_UNVERIFIED" in abr["blockers"]
+    assert "ABR_QUALIFICATION_RELEASE_PENDING" in abr["blockers"]
 
 
 def test_verified_pilot_observations_and_current_approvals_are_distinct_requirements():
@@ -140,8 +140,8 @@ def test_receipt_can_use_iso_dates_but_cannot_approve_abr_generation_mapping():
     result = readiness_report(config, rows, target="production", now=NOW, runtime_evidence=receipts)
     assert result["status"] == "blocked" and result["production_installed"] is True
     abr = next(check for check in result["checks"] if check["capability"] == "abr")
-    assert abr["blockers"] == ["LIVE_ABR_GENERATION_MAPPING_UNVERIFIED"]
-    assert abr["implementation_status"] == "mapping_unverified"
+    assert abr["blockers"] == ["ABR_QUALIFICATION_RELEASE_PENDING"]
+    assert abr["implementation_status"] == "observe_only_implemented"
 
 
 def test_declared_production_mode_does_not_claim_installation():

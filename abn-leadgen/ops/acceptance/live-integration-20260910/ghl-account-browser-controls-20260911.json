@@ -1,0 +1,51 @@
+{
+  "observed_at": "2026-09-11T01:31:04.756427+00:00",
+  "location_id": "xHZFHMOE476t5CxY9vCG",
+  "location_name": "Maintain Media",
+  "method": "authenticated browser UI with matching location URL, plus pinned API probes",
+  "integration_id": "6aa2dcbeb5521118febbe93d",
+  "integration_name": "Maintain Media ABN Lead Gen",
+  "scopes_selected_and_saved": [
+    "locations.readonly",
+    "locations/customFields.readonly",
+    "contacts.readonly",
+    "contacts.write",
+    "workflows.readonly"
+  ],
+  "token_rotated": false,
+  "duplicate_contacts_enabled": false,
+  "duplicate_priority": [
+    "email",
+    "phone"
+  ],
+  "staff_observation": {
+    "rows_visible": 1,
+    "role": "AGENCY-ADMIN",
+    "signed_in_operator_is_listed_staff": true,
+    "changes": 0
+  },
+  "workflow_ui": {
+    "folder": "Marketing Workflows",
+    "count": 6,
+    "all_status_draft": true,
+    "total_enrolled": 0,
+    "active_enrolled": 0,
+    "workflow_mutations": 0
+  },
+  "marketplace_subaccount_installed_apps": {
+    "total": 0,
+    "filters": [],
+    "pagination": "0 - 0 of 0",
+    "installed_app_mutations": 0
+  },
+  "connected_services_observation": {
+    "google_facebook_instagram_whatsapp_slack_show_connect": true,
+    "other_manage_links_not_treated_as_disconnection_proof": true
+  },
+  "no_messages_calls_campaign_or_workflow_enrolment_actions": true,
+  "limitations": [
+    "Browser observations are time-bound; API checks guard workflow inventory before every mutation.",
+    "No atomic lock prevents an authorised GHL admin changing automation between the inventory GET and contact mutation.",
+    "Staff access is observed in the correct workspace; no independent staff identity certification is claimed."
+  ]
+}

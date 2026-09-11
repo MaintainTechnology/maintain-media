@@ -3,6 +3,7 @@
 from pathlib import Path
 
 import duckdb
+import pyarrow.parquet as pq
 
 from abr_engine.ingest.abr_parse import ABRMapping
 from abr_engine.ingest.common import SourceError
@@ -23,7 +24,7 @@ def weighted_fill(members) -> dict:
     }
 
 
-def parquet_fill(paths: list[Path]) -> dict:
+def parquet_fill(paths: list[Path], *, check=None) -> dict:
     """Verify the actual publication columns; no whole-register Python objects."""
     con = duckdb.connect()
     try:
@@ -34,17 +35,25 @@ def parquet_fill(paths: list[Path]) -> dict:
             f"sum(CASE WHEN {field} IS NOT NULL AND CAST({field} AS VARCHAR)<>'' THEN 1 ELSE 0 END)"
             for field in REQUIRED_FILL_FIELDS
         )
-        row = con.execute(
-            f"SELECT count(*),{projection} FROM read_parquet(?)", [[str(path) for path in paths]]
-        ).fetchone()
+        from abr_engine.ops.analytical import analytical_guard
+
+        with analytical_guard(con, check):
+            row = con.execute(
+                f"SELECT count(*),{projection} FROM read_parquet(?)", [[str(path) for path in paths]]
+            ).fetchone()
         if not row or row[0] <= 0:
             raise SourceError("FIELD_FILL_EVIDENCE_MISSING")
-        return {
+        result = {
             "source_rows": row[0],
             "field_fill_weighted": {
                 field: row[index + 1] / row[0] for index, field in enumerate(REQUIRED_FILL_FIELDS)
             },
         }
+        from abr_engine.ingest.abr_public import PUBLIC_SCHEMA
+
+        if all(pq.read_schema(path).equals(PUBLIC_SCHEMA, check_metadata=True) for path in paths):
+            result["source_contract"] = "abr-public-v1"
+        return result
     finally:
         con.close()
 
@@ -67,6 +76,14 @@ def validate_fill(actual: dict, declared: dict, previous: dict | None = None) ->
         for field in REQUIRED_FILL_FIELDS
     ):
         raise SourceError("FIELD_FILL_BREACH")
-    # Missing metadata cannot waive the fixture mapping's mandatory per-record fields.
-    if any(value != 1 for value in actual["field_fill_weighted"].values()):
+    # Public XSD strings allow empty names/geography. A manifest label alone
+    # cannot grant that allowance: every actual Parquet schema must match too.
+    nullable = set()
+    if (
+        actual.get("source_contract") == "abr-public-v1"
+        and declared.get("parser_version") == "abr-public-v1"
+        and declared.get("mapping_version") == "abn-lookup-public-20260911-v1"
+    ):
+        nullable = {"main_name", "state", "postcode"}
+    if any(value != 1 for field, value in actual["field_fill_weighted"].items() if field not in nullable):
         raise SourceError("REQUIRED_FIELD_MISSING")

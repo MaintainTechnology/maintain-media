@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { readinessGuidance } from "../src/components/abn-lead-gen/readiness.ts";
+import { readinessGuidance, websiteCollectionGuidance } from "../src/components/abn-lead-gen/readiness.ts";
 
 const blocked = (id, detail = "Required evidence: CAPABILITY_DISABLED") => ({ id, label: id, status: "blocked", detail });
 const copy = result => [result.summary, result.note, ...result.steps.flatMap(step => [step.owner, step.action])].join(" ");
@@ -10,8 +10,9 @@ test("disabled QBCC guidance names source/privacy and developer steps without im
   const result = readinessGuidance(input, "pilot");
   assert.equal(result.ready, false);
   assert.equal(result.statusLabel, "Blocked");
-  assert.match(copy(result), /Jon Pepper and the privacy adviser/);
-  assert.match(copy(result), /QBCC source format, security, backup recovery/);
+  assert.match(copy(result), /Business owner or authorised delegate/);
+  assert.match(copy(result), /owner-authorised QBCC scope/);
+  assert.match(copy(result), /Website collection and vendor hand-off have separate controls/);
   assert.match(result.note, /Approval details have not been checked/);
   assert.doesNotMatch(copy(result), /100-record|four measured|approved already|approval is missing/i);
   assert.equal(result.technicalDetail, input.detail);
@@ -23,25 +24,57 @@ test("disabled CRM points to account/vendor and suppression tests without claimi
   assert.match(result.summary, /GoHighLevel is switched off/);
   assert.match(copy(result), /terms and countries/);
   assert.match(copy(result), /duplicate handling and do-not-contact updates/);
+  assert.match(copy(result), /authorised delegate/);
+  assert.match(copy(result), /Approve each eligible, selected tier A business separately/);
   assert.doesNotMatch(copy(result), /installed successfully|token missing|contact access granted|sign in again/i);
+  for (const code of ["GATE_G1_CLOSED", "GATE_G5_CLOSED"]) {
+    const detail = copy(readinessGuidance(blocked("crm", `Required evidence: ${code}`), "pilot"));
+    assert.match(detail, /authorised delegate/);
+    assert.doesNotMatch(detail, /privacy adviser|\bJon\b/);
+  }
 });
 
 test("broader ABR explains its separate pilot decision and matching review", () => {
   const result = readinessGuidance(blocked("abr"), "pilot");
-  assert.match(copy(result), /four measured weeks of the QBCC pilot/);
+  assert.match(copy(result), /early ABR validation decision/);
+  assert.match(copy(result), /before the later measured pilot finishes/);
+  assert.doesNotMatch(copy(result), /four measured weeks|Jon/);
   assert.match(copy(result), /100-record matching review/);
-  assert.match(copy(result), /record whether to expand/);
-  assert.match(copy(result), /Complete and test the live ABR feed/);
+  assert.match(copy(result), /before activating classification/);
+  assert.match(copy(result), /Verify the live ABR feed/);
   assert.equal(result.ready, false);
 });
 
 test("website collection has its own decision and cannot inherit QBCC approval", () => {
   const result = readinessGuidance(blocked("website_collection"), "pilot");
   assert.equal(result.ready, false);
-  assert.match(copy(result), /QBCC approval does not approve this feature/);
+  assert.match(copy(result), /QBCC approval alone does not approve website collection or email harvesting/);
   assert.match(copy(result), /business identity, current licence and each site's terms/);
+  assert.match(copy(result), /Business owner or authorised delegate/);
   assert.match(result.note, /Approval details have not been checked/);
   assert.doesNotMatch(copy(result), /100-record|four measured/);
+  const gate = copy(readinessGuidance(blocked("website_collection", "Required evidence: GATE_G1_CLOSED"), "pilot"));
+  assert.match(gate, /authorised delegate/);
+  assert.match(gate, /phone-only website research decision/);
+  assert.doesNotMatch(gate, /privacy adviser/);
+});
+
+test("phone-only submission needs the current explicit policy, not a readiness label", () => {
+  const policy = { allowed_channels: ["mobile", "landline"], reason_codes: [], expires_at: "2099-01-01T00:00:00Z" };
+  const result = websiteCollectionGuidance({ mode: "pilot", website_collection_policy: policy });
+  assert.equal(result.enabled, true);
+  assert.match(result.summary, /Email extraction is disabled/);
+  assert.match(result.summary, /does not establish permission to call/);
+  for (const entry of [undefined, { ...policy, allowed_channels: [] }, { ...policy, allowed_channels: ["email"] },
+    { ...policy, allowed_channels: ["mobile", "landline", "email"] }, { ...policy, allowed_channels: ["mobile", "mobile"] },
+    { ...policy, reason_codes: ["GATE_G1_CLOSED"] }, { ...policy, expires_at: null }, { ...policy, expires_at: "2000-01-01T00:00:00Z" }]) {
+    const held = websiteCollectionGuidance({ mode: "pilot", website_collection_policy: entry, setup: [{ id: "website_collection", status: "approved" }] });
+    assert.equal(held.enabled, false);
+    assert.match(held.summary, /not currently confirmed/);
+  }
+  const fixture = websiteCollectionGuidance({ mode: "fixture", website_collection_policy: policy });
+  assert.equal(fixture.enabled, false);
+  assert.match(fixture.summary, /Synthetic/);
 });
 
 test("specific engine gates explain only the checks actually reported, including renewed evidence", () => {
@@ -61,11 +94,24 @@ test("additional unknown checks remain unverified and retain exact engine detail
   assert.equal(result.note, "");
   assert.equal(result.steps.length, 2);
   assert.match(copy(result), /meaning has not been verified here/);
-  assert.match(copy(result), /Record or renew the source and privacy decision/);
+  assert.match(copy(result), /Check or renew the recorded QBCC-only source decision/);
   assert.equal(result.technicalDetail, input.detail);
   const unknownOnly = readinessGuidance(blocked("collection", "Required evidence: RUNTIME_UNAVAILABLE"), "pilot");
   assert.equal(unknownOnly.summary, "This feature is waiting for required checks.");
   assert.doesNotMatch(unknownOnly.summary, /approval/);
+});
+
+test("responsibility is role-based and a current owner-authorised collection state stays authoritative", () => {
+  for (const id of ["collection", "crm", "website_collection", "abr"]) {
+    for (const detail of ["Required evidence: CAPABILITY_DISABLED", "Required evidence: GATE_G1_CLOSED, GATE_G2_CLOSED, GATE_G3_CLOSED, GATE_G4_CLOSED, GATE_G5_CLOSED, GATE_G6_CLOSED, GATE_G7_CLOSED"]) {
+      assert.doesNotMatch(copy(readinessGuidance(blocked(id, detail), "pilot")), /\bJon\b|Pepper/);
+    }
+  }
+  const result = readinessGuidance({ id: "collection", label: "Business source collection", status: "approved", detail: "Owner-authorised QBCC-only pilot is current." }, "pilot");
+  assert.equal(result.ready, true);
+  assert.equal(result.summary, "Owner-authorised QBCC-only pilot is current.");
+  assert.equal(result.steps.length, 0);
+  assert.equal(result.note, "");
 });
 
 test("unknown IDs cannot borrow readiness guidance by label or inherited object property", () => {

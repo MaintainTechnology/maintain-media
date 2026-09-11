@@ -1,0 +1,22 @@
+{
+  "status": "website_phone_authority_installed",
+  "plan_sha256": "bf1920bd92a2901d518cc4346ce6d39cb4b2ae2f803e10f23dc4980f41444eb0",
+  "new_gate_rows": 7,
+  "new_policy_version": "website-phone-delegated-pilot-retention-20260911-v1",
+  "website_expires_at": "2026-09-24T23:18:20Z",
+  "retention_expires_at": "2027-09-10T23:18:20Z",
+  "enabled_capabilities": [
+    "collection",
+    "retention",
+    "website_collection"
+  ],
+  "allowed_channels": [
+    "mobile",
+    "landline"
+  ],
+  "services_started": false,
+  "timers_enabled": false,
+  "outreach": "disabled",
+  "production_backup_accepted": false,
+  "original_configuration_preserved": "/etc/abr-engine/pilot.before-website-phone-20260911.yaml"
+}

@@ -1,0 +1,12 @@
+{
+  "status": "preview_passed",
+  "source_manifest_sha256": "862d7c83255aa537eebce401e428729e273e2326e18b6b284f835bd930178313",
+  "baseline_state_sha256": "95ec41025c7e9b18cd5149279a421e6f3e06cd3a63161f6778049447d65bf853",
+  "preview_plan_sha256": "44f532b41e4e857eca1cef182667ab87390e026fac9b47c3041538d9d1d6108b",
+  "gates_before": 25,
+  "gates_after": 34,
+  "policies_before": 2,
+  "policies_after": 3,
+  "services_changed": false,
+  "source_runs": 0
+}

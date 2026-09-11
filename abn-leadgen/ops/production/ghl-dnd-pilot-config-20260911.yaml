@@ -1,0 +1,23 @@
+allow_writes: true
+allowed_channels:
+- phone
+api_version: '2023-02-21'
+field_ids:
+  abn: rm7UiYsYhH2fChW1MGiK
+  basis_summary: MChuJxvDxfoQiRZdRBqV
+  channel: 0q4wFakPGqj01PqpgRjG
+  contact_id: VuHeNqML8gboG9z25bri
+  entity_class: f6ZAmrDiSeAuT2wkysia
+  group_id: C17XY6QzLsYssEnb1gUz
+  industry: L5J9lpkOlj4rmcs43XYj
+  positioning_notes: L8ftHWfbcXNV5p9LmSES
+  score: vlb0Tx8aXtfTxBtUzHhk
+  signal: g8p49CsBxET78RdmC398
+  state: tGj8frSWWapsCN9iuWnC
+  tier: Mzt5Ijo1zFWAmhdllO5f
+  website: bwgTvekr4J2Y4mMAr14L
+group_search_field: customFields.C17XY6QzLsYssEnb1gUz
+location_id: xHZFHMOE476t5CxY9vCG
+mapping_version: maintain-media-ghl-v1
+token_env: ABR_GHL_TOKEN
+workflow_inventory_sha256: e30e1d90e03a629a82b04bf0d552322e9e8f47add0fe2967e81f3fbac72291e8

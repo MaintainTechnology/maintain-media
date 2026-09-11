@@ -19,11 +19,11 @@ from pydantic import BaseModel, ConfigDict, Field, model_validator
 
 from abr_engine import __version__
 from abr_engine.compliance.keys import load_keys
-from abr_engine.compliance.policy import gate_reasons
+from abr_engine.compliance.policy import website_collection_policy
 from abr_engine.control.service import DomainError, Service, digest
 from abr_engine.db import lock, transaction
 from abr_engine.enrich.crawl import PinnedTransport, SafeCrawler, resolve_public, validate_url
-from abr_engine.enrich.endpoints import normalize_email, normalize_phone, positioning_excerpt
+from abr_engine.enrich.endpoints import normalize_phone, positioning_excerpt
 from abr_engine.enrich.identity import registrable_domain
 from abr_engine.ingest.qbcc_review import _configured
 from abr_engine.pipeline import process_lock, safe_root
@@ -54,12 +54,22 @@ class WebsiteCollection(BaseModel):
         return self
 
 
-def _admit(conn, service, request, *, initial=False):
+def _purpose(conn, settings, now):
+    policy = website_collection_policy(conn, settings, now)
+    if policy["reason_codes"]:
+        raise DomainError(policy["reason_codes"][0], 403)
+    return policy
+
+
+def _admit(conn, service, request, *, initial=False, job_id=None):
     service.personal_data_access(conn)
     now = service.now(conn)
-    reasons = gate_reasons(conn, service.settings, "website_collection", now)
-    if reasons:
-        raise DomainError(reasons[0], 403)
+    _purpose(conn, service.settings, now)
+    if job_id is not None:
+        job = conn.execute("SELECT * FROM pipeline_run WHERE run_id=%s", (job_id,)).fetchone()
+        if (not job or job["state"] != "running" or job["started_at"] <= now - timedelta(hours=24)
+                or "request_encrypted" not in job["manifest"]):
+            raise DomainError("WEBSITE_REQUEST_EXPIRED", 409)
     lead = service.lead(conn, request.lead_id)
     if lead["lifecycle"] != "active" or service.restricted(conn, lead["group_id"]):
         raise DomainError("LEAD_INACTIVE_OR_SUPPRESSED", 409)
@@ -111,44 +121,44 @@ def _admit(conn, service, request, *, initial=False):
     return lead, candidate
 
 
-def _endpoints(page):
+def _endpoints(page, allowed_channels):
     soup = BeautifulSoup(page.html, "html.parser")
     for node in soup(["script", "style", "template", "noscript"]):
         node.decompose()
-    text = soup.get_text(" ", strip=True)
-    emails = set(re.findall(r"[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}", text))
     phones = set()
+    text = soup.get_text(" ", strip=True)
+    # Do not reinterpret labelled business identifiers as telephone numbers.
+    text = re.sub(r"\b(?:ABN|ACN|QBCC(?:\s+licen[cs]e)?|licen[cs]e(?:\s+(?:number|no\.?))?)"
+                  r"\s*[:#]?\s*\d[\d -]{4,30}", " ", text, flags=re.IGNORECASE)
+    for match in phonenumbers.PhoneNumberMatcher(text, "AU", max_tries=1000):
+        if not match.number.extension and text[match.end:match.end+1] != "@":
+            phones.add(match.raw_string)
     for link in soup.find_all("a", href=True):
         href = str(link["href"])
-        if href.lower().startswith("mailto:"):
-            emails.add(unquote(href[7:].split("?")[0]))
-        elif href.lower().startswith("tel:"):
+        if href.lower().startswith("tel:"):
             phones.add(unquote(href[4:]))
     result = []
-    for email in sorted(emails):
-        try:
-            result.append(("email", normalize_email(email)))
-        except ValueError:
-            continue
     for phone in sorted(phones):
         try:
             value = normalize_phone(phone)
             kind = phonenumbers.number_type(phonenumbers.parse(value, "AU"))
-            result.append(("mobile" if kind == phonenumbers.PhoneNumberType.MOBILE else "landline", value))
+            if kind not in (phonenumbers.PhoneNumberType.MOBILE, phonenumbers.PhoneNumberType.FIXED_LINE):
+                continue
+            channel = "mobile" if kind == phonenumbers.PhoneNumberType.MOBILE else "landline"
+            if channel in allowed_channels:
+                result.append((channel, value))
         except ValueError:
             continue
     return result
 
 
-def collect_website(settings, data: dict, actor: str, *, transport=None, resolver=None, sleep=None) -> dict:
+def collect_website(settings, data: dict, actor: str, *, transport=None, resolver=None, sleep=None, job_id=None) -> dict:
     request = WebsiteCollection.model_validate(data)
     _configured(settings)
     if not actor.strip():
         raise DomainError("ACTOR_REQUIRED", 403)
     with transaction(settings) as conn:
-        reasons = gate_reasons(conn, settings, "website_collection", Service.now(conn))
-        if reasons:
-            raise DomainError(reasons[0], 403)
+        _purpose(conn, settings, Service.now(conn))
     service = Service(settings, load_keys(settings))
     body_digest = digest({**request.model_dump(mode="json"), "actor": actor})
     root = safe_root(settings)
@@ -167,7 +177,7 @@ def collect_website(settings, data: dict, actor: str, *, transport=None, resolve
                 if prior["manifest"].get("receipt"):
                     return {**prior["manifest"]["receipt"], "replayed": True}
                 raise DomainError("INTERRUPTED_COLLECTION_REQUIRES_NEW_REQUEST", 409)
-            _admit(conn, service, request, initial=True)
+            _admit(conn, service, request, initial=True, job_id=job_id)
             conn.execute(
                 "INSERT INTO pipeline_run(run_id,mode,code_version,config_digest,state,manifest) VALUES(%s,%s,%s,%s,'running',%s)",
                 (
@@ -185,18 +195,18 @@ def collect_website(settings, data: dict, actor: str, *, transport=None, resolve
 
             def request(self, *args, **kwargs):
                 with transaction(settings) as conn:
-                    _admit(conn, service, request)
+                    _admit(conn, service, request, job_id=job_id)
                 response = self.base.request(*args, **kwargs)
                 with transaction(settings) as conn:
-                    _admit(conn, service, request)
+                    _admit(conn, service, request, job_id=job_id)
                 return response
 
         def checked_resolver(*args, **kwargs):
             with transaction(settings) as conn:
-                _admit(conn, service, request)
+                _admit(conn, service, request, job_id=job_id)
             addresses = (resolver or resolve_public)(*args, **kwargs)
             with transaction(settings) as conn:
-                _admit(conn, service, request)
+                _admit(conn, service, request, job_id=job_id)
             return addresses
 
         options = {"resolver": checked_resolver}
@@ -220,10 +230,11 @@ def collect_website(settings, data: dict, actor: str, *, transport=None, resolve
             seen: set[tuple[str, str]] = set()
             captured_at = None
             with transaction(settings) as conn:
-                lead, candidate = _admit(conn, service, request)
+                lead, candidate = _admit(conn, service, request, job_id=job_id)
                 captured_at = service.now(conn)
+                channels = _purpose(conn, settings, captured_at)["allowed_channels"]
                 for page in crawled.pages:
-                    for channel, value in _endpoints(page):
+                    for channel, value in _endpoints(page, channels):
                         if (channel, value) in seen or len(contacts) >= 10:
                             continue
                         seen.add((channel, value))
@@ -318,7 +329,7 @@ def collect_website(settings, data: dict, actor: str, *, transport=None, resolve
             reason = exc.code if isinstance(exc, DomainError) else "WEBSITE_COLLECTION_FAILED"
             if reason == "WEBSITE_COLLECTION_HELD":
                 with transaction(settings) as conn:
-                    _, candidate = _admit(conn, service, request)
+                    _, candidate = _admit(conn, service, request, job_id=job_id)
                     conn.execute(
                         "UPDATE candidate_queue SET state='needs_review',last_attempt_at=clock_timestamp(),attempt_count=attempt_count+1,stage_data=stage_data||%s WHERE candidate_id=%s",
                         (
@@ -344,9 +355,7 @@ def submit_website_collection(settings, data: dict, actor: str) -> dict:
     request = WebsiteCollection.model_validate(data)
     _configured(settings)
     with transaction(settings) as conn:
-        reasons = gate_reasons(conn, settings, "website_collection", Service.now(conn))
-        if reasons:
-            raise DomainError(reasons[0], 403)
+        _purpose(conn, settings, Service.now(conn))
     service = Service(settings, load_keys(settings))
     body_digest = digest({**request.model_dump(mode="json"), "actor": actor})
     with transaction(settings) as conn:
@@ -417,7 +426,7 @@ def execute_website_collection(settings, job_id, **transport_options) -> dict:
     if current["state"] in ("complete", "held", "failed"):
         return current
     with transaction(settings) as conn:
-        reasons = gate_reasons(conn, settings, "website_collection", Service.now(conn))
+        reasons = website_collection_policy(conn, settings, Service.now(conn))["reason_codes"]
         if reasons:
             conn.execute(
                 "UPDATE pipeline_run SET state='held',finished_at=clock_timestamp(),manifest=(manifest-'request_encrypted')||%s WHERE run_id=%s",
@@ -433,7 +442,7 @@ def execute_website_collection(settings, job_id, **transport_options) -> dict:
                 raise DomainError("NOT_FOUND", 404)
             if row["manifest"]["phase"] in ("complete", "held", "failed"):
                 return _website_receipt(row)
-            if row["started_at"] < service.now(conn) - timedelta(hours=24):
+            if row["started_at"] <= service.now(conn) - timedelta(hours=24):
                 conn.execute(
                     "UPDATE pipeline_run SET state='held',finished_at=clock_timestamp(),manifest=(manifest-'request_encrypted')||%s WHERE run_id=%s",
                     (Jsonb({"phase": "held", "reason_codes": ["WEBSITE_REQUEST_EXPIRED"]}), job_id),
@@ -451,7 +460,7 @@ def execute_website_collection(settings, job_id, **transport_options) -> dict:
                 (Jsonb({"phase": "running"}), job_id),
             )
         try:
-            receipt = collect_website(settings, data, actor, **transport_options)
+            receipt = collect_website(settings, data, actor, job_id=job_id, **transport_options)
             phase, reasons = "complete", receipt["reason_codes"]
         except (DomainError, ValueError) as exc:
             receipt, phase = None, "held"

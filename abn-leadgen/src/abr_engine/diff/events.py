@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from collections.abc import Iterator
+from collections.abc import Callable, Iterator
 from dataclasses import dataclass
 from datetime import datetime
 from pathlib import Path
@@ -12,6 +12,7 @@ import duckdb
 import pyarrow.parquet as pq
 
 from abr_engine.ingest.common import SourceError
+from abr_engine.ops.analytical import analytical_guard
 
 
 @dataclass(frozen=True)
@@ -30,8 +31,20 @@ def diff_snapshots(
     previous_snapshot_id: str | None = None,
     rebaseline: bool = False,
     max_spill_bytes: int = 8 * 1024**3,
+    threads: int = 3,
+    authority: Callable[[], object] | None = None,
+    check: Callable[[], object] | None = None,
+    progress: Callable[[dict], object] | None = None,
+    max_events: int | None = None,
+    max_output_bytes: int | None = None,
 ) -> DiffResult:
     UUID(snapshot_id)
+    if type(threads) is not int or not 1 <= threads <= 3:
+        raise ValueError("Invalid analytical thread limit")
+    if max_events is not None and (type(max_events) is not int or max_events < 0):
+        raise ValueError("Invalid analytical event limit")
+    if max_output_bytes is not None and (type(max_output_bytes) is not int or max_output_bytes <= 0):
+        raise ValueError("Invalid analytical output limit")
     if observed_at.tzinfo is None:
         raise ValueError("observed_at must be timezone aware")
     if not current or output_path.exists():
@@ -41,24 +54,51 @@ def diff_snapshots(
         raise SourceError("PARSER_SCHEMA_REBASELINE_REQUIRED")
     output_path.parent.mkdir(parents=True, exist_ok=True)
     con = duckdb.connect()
-    try:
-        con.execute("SET memory_limit='512MB'")
-        con.execute("SET threads=3")
-        con.execute("SET preserve_insertion_order=false")
-        con.execute("SET temp_directory=?", [str(output_path.parent / "diff-spill")])
-        con.execute("SET max_temp_directory_size=?", [f"{max_spill_bytes}B"])
+    emitted = 0
+
+    def bounded_check():
+        if check is not None:
+            check()
+        if max_output_bytes is not None:
+            total = 0
+            for path in (output_path, *output_path.parent.glob(output_path.name + ".part-*")):
+                try:
+                    total += path.stat().st_size
+                except FileNotFoundError:
+                    continue  # A completed part can be removed between checks.
+            if total > max_output_bytes:
+                raise SourceError("ABR_EVENT_STORAGE_LIMIT")
+
+    def checkpoint():
+        active_check()
+        if authority is not None:
+            authority()
+
+    def execute(query, parameters=None):
+        checkpoint()
+        result = con.execute(query, parameters) if parameters is not None else con.execute(query)
+        checkpoint()
+        return result
+
+    def _materialize():
+        nonlocal emitted
+        execute("SET memory_limit='512MB'")
+        execute("SET threads=?", [threads])
+        execute("SET preserve_insertion_order=false")
+        execute("SET temp_directory=?", [str(output_path.parent / "diff-spill")])
+        execute("SET max_temp_directory_size=?", [f"{max_spill_bytes}B"])
         con.from_parquet([str(p) for p in current]).create_view("all_current_rows")
         if previous and not rebaseline:
             con.from_parquet([str(p) for p in previous]).create_view("all_previous_rows")
         else:
-            con.execute("CREATE VIEW all_previous_rows AS SELECT * FROM all_current_rows WHERE false")
+            execute("CREATE VIEW all_previous_rows AS SELECT * FROM all_current_rows WHERE false")
         for name in ("all_previous_rows", "all_current_rows"):
-            if con.execute(f"SELECT abn FROM {name} GROUP BY abn HAVING count(*)>1 LIMIT 1").fetchone():
+            if execute(f"SELECT abn FROM {name} GROUP BY abn HAVING count(*)>1 LIMIT 1").fetchone():
                 raise SourceError("DUPLICATE_ABN")
-        con.execute(
+        execute(
             "CREATE TABLE context(snapshot_id VARCHAR, previous_snapshot_id VARCHAR, observed_at TIMESTAMPTZ, enabled BOOLEAN)"
         )
-        con.execute(
+        execute(
             "INSERT INTO context VALUES (?,?,?,?)",
             [snapshot_id, previous_snapshot_id, observed_at, bool(previous) and not rebaseline],
         )
@@ -94,17 +134,18 @@ def diff_snapshots(
         # Each join is bounded to at most 400k rows per side. Numeric ABN ranges preserve
         # exact whole-set semantics, including absent keys and simultaneous event types.
         # Adaptive subdivision handles skew; Parquet row-group statistics prune ordered sources.
-        bounds = con.execute("SELECT min(abn),max(abn) FROM (SELECT abn FROM all_previous_rows UNION ALL SELECT abn FROM all_current_rows)").fetchone()
+        bounds = execute("SELECT min(abn),max(abn) FROM (SELECT abn FROM all_previous_rows UNION ALL SELECT abn FROM all_current_rows)").fetchone()
         assert bounds is not None
         ranges = [(int(bounds[0]), int(bounds[1]))] if bounds[0] is not None and previous and not rebaseline else []
         writer = None
         try:
             while ranges:
+                checkpoint()
                 low, high = ranges.pop()
                 predicate = f"abn BETWEEN '{low:011d}' AND '{high:011d}'"
                 counts = []
                 for name in ("all_previous_rows", "all_current_rows"):
-                    count_row = con.execute(f"SELECT count(*) FROM {name} WHERE {predicate}").fetchone()
+                    count_row = execute(f"SELECT count(*) FROM {name} WHERE {predicate}").fetchone()
                     assert count_row is not None
                     counts.append(count_row[0])
                 if max(counts) > 400000 and low < high:
@@ -112,32 +153,53 @@ def diff_snapshots(
                     ranges.extend([(middle + 1, high), (low, middle)])
                     continue
                 for side in ("previous", "current"):
-                    con.execute(f"CREATE OR REPLACE VIEW {side}_rows AS SELECT * FROM all_{side}_rows WHERE {predicate}")
+                    execute(f"CREATE OR REPLACE VIEW {side}_rows AS SELECT * FROM all_{side}_rows WHERE {predicate}")
+                if max_events is not None:
+                    count_row = execute(f"SELECT count(*) FROM ({query}) prospective_events").fetchone()
+                    assert count_row is not None
+                    if emitted + count_row[0] > max_events:
+                        raise SourceError("ABR_EVENT_COUNT_LIMIT")
                 part = output_path.parent / (output_path.name + f".part-{low}-{high}")
+                if part.exists():
+                    raise SourceError("DIFF_PART_ALREADY_EXISTS")
                 try:
                     escaped = str(part).replace("'", "''")
-                    con.execute(f"COPY ({query}) TO '{escaped}' (FORMAT PARQUET, COMPRESSION ZSTD)")
+                    execute(f"COPY ({query}) TO '{escaped}' (FORMAT PARQUET, COMPRESSION ZSTD)")
                     with pq.ParquetFile(part) as parquet:
                         if writer is None:
                             writer = pq.ParquetWriter(output_path, parquet.schema_arrow, compression="zstd")
                         for batch in parquet.iter_batches(batch_size=10000):
+                            checkpoint()
+                            emitted += batch.num_rows
+                            if max_events is not None and emitted > max_events:
+                                raise SourceError("ABR_EVENT_COUNT_LIMIT")
                             writer.write_batch(batch)
+                            checkpoint()
+                            if progress is not None:
+                                progress({"event_count": emitted})
                 finally:
                     part.unlink(missing_ok=True)
             if writer is None:
                 for side in ("previous", "current"):
-                    con.execute(f"CREATE OR REPLACE VIEW {side}_rows AS SELECT * FROM all_{side}_rows WHERE false")
+                    execute(f"CREATE OR REPLACE VIEW {side}_rows AS SELECT * FROM all_{side}_rows WHERE false")
                 escaped = str(output_path).replace("'", "''")
-                con.execute(f"COPY ({query}) TO '{escaped}' (FORMAT PARQUET, COMPRESSION ZSTD)")
+                execute(f"COPY ({query}) TO '{escaped}' (FORMAT PARQUET, COMPRESSION ZSTD)")
         finally:
             if writer:
                 writer.close()
+        checkpoint()
         with pq.ParquetFile(output_path) as result:
             for _ in result.iter_batches(batch_size=10000):
-                pass
+                checkpoint()
+            if result.metadata.num_rows != emitted:
+                raise SourceError("DIFF_OUTPUT_COUNT_MISMATCH")
             return DiffResult(output_path, result.metadata.num_rows)
+
+    try:
+        watcher_check = bounded_check if check is not None or max_output_bytes is not None else None
+        with analytical_guard(con, watcher_check) as active_check:
+            return _materialize()
     except Exception:
-        con.close()
         output_path.unlink(missing_ok=True)
         raise
     finally:

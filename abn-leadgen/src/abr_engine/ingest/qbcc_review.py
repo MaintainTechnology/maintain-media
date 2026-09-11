@@ -356,9 +356,15 @@ def cleanup_qbcc_review(settings: Settings, *, run_id: UUID | None = None, execu
         with transaction(settings) as conn:
             service.personal_data_access(conn)
             now = Service.now(conn)
+            # Accepted intakes belong to ordinary source/artifact retention, not
+            # abandoned review staging. Exclude only the coherent terminal receipt;
+            # missing receipts or inconsistent states must still be checked/held.
             runs = conn.execute(
                 "SELECT * FROM pipeline_run WHERE manifest->>'kind'='qbcc_review_intake' AND mode=%s "
                 "AND manifest->>'intake_state' IS DISTINCT FROM 'expired' "
+                "AND NOT COALESCE(state='complete' AND manifest @> "
+                "'{\"intake_state\":\"accepted\",\"acceptance_receipt\":{\"accepted\":true,"
+                "\"source\":\"qbcc\",\"state\":\"complete\"}}'::jsonb, false) "
                 "AND (%s::uuid IS NULL OR run_id=%s) "
                 "ORDER BY COALESCE((manifest->>'cleanup_checked_at')::timestamptz,started_at),run_id LIMIT 100 FOR UPDATE",
                 (settings.mode, run_id, run_id),

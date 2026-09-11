@@ -1,0 +1,28 @@
+{
+  "verified_at": "2026-09-11T01:54:38.834323+00:00",
+  "reviewer_admin_dashboard_http": 200,
+  "admin_without_reviewer_dashboard_http": 200,
+  "operator_without_admin_dashboard_http": 403,
+  "cache_control": "no-store",
+  "reviewer_leads": [
+    {
+      "row_id_present": false,
+      "row_version": null,
+      "crm_handoff": {
+        "state": "not_selected",
+        "can_approve": false,
+        "can_reject": false,
+        "reason_codes": [
+          "ONLY_SELECTED_TIER_A"
+        ],
+        "outbox_id": null,
+        "updated_at": null
+      },
+      "contact_count": 2
+    }
+  ],
+  "admin_without_reviewer_crm_controls_absent": true,
+  "real_lead_or_contact_values_in_receipt": false,
+  "approval_submissions": 0,
+  "probe_correction": "Operator-only dashboard read is403 by the existing admin-only route contract; the read-only probe expectation was corrected, not the permission model."
+}

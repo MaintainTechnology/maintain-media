@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<testsuites>
+	<testcase name="current unselected phone-evidence business explains the missing step without an approval form" time="0.297805" classname="test"/>
+	<testcase name="a reviewer explicitly submits the selected row and opening version, without a dispatch call" time="0.250149" classname="test"/>
+	<testcase name="withdrawn eligibility blocks a stale approve choice while still allowing the engine's reject action" time="0.185892" classname="test"/>
+	<testcase name="missing or unrecognised status cannot activate approval from row presence or boolean flags alone" time="0.710584" classname="test"/>
+	<testcase name="queued, uncertain and confirmed results remain distinct and never claim outreach" time="0.000896" classname="test"/>
+	<testcase name="CRM error codes explain installation, eligibility and identity problems rather than report expiry" time="0.000735" classname="test"/>
+	<testcase name="CRM projection validation keeps unknown future state readable but refuses malformed authority or identifiers" time="0.000897" classname="test"/>
+	<testcase name="live empty workspace preserves zero and blocked worker without demo claims" time="0.175727" classname="test"/>
+	<testcase name="live reviewer can see actual worklist and optout controls with explicit evidence fields" time="0.064850" classname="test"/>
+	<testcase name="held publisher download explains this run without hiding previously accepted records" time="0.063515" classname="test"/>
+	<testcase name="request errors share the publisher explanation while other errors keep their own meaning" time="0.001706" classname="test"/>
+	<testcase name="real disabled capability rows render next steps, named owners and native expandable engine details" time="0.105314" classname="test"/>
+	<testcase name="approved readiness remains scoped to its row and an unknown engine observation is escaped" time="0.175424" classname="test"/>
+	<testcase name="stored QBCC data has publisher/licence attribution and adaptation context in both views" time="0.216853" classname="test"/>
+	<testcase name="fixture and uncollected source states do not claim that their records came from QBCC" time="0.235595" classname="test"/>
+	<testcase name="stored QBCC leads retain attribution after the current source snapshot has expired" time="0.062626" classname="test"/>
+	<testcase name="permission drafts retain their opening revision across refresh and require explicit reload" time="0.292935" classname="test"/>
+	<testcase name="accepted ABR baseline displays actual source counts and zero events, not newly formed leads" time="0.284198" classname="test"/>
+	<testcase name="source-specific current checks control runs and unknown permission never borrows the other source" time="0.524209" classname="test"/>
+	<testcase name="ABR in-progress and history-gap receipts preserve the accepted list without a false baseline" time="0.421000" classname="test"/>
+	<testcase name="completed ABR receipts distinguish actual differences, no change and unknown results" time="0.000735" classname="test"/>
+	<testcase name="source DTO accepts genuine zero counts but rejects malformed permission or receipt fields" time="0.002691" classname="test"/>
+	<testcase name="uncertain requests retain their original source and identifier when a different default is chosen" time="0.592735" classname="test"/>
+	<testcase name="refresh announces completion only for the same active job and never promises baseline leads" time="0.229796" classname="test"/>
+	<testcase name="a held admission receipt is saved and explained without announcing a started run" time="0.132193" classname="test"/>
+	<testcase name="a disconnected dashboard explains setup without claiming demo data was loaded" time="0.132338" classname="test"/>
+	<testcase name="the first connection check shows loading without inventing a workspace mode" time="0.090700" classname="test"/>
+	<testcase name="offline sample records remain labelled and engine controls follow connection state" time="0.109060" classname="test"/>
+	<testcase name="connected sample records remain labelled and engine controls follow connection state" time="0.081500" classname="test"/>
+	<testcase name="disabled QBCC guidance names source/privacy and developer steps without imposing later ABR gates" time="0.004221" classname="test"/>
+	<testcase name="disabled CRM points to account/vendor and suppression tests without claiming contact access" time="0.002679" classname="test"/>
+	<testcase name="broader ABR explains its separate pilot decision and matching review" time="0.000660" classname="test"/>
+	<testcase name="website collection has its own decision and cannot inherit QBCC approval" time="0.000803" classname="test"/>
+	<testcase name="phone-only submission needs the current explicit policy, not a readiness label" time="0.001264" classname="test"/>
+	<testcase name="specific engine gates explain only the checks actually reported, including renewed evidence" time="0.001473" classname="test"/>
+	<testcase name="additional unknown checks remain unverified and retain exact engine detail" time="0.001179" classname="test"/>
+	<testcase name="responsibility is role-based and a current owner-authorised collection state stays authoritative" time="0.004744" classname="test"/>
+	<testcase name="unknown IDs cannot borrow readiness guidance by label or inherited object property" time="0.014042" classname="test"/>
+	<testcase name="ready/unknown states and fixture responses keep their actual engine descriptions" time="0.001320" classname="test"/>
+	<testcase name="non-code backend explanations are preserved instead of guessed into an approval" time="0.000763" classname="test"/>
+	<testcase name="a current reviewed business exposes an explicit phone-only form with required evidence" time="1.005086" classname="test"/>
+	<testcase name="a reviewer can inspect collected phone evidence without an email permission form" time="0.400910" classname="test"/>
+	<testcase name="submission binds the actual business and identity, retains dated terms and sends no channel override" time="0.163692" classname="test"/>
+	<testcase name="an invalid terms date is shown as a form error without a request or uncaught RangeError" time="0.110969" classname="test"/>
+	<testcase name="a persisted active job reopens disabled and resumes its saved job identifier" time="0.287644" classname="test"/>
+	<testcase name="a newer saved active job replaces the displayed terminal local receipt" time="0.134453" classname="test"/>
+	<testcase name="website errors and validation explain their own review step without demo or spending instructions" time="0.002882" classname="test"/>
+	<testcase name="public research notice uses the existing public contact and qualified scope disclosures" time="0.063075" classname="test"/>
+	<!-- tests 48 -->
+	<!-- suites 0 -->
+	<!-- pass 48 -->
+	<!-- fail 0 -->
+	<!-- cancelled 0 -->
+	<!-- skipped 0 -->
+	<!-- todo 0 -->
+	<!-- duration_ms 8824.8342 -->
+</testsuites>

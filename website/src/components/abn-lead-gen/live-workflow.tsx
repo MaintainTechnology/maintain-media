@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import type { Lead } from "@/lib/abn-lead-gen/types";
 import { dateLabel, humanize, validJob, jobActive, type Job } from "@/lib/abn-lead-gen/types";
-import type { DashboardController } from "./use-dashboard";
+import { errorMessage, type DashboardController } from "./use-dashboard";
+import { crmHandoffGuidance, websiteCollectionGuidance } from "./readiness";
 import styles from "./dashboard.module.css";
 
 const cls = (...names: string[]) => names.map(name => styles[name]).filter(Boolean).join(" ");
@@ -18,7 +19,10 @@ export function LeadActions({ lead, engine }: { lead: Lead; engine: DashboardCon
   const [receipt, setReceipt] = useState<string | null>(null);
   const [stopUnconfirmed, setStopUnconfirmed] = useState(false);
   const [evidence, setEvidence] = useState<{ contact: string; text: string; source: string } | null>(null);
-  const [websiteJob, setWebsiteJob] = useState<Job | null>(null);
+  const [localWebsiteJob, setWebsiteJob] = useState<Job | null>(null);
+  const websiteJob = jobActive(lead.website_job) && (!localWebsiteJob || lead.website_job?.job_id !== localWebsiteJob.job_id && !jobActive(localWebsiteJob))
+    ? lead.website_job! : localWebsiteJob || lead.website_job || null;
+  const websiteCollection = websiteCollectionGuidance(engine.data);
   const [outcomeVersion, setOutcomeVersion] = useState(lead.row_version);
   const [identityVersion, setIdentityVersion] = useState(lead.revision);
   const [formEpoch, setFormEpoch] = useState(0);
@@ -55,7 +59,9 @@ export function LeadActions({ lead, engine }: { lead: Lead; engine: DashboardCon
       if (stopping) { setStopUnconfirmed(false); stop.current = null; }
       if (endpoint.startsWith("worklist-rows/") && typeof result.version === "number") setOutcomeVersion(result.version);
       if (endpoint === "identity-assessments") setIdentityVersion(value => (value ?? 0) + 1);
-      setReceipt(stopping ? "Do not contact saved. The engine has committed the restriction." : "Saved to the engine.");
+      setReceipt(stopping ? "Do not contact saved. The engine has committed the restriction."
+        : endpoint === "crm-approvals" ? `CRM decision saved. ${crmHandoffGuidance({ state: String(result.state), can_approve: false, can_reject: false, reason_codes: [], outbox_id: null, updated_at: null }).detail}`
+          : "Saved to the engine.");
       await engine.refresh();
     } catch (failure) { if (mounted.current) setError(errorText(failure)); }
     finally { if (mounted.current) setBusy(false); }
@@ -95,14 +101,18 @@ export function LeadActions({ lead, engine }: { lead: Lead; engine: DashboardCon
         <button type="submit" className={cls("button", "secondary")}>Save identity review</button>
       </fieldset></form>
     </details>}
-    {reviewer && lead.website_identity?.assessment === "approved" && <details className={cls("review-form")}><summary>Collect from the reviewed website</summary>
-      <p>The engine checks robots rules and fetches a small number of public pages from this approved business domain. Finding an address does not establish permission or verify delivery.</p>
-      {websiteJob && <p role="status">Website job: {humanize(websiteJob.state)}{websiteJob.error_code ? ` · ${humanize(websiteJob.error_code)}` : ""}</p>}
+    {reviewer && lead.website_identity?.assessment === "approved" && <details className={cls("review-form")}><summary>Collect phone details from the reviewed website</summary>
+      <p>{websiteCollection.summary}</p>
+      <p>The engine checks robots rules and reads up to six public HTML pages. The licence check and site-terms review must be less than 30 days old; the website identity decision must still be current. Use the HTTPS homepage with a trailing slash and no query or fragment.</p>
+      <p><a href="/business-research-notice" target="_blank" rel="noreferrer">Read the business research notice</a>. The engine checks each request again before collection.</p>
+      {websiteJob && <p role="status">Website job: {humanize(websiteJob.state)}{websiteJob.error_code ? ` · ${errorMessage(websiteJob.error_code, `${humanize(websiteJob.error_code)}. Check the saved review details before trying again.`)}` : ""}</p>}
       <form onSubmit={async event => {
         event.preventDefault(); const form = new FormData(event.currentTarget);
+        const reviewedAt = new Date(String(form.get("terms_reviewed_at")));
+        if (!Number.isFinite(reviewedAt.getTime())) { setError("Enter a valid date and time for your site-terms review."); return; }
         const body = { lead_id: lead.lead_id, identity_id: lead.website_identity!.identity_id,
           website_url: form.get("website_url"), terms_permit: form.get("terms_permit") === "on",
-          terms_evidence_ref: form.get("terms_evidence_ref"), terms_reviewed_at: new Date(String(form.get("terms_reviewed_at"))).toISOString() };
+          terms_evidence_ref: form.get("terms_evidence_ref"), terms_reviewed_at: reviewedAt.toISOString() };
         const fingerprint = JSON.stringify(body);
         if (websiteRequest.current?.fingerprint !== fingerprint) websiteRequest.current = { fingerprint, id: crypto.randomUUID() };
         setBusy(true); setError(null); setReceipt(null);
@@ -114,16 +124,16 @@ export function LeadActions({ lead, engine }: { lead: Lead; engine: DashboardCon
           setReceipt("Website collection request saved. This panel will show its progress.");
         } catch (failure) { if (mounted.current) setError(errorText(failure)); }
         finally { if (mounted.current) setBusy(false); }
-      }}><fieldset disabled={disabled || stopUnconfirmed || jobActive(websiteJob)}><legend>Checked website collection</legend>
+      }}><fieldset disabled={disabled || stopUnconfirmed || !websiteCollection.enabled || jobActive(websiteJob) || jobActive(lead.website_job)}><legend>Checked phone-only website collection</legend>
         <label>Website homepage<input name="website_url" type="url" required maxLength={300} defaultValue={`https://${lead.website_identity.registrable_domain}/`} /></label>
-        <label className={cls("checkbox-label")}><input name="terms_permit" type="checkbox" required />I reviewed this site’s terms and recorded evidence that this collection is permitted.</label>
+        <label className={cls("checkbox-label")}><input name="terms_permit" type="checkbox" required />I reviewed this site’s terms and recorded evidence permitting this phone-only collection.</label>
         <label>Terms review evidence<input name="terms_evidence_ref" required minLength={1} maxLength={500} /></label>
         <label>When did you review the terms? (your local time)<input name="terms_reviewed_at" type="datetime-local" required /></label>
-        <button type="submit" className={cls("button", "secondary")}>Collect reviewed website</button>
+        <button type="submit" className={cls("button", "secondary")}>Collect reviewed phone details</button>
       </fieldset></form>
     </details>}
-    {reviewer && lead.contacts?.filter(contact => contact.channel === "email").map(contact => <details key={contact.contact_id} className={cls("review-form")}><summary>Review email permission · {contact.contact_id.slice(0, 8)}</summary>
-      <p>Public contact details do not automatically give permission. Review the captured evidence under your approved policy.</p>
+    {reviewer && lead.contacts?.map(contact => <details key={contact.contact_id} className={cls("review-form")}><summary>{contact.channel === "email" ? "Review email permission" : "Review phone evidence"} · {contact.contact_id.slice(0, 8)}</summary>
+      <p>{contact.channel === "email" ? "Public contact details do not automatically give permission. Review the captured evidence under your approved policy." : "These phone details are for internal research. Collection does not establish permission to call or confirm a Do Not Call Register check."}</p>
       <button className={cls("button", "secondary", "small")} type="button" disabled={disabled} onClick={async () => {
         setBusy(true); setError(null);
         try {
@@ -134,7 +144,7 @@ export function LeadActions({ lead, engine }: { lead: Lead; engine: DashboardCon
         finally { if (mounted.current) setBusy(false); }
       }}>Open private captured evidence</button>
       {evidence?.contact === contact.contact_id && <div><p>Captured source: {evidence.source}</p><pre className={cls("evidence-text")}>{evidence.text}</pre><button type="button" className={cls("button", "small", "secondary")} onClick={() => setEvidence(null)}>Close evidence</button></div>}
-      <PermissionForm contact={contact} disabled={disabled || stopUnconfirmed} save={save} />
+      {contact.channel === "email" && <PermissionForm contact={contact} disabled={disabled || stopUnconfirmed} save={save} />}
     </details>)}
     {lead.row_id && lead.row_version ? <form key={`${lead.row_id}:${formEpoch}`} onSubmit={event => {
       event.preventDefault(); const form = new FormData(event.currentTarget); const status = String(form.get("status"));
@@ -154,12 +164,34 @@ export function LeadActions({ lead, engine }: { lead: Lead; engine: DashboardCon
         <button className={cls("button", "primary")} type="submit">Save outcome</button>
       </fieldset>
     </form> : <p>A worklist outcome becomes available after this business passes the contact checks and is selected. You can record a do-not-contact request now.</p>}
-    {reviewer && lead.row_id && <form onSubmit={event => {
-      event.preventDefault(); const form = new FormData(event.currentTarget);
-      void save("crm-approvals", { row_id: lead.row_id, expected_version: outcomeVersion, decision: form.get("decision"), reason: form.get("reason") });
-    }}><fieldset disabled={disabled || stopUnconfirmed}><legend>GoHighLevel review</legend>
-      <p>Approval only queues an eligible tier A business. Current identity, permission and vendor checks must still pass.</p>
-      <label>Decision<select name="decision" required defaultValue=""><option value="" disabled>Choose a decision</option><option value="approve">Approve this business for CRM</option><option value="reject">Reject this CRM hand-off</option></select></label>
+    <CrmReview key={`crm:${lead.row_id || "unselected"}:${formEpoch}`} lead={lead} reviewer={!!reviewer} disabled={disabled || stopUnconfirmed} expectedVersion={outcomeVersion} save={save} />
+  </section>;
+}
+
+export function CrmReview({ lead, reviewer, disabled, expectedVersion, save }: {
+  lead: Lead; reviewer: boolean; disabled: boolean; expectedVersion?: number | null;
+  save: (endpoint: string, body: unknown) => Promise<void>;
+}) {
+  const [error, setError] = useState<string | null>(null);
+  const guidance = crmHandoffGuidance(lead.crm_handoff);
+  const editable = reviewer && !!lead.row_id && Number.isSafeInteger(expectedVersion) && Number(expectedVersion) > 0;
+  return <section className={cls("review-form")} aria-label="GoHighLevel hand-off">
+    <h4>GoHighLevel hand-off</h4>
+    <p role="status"><strong>{guidance.label}</strong></p><p>{guidance.detail}</p>
+    <p>Enabling the connection does not approve every business. A reviewer must approve each eligible, selected tier A business. The worker then handles the saved request; this tool does not send messages or make calls.</p>
+    {lead.crm_handoff?.reason_codes.map(code => <p key={code}>{errorMessage(code, `Additional engine check: ${humanize(code)}. Ask the administrator to review it.`)}</p>)}
+    {lead.crm_handoff?.outbox_id && <p>Saved request: {lead.crm_handoff.outbox_id.slice(0, 8)} · Last updated: {dateLabel(lead.crm_handoff.updated_at)}</p>}
+    {!reviewer && <p>An explicitly assigned reviewer role is required to inspect and approve this business’s hand-off.</p>}
+    {error && <p className={cls("field-error")} role="alert">{error}</p>}
+    {editable && <form onSubmit={event => {
+      event.preventDefault(); const form = new FormData(event.currentTarget); const decision = form.get("decision");
+      if (disabled || !(decision === "approve" ? guidance.canApprove : decision === "reject" && guidance.canReject)) {
+        setError("This decision is not available under the current engine checks. Refresh and review the latest status before trying again."); return;
+      }
+      setError(null);
+      void save("crm-approvals", { row_id: lead.row_id, expected_version: expectedVersion, decision, reason: form.get("reason") });
+    }}><fieldset disabled={disabled || !(guidance.canApprove || guidance.canReject)}><legend>Record this business’s CRM decision</legend>
+      <label>Decision<select name="decision" required defaultValue=""><option value="" disabled>Choose a checked decision</option><option value="approve" disabled={!guidance.canApprove}>Approve this business for hand-off</option><option value="reject" disabled={!guidance.canReject}>Reject this hand-off</option></select></label>
       <label>Reason<textarea name="reason" minLength={1} maxLength={2000} required rows={2} /></label>
       <button className={cls("button", "secondary")} type="submit">Save CRM decision</button>
     </fieldset></form>}

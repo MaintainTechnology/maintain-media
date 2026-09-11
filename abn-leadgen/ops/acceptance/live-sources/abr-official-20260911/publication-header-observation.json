@@ -1,0 +1,266 @@
+{
+  "checked_at": "2026-09-11T02:43:14.806513+00:00",
+  "method": "Fixed official publisher HEAD plus bounded validated206 central-directory and2048-byte decompressed header-prefix inspections; source records not saved or returned",
+  "resources": [
+    {
+      "resource_id": "0ae4d427-6fa8-4d40-8e76-c6909b5a071b",
+      "url": "https://data.gov.au/data/dataset/5bd7fcab-e315-42cb-8daf-50b7efc2027e/resource/0ae4d427-6fa8-4d40-8e76-c6909b5a071b/download/public_split_1_10.zip",
+      "length": 497706546,
+      "etag": "\"1788906841.312-497706546-3535277992\"",
+      "last_modified": "Tue, 08 Sep 2026 22:34:01 GMT",
+      "members": [
+        {
+          "name": "20260909_Public01.xml",
+          "compressed_bytes": 49801647,
+          "expanded_bytes": 633055347,
+          "crc32": "92c9aa68",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "1",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public02.xml",
+          "compressed_bytes": 49589077,
+          "expanded_bytes": 631492508,
+          "crc32": "05fe95d2",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "2",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public03.xml",
+          "compressed_bytes": 49854572,
+          "expanded_bytes": 631296419,
+          "crc32": "42dab9ee",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "3",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public04.xml",
+          "compressed_bytes": 49749419,
+          "expanded_bytes": 630271617,
+          "crc32": "0ef9a8d3",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "4",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public05.xml",
+          "compressed_bytes": 49834070,
+          "expanded_bytes": 632839736,
+          "crc32": "9c67c85f",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "5",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public06.xml",
+          "compressed_bytes": 49715790,
+          "expanded_bytes": 631274230,
+          "crc32": "52c77ed6",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "6",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public07.xml",
+          "compressed_bytes": 49841683,
+          "expanded_bytes": 631553885,
+          "crc32": "14354e93",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "7",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public08.xml",
+          "compressed_bytes": 49779609,
+          "expanded_bytes": 629726428,
+          "crc32": "cb007690",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "8",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public09.xml",
+          "compressed_bytes": 49689540,
+          "expanded_bytes": 631449038,
+          "crc32": "85ef103f",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "9",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public10.xml",
+          "compressed_bytes": 49849937,
+          "expanded_bytes": 632590882,
+          "crc32": "dadaf7f6",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "10",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        }
+      ]
+    },
+    {
+      "resource_id": "635fcb95-7864-4509-9fa7-a62a6e32b62d",
+      "url": "https://data.gov.au/data/dataset/5bd7fcab-e315-42cb-8daf-50b7efc2027e/resource/635fcb95-7864-4509-9fa7-a62a6e32b62d/download/public_split_11_20.zip",
+      "length": 497475853,
+      "etag": "\"1788906945.14-497475853-3392933766\"",
+      "last_modified": "Tue, 08 Sep 2026 22:35:45 GMT",
+      "members": [
+        {
+          "name": "20260909_Public11.xml",
+          "compressed_bytes": 49762302,
+          "expanded_bytes": 630699084,
+          "crc32": "4b02ec67",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "11",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public12.xml",
+          "compressed_bytes": 49898355,
+          "expanded_bytes": 631465281,
+          "crc32": "e94f0bf2",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "12",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public13.xml",
+          "compressed_bytes": 49647654,
+          "expanded_bytes": 631661137,
+          "crc32": "b53c0ab7",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "13",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public14.xml",
+          "compressed_bytes": 49799872,
+          "expanded_bytes": 632379686,
+          "crc32": "0467ebab",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "14",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public15.xml",
+          "compressed_bytes": 49773082,
+          "expanded_bytes": 630406965,
+          "crc32": "16f8e393",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "15",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public16.xml",
+          "compressed_bytes": 49953745,
+          "expanded_bytes": 631955461,
+          "crc32": "b91ccd96",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "16",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public17.xml",
+          "compressed_bytes": 49759254,
+          "expanded_bytes": 630639205,
+          "crc32": "74bb90e0",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "17",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public18.xml",
+          "compressed_bytes": 49715272,
+          "expanded_bytes": 632549240,
+          "crc32": "b51a9d24",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "18",
+            "RecordCount": "1026000",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public19.xml",
+          "compressed_bytes": 49831291,
+          "expanded_bytes": 630282571,
+          "crc32": "9a3cafbf",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "19",
+            "RecordCount": "1025999",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        },
+        {
+          "name": "20260909_Public20.xml",
+          "compressed_bytes": 49333824,
+          "expanded_bytes": 624802289,
+          "crc32": "a3a12fb9",
+          "root_attributes": "error=\"none\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:noNamespaceSchemaLocation=\"BulkExtract.xsd\"",
+          "header": {
+            "FileSequenceNumber": "20",
+            "RecordCount": "1016903",
+            "ExtractTime": "2026-09-09T12:20:57"
+          }
+        }
+      ]
+    }
+  ],
+  "coherence": "header_inventory_observation_only_full_download_hash_crc_and_record_checks_pending",
+  "records_collected": 0
+}

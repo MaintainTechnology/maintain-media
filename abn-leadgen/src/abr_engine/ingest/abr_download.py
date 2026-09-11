@@ -18,6 +18,8 @@ from urllib.parse import urlsplit
 
 import duckdb
 
+from abr_engine.ops.analytical import analytical_guard
+
 from .abr_parse import ABRMapping, ParsedMember, parse_xml
 from .common import SourceError, digest_file
 from .snapshots import content_identity
@@ -65,8 +67,12 @@ def ingest_archives(
     max_members: int = 1000,
     max_compression_ratio: int = 1000,
     production: bool = False,
+    authority: Callable[[], object] | None = None,
+    progress: Callable[[dict], object] | None = None,
 ) -> Publication:
     mapping.validate(production)
+    if authority is not None:
+        authority()
     if _inventory(inventory_before) != _inventory(inventory_after):
         raise SourceError("INVENTORY_CHANGED_DURING_DOWNLOAD")
     if {r.part_label for r in resources} != required_parts or len(resources) != len(required_parts):
@@ -92,6 +98,8 @@ def ingest_archives(
             if set(names) != set(resource.member_labels):
                 raise SourceError("MEMBER_INVENTORY_MISMATCH")
             for member_index, info in enumerate(infos):
+                if authority is not None:
+                    authority()
                 name = info.filename
                 if name in member_names:
                     raise SourceError("DUPLICATE_ARCHIVE_MEMBER")
@@ -126,10 +134,13 @@ def ingest_archives(
                         if actual > info.file_size or actual > max_uncompressed_bytes:
                             raise SourceError("ARCHIVE_EXPANSION_LIMIT")
                         destination.write(chunk)
+                        if authority is not None and actual % (64 * 1024 * 1024) == 0:
+                            authority()
                 if actual != info.file_size:
                     raise SourceError("MEMBER_LENGTH_MISMATCH")
                 result = parse_xml(
-                    extracted, member_dir, mapping=mapping, production=production, member_name=name
+                    extracted, member_dir, mapping=mapping, production=production, member_name=name,
+                    authority=authority, progress=progress,
                 )
                 parsed.append(result)
                 sequence = int(result.header["sequence"])
@@ -169,21 +180,26 @@ def ingest_archives(
         raise SourceError("GENERATION_UNPROVABLE")
     con = duckdb.connect()
     try:
-        con.execute("SET memory_limit='512MB'")
-        con.execute("SET threads=2")
-        con.execute("SET max_temp_directory_size='8GB'")
-        con.execute("SET temp_directory=?", [str(staging_dir / "spill")])
-        duplicate = con.execute(
-            "SELECT abn FROM read_parquet(?) GROUP BY abn HAVING count(*)>1 LIMIT 1",
-            [[str(m.parquet_path) for m in parsed]],
-        ).fetchone()
-        if duplicate:
-            raise SourceError("DUPLICATE_ABN_ACROSS_MEMBERS")
+        with analytical_guard(con, authority) as checkpoint:
+            con.execute("SET memory_limit='512MB'")
+            con.execute("SET threads=2")
+            con.execute("SET max_temp_directory_size='8GB'")
+            con.execute("SET temp_directory=?", [str(staging_dir / "spill")])
+            checkpoint()
+            duplicate = con.execute(
+                "SELECT abn FROM read_parquet(?) GROUP BY abn HAVING count(*)>1 LIMIT 1",
+                [[str(m.parquet_path) for m in parsed]],
+            ).fetchone()
+            checkpoint()
+            if duplicate:
+                raise SourceError("DUPLICATE_ABN_ACROSS_MEMBERS")
     finally:
         con.close()
     from abr_engine.ingest.quality import weighted_fill
 
     quality = weighted_fill(parsed)
+    if authority is not None:
+        authority()
     digest = content_identity(parts)
     return Publication(
         digest,

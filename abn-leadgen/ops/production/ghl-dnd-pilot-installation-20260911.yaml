@@ -1,0 +1,37 @@
+approved_by: delegated-owner:jeph@quotemax.com.au
+checks:
+  group_search:
+    evidence_ref: /etc/abr-engine/decisions/ghl-dnd-pilot-20260911/ghl-live-account-contract-20260911.json
+    evidence_sha256: b8163433480fa379bda245bcc14c30b928ba0e3e8884a986994635554ea42140
+    passed: true
+  metadata:
+    evidence_ref: /etc/abr-engine/decisions/ghl-dnd-pilot-20260911/ghl-live-metadata-workflows-20260911.json
+    evidence_sha256: fe5626204ef2a42e40cacea10b84256a20af5cbecdfc692677538eda160d25d7
+    passed: true
+  processor_countries:
+    evidence_ref: /etc/abr-engine/decisions/ghl-dnd-pilot-20260911/ghl-vendor-review-20260911.md
+    evidence_sha256: 32fe8c537e55c7ed1c683251a11d3f07fef169d45c2ef7760a45ae079a6406a4
+    passed: true
+  suppression_clear:
+    evidence_ref: /etc/abr-engine/decisions/ghl-dnd-pilot-20260911/ghl-live-account-contract-20260911.json
+    evidence_sha256: b8163433480fa379bda245bcc14c30b928ba0e3e8884a986994635554ea42140
+    passed: true
+  uncertain_create:
+    evidence_ref: /etc/abr-engine/decisions/ghl-dnd-pilot-20260911/ghl-live-account-contract-20260911.json
+    evidence_sha256: b8163433480fa379bda245bcc14c30b928ba0e3e8884a986994635554ea42140
+    passed: true
+  unrelated_tags:
+    evidence_ref: /etc/abr-engine/decisions/ghl-dnd-pilot-20260911/ghl-live-account-contract-20260911.json
+    evidence_sha256: b8163433480fa379bda245bcc14c30b928ba0e3e8884a986994635554ea42140
+    passed: true
+  workflow_isolation:
+    evidence_ref: /etc/abr-engine/decisions/ghl-dnd-pilot-20260911/ghl-live-account-contract-20260911.json
+    evidence_sha256: b8163433480fa379bda245bcc14c30b928ba0e3e8884a986994635554ea42140
+    passed: true
+config_sha256: d9353beca5e3490fa7aa6f249e6ce1c784193337de04cd0a4515b199a3339477
+environment: pilot
+expires_at: '2027-09-10T23:18:20Z'
+location_id: xHZFHMOE476t5CxY9vCG
+provider: gohighlevel
+schema_version: 1
+verified_at: '2026-09-11T01:38:17.066810+00:00'

@@ -1,6 +1,70 @@
 # ABN Lead Gen — draft source, privacy and vendor decision pack
 
-**DRAFT — NOT APPROVED — known setup updated 11 September 2026 (Manila).**
+**WIDER-USE DRAFT — NOT GENERAL APPROVAL — updated 11 September 2026 (Manila).**
+
+## Current limited QBCC decision supersedes waiting for Jon
+
+**Activation update: release 007 is live; manual QBCC collection and finite
+deletion are enabled.** The signed dashboard reports Business source collection
+approved. The API, worker/control, review-cleanup and retention are active; the
+weekly source timer and all three backup timers remain disabled.
+
+The [actual release 007 result](../acceptance/live-sources/qbcc-live-release007-result-20260911.json)
+records job `b53a0928-454c-4014-a443-e2a43696cb99` completed at
+2026-09-11T00:03:19.451115Z, about 57 seconds after queuing. Its accepted snapshot
+contains 11,034 source events and zero qualified candidates. The
+[private review check](../acceptance/live-sources/qbcc-live-release007-reviews-20260911.json)
+confirms 11,034 review records; all first 100 returned records had publisher status
+UNKNOWN and needed review. The publication is dated 18 May 2026 despite the fresh
+download. No current licence or contact permission is inferred.
+
+The [actual host verification](../acceptance/aws/qbcc-live-release007-host-20260911.json)
+records 196,116 raw licence-class rows, 108,019 usable parsed licence records,
+517 quarantined records, 11,034 Category 1–2 review events and one committed
+snapshot. Actual reviews, qualified leads and contacts remain zero.
+
+The user has explicitly authorised Business source collection and delegated the
+decision. The [dated delegated-owner record](../acceptance/live-sources/qbcc-pilot-delegated-owner-20260911.json)
+and canonical QBCC-PILOT-2026-09-11 v1.0.0 amendment permit manual QBCC intake and
+authenticated internal review until **24 September 2026, 23:18:20 UTC**. No further
+Jon approval is required for this exact scope and interval. `adviser_status` is
+`not_obtained`; no legal/adviser assessment is claimed.
+
+The decision permits the 11 public source fields and necessary derived review
+data using the existing private AWS Sydney, Vercel/Clerk and admin architecture.
+Names and business addresses may identify individuals. Unknown support/global
+processing countries are an explicit accepted pilot limitation, not an
+Australian-only processing claim. Google/GHL, website contact collection, ABR,
+outreach and external exports remain excluded.
+
+The [technical companion](qbcc-pilot-technical-decision-20260911.md) records scoped
+G2/G3/G7 admission for a controlled first-file validation and separately authorises
+finite deletion through **10 September 2027, 23:18:20 UTC**. Full disaster recovery
+and independent custody remain deferred and unverified for this pilot; production
+backup acceptance is not granted. The
+[initial activation receipt](../acceptance/aws/qbcc-pilot-activation-20260911.json)
+records installed authority; the [release 007 continuation](qbcc-pilot-release-007-decision-20260911.md)
+adds revision-2 collection G2/G3/G7 and retention G3/G7 evidence. G1 decisions,
+original expiry dates and the retention policy are unchanged. First-source
+acceptance is recorded. The retention service completed successfully with exit 0
+at 2026-09-11T00:05:33Z; no newly imported records were expected to be due for
+deletion. Future expiry, independent custody and full recovery remain outside
+this limited execution result.
+
+Follow the [short dashboard operating steps](first-live-qbcc.md#how-to-use-the-activated-pilot):
+sign in with the existing admin account, choose QBCC and inspect the completed
+request in Run history. An assigned reviewer can load the accepted source records
+and record genuine current licence/identity checks. The
+[signed dashboard check](../acceptance/live-sources/qbcc-live-release007-dashboard-20260911.json)
+reports zero qualified leads; the 11,034 records are in source review. A fresh
+browser Clerk login is still unverified. Saving settings does not enable other
+capabilities, and an imported row is not contact permission.
+
+## Earlier draft retained for general and wider-use review
+
+The questions and NOT DECIDED entries below preserve the earlier standard review
+pack. They remain relevant to broader use, vendor hand-off and renewal; they do
+not revoke or add another approval prerequisite to the limited QBCC decision above.
 
 Prepared for Jon Pepper (`jon@maintain.com.au`) and a qualified Australian privacy/legal
 adviser. Nothing has been sent to them. This document does not approve collection,

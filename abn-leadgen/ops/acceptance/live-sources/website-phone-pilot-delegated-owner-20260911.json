@@ -1,0 +1,139 @@
+{
+  "decision_id": "website-phone-pilot-delegated-owner-20260911",
+  "amendment_version": "1.0.0",
+  "product_baseline_version": "4.0",
+  "recorded_at": "2026-09-11T00:33:22Z",
+  "effective_at": "2026-09-11T00:33:22Z",
+  "expires_at": "2026-09-24T23:18:20Z",
+  "status": "approved_with_limits_under_delegated_authority",
+  "authorising_actor": "user in the current Codex task",
+  "decision_recorded_by": "Codex acting under the user's express delegation",
+  "authorization_evidence": {
+    "source": "current Codex task user instruction",
+    "summary": "The user explicitly directed website contact collection to be enabled without waiting for Jon and delegated the decision to Codex. Codex limits this decision to manually reviewed business phone evidence; automated email extraction is excluded.",
+    "is_verbatim_quote": false,
+    "jon_approval_claimed": false,
+    "prior_qbcc_decision": "abn-leadgen/ops/acceptance/live-sources/qbcc-pilot-delegated-owner-20260911.json",
+    "prior_qbcc_decision_extended_by_implication": false
+  },
+  "scope": "Time-limited, manually initiated own-business-website phone collection for genuinely qualified QBCC pilot records and authenticated internal review only",
+  "purpose": "Assess whether a relevant contractor business has a usable public business phone contact and preserve evidence for internal review; no calls, messages, contact permission or external hand-off",
+  "business_identity": {
+    "trading_name": "Maintain Media",
+    "registered_legal_entity": null,
+    "registered_abn": null,
+    "independent_verification": "not_obtained"
+  },
+  "adviser_status": "not_obtained",
+  "legal_compliance_certified": false,
+  "privacy_applicability_and_notice_assessment": "No qualified assessment obtained. The user delegates this narrow owner decision; the public notice and conservative collection limits are not represented as an APP compliance determination.",
+  "official_guidance_reviewed": [
+    {
+      "title": "ACMA - Avoid sending spam",
+      "url": "https://www.acma.gov.au/avoid-sending-spam",
+      "checked_on": "2026-09-11",
+      "relevant_guidance": "ACMA identifies prohibitions concerning address-harvesting software and lists created with it, separately from consent requirements for marketing messages.",
+      "operational_decision": "Exclude automated email extraction and email-address indexing from this pilot. This conservative scope decision is not a legal finding that any particular software or phone collection complies with the Spam Act. No message or consent request is sent."
+    },
+    {
+      "title": "OAIC - Chapter 5: APP 5 Notification of the collection of personal information",
+      "url": "https://www.oaic.gov.au/privacy/australian-privacy-principles/australian-privacy-principles-guidelines/chapter-5-app-5-notification-of-the-collection-of-personal-information",
+      "checked_on": "2026-09-11",
+      "relevant_guidance": "For an APP entity, reasonable notification or awareness steps depend on the circumstances and generally precede or accompany collection, or follow as soon as practicable. Relevant matters include identity, source, purpose, recipients, privacy information and practicable overseas-country disclosure.",
+      "operational_decision": "Publish the scoped research notice before admission, retain accurate source and request contacts, and explicitly disclose what is unknown. Publication alone is not certified as individual awareness or sufficient APP 5 compliance; applicability and a qualified assessment remain unresolved."
+    }
+  ],
+  "personal_information_acknowledged": "Public business phone numbers, mobile numbers, names and website captures may identify sole traders, staff or other individuals. Public availability is not consent. Encrypted page evidence may incidentally contain email addresses and other personal information even though email extraction and indexing are disabled.",
+  "source_and_admission": {
+    "source": "Manually supplied, verified own-business HTTPS website root; no search-engine or directory discovery adapter",
+    "allowed_channels": ["mobile", "landline"],
+    "email_extraction_allowed": false,
+    "email_contact_indexing_allowed": false,
+    "phone_format": "Valid Australian E.164 numbers classified as actual MOBILE or FIXED_LINE; no extensions, short, ambiguous or non-Australian numbers. Other number classes, including 1300/1800, are not relabelled as landlines or collected under this scope.",
+    "phone_locations": "Visible static page text and tel links only, with bounded matching and labelled business identifiers excluded; no script execution or hidden account data",
+    "maximum_new_contacts_per_attempt": 10,
+    "eligible_record": "Active unsuppressed tier A or B QBCC lead, current target geography and an eligible pending-enrichment or needs-review candidate qualified within the preceding eight weeks",
+    "current_licence": "Genuine active-licence and identity-match review, attributable evidence, reviewed strictly less than 30 days ago; UNKNOWN is not active",
+    "domain_identity": "Exact source identifier on the business site, or reviewer-approved name plus full address or phone supported by two independent evidence references; current approved identity expires within 90 days",
+    "site_terms": "Actual per-site terms review with an attributable evidence reference and aware timestamp strictly less than 30 days old, permitting the bounded collection; a checkbox, robots permission or absence of a detected prohibition is not a substitute",
+    "source_permission_not_inferred": "This owner decision does not grant a website operator's permission, override its terms, or infer permission merely because a number or page is publicly listed. Each site's actual applicable restrictions must be reviewed before a request.",
+    "allowed_evidence": ["normalised business phone channel and value", "encrypted normalised endpoint value and versioned keyed lookup token", "own-domain identity and current licence review references", "source URL and UTC collection time", "encrypted page capture and limited evidence excerpt", "content hash, parser/collector version, robots and terms decision references", "collection job and internal review state"],
+    "contact_permission": "Every collected phone remains unverified and requires separate permission, relevance and any DNCR review; collection never authorises a call",
+    "cooldown": "No repeat completed or exhausted group-family attempt within 90 days; interruption is not invented exhaustion"
+  },
+  "crawler_limits": {
+    "static_html_only": true,
+    "maximum_html_pages": 6,
+    "maximum_total_http_requests_including_robots_and_redirects": 20,
+    "maximum_redirects": 3,
+    "maximum_page_bytes": 2097152,
+    "request_deadline_seconds": 20,
+    "maximum_requests_per_second_per_domain": 1,
+    "origin_policy": "Same registrable domain; public IP validation and connection pinning; no private/metadata addresses, rebinding, login, bot-control bypass, headless browser, 403/429 bypass or external assets",
+    "robots_and_terms": "Respect robots and stricter site terms; incomplete evidence does not establish permission",
+    "authority_rechecks": "Before queued execution, before and after DNS and each HTTP request, and before the final contact commit; revocation or expiry stops the operation"
+  },
+  "notice_strategy": {
+    "public_notice_url": "https://www.maintainmedia.com.au/business-research-notice",
+    "publication_status": "verified_public_http_200_and_six_content_checks",
+    "verified_at": "2026-09-11T00:33:01.0300708+00:00",
+    "live_readback_evidence": "website/acceptance/vercel/website-phone-notice-readback-20260911.json",
+    "deployment_id": "dpl_Ex1sbMr6Ti2KxpqZybQhzisU5Enj",
+    "website_source_digest": "88970d86a256e3dd16822cc5ebe316be090aa61dcce1a8829314c25c38beb82e",
+    "source_request_and_privacy_contact": "jon@maintainaudits.com.au",
+    "contact_basis": "Existing published Maintain Media website contact; no new mailbox, identity verification or message delivery is claimed",
+    "actual_source_disclosure": "QBCC public register for business records and each business's own website for phone evidence; ABR, Google Sheets and GHL are not represented as active sources or recipients",
+    "individual_notice_sent": false,
+    "individual_notification_strategy": "Publish an accessible source/purpose/retention/recipient-limitation notice before website admission; handle source, correction, deletion and objection requests through the existing contact. No individual email, call or form submission is authorised by this decision.",
+    "app_notice_sufficiency_certified": false
+  },
+  "permitted_architecture": {
+    "engine_and_contact_evidence_storage": "Existing private encrypted AWS Sydney service and storage, ap-southeast-2",
+    "dashboard": "Existing Maintain Technology Vercel deployment with Sydney server functions",
+    "identity": "Existing Maintain Media Clerk authentication; Clerk middleware is global",
+    "internal_admin": "Existing authenticated admin jeph@quotemax.com.au and separately assigned reviewer scope",
+    "admin_access_country": "May be outside Australia; Australian-only access is not claimed",
+    "vendor_support_and_global_processing_countries": "Not fully verified; the user delegates acceptance of this limitation for these existing accounts and this narrow additional phone-evidence scope",
+    "all_processing_australian_claimed": false,
+    "new_vendor_approved": false,
+    "public_business_or_contact_data_publication_allowed": false,
+    "external_file_or_vendor_exports_allowed": false
+  },
+  "retention": {
+    "schedule_version": "abr-v4-defaults",
+    "finite_deletion_authority_expires_at": "2027-09-10T23:18:20Z",
+    "encrypted_pending_website_request_max_hours": 24,
+    "ordinary_page_capture_and_excerpt_max_days": 90,
+    "unworked_profile_max_days_since_last_qualifying_event": 180,
+    "unnecessary_profile_fields_max_days_after_suppression_or_disqualification": 30,
+    "retain_selected_evidence": false,
+    "seven_year_archive_authorised": false,
+    "selected_evidence_enforcement": "The scoped retention policy must explicitly disable selected-evidence archival and apply the ordinary 90-day page limit even if a worklist row exists; disabling email alone is insufficient",
+    "routine_crawl_resets_profile_clock": false,
+    "suppression": "Preserve only the minimum matchable restriction tokens and aliases needed to honour objections; do not restore or re-create erased contact values",
+    "holds": "Only attributable scoped holds with reason, owner and review date; no blanket indefinite hold",
+    "authority_expiry_effect": "Stop new website collection at the existing pilot expiry. Continue authorised finite deletion until the existing deletion-authority expiry; no automatic renewal or indefinite retention.",
+    "enforcement": "A new attributable policy version and current retention G1/G3/G7 continuation evidence must cover website phones, captures and queued requests. The original QBCC-only policy remains immutable. Applicable deletion controls require separate implementation and execution evidence."
+  },
+  "g3_pilot_disposition": {
+    "basis": "Separately accept the existing verified Sydney encryption, restricted access and bounded storage for this limited private phone-evidence pilot; do not assume the prior public-QBCC-only disposition included contact data",
+    "current_technical_evidence_required": true,
+    "deferred": ["independent recovery-key custodian certification", "full disaster-recovery acceptance and installed-provider database restore"],
+    "risk_accepted_under_delegation": "Loss of the host or access keys may lose manual reviews and require rechecking public business websites. Do not claim recovery readiness, restore stale restriction state, or resume collection without current restriction authority.",
+    "production_backup_approved": false,
+    "general_production_g3_pass": false
+  },
+  "required_policy_binding": {
+    "website_collection": {"approved": true, "allowed_channels": ["mobile", "landline"], "evidence_sha256": "Bind to the final exact bytes of this owner decision", "expires_at": "2026-09-24T23:18:20Z"},
+    "retention": {"retain_selected_evidence": false},
+    "gate_scopes": "Own current pilot/website_collection G1/G3/G7 plus current pilot/collection G1/G2/G3/G7; applicable retention G1/G3/G7 must independently cover this scope"
+  },
+  "required_separate_execution_evidence": ["public notice live readback before admission", "exact-release phone-only policy and expiry tests", "genuine per-business licence, domain and site-terms evidence", "before/after DNS and HTTP authority-withdrawal tests", "24-hour pending-request expiry, 90-day capture minimisation and disabled seven-year archive tests", "current private access and encryption tests", "actual collection receipt if an individually eligible business is available"],
+  "excluded_capabilities": ["automated email extraction or email-address indexing", "paid search or email verification", "ABR expansion", "directories, marketplaces, social networks and Google Maps/Places", "Google Sheets live data pull", "GHL contact access or export", "email_action", "phone_action", "SMS or social messages", "contact-form submissions", "campaign enrolment", "external exports", "production backups"],
+  "targeting_changed": false,
+  "scheduling": "Manual per-business requests only; no bulk website crawl or periodic collection trigger",
+  "database_gate_records_created_by_this_document": false,
+  "collection_executed_by_this_document": false,
+  "affected_requirements": ["R15-R18", "R20", "R26", "R27 / FR-027", "R29", "R30", "G1 website_collection", "G3 website_collection", "G7 website_collection", "G1/G3/G7 retention"],
+  "unaffected_requirements": "Genuine source qualification, UNKNOWN preservation, own-domain proof, per-site terms, robots, suppression, channel permission, other vendor gates and full-production recovery acceptance remain authoritative"
+}

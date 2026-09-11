@@ -1,0 +1,16 @@
+{
+  "expires_at": "2026-09-24T23:18:20Z",
+  "free_headroom_bytes": 26843545600,
+  "mapping_evidence_sha256": "18036346d16df9cefd2e0219ece86893fe6461d25639467b7d7653602a9da152",
+  "max_download_bytes": 2147483648,
+  "max_event_bytes": 4294967296,
+  "max_events": 100000,
+  "max_expanded_bytes": 17179869184,
+  "max_parquet_bytes": 8589934592,
+  "max_rss_bytes": 2147483648,
+  "max_seconds": 21600,
+  "max_working_bytes": 51539607552,
+  "operation": "observe_only",
+  "schema_version": 1,
+  "source_scope_evidence_sha256": "a47fec2220191ecb8f5fb44dcdf8c8dd1185e4f77d29a7ee02ce3ec2257dbc3e"
+}

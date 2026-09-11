@@ -1,0 +1,11 @@
+{
+  "status": "sydney_service_credential_and_account_verified",
+  "verified_at": "2026-09-11T01:52:26.529973+00:00",
+  "uid": 999,
+  "location_id": "xHZFHMOE476t5CxY9vCG",
+  "fields_verified": true,
+  "workflow_inventory_sha256": "e30e1d90e03a629a82b04bf0d552322e9e8f47add0fe2967e81f3fbac72291e8",
+  "provider_mutations": 0,
+  "messages_sent": 0,
+  "service_exit_code": 0
+}

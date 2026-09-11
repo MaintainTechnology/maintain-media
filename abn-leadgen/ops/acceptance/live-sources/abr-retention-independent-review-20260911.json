@@ -1,0 +1,61 @@
+{
+  "status": "passed_no_blocking_findings",
+  "reviewer": "live_dashboard",
+  "checked_at": "2026-09-11T03:57:27.959340+00:00",
+  "files": [
+    {
+      "path": "src/abr_engine/live/artifact_retention.py",
+      "sha256": "816fd41bcb62614924338fbaabe6f144155da00c265fb7a4afa83dff39654af0"
+    },
+    {
+      "path": "src/abr_engine/compliance/retention.py",
+      "sha256": "bc4756583b63976600fb8a98c24c3434d3f1b18d206dab786ed133c5a033b6b2"
+    },
+    {
+      "path": "src/abr_engine/live/abr_cleanup.py",
+      "sha256": "dbe6df019b121a59bab44268800d3ccd928b3da0b6738552f86e43e53fb4d8df"
+    },
+    {
+      "path": "src/abr_engine/live/schedule.py",
+      "sha256": "58cb61b939c64f736c2f6c1267edb47329b8137d494ebcf47d295e9461fd31c7"
+    },
+    {
+      "path": "tests/integration/test_artifact_retention_seals.py",
+      "sha256": "99ece802cf1f598ee2650de9924db4b8d606ad4cec01cb7881a7e1b6cd9a55c5"
+    }
+  ],
+  "source_unchanged_during_final_run": true,
+  "validation": {
+    "final_seal_cases_passed": 22,
+    "final_failures": 0,
+    "final_errors": 0,
+    "final_skipped": 0,
+    "elapsed_seconds": 100.85,
+    "junit": "ops/acceptance/live-sources/abr-retention-seals-independent-20260911.xml",
+    "junit_sha256": "80f62b75be24607da7886da4c05683589963242fc3004db5b54cb430700f91b9",
+    "namespace_new_hold_and_deleted_history_regressions": {
+      "passed": 2,
+      "elapsed_seconds": 13.4
+    },
+    "earlier_existing_artifact_compatibility": {
+      "passed": 10,
+      "elapsed_seconds": 10.55,
+      "scope": "before final actual-schema and opened-descriptor corrections; not claimed as a new final-tree run"
+    }
+  },
+  "findings_closed": [
+    "Held/active/overflow artifacts remain explicit in the combined maintenance result.",
+    "A new artifact hold during namespace hashing preserves its prior ledger state.",
+    "Reappearing files cannot revive an existing deleted artifact ledger.",
+    "Final prevalidation uses actual database schema, with opened-descriptor and original-path identity checks."
+  ],
+  "limits": [
+    "Only synthetic local files and isolated loopback PostgreSQL schemas were used.",
+    "Actual Linux systemd and first live ABR source execution remain root deployment checks.",
+    "Large direct CLI/restore retention without a seal is explicitly held; it is not silently hashed under the staff control lock."
+  ],
+  "source_edits_by_reviewer": false,
+  "provider_operations": false,
+  "production_database_operations": false,
+  "full_production_release": false
+}

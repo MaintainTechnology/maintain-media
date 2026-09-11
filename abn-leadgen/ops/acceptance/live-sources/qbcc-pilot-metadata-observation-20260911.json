@@ -1,0 +1,86 @@
+{
+  "checked_at": "2026-09-10T23:17:58.742738+00:00",
+  "scope": "Public catalogue metadata, zero-row schema and HEAD only. No CSV body or business rows requested.",
+  "approved": false,
+  "mapping_version": "qbcc-catalogue-11-column-v1",
+  "reviewed_columns": [
+    "Licence Number",
+    "Licensee Name",
+    "ACN",
+    "ABN",
+    "Licensee Business Address",
+    "Licence Type DESC",
+    "Licence Type CODE",
+    "Financial Category DESC",
+    "Financial Category CODE",
+    "Licence Grade",
+    "Licence Class Type"
+  ],
+  "source_head": {
+    "status": 202,
+    "content_length": "0",
+    "etag": null,
+    "last_modified": null,
+    "content_type": "text/html; charset=UTF-8"
+  },
+  "schema": {
+    "status": 200,
+    "url": "https://www.data.qld.gov.au/api/3/action/datastore_search?resource_id=25608781-b28c-44f8-8545-0ab18d84082f&limit=0",
+    "response_sha256": "aa6a087e7cfc379c7855a16bd2db9e25f2dc9656cd5b2ac7a26a3c627522708c",
+    "records_received": 0,
+    "ordered_fields": [
+      "Licence Number",
+      "Licensee Name",
+      "ACN",
+      "ABN",
+      "Licensee Business Address",
+      "Licence Type DESC",
+      "Licence Type CODE",
+      "Financial Category DESC",
+      "Financial Category CODE",
+      "Licence Grade",
+      "Licence Class Type"
+    ],
+    "matches_current_mapping": true,
+    "total_rows_reported": 196116
+  },
+  "catalogue": {
+    "status": "metadata_observed",
+    "source": "qbcc",
+    "dataset_id": "980b6499-c0b4-491b-ba9c-1c7506368a50",
+    "catalogue_url": "https://www.data.qld.gov.au/api/3/action/package_show?id=qbcc-licensed-contractors-register",
+    "retrieved_at": "2026-09-10T23:18:00.735899+00:00",
+    "metadata_sha256": "f8e01c43ae2e113a845e9c2354bc62111445d77fbd33afcc0e7d1e71211916cb",
+    "response_validators": {
+      "etag": null,
+      "last_modified": null
+    },
+    "licence": {
+      "id": "CC-BY-4.0",
+      "title": "Creative Commons Attribution 4.0",
+      "url": "https://creativecommons.org/licenses/by/4.0/"
+    },
+    "publisher_metadata_modified": "2026-05-18T05:16:17.012782",
+    "resource_inventory_sha256": "e6cc43e494578dee7081114b1c8b3193097352ca2c4028a7c80793f491574b11",
+    "resources": [
+      {
+        "resource_id": "25608781-b28c-44f8-8545-0ab18d84082f",
+        "url": "https://www.data.qld.gov.au/dataset/980b6499-c0b4-491b-ba9c-1c7506368a50/resource/25608781-b28c-44f8-8545-0ab18d84082f/download/builder-contractor-qbcc-licensee-register.csv",
+        "format": "CSV",
+        "declared_size": null,
+        "publisher_size_label": "72.6 MiB",
+        "publisher_last_modified": "2026-05-18T05:14:43.785988",
+        "publisher_created": "2014-02-20T02:13:54.314153",
+        "publisher_hash": "ea7d950f3af67c21966a0e895efad027"
+      }
+    ],
+    "register_rows_downloaded": 0,
+    "coherence": "not_established",
+    "collection_approved": false,
+    "business_data_accepted": false,
+    "limitations": [
+      "Catalogue timestamps are publisher metadata, not a coherent publication proof.",
+      "This command does not download, classify, promote or export business records."
+    ]
+  }
+}

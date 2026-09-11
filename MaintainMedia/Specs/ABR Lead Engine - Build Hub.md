@@ -2,7 +2,7 @@
 title: ABR Lead Engine - Build Hub
 project: Maintain Media
 version: "4.0"
-revised: 2026-09-09
+revised: 2026-09-11
 tags: [abr-lead-engine, maintain-media]
 ---
 
@@ -11,9 +11,21 @@ tags: [abr-lead-engine, maintain-media]
 Start with [[ABR Lead Engine - Explained Simply]]. It explains the whole idea using small
 examples and everyday language. Then read [[ABR Lead Engine]] for the authoritative requirements.
 
-The local application is implemented in `abn-leadgen/` and runs with synthetic data.
-Open [[ABR Lead Engine - Implementation Status]] for code, tests, operating instructions and remaining work.
-Production source, policy, account, vendor and release evidence remains pending; it has not been deployed.
+The application in `abn-leadgen/` now serves the authenticated
+[live dashboard](https://www.maintainmedia.com.au/abn-lead-gen/dashboard). Actual
+QBCC intake, reviewed website-phone collection and the separately approved GHL
+connection are enabled. There is one reviewed business with two landlines and
+zero selected worklist rows or real GHL transfers. Local fixture tools still use
+synthetic data and remain separate.
+
+Open [[ABR Lead Engine - Implementation Status]] and
+[[ABR Lead Engine - Activation Follow-up 2026-09-11]] for the verified release,
+operating steps and remaining work. The live DNCR receipt adapter, genuine
+individual phone/qualification approval, disabled Google workflow, backup/restore
+acceptance and measured pilot are unfinished. Broader ABR also needs its live
+feed implementation and classifier study. The full-tool progress score is
+**87/100**; no full-production pass is claimed.
+
 The original specification scored 7.8/10; the corrected v4.0 received a final independent
 native fallback judgment of **9.3/10**. This rates the documents, not a completed application.
 
@@ -35,6 +47,8 @@ native fallback judgment of **9.3/10**. This rates the documents, not a complete
 - [[ABR Lead Engine - Build Tasks|Implementation tasks and six convergence follow-ups]]
 - [[ABR Lead Engine - Developer Quickstart|Fixture validation and handover]]
 - [[ABR Lead Engine - Implementation Status|Runnable build and acceptance evidence]]
+- [[ABR Lead Engine - GHL Phone Handoff 2026-09-11|Current GHL connection and why individual hand-offs still wait]]
+- [[ABR Lead Engine - Staff Workflow Installation|Private Google and GHL installation status]]
 
 ## Review evidence
 

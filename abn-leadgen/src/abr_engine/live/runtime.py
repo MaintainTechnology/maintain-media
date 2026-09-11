@@ -1,7 +1,7 @@
 """Durable, gate-first QBCC jobs shared by the staff API and scheduled CLI.
 
-Only the approved official catalogue resource is accepted. The transport never
-follows redirects or inherits local proxy credentials. A worker crash is visible
+Only the approved official catalogue resource and its exact same-origin
+attachment redirect are accepted. The transport never inherits proxy credentials. A worker crash is visible
 and recoverable; a successful intake/acceptance is replayed without a download.
 """
 
@@ -10,7 +10,9 @@ from __future__ import annotations
 import hashlib
 import os
 import random
+import re
 import time
+from collections.abc import Callable
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 from uuid import UUID, uuid4, uuid5
@@ -38,6 +40,12 @@ from abr_engine.ops.promotion import declare_artifact, source_lock_key, verify_a
 from abr_engine.pipeline import _session_lock, process_lock, safe_root
 
 RESOURCE_ID = "25608781-b28c-44f8-8545-0ab18d84082f"
+ATTACHMENT_URL = (
+    "https://www.data.qld.gov.au/ckan-opendata-attachments-prod/resources/"
+    + RESOURCE_ID
+    + "/builder-contractor-qbcc-licensee-register.csv"
+)
+_ATTACHMENT_REDIRECT = re.compile(re.escape(ATTACHMENT_URL) + r"\?ETag=[0-9a-fA-F]{32}")
 
 
 def _publisher_resource(metadata):
@@ -50,8 +58,19 @@ def _publisher_resource(metadata):
     return selected[0]
 
 
-def download_qbcc(path: Path, *, transport=None, sleep=time.sleep, clock=time.monotonic) -> dict:
-    """Fixed official URL, fresh downloads only, five attempts and hard bounds."""
+def download_qbcc(
+    path: Path,
+    *,
+    transport=None,
+    sleep=time.sleep,
+    clock=time.monotonic,
+    authority: Callable[[], object] | None = None,
+) -> dict:
+    """Fixed publisher URL with at most one exact, observed attachment redirect.
+
+    The ETag query is a publisher cache validator, not an inferred content hash.
+    Live composition supplies current authority before every HTTP request.
+    """
     _ordinary_path(path)
     started = clock()
     with httpx.Client(
@@ -68,43 +87,62 @@ def download_qbcc(path: Path, *, transport=None, sleep=time.sleep, clock=time.mo
         for attempt in range(5):
             checksum, count = hashlib.sha256(), 0
             try:
-                with client.stream("GET", SOURCE_URL) as response:
-                    if response.status_code in {429, 500, 502, 503, 504}:
-                        raise httpx.TransportError("retryable source response")
-                    if response.status_code != 200:
-                        raise SourceError("QBCC_SOURCE_HTTP_REJECTED")
-                    length = response.headers.get("content-length")
-                    if length and (
-                        len(length) > 12
-                        or not length.isascii()
-                        or not length.isdecimal()
-                        or int(length) > MAX_FILE_BYTES
-                    ):
-                        raise SourceError("SOURCE_SIZE_LIMIT")
-                    if response.headers.get("content-encoding", "identity") not in ("", "identity"):
-                        raise SourceError("QBCC_SOURCE_ENCODING_REJECTED")
-                    flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | getattr(os, "O_NOFOLLOW", 0)
-                    with os.fdopen(os.open(path, flags, 0o600), "wb") as output:
-                        for chunk in response.iter_raw(1024 * 1024):
-                            count += len(chunk)
-                            if count > MAX_FILE_BYTES:
-                                raise SourceError("SOURCE_SIZE_LIMIT")
-                            if clock() - started > 600:
-                                raise SourceError("QBCC_SOURCE_DEADLINE")
-                            output.write(chunk)
-                            checksum.update(chunk)
-                        output.flush()
-                        os.fsync(output.fileno())
-                    if length and int(length) != count:
-                        raise SourceError("SOURCE_LENGTH_MISMATCH")
-                    return {
-                        "source_sha256": checksum.hexdigest(),
-                        "byte_count": count,
-                        "retrieved_at": datetime.now(UTC).isoformat(),
-                        "attempts": attempt + 1,
-                        "etag": response.headers.get("etag"),
-                        "last_modified": response.headers.get("last-modified"),
-                    }
+                url = SOURCE_URL
+                for hop in range(2):
+                    if clock() - started > 600:
+                        raise SourceError("QBCC_SOURCE_DEADLINE")
+                    if authority is not None:
+                        authority()
+                    with client.stream("GET", url) as response:
+                        if response.status_code in {429, 500, 502, 503, 504}:
+                            raise httpx.TransportError("retryable source response")
+                        if response.status_code == 302 and hop == 0:
+                            locations = response.headers.get_list("location")
+                            if len(locations) != 1 or not _ATTACHMENT_REDIRECT.fullmatch(locations[0]):
+                                raise SourceError("QBCC_SOURCE_REDIRECT_REJECTED")
+                            url = locations[0]
+                            continue
+                        if response.status_code != 200:
+                            raise SourceError("QBCC_SOURCE_HTTP_REJECTED")
+                        length = response.headers.get("content-length")
+                        if length and (
+                            len(length) > 12
+                            or not length.isascii()
+                            or not length.isdecimal()
+                            or int(length) > MAX_FILE_BYTES
+                        ):
+                            raise SourceError("SOURCE_SIZE_LIMIT")
+                        if response.headers.get("content-encoding", "identity") not in ("", "identity"):
+                            raise SourceError("QBCC_SOURCE_ENCODING_REJECTED")
+                        flags = os.O_WRONLY | os.O_CREAT | os.O_TRUNC | getattr(os, "O_NOFOLLOW", 0)
+                        with os.fdopen(os.open(path, flags, 0o600), "wb") as output:
+                            for chunk in response.iter_raw(1024 * 1024):
+                                count += len(chunk)
+                                if count > MAX_FILE_BYTES:
+                                    raise SourceError("SOURCE_SIZE_LIMIT")
+                                if clock() - started > 600:
+                                    raise SourceError("QBCC_SOURCE_DEADLINE")
+                                output.write(chunk)
+                                checksum.update(chunk)
+                            output.flush()
+                            os.fsync(output.fileno())
+                        if length and int(length) != count:
+                            raise SourceError("SOURCE_LENGTH_MISMATCH")
+                        return {
+                            "source_sha256": checksum.hexdigest(),
+                            "byte_count": count,
+                            "retrieved_at": datetime.now(UTC).isoformat(),
+                            "attempts": attempt + 1,
+                            "source_url": SOURCE_URL,
+                            "response_url": url,
+                            "redirect_count": hop,
+                            "etag": response.headers.get("etag"),
+                            "last_modified": response.headers.get("last-modified"),
+                        }
+            except httpx.RemoteProtocolError:
+                # httpx parses Location before yielding a response even when
+                # redirect following is disabled. Malformed protocol is final.
+                raise SourceError("QBCC_SOURCE_HTTP_REJECTED") from None
             except httpx.HTTPError:
                 if attempt == 4 or clock() - started >= 580:
                     raise SourceError("QBCC_SOURCE_UNAVAILABLE") from None
@@ -272,7 +310,9 @@ class QBCCRuntime:
         self._authority()
         self._record(job_id, phase="downloading")
         try:
-            download = download_qbcc(raw, transport=self.transport, sleep=self.sleep)
+            download = download_qbcc(
+                raw, transport=self.transport, sleep=self.sleep, authority=self._authority
+            )
         finally:
             if raw.is_file():
                 with transaction(self.settings) as conn:
@@ -317,6 +357,9 @@ class QBCCRuntime:
                 "metadata_after_sha256": after["metadata_sha256"],
                 "etag": download["etag"],
                 "last_modified": download["last_modified"],
+                "source_url": download["source_url"],
+                "response_url": download["response_url"],
+                "redirect_count": download["redirect_count"],
                 "licence_reference": before["licence"]["url"] or before["licence"]["id"],
             }
             conn.execute(

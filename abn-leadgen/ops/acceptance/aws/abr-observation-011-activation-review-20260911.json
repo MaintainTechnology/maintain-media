@@ -1,0 +1,53 @@
+{
+  "status": "local_tests_passed_operator_execution_not_performed",
+  "checked_at": "2026-09-11T03:29:12.980978+00:00",
+  "release": "011",
+  "files": [
+    {
+      "path": "ops/aws/activate_abr_observation_011.py",
+      "sha256": "5d12262c6e9db83c9cdbc6e4e98018d087f3f27da3952e97f22d8efeb955770a",
+      "bytes": 25251
+    },
+    {
+      "path": "ops/aws/test_activate_abr_observation_011.py",
+      "sha256": "450dd3e4fb49ef7ca8bfda26d437a51e2610e5919805a05d75383fbc26bccdb2",
+      "bytes": 21931
+    },
+    {
+      "path": "ops/acceptance/aws/abr-observation-011-activation-tests-20260911.xml",
+      "sha256": "5dfb892b7ce3a2f5b375620c2ede7175b7bf9a019707c76bdb0bd8e1479a94a4",
+      "bytes": 7204
+    }
+  ],
+  "validation": {
+    "synthetic_tests_passed": 45,
+    "failures": 0,
+    "errors": 0,
+    "ruff": "passed",
+    "mypy_linux": "passed",
+    "independent_runtime_review": "passed_no_blocking_findings",
+    "reviewer": "live_integrations",
+    "independently_executed_initial_tests": 35,
+    "final_ten_tests": "direct_preflight_and_concurrent_change_boundaries"
+  },
+  "planned_gate_count_before": 25,
+  "planned_gate_count_after": 34,
+  "planned_policy_count_before": 2,
+  "planned_policy_count_after": 3,
+  "source_manifest_before_sha256": "608bcbcb881f2787db2f6f408e666c5e3debe0d4a59760085e62d3c4aa1c5660",
+  "unchanged_uv_lock_sha256": "c7c7a58208f93368d2050b3a75daed625e5bacda8a241b9be56213f6e9552b30",
+  "technical_release_plan_finalised": false,
+  "preview_on_actual_host": false,
+  "host_mutations": false,
+  "provider_operations": false,
+  "source_runs_requested": 0,
+  "services_started": false,
+  "timers_enabled": false,
+  "classification_enabled": false,
+  "full_production_release": false,
+  "limitations": [
+    "Final backend manifest and technical evidence must be supplied by the operator after the reopened ABR abrupt-stop cleanup review.",
+    "Actual staged import, systemd unit verification and append-only database transaction remain host execution checks.",
+    "An interrupted installation remains stopped for explicit operator reconciliation; it is not silently retried."
+  ]
+}

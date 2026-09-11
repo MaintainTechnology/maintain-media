@@ -18,7 +18,7 @@ RUNTIME_BLOCKERS = {
     "website_collection": [],
     "crm": [],
     "sheets": [],
-    "abr": ["LIVE_ABR_GENERATION_MAPPING_UNVERIFIED"],
+    "abr": ["ABR_QUALIFICATION_RELEASE_PENDING"],
 }
 RUNTIME_CHECKS = {
     "collection": {"private_service_installed", "database_access", "dashboard_auth", "qbcc_pipeline",
@@ -75,6 +75,8 @@ def readiness_report(settings: Settings, rows: list[dict], *, target: str,
     selected: tuple[str, ...] = ("collection", "crm", "sheets") if target == "pilot" else ("collection", "crm", "sheets", "abr")
     if settings.capabilities.get("website_collection", False):
         selected += ("website_collection",)
+    if settings.capabilities.get("abr", False) and "abr" not in selected:
+        selected += ("abr",)
     checks: list[dict] = []
     for capability in selected:
         latest: dict[str, dict] = {}
@@ -107,7 +109,7 @@ def readiness_report(settings: Settings, rows: list[dict], *, target: str,
             if not any(c["capability"] == prerequisite and c["status"] == "ready" for c in checks):
                 blockers.append("DEPENDENCY_" + prerequisite.upper() + "_BLOCKED")
         checks.append({"capability": capability, "status": "blocked" if blockers else "ready",
-                       "implementation_status": "mapping_unverified" if capability == "abr" else "implemented",
+                       "implementation_status": "observe_only_implemented" if capability == "abr" else "implemented",
                        "runtime": runtime, "approved_gates": valid, "missing_gates": missing, "blockers": blockers})
     # A declared mode, reachable DB or approved G3/G7 is not an installation observation.
     installed = True if "private_service_installed" in checks[0]["runtime"]["passed_checks"] else None

@@ -1,0 +1,102 @@
+{
+  "checked_at": "2026-09-11T01:49:55.794250+00:00",
+  "status": "source009b_crm_active_host_readback",
+  "manifest_sha256": "7b1b866ec895c3fbe84409113602859200f0fd83cc18576d14bc35db8dc8f8c9",
+  "mode": "pilot",
+  "capabilities": {
+    "abr": false,
+    "collection": true,
+    "crm": true,
+    "retention": true,
+    "sheets": false,
+    "website_collection": true
+  },
+  "ghl_config_file": "/etc/abr-engine/decisions/ghl-dnd-pilot-20260911/ghl-dnd-pilot-config-20260911.yaml",
+  "ghl_installation_file": "/etc/abr-engine/decisions/ghl-dnd-pilot-20260911/ghl-dnd-pilot-installation-20260911.yaml",
+  "database_counts": {
+    "release_gate": 23,
+    "policy": 2,
+    "schema_migration": 26,
+    "lead_entity": 1,
+    "contact_record": 2,
+    "source_snapshot": 1,
+    "source_cursor": 1,
+    "worklist_row": 0,
+    "crm_outbox": 0,
+    "crm_identity": 0
+  },
+  "crm_gates": [
+    {
+      "gate_name": "G1",
+      "scope": "crm",
+      "revision": 1,
+      "evidence_sha256": "3fe51dc33211e28ddc05d603c78e52b339be2bbebe6846c7f8e9b80b0c453743",
+      "expires_at": "2026-09-24T23:18:20+00:00"
+    },
+    {
+      "gate_name": "G3",
+      "scope": "crm",
+      "revision": 1,
+      "evidence_sha256": "220938c30286ea6469b7b54c4712617421d3dfbec99ce3c4b00f295d9caf5881",
+      "expires_at": "2027-09-10T23:18:20+00:00"
+    },
+    {
+      "gate_name": "G5",
+      "scope": "crm",
+      "revision": 1,
+      "evidence_sha256": "3ba2247eb3ffa495e0a890ebcf02e05e1e5f9bcc5be3d5de7e0e525fab82eeec",
+      "expires_at": "2027-09-10T23:18:20+00:00"
+    },
+    {
+      "gate_name": "G7",
+      "scope": "crm",
+      "revision": 1,
+      "evidence_sha256": "220938c30286ea6469b7b54c4712617421d3dfbec99ce3c4b00f295d9caf5881",
+      "expires_at": "2026-09-24T23:18:20+00:00"
+    }
+  ],
+  "units": {
+    "abr-engine-api.service": "active",
+    "abr-engine-worker.timer": "active",
+    "abr-engine-control.timer": "active",
+    "abr-engine-qbcc-review-cleanup.timer": "active",
+    "abr-engine-retention.timer": "active"
+  },
+  "disabled_timers": {
+    "abr-engine-qbcc-weekly.timer": {
+      "active": "inactive",
+      "enabled": "disabled"
+    },
+    "abr-engine-backup-daily.timer": {
+      "active": "inactive",
+      "enabled": "disabled"
+    },
+    "abr-engine-backup-ledger.timer": {
+      "active": "inactive",
+      "enabled": "disabled"
+    },
+    "abr-engine-backup-expiry.timer": {
+      "active": "inactive",
+      "enabled": "disabled"
+    }
+  },
+  "private_files": {
+    "/etc/abr-engine/decisions/ghl-dnd-pilot-20260911/ghl-dnd-pilot-config-20260911.yaml": {
+      "mode": "0o640",
+      "uid": 0,
+      "gid": 988
+    },
+    "/etc/abr-engine/decisions/ghl-dnd-pilot-20260911/ghl-dnd-pilot-installation-20260911.yaml": {
+      "mode": "0o640",
+      "uid": 0,
+      "gid": 988
+    },
+    "/etc/abr-engine/ghl.env": {
+      "mode": "0o600",
+      "uid": 0,
+      "gid": 0
+    }
+  },
+  "no_individual_approvals_or_outreach_created": true,
+  "prior_policy_count_preserved": true
+}

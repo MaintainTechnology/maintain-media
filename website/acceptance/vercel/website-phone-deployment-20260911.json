@@ -1,0 +1,42 @@
+{
+  "checked_at": "2026-09-11T00:35:24.3888732+00:00",
+  "id": "dpl_Ex1sbMr6Ti2KxpqZybQhzisU5Enj",
+  "ready_state": "READY",
+  "aliases": [
+    "www.maintainmedia.com.au",
+    "website-iota-ruddy-35.vercel.app",
+    "maintainmedia.com.au",
+    "website-maintain-technology.vercel.app"
+  ],
+  "source_digest": "88970d86a256e3dd16822cc5ebe316be090aa61dcce1a8829314c25c38beb82e",
+  "file_count": 74,
+  "build_and_types": "passed",
+  "sydney_function_count": 65,
+  "global_middleware": [
+    {
+      "path": "_middleware",
+      "regions": [
+        "arn1",
+        "bom1",
+        "cdg1",
+        "cle1",
+        "cpt1",
+        "dub1",
+        "fra1",
+        "gru1",
+        "hkg1",
+        "hnd1",
+        "iad1",
+        "icn1",
+        "kix1",
+        "lhr1",
+        "pdx1",
+        "sfo1",
+        "sin1",
+        "syd1",
+        "yul1"
+      ]
+    }
+  ],
+  "fresh_authenticated_staff_browser_verified": false
+}

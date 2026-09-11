@@ -1,0 +1,193 @@
+{
+  "checked_at": "2026-09-11T08:56:08.159469+08:00",
+  "source_manifest_sha256": "51a364b416b8b333c5651631e9db27d1e35e69e68f3ff1aae6ec8c9d501e58fb",
+  "enabled_capabilities": [
+    "collection",
+    "retention",
+    "website_collection"
+  ],
+  "active_units": {
+    "abr-engine-api.service": "active",
+    "abr-engine-worker.timer": "active",
+    "abr-engine-control.timer": "active",
+    "abr-engine-qbcc-review-cleanup.timer": "active",
+    "abr-engine-retention.timer": "active"
+  },
+  "disabled_timers": {
+    "abr-engine-qbcc-weekly.timer": {
+      "active": "inactive",
+      "enabled": "disabled"
+    },
+    "abr-engine-backup-daily.timer": {
+      "active": "inactive",
+      "enabled": "disabled"
+    },
+    "abr-engine-backup-ledger.timer": {
+      "active": "inactive",
+      "enabled": "disabled"
+    },
+    "abr-engine-backup-expiry.timer": {
+      "active": "inactive",
+      "enabled": "disabled"
+    }
+  },
+  "file_metadata": {
+    "runtime.env": {
+      "mode": "0o600",
+      "uid": 0,
+      "gid": 0,
+      "ordinary": true
+    },
+    "keys.json": {
+      "mode": "0o640",
+      "uid": 0,
+      "gid": 988,
+      "ordinary": true
+    },
+    "pilot.yaml": {
+      "mode": "0o640",
+      "uid": 0,
+      "gid": 988,
+      "ordinary": true
+    },
+    "pilot.before-website-phone-20260911.yaml": {
+      "mode": "0o600",
+      "uid": 0,
+      "gid": 0,
+      "ordinary": true
+    }
+  },
+  "database": {
+    "leads": 1,
+    "contacts": 2,
+    "email_contacts": 0,
+    "landline_contacts": 2,
+    "unverified_contacts": 2,
+    "encrypted_contact_values": 2,
+    "private_captures": 2,
+    "robots_allowed": 2,
+    "queued_request_payloads": 0,
+    "archives": 0,
+    "worklist_rows": 0,
+    "accepted_snapshots": 1,
+    "cursors": 1,
+    "gates": 19,
+    "policies": 2,
+    "migrations": 26,
+    "licence_reviews": 1,
+    "website_identities": 1,
+    "action_intents": 0,
+    "collection_runs": [
+      {
+        "run_id": "dbc280d7-cb39-4de8-b918-05a0965d8d11",
+        "state": "complete",
+        "started_at": "2026-09-11T08:50:09.182051+08:00",
+        "finished_at": "2026-09-11T08:50:15.337654+08:00"
+      },
+      {
+        "run_id": "0b9d0ed8-5431-5093-9300-6558fd237b30",
+        "state": "complete",
+        "started_at": "2026-09-11T08:50:09.364609+08:00",
+        "finished_at": "2026-09-11T08:50:15.326118+08:00"
+      }
+    ],
+    "current_policy": {
+      "version": "website-phone-delegated-pilot-retention-20260911-v1",
+      "approved_at": "2026-09-11T08:47:43+08:00",
+      "expires_at": "2027-09-11T07:18:20+08:00",
+      "settings": {
+        "outreach": "disabled",
+        "retention": {
+          "approved": true,
+          "evidence_sha256": "6364819693150146ded61e3cd00cd4e3900745158131a02a5109570b54004e07",
+          "restore_enabled": false,
+          "schedule_version": "abr-v4-defaults",
+          "retain_selected_evidence": false
+        },
+        "source_scope": "qbcc-plus-manual-own-website-phone-review-only",
+        "adviser_status": "not_obtained",
+        "website_collection": {
+          "approved": true,
+          "expires_at": "2026-09-24T23:18:20Z",
+          "evidence_sha256": "6364819693150146ded61e3cd00cd4e3900745158131a02a5109570b54004e07",
+          "allowed_channels": [
+            "mobile",
+            "landline"
+          ]
+        }
+      }
+    }
+  },
+  "post_collection_retention": {
+    "Result": "success",
+    "ExecMainStartTimestamp": "Fri 2026-09-11 00:54:15 UTC",
+    "ExecMainExitTimestamp": "Fri 2026-09-11 00:54:18 UTC",
+    "ExecMainStatus": "0"
+  },
+  "retention_result": {
+    "status": "complete",
+    "operation": "retention",
+    "execute": true,
+    "result": {
+      "status": "primary_retention_complete",
+      "profiles": [],
+      "held_groups": [],
+      "artifacts": [
+        {
+          "artifact_id": "24284a21-d3e1-49a6-95cf-5b98c7f5420d",
+          "state": "retained",
+          "due_at": "2026-09-18T07:34:30.590624+08:00"
+        },
+        {
+          "artifact_id": "7e711a25-f8f6-4809-a773-24167cc6d419",
+          "state": "retained",
+          "due_at": "2026-10-11T08:02:22.515629+08:00"
+        },
+        {
+          "artifact_id": "98d98668-df42-4a89-b286-14003cd2d08a",
+          "state": "retained",
+          "due_at": "2026-12-10T08:02:24.365593+08:00"
+        },
+        {
+          "artifact_id": "dc340c69-ec27-4d3d-a5e1-2bca18592fa7",
+          "state": "retained",
+          "due_at": "2026-10-11T08:02:24.365593+08:00"
+        },
+        {
+          "artifact_id": "537b3346-7a9b-4ab4-9a9b-21fd127b3d52",
+          "state": "retained",
+          "due_at": "2026-12-10T08:02:47.876788+08:00"
+        }
+      ],
+      "database_evidence": {
+        "page_bodies": 0,
+        "website_requests": 0,
+        "qbcc_source_reviews": 0,
+        "expired_pilot_metrics": {
+          "outcome_metric": 0,
+          "activity_metric": 0,
+          "cohort_metric": 0
+        },
+        "enrichment_results": 0,
+        "merge_evidence": 0,
+        "cost_receipts": 0,
+        "expired_cost_metrics": 0,
+        "operational_records": {
+          "observations": 0,
+          "mock_deliveries": 0
+        },
+        "full_source_events": {
+          "abr": 0,
+          "qbcc": 0
+        },
+        "expired_metrics": 0,
+        "state": "minimised"
+      },
+      "external_and_backups": "separate_receipts_required"
+    },
+    "external_and_backups": "separate_receipts_required"
+  },
+  "source_only_rollback_to_007_permitted": false,
+  "business_details_omitted": true,
+  "environment_and_key_contents_read": false
+}

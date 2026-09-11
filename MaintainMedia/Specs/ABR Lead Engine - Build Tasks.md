@@ -4,7 +4,7 @@ project: Maintain Media
 version: "4.0"
 synced: 2026-09-09
 source: "specs/001-abr-lead-engine/tasks.md"
-source_sha256: aa608d524e357bbd691c82f287b401c17693353994d7e3b6164fd61179805045
+source_sha256: 1cc1027bf857feb7f43d683581c540433edbbc7b15b4bc105d88117ca7fbfb61
 tags: [abr-lead-engine, maintain-media]
 ---
 > Synced from the repository; local document links adapted for Obsidian.
@@ -144,4 +144,4 @@ Live-release assessment, 9 September 2026: the user's request authorises impleme
 - [x] T068 Recover the now-present literal legacy corpus without executing its extraction script; preserve exact order/hash and prepare the owner decision and 100-record precision review artifacts per FR-009/FR-040/T041 (partial, HIGH; owner review remains external).
 - [x] T069 Implement and test a bounded GoHighLevel v2 transport and owner-restricted Sheet installation package; retain live writer blocks until actual identity, mapping and suppression sandbox evidence is available per FR-026/FR-031/FR-032/FR-033 (partial, HIGH).
 - [x] T070 Prepare a reproducible production bundle using supported commands, one scheduler and explicit backup/restore/access dependencies; validate fail-closed preflight without claiming installation on an unselected host per FR-026/FR-029/FR-035/FR-039 (partial, HIGH).
-- [ ] T071 Connect approved real ingestion, current licence/identity review, protected Next.js worklist, actual-editor bridge, CRM drain and suppression propagation end to end on the identified AU host; prove the full live workflow before changing demo labels per FR-001/FR-012/FR-025/FR-030/FR-031/FR-033/FR-037 (partial, HIGH; approved-file QBCC review intake and narrow cleanup are implemented, but accepted promotion/worklist/vendor integration and source/account/host evidence remain required).
+- [ ] T071 Connect approved real ingestion, current licence/identity review, protected Next.js worklist, actual-editor bridge, CRM drain and suppression propagation end to end on the identified AU host; prove each represented live result and the full workflow per FR-001/FR-012/FR-025/FR-030/FR-031/FR-033/FR-037 (partial, HIGH; release 010 has actual QBCC intake/review, website-phone evidence, verified intake cleanup and an enabled GHL account with synthetic provider contract checks under separate delegated-owner decisions. No real business is selected or exported. Live DNCR receipt-format implementation, genuine phone clearance/qualification and individual approval, the disabled Google staff workflow, real CRM/suppression outcomes, independent custody/backup restore, broader ABR implementation/accuracy and measured pilot evidence remain required; see implementation-status.md).

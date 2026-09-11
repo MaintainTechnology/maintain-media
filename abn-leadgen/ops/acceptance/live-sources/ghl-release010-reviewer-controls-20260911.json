@@ -1,0 +1,13 @@
+{
+  "release": "010",
+  "verified_at": "2026-09-11T02:24:49.658786+00:00",
+  "reviewer_admin_dashboard_http": 200,
+  "admin_without_reviewer_dashboard_http": 200,
+  "operator_without_admin_dashboard_http": 403,
+  "cache_control": "no-store",
+  "reviewed_businesses": 1,
+  "unselected_business_approval_disabled": true,
+  "admin_without_reviewer_crm_controls_absent": true,
+  "approval_submissions": 0,
+  "real_businesses_exported": 0
+}

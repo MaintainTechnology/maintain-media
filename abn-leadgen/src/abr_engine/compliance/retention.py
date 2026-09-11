@@ -94,6 +94,34 @@ def _held(conn, kind, identifier):
     )
 
 
+def _retain_selected_evidence(conn, service):
+    policy = service.current_policy(conn)
+    return not policy or policy["settings"].get("retention", {}).get("retain_selected_evidence") is not False
+
+
+def _expire_website_requests(conn, service, *, now, execute=False, lead_id=None):
+    """Erase private queued inputs independently of the collection worker."""
+    service.authority(conn)
+    if execute:
+        _execute_gate(conn, service, now=now)
+    predicate = """r.manifest->>'kind'='website_collection_job' AND r.manifest ? 'request_encrypted'
+      AND NOT EXISTS(SELECT 1 FROM retention_hold h LEFT JOIN lead_entity l
+        ON l.lead_id::text=r.manifest->>'lead_id' WHERE
+        (h.object_type='run' AND h.object_id=r.run_id::text)
+        OR (h.object_type='group' AND h.object_id=l.group_id::text))"""
+    predicate += " AND r.manifest->>'lead_id'=%s" if lead_id else " AND r.started_at<=%s"
+    params = (str(lead_id),) if lead_id else (now - timedelta(hours=24),)
+    count = conn.execute("SELECT count(*) n FROM pipeline_run r WHERE " + predicate, params).fetchone()["n"]
+    if execute:
+        reason = "WEBSITE_PROFILE_ERASED" if lead_id else "WEBSITE_REQUEST_EXPIRED"
+        conn.execute(
+            "UPDATE pipeline_run r SET state='held',finished_at=COALESCE(finished_at,%s),"
+            "manifest=(manifest-'request_encrypted')||%s WHERE " + predicate,
+            (now, Jsonb({"phase": "held", "reason_codes": [reason]}), *params),
+        )
+    return count
+
+
 def _evidence(conn, service, lead_id, contacts):
     group_id = service.lead(conn, lead_id)["group_id"]
     family = service.group_family(conn, group_id)
@@ -160,7 +188,10 @@ def _profile_held(conn, group_id):
       OR (h.object_type='contact' AND h.object_id IN(SELECT c.contact_id::text FROM contact_record c JOIN lead_entity l USING(lead_id) WHERE l.group_id=%s))
       OR (h.object_type='enrichment_operation' AND h.object_id IN(SELECT o.operation_id::text FROM enrichment_operation o JOIN enrichment_attempt a USING(attempt_id) JOIN lead_entity l USING(lead_id) WHERE l.group_id=%s))
       OR (h.object_type='qbcc_review' AND h.object_id IN(SELECT r.review_id::text FROM qbcc_source_review r JOIN lead_entity l USING(lead_id) WHERE l.group_id=%s))
-      LIMIT 1""", (group_id,)*4).fetchone())
+      OR (h.object_type='run' AND h.object_id IN(SELECT r.run_id::text FROM pipeline_run r JOIN lead_entity l
+        ON l.lead_id::text=r.manifest->>'lead_id' WHERE l.group_id=%s
+        AND r.manifest->>'kind'='website_collection_job' AND r.manifest ? 'request_encrypted'))
+      LIMIT 1""", (group_id,)*5).fetchone())
 
 
 def erase_profile(conn, service, group_id, *, actor="compliance", now=None):
@@ -180,7 +211,7 @@ def erase_profile(conn, service, group_id, *, actor="compliance", now=None):
         contacts = conn.execute("SELECT * FROM contact_record WHERE lead_id=%s", (lead_id,)).fetchall()
         selected = conn.execute("SELECT 1 FROM worklist_row WHERE lead_id=%s", (lead_id,)).fetchone()
         # Archive only selected contact/basis/action evidence with a distinct restricted purpose.
-        if selected:
+        if selected and _retain_selected_evidence(conn, service):
             evidence, last_relevant = _evidence(conn, service, lead_id, contacts)
             if last_relevant and retention_deadline("selected_evidence", last_relevant) > now:
                 encrypted = service.keys.encrypt(json.dumps(json_safe(evidence)))
@@ -196,6 +227,7 @@ def erase_profile(conn, service, group_id, *, actor="compliance", now=None):
                 )
         conn.execute("SET LOCAL abr.retention_delete='on'")
         conn.execute("SET CONSTRAINTS ALL DEFERRED")
+        _expire_website_requests(conn, service, now=now, execute=True, lead_id=lead_id)
         conn.execute("DELETE FROM action_intent WHERE lead_id=%s", (lead_id,))
         conn.execute(
             "DELETE FROM relevance_assessment WHERE contact_id IN(SELECT contact_id FROM contact_record WHERE lead_id=%s)",
@@ -232,13 +264,13 @@ def erase_profile(conn, service, group_id, *, actor="compliance", now=None):
     return {"group_id": group_id, "state": "primary_complete", "external_and_backup": "pending"}
 
 
-def retention_run(conn, service, *, now, execute=False):
+def retention_run(conn, service, *, now, execute=False, skip_artifacts=False):
     rows = preview(conn, service, now)
     if not execute:
         return {
             "status": "preview",
             "due_groups": [str(r["group_id"]) for r in rows],
-            "artifacts": artifact_retention(conn, service, now=now, execute=False),
+            "artifacts": [] if skip_artifacts else artifact_retention(conn, service, now=now, execute=False),
             "database_evidence": minimise_database_evidence(conn, service, now=now, execute=False),
         }
     _execute_gate(conn, service, now=now)
@@ -252,7 +284,7 @@ def retention_run(conn, service, *, now, execute=False):
         "DELETE FROM restricted_evidence_archive WHERE retained_until<=%s AND NOT EXISTS(SELECT 1 FROM retention_hold h WHERE (h.object_type='group' AND h.object_id=restricted_evidence_archive.group_id::text) OR (h.object_type='archive' AND h.object_id=restricted_evidence_archive.archive_id::text))",
         (now,),
     )
-    artifacts = artifact_retention(conn, service, now=now, execute=True)
+    artifacts = [] if skip_artifacts else artifact_retention(conn, service, now=now, execute=True)
     database_evidence = minimise_database_evidence(conn, service, now=now, execute=True)
     return {
         "status": "complete_with_holds"
@@ -273,12 +305,15 @@ def minimise_database_evidence(conn, service, *, now, execute=False):
         _execute_gate(conn, service, now=now)
     from abr_engine.ops.pilot_facts import expire_metrics
     pilot_metrics = expire_metrics(conn, now=now, execute=execute)
+    website_requests = _expire_website_requests(conn, service, now=now, execute=execute)
     page_predicate = """p.capture_erased_at IS NULL AND p.collected_at<=%s
-      AND NOT EXISTS(SELECT 1 FROM worklist_row w WHERE w.decision->>'contact_id'=p.contact_id::text)
-      AND NOT EXISTS(SELECT 1 FROM action_intent a WHERE a.contact_id=p.contact_id AND a.state='consumed')
       AND NOT EXISTS(SELECT 1 FROM retention_hold h JOIN lead_entity l ON l.lead_id=p.lead_id
         WHERE (h.object_type='group' AND h.object_id=l.group_id::text)
-           OR (h.object_type='provenance' AND h.object_id=p.provenance_id::text))"""
+           OR (h.object_type='provenance' AND h.object_id=p.provenance_id::text)
+           OR (h.object_type='contact' AND h.object_id=p.contact_id::text))"""
+    if _retain_selected_evidence(conn, service):
+        page_predicate += """ AND NOT EXISTS(SELECT 1 FROM worklist_row w WHERE w.decision->>'contact_id'=p.contact_id::text)
+          AND NOT EXISTS(SELECT 1 FROM action_intent a WHERE a.contact_id=p.contact_id AND a.state='consumed')"""
     cutoff = now - timedelta(days=90)
     qbcc_review_predicate = """r.created_at<=%s
       AND NOT EXISTS(SELECT 1 FROM worklist_row w WHERE w.lead_id=r.lead_id)
@@ -384,6 +419,7 @@ def minimise_database_evidence(conn, service, *, now, execute=False):
         )
     return {
         "page_bodies": pages,
+        "website_requests": website_requests,
         "qbcc_source_reviews": qbcc_reviews,
         "expired_pilot_metrics": pilot_metrics,
         "enrichment_results": operations,
@@ -397,13 +433,17 @@ def minimise_database_evidence(conn, service, *, now, execute=False):
     }
 
 
-def artifact_retention(conn, service, *, now, execute=False):
+def artifact_retention(conn, service, *, now, execute=False, prepared=None, artifact_ids=None):
     """Delete only explicitly classified, verified manifest-owned single files."""
     service.authority(conn)
     if execute:
         _execute_gate(conn, service, now=now)
+    from abr_engine.live.artifact_retention import ArtifactRetentionSeals, file_identity, row_digest
     from abr_engine.ops.promotion import source_lock_key
     from abr_engine.pipeline import safe_root
+
+    if prepared is not None and type(prepared) is not ArtifactRetentionSeals:
+        raise DomainError("ARTIFACT_PREVALIDATION_REQUIRED")
 
     root = safe_root(service.settings)
     schema = conn.execute("SELECT current_schema() AS schema").fetchone()["schema"]
@@ -412,6 +452,8 @@ def artifact_retention(conn, service, *, now, execute=False):
     ).fetchall()
     results = []
     for row in rows:
+        if artifact_ids is not None and str(row["artifact_id"]) not in artifact_ids:
+            continue
         item = {"artifact_id": str(row["artifact_id"]), "state": "retained"}
         try:
             orphan = row["state"] in {"writing", "orphan"} or (
@@ -427,6 +469,8 @@ def artifact_retention(conn, service, *, now, execute=False):
             if (
                 row["run_state"] == "running"
                 or _held(conn, "artifact", row["artifact_id"])
+                or _held(conn, "run", row["run_id"])
+                or _held(conn, "pipeline_run", row["run_id"])
                 or (row["snapshot_id"] and _held(conn, "snapshot", row["snapshot_id"]))
             ):
                 raise DomainError("ARTIFACT_ACTIVE_OR_HELD")
@@ -435,18 +479,25 @@ def artifact_retention(conn, service, *, now, execute=False):
             if not row["object_key"].startswith(f"staging/{row['source']}/{row['run_id']}/"):
                 raise DomainError("ARTIFACT_OWNERSHIP_MISMATCH")
             path = Path(row["local_path"])
-            if not path.is_absolute() or not path.resolve().is_relative_to(root) or path.resolve() == root:
-                raise DomainError("ARTIFACT_OUTSIDE_RETENTION_ROOT")
-            path = path.resolve()
+            original_identity = file_identity(path, root)
             for other in rows:
                 if other["artifact_id"] == row["artifact_id"] or not other.get("local_path"):
                     continue
                 if Path(other["local_path"]).resolve() == path and (
                     other["run_state"] == "running"
                     or now < retention_deadline(other.get("artifact_class"), other["created_at"])
+                    or _held(conn, "artifact", other["artifact_id"])
+                    or _held(conn, "run", other["run_id"])
+                    or _held(conn, "pipeline_run", other["run_id"])
+                    or (other["snapshot_id"] and _held(conn, "snapshot", other["snapshot_id"]))
                 ):
                     raise DomainError("ARTIFACT_STILL_REFERENCED")
-            if path.exists():
+            if prepared is not None:
+                prepared.validate(row, path, root, schema)
+            elif (service.settings.mode != "fixture" and original_identity is not None
+                  and original_identity[2] > 16 * 1024**2):
+                raise DomainError("ARTIFACT_PREVALIDATION_REQUIRED")
+            elif original_identity is not None:
                 if not path.is_file() or path.stat().st_size != row["byte_count"]:
                     raise DomainError("ARTIFACT_SIZE_MISMATCH")
                 checksum = hashlib.sha256()
@@ -466,6 +517,34 @@ def artifact_retention(conn, service, *, now, execute=False):
                 "SELECT artifact_id FROM artifact_manifest WHERE artifact_id=%s FOR UPDATE",
                 (row["artifact_id"],),
             )
+            current = conn.execute("SELECT * FROM artifact_manifest WHERE artifact_id=%s", (row["artifact_id"],)).fetchone()
+            if prepared is not None:
+                prepared.validate(current, path, root, schema)
+            elif row_digest(current) != row_digest(row) or file_identity(path, root) != original_identity:
+                raise DomainError("ARTIFACT_PREVALIDATION_CHANGED")
+            current_run = conn.execute("SELECT state FROM pipeline_run WHERE run_id=%s", (row["run_id"],)).fetchone()
+            if (current_run["state"] == "running" or _held(conn, "artifact", row["artifact_id"])
+                    or _held(conn, "run", row["run_id"])
+                    or _held(conn, "pipeline_run", row["run_id"])
+                    or current["snapshot_id"] and _held(conn, "snapshot", current["snapshot_id"])):
+                raise DomainError("ARTIFACT_ACTIVE_OR_HELD")
+            if execute:
+                _execute_gate(conn, service, now=service.now(conn))
+            references = conn.execute(
+                "SELECT a.*,r.state AS run_state FROM artifact_manifest a JOIN pipeline_run r USING(run_id) "
+                "WHERE a.state<>'deleted' AND a.artifact_id<>%s AND a.local_path=%s",
+                (row["artifact_id"], row["local_path"]),
+            ).fetchall()
+            for other in references:
+                if (other["run_state"] == "running"
+                    or now < retention_deadline(other.get("artifact_class"), other["created_at"])
+                    or _held(conn, "artifact", other["artifact_id"])
+                    or _held(conn, "run", other["run_id"])
+                    or _held(conn, "pipeline_run", other["run_id"])
+                    or other["snapshot_id"] and _held(conn, "snapshot", other["snapshot_id"])):
+                    raise DomainError("ARTIFACT_STILL_REFERENCED")
+            if file_identity(path, root) != original_identity:
+                raise DomainError("ARTIFACT_PREVALIDATION_CHANGED")
             conn.execute(
                 "UPDATE artifact_manifest SET state='deleting',deletion_reason='finite_retention' WHERE artifact_id=%s",
                 (row["artifact_id"],),

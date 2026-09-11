@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "status": "verified_bounded_synthetic_account_contract",
+  "verified_at": "2026-09-11T01:38:17.066810+00:00",
+  "location_id": "xHZFHMOE476t5CxY9vCG",
+  "api_version": "2023-02-21",
+  "synthetic_only": true,
+  "checks": {
+    "duplicate_no_overwrite": true,
+    "group_search": true,
+    "metadata": true,
+    "suppression_clear": true,
+    "uncertain_create": true,
+    "unrelated_tags": true,
+    "workflow_isolation": true
+  },
+  "test_evidence": {
+    "file": "ghl-account-contract-journal-20260911.json",
+    "sha256": "21f0dab0b1a1f91162b9e55b6d16e146b7099b0e7a21f53f73104ac005a13b11"
+  },
+  "metadata_evidence": {
+    "file": "ghl-live-metadata-workflows-20260911.json",
+    "sha256": "fe5626204ef2a42e40cacea10b84256a20af5cbecdfc692677538eda160d25d7"
+  },
+  "account_controls_evidence": {
+    "file": "ghl-account-browser-controls-20260911.json",
+    "sha256": "eb0a69d24f5eb60470eacd34cad74621f96913b205a4f2ce235217d70660e431"
+  },
+  "runtime_provider_name_fix_sha256": "7c5073171fd660ffe322ab956edeb68d6d5816529c3f455083ffe58ebd8b6092",
+  "actual_create_statuses": [
+    201,
+    400,
+    201
+  ],
+  "duplicate_result": {
+    "code": "GHL_REQUEST_REJECTED",
+    "error_type": "DomainError"
+  },
+  "index_delay_observation": {
+    "additional_create_attempts": 0,
+    "immediate_search_found_record": false,
+    "later_reconciliation_verified_at": "2026-09-11T01:35:11.083607+00:00",
+    "maximum_index_latency_measured": false
+  },
+  "synthetic_contacts_created": 2,
+  "synthetic_contacts_removed": 2,
+  "post_test_workflow_ui": {
+    "observed_at": "2026-09-11T01:38:17.066810+00:00",
+    "count": 6,
+    "all_draft": true,
+    "total_enrolled": 0,
+    "active_enrolled": 0
+  },
+  "remote_clearing": {
+    "mapped_projection_removed": true,
+    "name_firstName_lastName_phone_email_empty": true,
+    "dnd_true": true,
+    "unrelated_tag_preserved_before_test_cleanup": true,
+    "provider_backup_erasure_claimed": false
+  },
+  "workflow_inventory_sha256": "e30e1d90e03a629a82b04bf0d552322e9e8f47add0fe2967e81f3fbac72291e8",
+  "real_businesses_exported": 0,
+  "messages_sent": 0,
+  "calls_made": 0,
+  "campaign_or_workflow_enrolments_requested": 0,
+  "prior_failed_observations_preserved": [
+    {
+      "code": "FIELD_READBACK_MISMATCH_business_name",
+      "type": "RuntimeError"
+    },
+    {
+      "code": "UNCERTAIN_CREATE_RECONCILIATION_FAILED",
+      "type": "RuntimeError"
+    }
+  ],
+  "limitation": "This verifies account transport with explicitly synthetic records. It does not grant per-business approval, DNCR clearance, source permission or certify a real production outbox hand-off."
+}

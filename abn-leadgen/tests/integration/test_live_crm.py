@@ -10,10 +10,10 @@ import yaml
 from psycopg.types.json import Jsonb
 
 from abr_engine.compliance.policy import REQUIRED_GATES
-from abr_engine.control.service import DomainError, Service, json_safe
+from abr_engine.control.service import DomainError, Service, digest, json_safe
 from abr_engine.db import transaction
-from abr_engine.export.crm import approve, drain_live_one
-from abr_engine.export.gohighlevel import FIELD_NAMES
+from abr_engine.export.crm import approve, drain_live_one, handoff_status
+from abr_engine.export.gohighlevel import FIELD_NAMES, workflow_inventory_digest
 from abr_engine.export.live_contract import CHECKS, live_contract
 from abr_engine.fixture import seed_contact, seed_policy
 from abr_engine.ops.propagation import drain_propagation
@@ -24,6 +24,8 @@ def live_case(settings, service, tmp_path):
     now = datetime.now(UTC)
     config = {"location_id": "syntheticLocation", "mapping_version": "synthetic-live-contract-v1",
               "field_ids": {name: "live_" + name for name in FIELD_NAMES},
+              "allowed_channels": ["email", "phone"],
+              "workflow_inventory_sha256": workflow_inventory_digest({"workflows": []}, "syntheticLocation"),
               "allow_writes": True, "group_search_field": "customFields.live_group_id"}
     config_path, receipt_path = tmp_path / "ghl.yaml", tmp_path / "installation.yaml"
     config_path.write_text(yaml.safe_dump(config), encoding="utf-8")
@@ -68,9 +70,18 @@ class Vendor:
         self.on_lookup = None
         self.on_update = None
         self.ignore_clear = False
+        self.workflow_response = {"workflows": []}
+        self.on_inventory = None
+        self.inventory_calls = 0
 
     def __call__(self, request):
         path = request.url.path
+        if path == "/workflows/":
+            self.inventory_calls += 1
+            if self.on_inventory:
+                callback, self.on_inventory = self.on_inventory, None
+                callback()
+            return httpx.Response(200, json=self.workflow_response)
         if path == "/contacts/search":
             if self.on_lookup:
                 callback, self.on_lookup = self.on_lookup, None
@@ -217,3 +228,121 @@ def test_current_g5_must_bind_exact_installation_receipt(live_case):
         conn.execute("UPDATE release_gate SET evidence_sha256=%s WHERE gate_name='G5'", ("f"*64,))
     with pytest.raises(DomainError, match="CRM_INSTALLATION_NOT_APPROVED"):
         drain(live_case, lambda _: pytest.fail("Must not access vendor"))
+
+
+def test_handoff_has_no_endpoint_and_distinguishes_pending_verified_and_uncertain(live_case):
+    case = live_case
+    def status():
+        with transaction(case["settings"]) as conn:
+            return handoff_status(conn, case["service"], case["row"])
+    pending = status()
+    assert pending["state"] == "pending" and not pending["can_approve"] and pending["can_reject"]
+    assert pending["updated_at"] and set(pending) == {
+        "state", "can_approve", "can_reject", "reason_codes", "outbox_id", "updated_at"}
+    vendor = Vendor(case)
+    vendor.timeout_create = True
+    assert drain(case, vendor)["state"] == "uncertain"
+    assert status()["state"] == "uncertain"
+    with transaction(case["settings"]) as conn:
+        conn.execute("UPDATE crm_outbox SET next_attempt_at=NULL")
+    assert drain(case, vendor)["state"] == "succeeded"
+    verified = status()
+    assert verified["state"] == "succeeded" and not verified["can_approve"] and not verified["can_reject"]
+    assert str(vendor.remote["id"]) not in json.dumps(json_safe(verified))
+
+
+def test_handoff_requires_selected_revision_contact_and_current_vendor_contract(live_case):
+    case = live_case
+    with transaction(case["settings"]) as conn:
+        none = handoff_status(conn, case["service"], None)
+        assert none["state"] == "not_selected" and none["reason_codes"] == ["ONLY_SELECTED_TIER_A"]
+        assert not none["can_approve"] and not none["can_reject"]
+        # A genuinely new worklist revision must be reviewed separately.
+        conn.execute("UPDATE worklist_row SET version=version+1,approval_state='pending' WHERE row_id=%s", (case["row"],))
+        ready = handoff_status(conn, case["service"], case["row"])
+        assert ready["state"] == "awaiting_review" and ready["can_approve"] and ready["outbox_id"] is None
+        conn.execute("UPDATE contact_record SET verification_status='unverified'")
+        held = handoff_status(conn, case["service"], case["row"])
+        assert not held["can_approve"] and held["reason_codes"] == ["NO_ELIGIBLE_CONTACT"]
+        assert held["can_reject"]
+        drift = handoff_status(conn, case["service"], case["row"], contract_reasons=["CRM_INSTALLATION_INVALID"])
+        assert drift["reason_codes"] == ["CRM_INSTALLATION_INVALID"] and not drift["can_approve"]
+
+
+def test_workflow_withdrawal_during_inventory_blocks_create(live_case):
+    vendor = Vendor(live_case)
+    vendor.on_inventory = lambda: stop(live_case)
+    assert drain(live_case, vendor)["state"] == "blocked"
+    assert vendor.inventory_calls == 1 and vendor.mutations == []
+
+
+def test_published_workflow_during_suppression_stops_next_tag_mutation(live_case):
+    vendor = Vendor(live_case)
+    assert drain(live_case, vendor)["state"] == "succeeded"
+    stop(live_case)
+    def publish():
+        vendor.workflow_response = {"workflows": [{"id": "syntheticWorkflow", "locationId": "syntheticLocation",
+            "status": "published", "version": 1, "updatedAt": datetime.now(UTC).isoformat()}]}
+    vendor.on_update = publish
+    result = propagate(live_case, vendor)
+    assert result["results"][0]["state"] == "retry"
+    assert vendor.mutations == [("POST", "/contacts/"), ("PUT", "/contacts/remote1")]
+    with transaction(live_case["settings"]) as conn:
+        row = conn.execute("SELECT completed_at,last_error_code FROM propagation_outbox").fetchone()
+        assert row["completed_at"] is None and row["last_error_code"] == "GHL_WORKFLOW_NOT_ISOLATED"
+
+
+def test_phone_only_live_contract_skips_eligible_email_and_preserves_wash_requirement(live_case, service):
+    case = live_case
+    config = {**case["config"], "allowed_channels": ["phone"]}
+    case["config_path"].write_text(yaml.safe_dump(config), encoding="utf-8")
+    receipt = yaml.safe_load(case["receipt_path"].read_text())
+    receipt["config_sha256"] = hashlib.sha256(case["config_path"].read_bytes()).hexdigest()
+    case["receipt_path"].write_text(yaml.safe_dump(receipt), encoding="utf-8")
+    with transaction(case["settings"]) as conn:
+        conn.execute("UPDATE release_gate SET evidence_sha256=%s WHERE gate_name='G5'",
+                     (hashlib.sha256(case["receipt_path"].read_bytes()).hexdigest(),))
+        conn.execute("UPDATE worklist_row SET version=version+1,approval_state='pending' WHERE row_id=%s", (case["row"],))
+        email_only = handoff_status(conn, case["service"], case["row"])
+        assert not email_only["can_approve"] and email_only["reason_codes"] == ["NO_ELIGIBLE_CONTACT"]
+        existing = service.lead(conn, case["record"]["lead"]["lead_id"])
+        phone = seed_contact(conn, service, phone=True, existing_lead=existing)
+        from abr_engine.compliance.wash import create_batch, import_receipt
+        def append_wash(result):
+            value = service.keys.decrypt(phone["contact"]["encrypted_value"])
+            batch = create_batch(conn, service, [value])
+            records = [{"phone": value, "result": result, "washed_at": service.now(conn).isoformat()}]
+            import_receipt(conn, service, batch["batch_id"], records,
+                {"format": "maintain-fixture-wash-v1", "account": "synthetic-wash-test",
+                 "batch_digest": batch["digest"], "count": 1, "records_digest": digest(records)}, "synthetic-reviewer")
+        append_wash("listed")
+        assert not handoff_status(conn, case["service"], case["row"])["can_approve"]
+        # Explicit isolated fixture evidence; no real recipient or wash provider.
+        append_wash("clear")
+        approved = approve(conn, case["service"], {"row_id": case["row"], "expected_version": 2,
+            "decision": "approve", "reason": "Synthetic phone-only contract test"}, "synthetic-reviewer")
+    case["outbox"] = approved["outbox_id"]
+    vendor = Vendor(case)
+    assert drain(case, vendor)["state"] == "succeeded"
+    assert vendor.remote["email"] is None and vendor.remote["phone"] == service.keys.decrypt(phone["contact"]["encrypted_value"])
+    assert vendor.remote["dnd"] is True and vendor.inventory_calls == 1
+
+
+def test_live_lost_create_waits_for_search_index_without_another_create(live_case):
+    vendor = Vendor(live_case)
+    vendor.timeout_create = True
+    delayed_reads = 2
+    def handler(request):
+        nonlocal delayed_reads
+        if request.url.path == "/contacts/search" and vendor.remote and delayed_reads:
+            delayed_reads -= 1
+            return httpx.Response(200, json={"contacts": [], "total": 0})
+        return vendor(request)
+    assert drain(live_case, handler)["state"] == "uncertain"
+    for expected in ("uncertain", "uncertain", "succeeded"):
+        with transaction(live_case["settings"]) as conn:
+            row = conn.execute("SELECT attempts,next_attempt_at-clock_timestamp() AS delay FROM crm_outbox").fetchone()
+            assert row["delay"].total_seconds() > 0
+            conn.execute("UPDATE crm_outbox SET next_attempt_at=NULL")
+        assert drain(live_case, handler)["state"] == expected
+    assert vendor.mutations == [("POST", "/contacts/")]

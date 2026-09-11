@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="1" time="5.726" timestamp="2026-09-11T10:58:56.535031+08:00" hostname="Daligdig"><testcase classname="tests.integration.test_live_abr_runtime" name="test_full_public_baseline_commits_zero_events_and_replays" time="4.051"><failure message="AssertionError: {'job_id': 'd7dfb560-401f-41ad-a42b-ba1a4f10467e', 'run_id': 'd7dfb560-401f-41ad-a42b-ba1a4f10467e', 'source': 'abr', 'state': 'failed', ...}&#10;assert 'failed' == 'complete'&#10;  &#10;  - complete&#10;  + failed">settings = Settings(mode='fixture', database_url='postgresql://abr_fixture:abr_fixture@127.0.0.1:55432/abr_fixture', output_dir=W...ies={}, key_file=None, ghl_config_file=None, ghl_installation_file=None, sheets_bridge_file=None, abr_config_file=None)
+prepared = (&lt;abr_engine.live.abr.ABRRuntime object at 0x000001D1143A5DC0&gt;, {'bytes': b'PK\x03\x04\x14\x00\x00\x00\x08\x00`W+]\x1f...ta/api/3/action/package_show?id=abn-bulk-extract')], KeyStore(active_version=1, compromised=False, dependencies=set()))
+
+    def test_full_public_baseline_commits_zero_events_and_replays(settings, prepared):
+        runtime, _, calls, _ = prepared
+        receipt = run(runtime)
+&gt;       assert receipt['state'] == 'complete', receipt
+E       AssertionError: {'job_id': 'd7dfb560-401f-41ad-a42b-ba1a4f10467e', 'run_id': 'd7dfb560-401f-41ad-a42b-ba1a4f10467e', 'source': 'abr', 'state': 'failed', ...}
+E       assert 'failed' == 'complete'
+E         
+E         - complete
+E         + failed
+
+tests\integration\test_live_abr_runtime.py:92: AssertionError</failure></testcase></testsuite></testsuites>

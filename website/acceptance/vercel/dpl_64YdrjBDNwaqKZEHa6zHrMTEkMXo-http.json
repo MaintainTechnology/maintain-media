@@ -1,0 +1,133 @@
+{
+  "checked_at": "2026-09-11T02:48:29.191Z",
+  "origin": "https://www.maintainmedia.com.au",
+  "deployment_id": "dpl_64YdrjBDNwaqKZEHa6zHrMTEkMXo",
+  "status": "passed",
+  "passed": 12,
+  "total": 12,
+  "scope": "Public and signed-out GET/HEAD only. Alias identity requires a separate Vercel inspection. No browser login or business-data flow certified.",
+  "provider_mutations": false,
+  "requests_with_credentials": 0,
+  "checks": [
+    {
+      "path": "/abn-lead-gen/access",
+      "method": "GET",
+      "status": "passed",
+      "http_status": 307,
+      "expected_status": 307,
+      "private_headers": true,
+      "local_signin_redirect": true,
+      "denied_before_engine": true
+    },
+    {
+      "path": "/abn-lead-gen/dashboard",
+      "method": "GET",
+      "status": "passed",
+      "http_status": 307,
+      "expected_status": 307,
+      "private_headers": true,
+      "local_signin_redirect": true,
+      "denied_before_engine": true
+    },
+    {
+      "path": "/about",
+      "method": "GET",
+      "status": "passed",
+      "http_status": 200,
+      "expected_status": 200,
+      "private_headers": true,
+      "local_signin_redirect": true,
+      "denied_before_engine": true
+    },
+    {
+      "path": "/api/abn-lead-gen/dashboard",
+      "method": "GET",
+      "status": "passed",
+      "http_status": 401,
+      "expected_status": 401,
+      "private_headers": true,
+      "local_signin_redirect": true,
+      "denied_before_engine": true
+    },
+    {
+      "path": "/api/abn-lead-gen/dashboard",
+      "method": "HEAD",
+      "status": "passed",
+      "http_status": 401,
+      "expected_status": 401,
+      "private_headers": true,
+      "local_signin_redirect": true,
+      "denied_before_engine": true
+    },
+    {
+      "path": "/api/abn-lead-gen/jobs/00000000-0000-4000-8000-000000000001",
+      "method": "GET",
+      "status": "passed",
+      "http_status": 401,
+      "expected_status": 401,
+      "private_headers": true,
+      "local_signin_redirect": true,
+      "denied_before_engine": true
+    },
+    {
+      "path": "/api/abn-lead-gen/reports/00000000-0000-4000-8000-000000000001/csv",
+      "method": "GET",
+      "status": "passed",
+      "http_status": 401,
+      "expected_status": 401,
+      "private_headers": true,
+      "local_signin_redirect": true,
+      "denied_before_engine": true
+    },
+    {
+      "path": "/contact",
+      "method": "GET",
+      "status": "passed",
+      "http_status": 200,
+      "expected_status": 200,
+      "private_headers": true,
+      "local_signin_redirect": true,
+      "denied_before_engine": true
+    },
+    {
+      "path": "/",
+      "method": "GET",
+      "status": "passed",
+      "http_status": 200,
+      "expected_status": 200,
+      "private_headers": true,
+      "local_signin_redirect": true,
+      "denied_before_engine": true
+    },
+    {
+      "path": "/services",
+      "method": "GET",
+      "status": "passed",
+      "http_status": 200,
+      "expected_status": 200,
+      "private_headers": true,
+      "local_signin_redirect": true,
+      "denied_before_engine": true
+    },
+    {
+      "path": "/sign-in",
+      "method": "GET",
+      "status": "passed",
+      "http_status": 200,
+      "expected_status": 200,
+      "private_headers": true,
+      "local_signin_redirect": true,
+      "denied_before_engine": true
+    },
+    {
+      "path": "/sign-up",
+      "method": "GET",
+      "status": "passed",
+      "http_status": 200,
+      "expected_status": 200,
+      "private_headers": true,
+      "local_signin_redirect": true,
+      "denied_before_engine": true
+    }
+  ]
+}

@@ -12,16 +12,16 @@ def build_application(settings: Settings, *, environ=None):
     from abr_engine.control.sheets_auth import SheetsAuthority
     from abr_engine.live.api import create_live_app
     from abr_engine.live.auth import WebsiteAuthority
-    from abr_engine.live.runtime import QBCCRuntime
+    from abr_engine.live.sources import SourceRuntime
 
     if settings.mode not in {"pilot", "production"}:
         raise ValueError("Explicit live settings required")
     values = os.environ if environ is None else environ
     authority = WebsiteAuthority(values.get("ABN_ENGINE_ASSERTION_KEY", ""))
-    runtime = QBCCRuntime(settings)
+    runtime = SourceRuntime(settings)
     sheets = SheetsAuthority(settings.sheets_bridge_file) if settings.sheets_bridge_file else None
     return create_live_app(settings, authority=authority, submit_run=runtime.submit_run,
-                           get_job=runtime.get_job, execute_job=runtime.execute_job,
+                           get_job=runtime.get_job, execute_job=runtime.kick_job,
                            sheets_authority=sheets)
 
 
@@ -36,7 +36,7 @@ def worker_tick(settings: Settings, *, lane_group="all") -> dict:
 
     if settings.mode not in {"pilot", "production"}:
         raise ValueError("Explicit live settings required")
-    if lane_group not in {"all", "source", "control"}:
+    if lane_group not in {"all", "source", "control", "abr"}:
         raise ValueError("Unknown worker lane")
     service = Service(settings, load_keys(settings))
     # Each worker revalidates authority at the actual I/O boundary. Revoked
@@ -48,6 +48,11 @@ def worker_tick(settings: Settings, *, lane_group="all") -> dict:
             return {"status": "held", "code": error.code}
         except (ValueError, OSError, psycopg.Error):
             return {"status": "unavailable", "code": "WORKER_LANE_UNAVAILABLE"}
+
+    if lane_group == "abr":
+        from abr_engine.live.abr import ABRRuntime
+
+        return {"abr_jobs": lane(lambda: ABRRuntime(settings).execute_pending(limit=1))}
 
     # Removals take priority. Each lane is isolated so a closed vendor gate or
     # failed acquisition cannot stop another lane's necessary recovery work.

@@ -1,0 +1,72 @@
+{
+  "decision_id": "qbcc-cleanup-release-010-20260911",
+  "status": "approved_scoped_technical_maintenance_repair",
+  "actor_id": "delegated-owner:jeph@quotemax.com.au",
+  "approved_at": "2026-09-11T02:08:22.269852+00:00",
+  "authorization": "Existing user request to finish and operate the live lead engine; express delegated owner authority. No new purpose or individual contact permission is granted.",
+  "previous_release": "009b",
+  "previous_manifest_sha256": "7b1b866ec895c3fbe84409113602859200f0fd83cc18576d14bc35db8dc8f8c9",
+  "release": "010",
+  "source_manifest_sha256": "608bcbcb881f2787db2f6f408e666c5e3debe0d4a59760085e62d3c4aa1c5660",
+  "archive_sha256": "5c4e3794745433686a48ad440a1852711a78a846b63a29cd8e67caf588370cbd",
+  "file_count": 153,
+  "runtime_change": {
+    "file": "src/abr_engine/ingest/qbcc_review.py",
+    "sha256": "9b4b98c9e92b51d49f4d8c3c7ed39d8ab0def725614cf293be9a5b309904464a",
+    "reason": "The staging cleaner included successfully accepted referenced intakes and returned INTAKE_NOT_UNREFERENCED/exit3. No file was deleted during the observed failure.",
+    "change": "Exclude only a coherent complete+accepted QBCC acceptance receipt from abandoned-staging candidates. COALESCE keeps NULL, absent and inconsistent states in the existing guarded/held path.",
+    "data_lifecycle": "Accepted and accepted-no-op artifacts remain governed by unchanged ordinary raw30/snapshot90 retention. Abandoned unreferenced staging retains its seven-day limit. No retention clock, cursor, source evidence, ownership or legal hold is reset."
+  },
+  "validation": {
+    "actual_postgresql_lifecycle_and_ownership_checks": 22,
+    "cli_and_unit_checks": 6,
+    "before_fix_regression_failed_as_expected": true,
+    "after_fix_checks_passed": true,
+    "accepted_source_bytes_and_cursor_unchanged": true,
+    "overdue_accepted_noop_primary_retention_deletion_verified": true,
+    "ruff": "passed",
+    "mypy": "passed",
+    "packaged_python_syntax": "passed",
+    "packaged_runtime_difference_from009b": "exactly_one_file",
+    "crm_files_and_dependency_lock_unchanged": true,
+    "independent_review": "passed_no_blocking_findings",
+    "independent_postgresql_rerun": {
+      "passed": 13,
+      "additional_distinct_checks": false
+    },
+    "evidence_file": "qbcc-cleanup-lifecycle-fix-20260911.json",
+    "evidence_sha256": "30f1dc28a01106992d3523b906a2ee75e3fffe360c23d819a15be41d238e8510"
+  },
+  "new_gate_revisions": [
+    {
+      "scope": "collection",
+      "gate_name": "G7",
+      "revision": 4,
+      "expires_at": "2026-09-24T23:18:20Z"
+    },
+    {
+      "scope": "retention",
+      "gate_name": "G7",
+      "revision": 4,
+      "expires_at": "2027-09-10T23:18:20Z"
+    }
+  ],
+  "preserved": {
+    "all_owner_source_website_and_ghl_decisions": true,
+    "all_G1_G3_G5_and_CRM_gates": true,
+    "existing_two_policies_and_capability_config_bytes": true,
+    "no_new_individual_approval_or_export": true,
+    "no_outreach": true,
+    "prior009b_source_preserved_for_recovery": true
+  },
+  "post_deploy_required": [
+    "Run actual cleanup service and verify complete with no attempted deletion of the accepted source.",
+    "Verify retention, worker/control and API health on010.",
+    "Read back25gates/two policies, preserved CRM configuration and zero real outbox/actions.",
+    "Verify signed CRM readiness remains approved and unsigned access remains denied."
+  ],
+  "full_production_release": false,
+  "measured_pilot_completed": false,
+  "actual_due_production_deletion_claimed": false,
+  "remaining_limits": "Genuine DNCR receipt adapter and evidence, selected tierA row approval, Sheets, classifier/pilot and recovery gates remain unfinished."
+}

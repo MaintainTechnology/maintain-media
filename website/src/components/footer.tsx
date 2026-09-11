@@ -87,7 +87,7 @@ export function Footer() {
 
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-line py-7 text-sm text-mist">
           <span>&copy; 2026 Maintain Media. All rights reserved.</span>
-          <span>Built on the Maintain Media design system.</span>
+          <Link href="/business-research-notice" className="transition-colors hover:text-brand-300">Business research notice</Link>
         </div>
       </div>
     </footer>

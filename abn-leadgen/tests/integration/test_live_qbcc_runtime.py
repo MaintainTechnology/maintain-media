@@ -76,6 +76,63 @@ def test_complete_real_composition_from_http_to_unknown_review_list(settings, pr
         assert rows["total"] == 1 and rows["rows"][0]["publisher_status"] == "UNKNOWN"
 
 
+def test_publisher_attachment_redirect_is_accepted_with_original_source_evidence(settings, prepared):
+    adapter, calls, payload, content, _ = prepared
+    attachment = runtime.ATTACHMENT_URL + "?ETag=" + "a1" * 16
+
+    def respond(request):
+        calls.append(str(request.url))
+        if str(request.url) == CATALOGUES["qbcc"].endpoint:
+            return httpx.Response(200, json=payload)
+        if str(request.url) == SOURCE_URL:
+            return httpx.Response(302, headers={"location": attachment})
+        assert str(request.url) == attachment
+        return httpx.Response(200, headers={"content-length": str(len(content))}, stream=httpx.ByteStream(content))
+
+    adapter.transport = httpx.MockTransport(respond)
+    job = adapter.submit_run({}, "synthetic-reviewer")
+    done = adapter.execute_job(job["job_id"])
+    assert done["state"] == "complete" and done["result"]["accepted"]
+    assert done["result"]["candidates"] == 0
+    assert calls == [CATALOGUES["qbcc"].endpoint, SOURCE_URL, attachment, CATALOGUES["qbcc"].endpoint]
+    with transaction(settings) as conn:
+        manifest = conn.execute("SELECT manifest FROM pipeline_run WHERE run_id=%s", (job["job_id"],)).fetchone()["manifest"]
+        receipt = manifest["download_receipt"]
+        assert receipt["source_url"] == SOURCE_URL and receipt["response_url"] == attachment
+        assert receipt["redirect_count"] == 1
+        staged = conn.execute("SELECT manifest FROM pipeline_run WHERE run_id=%s", (manifest["intake_run_id"],)).fetchone()["manifest"]
+        assert staged["publisher_receipt"]["response_url"] == attachment
+        assert staged["publisher_receipt"]["source_url"] == SOURCE_URL
+
+
+def test_newer_withdrawal_between_redirect_hops_stops_http_and_cursor(settings, prepared):
+    adapter, calls, payload, _, _ = prepared
+    attachment = runtime.ATTACHMENT_URL + "?ETag=" + "b2" * 16
+
+    def respond(request):
+        calls.append(str(request.url))
+        if str(request.url) == CATALOGUES["qbcc"].endpoint:
+            return httpx.Response(200, json=payload)
+        assert str(request.url) == SOURCE_URL
+        with transaction(settings) as conn:
+            conn.execute(
+                "INSERT INTO release_gate SELECT gate_name,environment,scope,revision+1,evidence_ref,"
+                "evidence_sha256,actor_id,clock_timestamp()-interval '2 days',clock_timestamp()-interval '1 day' "
+                "FROM release_gate WHERE gate_name='G1' AND scope='collection'"
+            )
+        return httpx.Response(302, headers={"location": attachment})
+
+    adapter.transport = httpx.MockTransport(respond)
+    job = adapter.submit_run({}, "synthetic-reviewer")
+    result = adapter.execute_job(job["job_id"])
+    assert result["state"] == "held" and result["reason_codes"] == ["GATE_G1_CLOSED"]
+    assert calls == [CATALOGUES["qbcc"].endpoint, SOURCE_URL]
+    with transaction(settings) as conn:
+        for table in ("source_cursor", "source_snapshot", "lead_entity"):
+            assert conn.execute("SELECT count(*) n FROM " + table).fetchone()["n"] == 0
+    assert list(adapter.settings.output_dir.rglob("publisher.csv")) == []
+
+
 @pytest.mark.parametrize("gate", ["G1", "G2", "G3", "G7", "capability"])
 def test_no_http_or_key_loading_when_job_admission_is_closed(settings, prepared, monkeypatch, gate):
     adapter, calls, _, _, _ = prepared

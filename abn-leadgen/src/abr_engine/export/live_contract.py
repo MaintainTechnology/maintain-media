@@ -103,7 +103,7 @@ def live_contract(conn, service, *, removal_only=False) -> tuple[GHLConfig, dict
             raise DomainError("CRM_HOSTING_GATE_CLOSED", 409)
     mapping = load_field_mapping()
     mapping.update(mode=service.settings.mode, live_enabled=True, location_id=config.location_id,
-                   mapping_version=config.mapping_version)
+                   mapping_version=config.mapping_version, allowed_channels=config.allowed_channels)
     mapping["identity"]["custom_field_id"] = config.field_ids["group_id"]
     for name, field in mapping["fields"].items():
         field["custom_field_id"] = config.field_ids[name]

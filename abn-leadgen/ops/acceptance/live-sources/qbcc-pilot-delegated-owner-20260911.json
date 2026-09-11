@@ -1,0 +1,92 @@
+{
+  "decision_id": "qbcc-pilot-delegated-owner-20260911",
+  "amendment_version": "1.0.0",
+  "product_baseline_version": "4.0",
+  "recorded_at": "2026-09-10T23:18:20Z",
+  "effective_at": "2026-09-10T23:18:20Z",
+  "expires_at": "2026-09-24T23:18:20Z",
+  "status": "approved_with_limits_under_delegated_authority",
+  "authorising_actor": "user in the current Codex task",
+  "decision_recorded_by": "Codex acting under the user's express delegation",
+  "authorization_evidence": {
+    "source": "current Codex task user instruction",
+    "summary": "The user explicitly directed Business source collection to be enabled now, said not to wait for Jon, and delegated the decision to Codex.",
+    "is_verbatim_quote": false,
+    "jon_approval_claimed": false,
+    "prior_targeting_record": "abn-leadgen/ops/acceptance/live-sources/targeting-approval-2026-09-09.json"
+  },
+  "scope": "Time-limited QBCC public-register intake and authenticated internal business review; manual runs initially",
+  "purpose": "Prepare and review a limited worklist of contractor businesses potentially relevant to Maintain Media, preserving source evidence and current-licence uncertainty; no contact acquisition or outreach",
+  "business_identity": {
+    "trading_name": "Maintain Media",
+    "registered_legal_entity": null,
+    "registered_abn": null,
+    "independent_verification": "not_obtained"
+  },
+  "adviser_status": "not_obtained",
+  "legal_compliance_certified": false,
+  "privacy_applicability_and_notice_assessment": "not_obtained; expressly deferred for this limited delegated-owner pilot, not represented as qualified advice",
+  "personal_information_acknowledged": "Public licensee names and business addresses can identify sole traders or individuals; this is not a company-only or anonymous dataset",
+  "source": {
+    "name": "QBCC Licensed Contractors Register",
+    "resource_id": "25608781-b28c-44f8-8545-0ab18d84082f",
+    "resource_url": "https://www.data.qld.gov.au/dataset/980b6499-c0b4-491b-ba9c-1c7506368a50/resource/25608781-b28c-44f8-8545-0ab18d84082f/download/builder-contractor-qbcc-licensee-register.csv",
+    "catalogue_url": "https://www.data.qld.gov.au/dataset/qbcc-licensed-contractors-register/resource/25608781-b28c-44f8-8545-0ab18d84082f",
+    "observed_licence": "CC BY 4.0",
+    "licence_url": "https://creativecommons.org/licenses/by/4.0/",
+    "attribution": "QBCC Licensed Contractors Register, State of Queensland, CC BY 4.0; show actual publication and retrieval dates and identify derived or reviewed fields",
+    "dated_metadata_evidence": "abn-leadgen/ops/acceptance/live-integration-20260910/live-activation-recheck-20260911.json",
+    "fresh_terms_and_schema_check_required_before_acquisition": true,
+    "mapping_version": "qbcc-catalogue-11-column-v1",
+    "allowed_publisher_fields": ["Licence Number", "Licensee Name", "ACN", "ABN", "Licensee Business Address", "Licence Type DESC", "Licence Type CODE", "Financial Category DESC", "Financial Category CODE", "Licence Grade", "Licence Class Type"],
+    "allowed_derived_fields": ["state", "postcode", "licence/class groupings", "targeting and qualification classifications", "source age and provenance", "record digest and review state"],
+    "full_publication_validation": "The bounded raw publication can contain non-target rows; the weekly worklist cap is not a limit on downloaded publication rows",
+    "contact_fields_allowed": false,
+    "current_licence_status": "UNKNOWN until a genuine current licence check is recorded",
+    "unknown_entity_class_preserved": true
+  },
+  "targeting": {"recovered_trade_categories": 30, "full_state": "QLD", "partial_state": "NSW", "postcode_min": "2450", "postcode_max": "2490", "qbcc_categories": ["1", "2"], "weekly_business_limit": 60, "changed": false},
+  "permitted_architecture": {
+    "engine_and_source_storage": "Existing private encrypted AWS Sydney service and storage, ap-southeast-2",
+    "dashboard": "Existing Maintain Technology Vercel deployment; 59 non-middleware functions verified in Sydney",
+    "identity": "Existing Maintain Media Clerk authentication; Clerk middleware is global",
+    "internal_admin": "Existing authenticated admin jeph@quotemax.com.au using the private Maintain Media dashboard",
+    "admin_access_country": "May be outside Australia; no Australian-only access claim",
+    "vendor_support_and_global_processing_countries": "not fully verified; expressly accepted as an unresolved limitation for these existing accounts in this bounded pilot",
+    "all_processing_australian_claimed": false,
+    "public_business_data_publication_allowed": false,
+    "external_file_or_vendor_exports_allowed": false
+  },
+  "retention": {
+    "schedule_version": "abr-v4-defaults",
+    "raw_source_max_days": 30,
+    "accepted_snapshot_max_days": 90,
+    "unreferenced_intake_staging_max_days": 7,
+    "other_artifacts": "Existing finite v4.0 schedule only where the authorised workflow creates them; no contact or outreach evidence is authorised by this record",
+    "authority_expiry_effect": "Stop new collection at expiry; existing records remain subject to finite deletion, not indefinite retention or automatic renewal",
+    "enforcement": "Developer must separately enable and verify applicable deletion controls; this record does not certify that execution",
+    "holds": "Only attributable, scoped holds with reason, owner and review date; no blanket indefinite hold"
+  },
+  "source_notice_and_review": {
+    "internal_source_attribution_required": true,
+    "notice_or_subject_message_sent": false,
+    "external_collection_notice_certified": false,
+    "contact_consent_inferred": false,
+    "current_licence_review_required_before_qualification": true
+  },
+  "g3_pilot_disposition": {
+    "basis": "Accept the existing verified encrypted Sydney host, private access and installed security controls for this recoverable public-source pilot only",
+    "current_technical_evidence_required": true,
+    "deferred": ["independent recovery-key custodian certification", "full disaster-recovery acceptance and installed-provider database restore"],
+    "risk_accepted_under_delegation": "Loss of the host or unavailable keys may require reacquiring the public source and repeating internal review; do not claim full recovery readiness or restore stale restriction state into active use",
+    "production_backup_approved": false,
+    "general_production_g3_pass": false
+  },
+  "required_separate_execution_evidence": ["current source terms/schema and exact G2 mapping reference/hash", "applicable pilot G3 security/access/encryption and bounded storage checks", "applicable retention enforcement", "exact-release G7 positive/negative acceptance results", "actual acquisition/coherence/hash/count receipt"],
+  "excluded_capabilities": ["website_collection", "abr", "sheets", "crm", "email_action", "phone_action", "campaign enrolment", "external exports"],
+  "scheduling": "Manual runs initially; no weekly source timer approval is inferred",
+  "database_gate_records_created_by_this_document": false,
+  "collection_executed_by_this_document": false,
+  "affected_requirements": ["R27 / FR-027", "R29", "R30", "G1 collection", "G3 collection", "G7 collection"],
+  "unaffected_requirements": "Source coherence, genuine review, UNKNOWN preservation, suppression, exact G2 mapping, finite retention, other vendor gates and full-production recovery requirements remain authoritative"
+}

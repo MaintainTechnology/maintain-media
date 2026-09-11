@@ -1,5 +1,6 @@
 """Live control API. An empty production database is a valid, honest workspace."""
 
+from typing import Literal
 from uuid import UUID
 
 from fastapi import BackgroundTasks, Request
@@ -11,6 +12,10 @@ from abr_engine.dashboard.models import RunRequest, SettingsPatch
 from abr_engine.db import transaction
 from abr_engine.live.auth import WebsiteAuthority
 from abr_engine.live.dashboard import dashboard_state, job_projection, save_preferences
+
+
+class LiveRunRequest(RunRequest):
+    source: Literal["qbcc", "abr"] | None = None
 
 
 def create_live_app(settings, *, authority: WebsiteAuthority, submit_run=None, get_job=None,
@@ -75,7 +80,7 @@ def create_live_app(settings, *, authority: WebsiteAuthority, submit_run=None, g
         )
 
     @app.post("/api/runs", status_code=202)
-    def run(data: RunRequest, request: Request, background_tasks: BackgroundTasks):
+    def run(data: LiveRunRequest, request: Request, background_tasks: BackgroundTasks):
         actor = actor_for(request, ("admin",))
         if str(data.request_id) != request.headers.get("idempotency-key"):
             raise DomainError("REQUEST_IDENTIFIERS_REQUIRED", 422)

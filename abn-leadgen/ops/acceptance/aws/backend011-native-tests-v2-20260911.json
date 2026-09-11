@@ -1,0 +1,25 @@
+{
+  "exit_code": 0,
+  "external_network_available": false,
+  "fixture_database_stopped": true,
+  "interfaces": [
+    "lo"
+  ],
+  "live_database_access": false,
+  "log_path": "/tmp/abr011-native-iz0oos7r/pytest.log",
+  "scope": "synthetic isolated PostgreSQL16 and offline HTTP transports",
+  "source_manifest_sha256": "ff64b1e1cb45a408231fec93e672e862832ab11f4a7d2957e785e330855cb838",
+  "source_release_role": "Pre-activation candidate; subsequently reopened for abrupt-stop finite-retention repair",
+  "source_root": "/opt/abn-leadgen-live-20260911-011-validation",
+  "stats": {
+    "errors": 0,
+    "failures": 0,
+    "skipped": 0,
+    "tests": 374
+  },
+  "status": "passed",
+  "uid": 999,
+  "validation_manifest_sha256": "74c140f4a45221494ca4b2930ee681faf16d32c66a15d43de40ca2b20f9d6838",
+  "xml_path": "/tmp/abr011-native-iz0oos7r/tests.xml",
+  "xml_sha256": "3bfbd8298792a853f26ab3e948c5f737a35f85adf57bed3619dcb1212fb9d379"
+}

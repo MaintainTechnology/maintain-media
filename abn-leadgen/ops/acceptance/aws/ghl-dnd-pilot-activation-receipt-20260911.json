@@ -1,0 +1,17 @@
+{
+  "status": "ghl_phone_dnd_authority_installed",
+  "plan_sha256": "b5de4a5f27a3091ef68d5d67982a7d9d3d50b918e621e41725563401922b8545",
+  "new_gate_rows": 4,
+  "policy_changed": false,
+  "crm_expires_at": "2026-09-24T23:18:20Z",
+  "removal_expires_at": "2027-09-10T23:18:20Z",
+  "allowed_channels": [
+    "phone"
+  ],
+  "services_started": false,
+  "timers_enabled": false,
+  "individual_approvals_created": 0,
+  "provider_calls": 0,
+  "outreach": "disabled",
+  "original_configuration_preserved": "/etc/abr-engine/pilot.before-ghl-dnd-20260911.yaml"
+}

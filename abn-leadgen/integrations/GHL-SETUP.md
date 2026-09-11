@@ -6,7 +6,64 @@ Keep CRM capability and `allow_writes` disabled until actual installation checks
 and the current release decisions pass. Empty custom-field setup contains no
 business records.
 
-Actual setup observed on **11 September 2026** (Manila): the new private
+**Current checkpoint — 11 September 2026:** the GHL account connection enabled
+in release 009b remains enabled in the [verified release 010](../ops/acceptance/aws/cleanup010-host-20260911.json)
+under the separate delegated-owner decision. The
+[actual activation](../ops/acceptance/aws/ghl-dnd-pilot-activation-receipt-20260911.json)
+and [service/account readback](../ops/acceptance/aws/ghl-sydney-account-verification-20260911.json)
+are complete. The [provider contract test](../ops/acceptance/live-integration-20260910/ghl-live-account-contract-20260911.json)
+passed and both synthetic contacts were removed. This is account-level readiness:
+the database still has **zero selected worklist rows and zero real CRM transfers**.
+The live DNCR receipt-format adapter is not implemented; real phone clearance,
+verification/locality, qualification and individual reviewer approval remain
+required. Google publishing and outreach remain disabled. See the
+[current full-tool status](../../specs/001-abr-lead-engine/implementation-status.md).
+
+The phone-only hand-off runtime requires `allowed_channels: ['phone']` and
+`workflow_inventory_sha256` in the non-secret account configuration. The
+installation receipt binds the exact configuration bytes; the current CRM G5
+decision binds that installation receipt and its approving actor. Missing or
+changed evidence keeps writes closed. The token additionally needs
+`workflows.readonly` for the documented
+[2023-02-21 workflow inventory](https://marketplace.gohighlevel.com/docs/2023-02-21/ghl/workflows/get-workflow/).
+
+Before every contact, field or tag mutation, the adapter reads the complete
+bounded account workflow inventory, requires every workflow to remain Draft,
+and compares its canonical ID/location/status/version/update-time digest with
+the reviewed configuration. It then checks current local authority again.
+Changed, published, unknown or incomplete inventory blocks that mutation,
+including suppression cleanup. An operator must review the changed account and
+renew the configuration, installation and G5 evidence before cleanup can resume;
+the durable removal job remains pending. No workflow is changed automatically.
+This request-boundary check cannot prevent an account administrator publishing
+a workflow between the inventory read and the next request. Restricting account
+administration remains part of the reviewed installation.
+
+Enabling the account does not select or approve businesses. A current tier A
+worklist row, explicit reviewer approval, current identity/licence and a clear
+phone wash with reviewed recipient timezone/locality remain mandatory. Candidate
+records are written with Do Not Disturb enabled. A successful hand-off receipt
+means the candidate projection was read back; it gives no permission to call or
+send a message. Isolated account tests use clearly labelled synthetic companies,
+never a real business's contact details, through a separately reviewed operator
+procedure. The actual 11 September duplicate test used the explicitly approved
+fictional telephone endpoint recorded in its acceptance plan; it supplied no
+real email or phone contact. Do not relax candidate admission for an account test.
+
+The account search index can lag a successful contact create. An empty group
+search after an uncertain create is not proof that nothing was created. The
+worker keeps that operation uncertain, records the next exponential-backoff
+attempt, and performs no second create. Five unresolved attempts hold the job in
+dead letter for operator review. When an update already has a known remote ID,
+the worker reads that exact ID and verifies its group even if search is empty;
+it never replaces that uncertainty with a new create.
+
+### Historical metadata-only setup
+
+The observations below preceded the separately approved contact tests and
+release 009b activation. They do not describe the current five-scope connection.
+
+Initial setup observed on **11 September 2026** (Manila): the new private
 integration token was securely installed on the Sydney service, and the metadata
 installer read back all **13** expected fields at **2026-09-10 16:52:15 UTC**.
 The local receipt records zero contact calls and no pending field create.
@@ -36,6 +93,8 @@ Chromium context reproduced the old 403 and verified the corrected submission;
 the final setup suite passed **89 tests**. These tests used synthetic tokens.
 The actual token was subsequently accepted and its installation confirmed.
 [Browser form Origin rules](https://fetch.spec.whatwg.org/#origin-header).
+
+### Initial metadata installation procedure
 
 1. In the intended sub-account, create a dedicated private integration. For this
    metadata-only setup grant `locations.readonly`, `locations/customFields.readonly`
@@ -76,8 +135,9 @@ The actual token was subsequently accepted and its installation confirmed.
    still work. [Create custom field API](https://marketplace.gohighlevel.com/docs/2023-02-21/ghl/locations/create-custom-field/),
    [field and folder controls](https://help.gohighlevel.com/support/solutions/articles/155000008466-creating-and-managing-custom-fields-for-better-data-organization).
 
-The runtime adapter eventually needs `contacts.readonly` and `contacts.write` in
-addition to the two metadata read scopes. The contact-write permission also
+The runtime adapter needs `contacts.readonly`, `contacts.write` and
+`workflows.readonly` in addition to the two metadata read scopes. Those five
+scopes were saved and verified for the current pilot. The contact-write permission also
 covers contact campaign/workflow endpoints, so scope selection alone does not
 guarantee that a credential cannot trigger outreach. The application does not
 call those endpoints. [Official scope table](https://marketplace.gohighlevel.com/docs/Authorization/Scopes/index.html).

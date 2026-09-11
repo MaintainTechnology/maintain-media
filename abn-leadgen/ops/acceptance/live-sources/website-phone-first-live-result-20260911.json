@@ -1,0 +1,122 @@
+{
+  "checked_at": "2026-09-11T00:50:49Z",
+  "job": {
+    "job_id": "dbc280d7-cb39-4de8-b918-05a0965d8d11",
+    "run_id": "dbc280d7-cb39-4de8-b918-05a0965d8d11",
+    "state": "complete",
+    "phase": "complete",
+    "source": "qbcc",
+    "result": {
+      "run_id": "0b9d0ed8-5431-5093-9300-6558fd237b30",
+      "status": "complete",
+      "replayed": false,
+      "requests": 6,
+      "contact_ids": [
+        "d1e4807e-e548-4a53-9361-adc31146802b",
+        "464f191d-276d-49ff-bf76-ee7c6eb7e9aa"
+      ],
+      "reason_codes": [
+        "CONTACT_PERMISSION_REVIEW_REQUIRED"
+      ],
+      "pages_fetched": 4,
+      "export_eligible": false,
+      "contacts_created": 2
+    },
+    "reason_codes": [
+      "CONTACT_PERMISSION_REVIEW_REQUIRED"
+    ],
+    "error_code": "CONTACT_PERMISSION_REVIEW_REQUIRED"
+  },
+  "website_collection_policy": {
+    "allowed_channels": [
+      "mobile",
+      "landline"
+    ],
+    "expires_at": "2026-09-25T07:18:20+08:00",
+    "reason_codes": []
+  },
+  "summary": {
+    "total_leads": 1,
+    "selected": 0,
+    "needs_review": 1,
+    "last_run_at": "2026-09-11 00:50:09.364609+00:00"
+  },
+  "setup": [
+    {
+      "id": "engine",
+      "label": "Australian engine",
+      "status": "connected",
+      "detail": "Connected to the actual private database. No demonstration businesses are added."
+    },
+    {
+      "id": "collection",
+      "label": "Business source collection",
+      "status": "approved",
+      "detail": "Current capability evidence is recorded."
+    },
+    {
+      "id": "website_collection",
+      "label": "Website contact collection",
+      "status": "approved",
+      "detail": "Phone numbers only, from manually reviewed own-business websites, for internal research."
+    },
+    {
+      "id": "crm",
+      "label": "GoHighLevel hand-off",
+      "status": "blocked",
+      "detail": "Required evidence: CAPABILITY_DISABLED"
+    },
+    {
+      "id": "abr",
+      "label": "Broader ABR discovery",
+      "status": "blocked",
+      "detail": "Required evidence: CAPABILITY_DISABLED"
+    },
+    {
+      "id": "worker",
+      "label": "Source run worker",
+      "status": "connected",
+      "detail": "Uses the same approved source pipeline as the server schedule."
+    }
+  ],
+  "website_job": {
+    "job_id": "dbc280d7-cb39-4de8-b918-05a0965d8d11",
+    "run_id": "dbc280d7-cb39-4de8-b918-05a0965d8d11",
+    "state": "complete",
+    "phase": "complete",
+    "source": "qbcc",
+    "result": {
+      "run_id": "0b9d0ed8-5431-5093-9300-6558fd237b30",
+      "status": "complete",
+      "replayed": false,
+      "requests": 6,
+      "contact_ids": [
+        "d1e4807e-e548-4a53-9361-adc31146802b",
+        "464f191d-276d-49ff-bf76-ee7c6eb7e9aa"
+      ],
+      "reason_codes": [
+        "CONTACT_PERMISSION_REVIEW_REQUIRED"
+      ],
+      "pages_fetched": 4,
+      "export_eligible": false,
+      "contacts_created": 2
+    },
+    "reason_codes": [
+      "CONTACT_PERMISSION_REVIEW_REQUIRED"
+    ],
+    "error_code": "CONTACT_PERMISSION_REVIEW_REQUIRED"
+  },
+  "contacts": [
+    {
+      "contact_id": "464f191d-276d-49ff-bf76-ee7c6eb7e9aa",
+      "channel": "landline",
+      "provenance_id": "6d439607-a1ad-4cb0-bfa5-75ca6f710665"
+    },
+    {
+      "contact_id": "d1e4807e-e548-4a53-9361-adc31146802b",
+      "channel": "landline",
+      "provenance_id": "ac2c13f0-1f21-4e6f-b6a3-4c21541016fd"
+    }
+  ],
+  "outreach": "disabled"
+}

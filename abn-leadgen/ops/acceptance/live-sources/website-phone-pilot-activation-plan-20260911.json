@@ -1,0 +1,37 @@
+{
+  "version": "website-phone-pilot-activation-v1",
+  "actor_id": "delegated-owner:jeph@quotemax.com.au",
+  "adviser_status": "not_obtained",
+  "approved_at": "2026-09-11T00:47:43Z",
+  "collection_expires_at": "2026-09-24T23:18:20Z",
+  "website_expires_at": "2026-09-24T23:18:20Z",
+  "retention_expires_at": "2027-09-10T23:18:20Z",
+  "source_manifest_before_sha256": "5ec6694f2ba4c555083398b4c5a9a1bffbf3a0b17c4e97667ec2c9759b8c0fbd",
+  "source_manifest_sha256": "51a364b416b8b333c5651631e9db27d1e35e69e68f3ff1aae6ec8c9d501e58fb",
+  "production_backup_accepted": false,
+  "full_production_release": false,
+  "policy_version": "website-phone-delegated-pilot-retention-20260911-v1",
+  "owner_evidence": {
+    "file": "website-phone-pilot-delegated-owner-20260911.json",
+    "sha256": "6364819693150146ded61e3cd00cd4e3900745158131a02a5109570b54004e07"
+  },
+  "technical_evidence": {
+    "file": "website-phone-pilot-release-008-decision-20260911.md",
+    "sha256": "3fb83288c9d8302c566beeb11196c28fe7303e2da8330af0f5551b1160a3fa47"
+  },
+  "gate_revisions": {
+    "website_collection": {
+      "G1": 1,
+      "G3": 1,
+      "G7": 1
+    },
+    "retention": {
+      "G1": 2,
+      "G3": 3,
+      "G7": 3
+    },
+    "collection": {
+      "G7": 3
+    }
+  }
+}

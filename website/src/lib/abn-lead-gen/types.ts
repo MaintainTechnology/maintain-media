@@ -3,12 +3,18 @@ export type ReportKind = "html" | "csv" | "markdown";
 export type DashboardView = "leads" | "runs" | "setup";
 export interface DashboardAdmin { username: string; displayName: string; csrfToken: string }
 export interface RunSettings { default_source: LeadSource; monthly_cap_micro_aud: number }
+export interface CrmHandoff {
+  state: string; can_approve: boolean; can_reject: boolean; reason_codes: string[];
+  outbox_id: string | null; updated_at: string | null;
+}
 export interface Lead {
   group_id?: string; revision?: number; row_id?: string | null; row_version?: number | null;
   worklist_id?: string | null; outcome?: string | null; approval_state?: string | null;
   outcome_details?: { attempts?: number; invitation_state?: string; invitation_evidence_ref?: string | null; notes?: string; occurred_at?: string };
   contacts?: { contact_id: string; channel: string; revision: number; provenance_id: string; allowed: boolean; reason_codes: string[] }[];
   website_identity?: { identity_id: string; registrable_domain: string; assessment: string; expires_at: string } | null;
+  website_job?: Job | null;
+  crm_handoff?: CrmHandoff | null;
   lead_id: string; source: string; business_name?: string | null; abn?: string | null;
   location?: string | null; first_observed_at?: string | null; signal?: string | null;
   state?: string | null; next_action?: string | null; tier?: "A" | "B" | "C" | null;
@@ -16,9 +22,24 @@ export interface Lead {
 }
 export interface Job {
   job_id?: string; run_id?: string | null; state: string; source: string; error_code?: string | null;
+  phase?: string | null; reason_codes?: string[]; result?: SourceResult | null;
+  started_at?: string | null; finished_at?: string | null;
+}
+export interface SourceResult {
+  snapshot_id?: string; cursor_version?: number; baseline?: boolean; noop?: boolean;
+  events?: number; candidates?: number; classification?: string; record_count?: number;
+  source_published_at?: string | null;
+  publisher_extract_time?: string | null;
+}
+export interface SourceStatus {
+  source: string; status: string; last_success_at?: string | null; source_published_at?: string | null;
+  capability?: string; can_run?: boolean; reason_codes?: string[]; record_count?: number | null;
+  baseline?: boolean | null; classification?: string | null;
+  publisher_extract_time?: string | null;
 }
 export interface EngineRun {
   run_id: string; source: string; status: string; started_at?: string | null;
+  phase?: string | null; result?: SourceResult | null; error_code?: string | null; reason_codes?: string[];
   selected?: number | null; reports?: Partial<Record<ReportKind, string | null>> | null;
 }
 export interface DashboardData {
@@ -26,17 +47,27 @@ export interface DashboardData {
   scopes?: string[]; run_enabled?: boolean; worklist_csv?: string | null;
   summary: { total_leads: number; selected: number; needs_review: number; last_run_at?: string | null };
   leads: Lead[]; runs: EngineRun[];
-  sources: { source: string; status: string; last_success_at?: string | null; source_published_at?: string | null }[];
+  sources: SourceStatus[];
   setup: { id?: string; label: string; status: string; detail: string }[];
   active_job?: Job | null; latest_job?: Job | null;
   budget?: { effective_cap_micro_aud: number; frozen: boolean } | null;
   operational_notices?: { code: string; message: string; count: number }[];
+  website_collection_policy?: { allowed_channels: string[]; reason_codes: string[]; expires_at: string | null };
 }
 
 const record = (value: unknown): value is Record<string, unknown> => value !== null && typeof value === "object" && !Array.isArray(value);
 const optionalString = (value: unknown) => value == null || typeof value === "string";
 const count = (value: unknown) => typeof value === "number" && Number.isSafeInteger(value) && value >= 0;
 const uuid = (value: unknown) => typeof value === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
+const optionalReasons = (value: unknown) => value == null || Array.isArray(value) && value.every(reason => typeof reason === "string");
+export function validSourceResult(value: unknown): value is SourceResult {
+  return record(value) && (value.snapshot_id == null || uuid(value.snapshot_id))
+    && ["cursor_version", "events", "candidates", "record_count"].every(key => value[key] == null || count(value[key]))
+    && ["baseline", "noop"].every(key => value[key] == null || typeof value[key] === "boolean")
+    && optionalString(value.classification) && optionalString(value.source_published_at) && optionalString(value.publisher_extract_time);
+}
+const sourceReceipt = (value: Record<string, unknown>) => optionalString(value.phase) && optionalReasons(value.reason_codes)
+  && optionalString(value.error_code) && (value.result == null || validSourceResult(value.result));
 export const isSource = (value: unknown): value is LeadSource => value === "all" || value === "abr" || value === "qbcc";
 export function validSettings(value: unknown): value is RunSettings {
   return record(value) && isSource(value.default_source) && count(value.monthly_cap_micro_aud) && Number(value.monthly_cap_micro_aud) <= 150000000;
@@ -44,7 +75,12 @@ export function validSettings(value: unknown): value is RunSettings {
 export function validJob(value: unknown): value is Job {
   return record(value) && uuid(value.job_id) && uuid(value.run_id) && typeof value.state === "string"
     && ["queued", "running", "complete", "held", "failed", "interrupted"].includes(value.state)
-    && isSource(value.source) && optionalString(value.error_code);
+    && isSource(value.source) && sourceReceipt(value) && optionalString(value.started_at) && optionalString(value.finished_at);
+}
+export function validCrmHandoff(value: unknown): value is CrmHandoff {
+  return record(value) && typeof value.state === "string" && typeof value.can_approve === "boolean" && typeof value.can_reject === "boolean"
+    && Array.isArray(value.reason_codes) && value.reason_codes.every(reason => typeof reason === "string")
+    && (value.outbox_id === null || uuid(value.outbox_id)) && optionalString(value.updated_at);
 }
 export function validMutationReceipt(endpoint: string, value: unknown): boolean {
   if (endpoint === "settings") return validSettings(value);
@@ -66,21 +102,35 @@ export function validDashboard(value: unknown): value is DashboardData {
     && Array.isArray(value.leads) && value.leads.every(lead => record(lead) && typeof lead.lead_id === "string" && typeof lead.source === "string"
       && ["business_name", "abn", "location", "first_observed_at", "signal", "state", "next_action"].every(key => optionalString(lead[key]))
       && (lead.tier == null || ["A", "B", "C"].includes(String(lead.tier))) && (lead.score == null || typeof lead.score === "number" && Number.isFinite(lead.score))
-      && (lead.reason_codes == null || Array.isArray(lead.reason_codes) && lead.reason_codes.every(reason => typeof reason === "string")))
+      && (lead.reason_codes == null || Array.isArray(lead.reason_codes) && lead.reason_codes.every(reason => typeof reason === "string"))
+      && (lead.website_job == null || validJob(lead.website_job))
+      && (lead.crm_handoff == null || validCrmHandoff(lead.crm_handoff)))
     && Array.isArray(value.runs) && value.runs.every(run => record(run) && ["run_id", "source", "status"].every(key => typeof run[key] === "string")
-      && optionalString(run.started_at) && (run.selected == null || count(run.selected))
+      && optionalString(run.started_at) && (run.selected == null || count(run.selected)) && sourceReceipt(run)
       && (run.reports == null || record(run.reports) && ["html", "csv", "markdown"].every(key => optionalString((run.reports as Record<string, unknown>)[key]))))
-    && Array.isArray(value.sources) && value.sources.every(source => record(source) && typeof source.source === "string" && typeof source.status === "string" && optionalString(source.last_success_at) && optionalString(source.source_published_at))
+    && Array.isArray(value.sources) && value.sources.every(source => record(source) && typeof source.source === "string" && typeof source.status === "string" && optionalString(source.last_success_at) && optionalString(source.source_published_at)
+      && optionalString(source.capability) && optionalString(source.classification) && optionalString(source.publisher_extract_time) && optionalReasons(source.reason_codes)
+      && (source.can_run == null || typeof source.can_run === "boolean") && (source.baseline == null || typeof source.baseline === "boolean") && (source.record_count == null || count(source.record_count)))
     && Array.isArray(value.setup) && value.setup.every(item => record(item) && ["label", "status", "detail"].every(key => typeof item[key] === "string"))
     && [value.active_job, value.latest_job].every(job => job == null || validJob(job))
     && (value.budget == null || record(value.budget) && count(value.budget.effective_cap_micro_aud) && typeof value.budget.frozen === "boolean")
-    && (value.operational_notices == null || Array.isArray(value.operational_notices) && value.operational_notices.every(notice => record(notice) && typeof notice.code === "string" && typeof notice.message === "string" && count(notice.count)));
+    && (value.operational_notices == null || Array.isArray(value.operational_notices) && value.operational_notices.every(notice => record(notice) && typeof notice.code === "string" && typeof notice.message === "string" && count(notice.count)))
+    && (value.website_collection_policy == null || record(value.website_collection_policy)
+      && Array.isArray(value.website_collection_policy.allowed_channels) && value.website_collection_policy.allowed_channels.every(channel => typeof channel === "string")
+      && Array.isArray(value.website_collection_policy.reason_codes) && value.website_collection_policy.reason_codes.every(reason => typeof reason === "string")
+      && optionalString(value.website_collection_policy.expires_at));
 }
 export function safeReportURL(url: unknown): string | null {
   if (url === "/api/abn-lead-gen/worklist.csv") return url;
   return typeof url === "string" && /^\/api\/abn-lead-gen\/reports\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\/(html|csv|markdown)$/.test(url) ? url : null;
 }
 export const jobActive = (job?: Job | null) => !!job && ["running", "queued", "pending"].includes(job.state);
+export function sourceRunAllowed(data: DashboardData | null | undefined, source = data?.settings.default_source): boolean {
+  if (!data) return false;
+  if (data.mode === "fixture") return data.run_enabled !== false;
+  const current = data.sources.find(item => item.source === source);
+  return data.run_enabled === true && source !== "all" && current?.can_run === true && current.reason_codes?.length === 0;
+}
 export const sourceName = (value?: string | null) => value === "all" ? "ABR + QBCC" : (value || "Unknown").toUpperCase();
 export function humanize(value?: string | null): string {
   const labels: Record<string, string> = {

@@ -130,7 +130,7 @@ def projection(conn, service, row) -> tuple[dict, dict]:
     contacts = conn.execute("SELECT contact_id FROM contact_record WHERE lead_id=%s ORDER BY channel,contact_id", (lead["lead_id"],)).fetchall()
     for item in contacts:
         gate = service.gate(conn, item["contact_id"])
-        if gate["allowed"]:
+        if gate["allowed"] and gate["channel"] in mapping.get("allowed_channels", ["email", "phone"]):
             contact = service.contact(conn, item["contact_id"])
             aliases = conn.execute("SELECT encrypted_identifier FROM lead_source_link WHERE group_id=ANY(%s) AND source_type='abn'", (family,)).fetchall()
             abns = {service.keys.decrypt(alias["encrypted_identifier"]) for alias in aliases}
@@ -178,6 +178,46 @@ def approve(conn, service, data, actor):
     conn.execute("UPDATE worklist_row SET approval_state='approved' WHERE row_id=%s", (row["row_id"],))
     service.audit(conn, actor, "crm_approved", outbox["outbox_id"])
     return {"approval_id": outbox["outbox_id"], "outbox_id": outbox["outbox_id"], "state": outbox["state"]}
+
+
+def handoff_status(conn, service, row_id, *, contract_reasons=()) -> dict:
+    """Reviewer-only, endpoint-free view of this worklist revision and its outbox.
+
+    A successful receipt means a verified DND candidate projection, never a sent
+    message. Admission is checked again by approve and every worker I/O boundary.
+    """
+    result = {"state": "not_selected", "can_approve": False, "can_reject": False,
+              "reason_codes": list(contract_reasons), "outbox_id": None, "updated_at": None}
+    work = conn.execute("SELECT * FROM worklist_row WHERE row_id=%s", (row_id,)).fetchone() if row_id else None
+    if not work:
+        result["reason_codes"] = sorted({*contract_reasons, "ONLY_SELECTED_TIER_A"})
+        return result
+    outbox = conn.execute(
+        "SELECT o.*, (SELECT max(created_at) FROM audit_event a WHERE a.object_type='control' "
+        "AND a.object_id=o.outbox_id::text AND left(a.action,4)='crm_') AS updated_at "
+        "FROM crm_outbox o WHERE row_id=%s AND approved_version=%s ORDER BY outbox_id LIMIT 1",
+        (row_id, work["version"]),
+    ).fetchone()
+    result["state"] = outbox["state"] if outbox else (
+        "rejected" if work["approval_state"] == "rejected" else "awaiting_review")
+    if outbox:
+        result.update(outbox_id=outbox["outbox_id"], updated_at=outbox["updated_at"])
+    # Rejecting a queued approval does not purport to erase a verified hand-off;
+    # the separate restriction action owns downstream removal.
+    result["can_reject"] = work["approval_state"] != "rejected" and result["state"] != "succeeded"
+    reasons = list(contract_reasons)
+    if work["selected_tier"] != "A":
+        reasons.append("ONLY_SELECTED_TIER_A")
+    elif not reasons:
+        try:
+            projection(conn, service, work)
+        except DomainError as error:
+            reasons.extend(error.details.get("reasons") or [error.code])
+    result["reason_codes"] = sorted(set(reasons))
+    # Repeated approval of the same durable outbox cannot revive blocked or
+    # uncertain work. Its worker must reconcile it or a new row revision is needed.
+    result["can_approve"] = not reasons and outbox is None
+    return result
 
 
 def _current(conn, service, row, desired) -> bool:
@@ -375,6 +415,15 @@ def drain_one(settings, service, provider: CRMProvider, outbox_id):
         matches = provider.find_group(desired["group_id"])
         if len(matches) > 1:
             raise DomainError("CRM_MATCH_AMBIGUOUS", 409)
+        # The provider's search index can lag its successful write/read API.
+        # A known remote identity must never become a new create merely because
+        # an index lookup is temporarily empty. Read and verify that exact ID;
+        # missing/conflicting records remain held by the normal error path.
+        if not matches and claim.get("remote_id"):
+            known_id = claim["remote_id"]
+            if provider.fetch(known_id).get("group_id") != desired["group_id"]:
+                raise DomainError("CRM_REMOTE_IDENTITY_CONFLICT", 409)
+            matches = [known_id]
         if claim["reconcile_only"]:
             if matches:
                 remote_id = matches[0]

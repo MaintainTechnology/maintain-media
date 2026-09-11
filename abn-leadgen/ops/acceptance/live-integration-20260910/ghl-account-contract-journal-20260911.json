@@ -1,0 +1,450 @@
+{
+  "active_case": "mapping",
+  "checks": {
+    "duplicate_no_overwrite": true,
+    "group_search": true,
+    "metadata": true,
+    "suppression_clear": true,
+    "uncertain_create": true,
+    "unrelated_tags": true,
+    "workflow_isolation": true
+  },
+  "cleanup": {
+    "mapping": {
+      "cleared_at": "2026-09-11T01:36:57.120998+00:00",
+      "deleted": true,
+      "remote_id": "8uv4311kX7iMUsTnLYpX",
+      "verified_at": "2026-09-11T01:36:58.381307+00:00"
+    },
+    "uncertain": {
+      "cleared_at": "2026-09-11T01:36:55.165798+00:00",
+      "deleted": true,
+      "remote_id": "maJvYLSvkvYfB5UuiwrS",
+      "verified_at": "2026-09-11T01:36:56.323364+00:00"
+    }
+  },
+  "collision_result": {
+    "code": "GHL_REQUEST_REJECTED",
+    "error_type": "DomainError"
+  },
+  "config": {
+    "allow_writes": true,
+    "allowed_channels": [
+      "phone"
+    ],
+    "api_version": "2023-02-21",
+    "field_ids": {
+      "abn": "rm7UiYsYhH2fChW1MGiK",
+      "basis_summary": "MChuJxvDxfoQiRZdRBqV",
+      "channel": "0q4wFakPGqj01PqpgRjG",
+      "contact_id": "VuHeNqML8gboG9z25bri",
+      "entity_class": "f6ZAmrDiSeAuT2wkysia",
+      "group_id": "C17XY6QzLsYssEnb1gUz",
+      "industry": "L5J9lpkOlj4rmcs43XYj",
+      "positioning_notes": "L8ftHWfbcXNV5p9LmSES",
+      "score": "vlb0Tx8aXtfTxBtUzHhk",
+      "signal": "g8p49CsBxET78RdmC398",
+      "state": "tGj8frSWWapsCN9iuWnC",
+      "tier": "Mzt5Ijo1zFWAmhdllO5f",
+      "website": "bwgTvekr4J2Y4mMAr14L"
+    },
+    "group_search_field": "customFields.C17XY6QzLsYssEnb1gUz",
+    "location_id": "xHZFHMOE476t5CxY9vCG",
+    "mapping_version": "maintain-media-ghl-v1",
+    "token_env": "ABR_GHL_TOKEN",
+    "workflow_inventory_sha256": "e30e1d90e03a629a82b04bf0d552322e9e8f47add0fe2967e81f3fbac72291e8"
+  },
+  "fictional_phone_source": "https://www.acma.gov.au/phone-numbers-use-tv-shows-films-and-creative-works",
+  "finished_at": "2026-09-11T01:36:58.665655+00:00",
+  "index_delay_observation": {
+    "additional_create_attempts": 0,
+    "immediate_search_found_record": false,
+    "later_reconciliation_verified_at": "2026-09-11T01:35:11.083607+00:00",
+    "maximum_index_latency_measured": false
+  },
+  "location_id": "xHZFHMOE476t5CxY9vCG",
+  "messages_sent": 0,
+  "mutation_attempts": 12,
+  "pending_request": null,
+  "records": {
+    "collision": {
+      "contact_id": "8af49edf-2136-4ca3-8f7d-92c8425bd3cf",
+      "group_id": "64814bb2-b232-447b-a0e4-2f5e2dd47642",
+      "remote_id": null
+    },
+    "mapping": {
+      "contact_id": "8e2f62e4-72e5-4425-8529-a68f3f7e28ab",
+      "group_id": "3fa57170-cf55-4df6-897e-550baf7e3ab0",
+      "remote_id": "8uv4311kX7iMUsTnLYpX"
+    },
+    "uncertain": {
+      "contact_id": "340fba8e-de49-401c-9b11-24983dbafb56",
+      "group_id": "de1308d1-34d9-4309-a98c-37b3f24935b5",
+      "remote_id": "maJvYLSvkvYfB5UuiwrS"
+    }
+  },
+  "requests": [
+    {
+      "at": "2026-09-11T01:28:48.331770+00:00",
+      "method": "GET",
+      "path": "/locations/xHZFHMOE476t5CxY9vCG",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:28:48.600064+00:00",
+      "method": "GET",
+      "path": "/locations/xHZFHMOE476t5CxY9vCG/customFields",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:28:48.910541+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:28:49.369549+00:00",
+      "method": "POST",
+      "path": "/contacts/search",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:28:49.687307+00:00",
+      "method": "POST",
+      "path": "/contacts/search",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:28:50.119542+00:00",
+      "method": "POST",
+      "path": "/contacts/search",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:28:50.440418+00:00",
+      "method": "POST",
+      "path": "/contacts/search",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:28:50.713044+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:28:51.217265+00:00",
+      "method": "POST",
+      "path": "/contacts/",
+      "status": 201
+    },
+    {
+      "at": "2026-09-11T01:28:51.480428+00:00",
+      "method": "GET",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:28:51.790784+00:00",
+      "method": "GET",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:44.971827+00:00",
+      "method": "GET",
+      "path": "/locations/xHZFHMOE476t5CxY9vCG",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:45.243475+00:00",
+      "method": "GET",
+      "path": "/locations/xHZFHMOE476t5CxY9vCG/customFields",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:45.805499+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:46.097849+00:00",
+      "method": "GET",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:46.429169+00:00",
+      "method": "POST",
+      "path": "/contacts/search",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:46.704324+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:48.832211+00:00",
+      "method": "POST",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX/tags",
+      "status": 201
+    },
+    {
+      "at": "2026-09-11T01:31:49.117262+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:49.419765+00:00",
+      "method": "POST",
+      "path": "/contacts/",
+      "status": 400
+    },
+    {
+      "at": "2026-09-11T01:31:49.698473+00:00",
+      "method": "GET",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:50.501863+00:00",
+      "method": "POST",
+      "path": "/contacts/search",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:51.041305+00:00",
+      "method": "POST",
+      "path": "/contacts/search",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:51.326578+00:00",
+      "method": "GET",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:51.599444+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:51.954358+00:00",
+      "method": "PUT",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:52.222593+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:52.785889+00:00",
+      "method": "DELETE",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX/tags",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:53.055671+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:53.698623+00:00",
+      "method": "POST",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX/tags",
+      "status": 201
+    },
+    {
+      "at": "2026-09-11T01:31:53.965556+00:00",
+      "method": "GET",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:54.220560+00:00",
+      "method": "GET",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:54.495317+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:31:54.886736+00:00",
+      "method": "POST",
+      "path": "/contacts/",
+      "status": 201
+    },
+    {
+      "at": "2026-09-11T01:31:55.255691+00:00",
+      "method": "POST",
+      "path": "/contacts/search",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:35:10.389470+00:00",
+      "method": "POST",
+      "path": "/contacts/search",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:35:10.745268+00:00",
+      "method": "GET",
+      "path": "/contacts/maJvYLSvkvYfB5UuiwrS",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:35:11.057809+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:52.041704+00:00",
+      "method": "GET",
+      "path": "/contacts/maJvYLSvkvYfB5UuiwrS",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:52.304022+00:00",
+      "method": "GET",
+      "path": "/contacts/maJvYLSvkvYfB5UuiwrS",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:52.558964+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:52.919236+00:00",
+      "method": "PUT",
+      "path": "/contacts/maJvYLSvkvYfB5UuiwrS",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:53.169429+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:53.732379+00:00",
+      "method": "DELETE",
+      "path": "/contacts/maJvYLSvkvYfB5UuiwrS/tags",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:54.011275+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:54.610284+00:00",
+      "method": "POST",
+      "path": "/contacts/maJvYLSvkvYfB5UuiwrS/tags",
+      "status": 201
+    },
+    {
+      "at": "2026-09-11T01:36:54.866088+00:00",
+      "method": "GET",
+      "path": "/contacts/maJvYLSvkvYfB5UuiwrS",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:55.129260+00:00",
+      "method": "GET",
+      "path": "/contacts/maJvYLSvkvYfB5UuiwrS",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:55.453227+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:56.045865+00:00",
+      "method": "DELETE",
+      "path": "/contacts/maJvYLSvkvYfB5UuiwrS",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:56.314307+00:00",
+      "method": "GET",
+      "path": "/contacts/maJvYLSvkvYfB5UuiwrS",
+      "status": 400
+    },
+    {
+      "at": "2026-09-11T01:36:56.584147+00:00",
+      "method": "GET",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:56.854981+00:00",
+      "method": "GET",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:57.111534+00:00",
+      "method": "GET",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:57.404935+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:58.114325+00:00",
+      "method": "DELETE",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX",
+      "status": 200
+    },
+    {
+      "at": "2026-09-11T01:36:58.365010+00:00",
+      "method": "GET",
+      "path": "/contacts/8uv4311kX7iMUsTnLYpX",
+      "status": 400
+    },
+    {
+      "at": "2026-09-11T01:36:58.657545+00:00",
+      "method": "GET",
+      "path": "/workflows/",
+      "status": 200
+    }
+  ],
+  "reviewed_failures": [
+    {
+      "code": "FIELD_READBACK_MISMATCH_business_name",
+      "type": "RuntimeError"
+    },
+    {
+      "code": "UNCERTAIN_CREATE_RECONCILIATION_FAILED",
+      "type": "RuntimeError"
+    }
+  ],
+  "schema_version": 1,
+  "started_at": "2026-09-11T01:28:38.618298+00:00",
+  "status": "contract_passed_synthetic_contacts_removed",
+  "synthetic_only": true
+}

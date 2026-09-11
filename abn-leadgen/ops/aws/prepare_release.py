@@ -20,6 +20,7 @@ MAX_FILES = 999  # Plus one manifest member; shared with archive verification.
 GENERATED = {"config/fixture.yaml": b"mode: fixture\n"}
 FIXED = frozenset({
     "pyproject.toml", "uv.lock", ".python-version", "config/qualification.yaml",
+    "config/sources/abr-public.xsd", "config/sources/abr-public-mapping.json",
     "src/abr_engine/__init__.py", "src/abr_engine/cli.py", "src/abr_engine/config.py",
     "migrations/001_foundation.sql",
     "integrations/crm_fields.yaml", "templates/report.html.j2", "templates/report.md.j2",
@@ -41,6 +42,7 @@ FIXED = frozenset({
     "ops/aws/abr-engine-qbcc-weekly.service", "ops/aws/abr-engine-qbcc-weekly.timer",
     "ops/aws/abr-engine-qbcc-review-cleanup.service", "ops/aws/abr-engine-qbcc-review-cleanup.timer",
     "ops/aws/abr-engine-retention.service", "ops/aws/abr-engine-retention.timer",
+    "ops/aws/abr-engine-abr-worker.service", "ops/aws/abr-engine-abr-worker.timer",
     "src/abr_engine/dashboard/static/OFL.txt", "src/abr_engine/dashboard/static/logo.svg",
     "src/abr_engine/dashboard/static/index.html", "src/abr_engine/dashboard/static/dashboard.js",
     "src/abr_engine/dashboard/static/dashboard.css", "src/abr_engine/dashboard/static/albert-sans.ttf",

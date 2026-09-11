@@ -1,0 +1,132 @@
+{
+  "observed_at": "2026-09-11T01:21:38.353108+00:00",
+  "location_id": "xHZFHMOE476t5CxY9vCG",
+  "api_version": "2023-02-21",
+  "fields": {
+    "group_id": {
+      "id": "C17XY6QzLsYssEnb1gUz",
+      "name": "ABN Engine Group ID",
+      "type": "TEXT",
+      "key": "contact.abn_engine_group_id"
+    },
+    "contact_id": {
+      "id": "VuHeNqML8gboG9z25bri",
+      "name": "ABN Engine Contact ID",
+      "type": "TEXT",
+      "key": "contact.abn_engine_contact_id"
+    },
+    "channel": {
+      "id": "0q4wFakPGqj01PqpgRjG",
+      "name": "ABN Engine Channel",
+      "type": "TEXT",
+      "key": "contact.abn_engine_channel"
+    },
+    "abn": {
+      "id": "rm7UiYsYhH2fChW1MGiK",
+      "name": "ABN Engine ABN",
+      "type": "TEXT",
+      "key": "contact.abn_engine_abn"
+    },
+    "signal": {
+      "id": "g8p49CsBxET78RdmC398",
+      "name": "ABN Engine Signal",
+      "type": "TEXT",
+      "key": "contact.abn_engine_signal"
+    },
+    "score": {
+      "id": "vlb0Tx8aXtfTxBtUzHhk",
+      "name": "ABN Engine Score",
+      "type": "NUMERICAL",
+      "key": "contact.abn_engine_score"
+    },
+    "tier": {
+      "id": "Mzt5Ijo1zFWAmhdllO5f",
+      "name": "ABN Engine Tier",
+      "type": "TEXT",
+      "key": "contact.abn_engine_tier"
+    },
+    "industry": {
+      "id": "L5J9lpkOlj4rmcs43XYj",
+      "name": "ABN Engine Industry",
+      "type": "TEXT",
+      "key": "contact.abn_engine_industry"
+    },
+    "entity_class": {
+      "id": "f6ZAmrDiSeAuT2wkysia",
+      "name": "ABN Engine Entity Class",
+      "type": "TEXT",
+      "key": "contact.abn_engine_entity_class"
+    },
+    "state": {
+      "id": "tGj8frSWWapsCN9iuWnC",
+      "name": "ABN Engine State",
+      "type": "TEXT",
+      "key": "contact.abn_engine_state"
+    },
+    "website": {
+      "id": "bwgTvekr4J2Y4mMAr14L",
+      "name": "ABN Engine Website",
+      "type": "TEXT",
+      "key": "contact.abn_engine_website"
+    },
+    "positioning_notes": {
+      "id": "L8ftHWfbcXNV5p9LmSES",
+      "name": "ABN Engine Positioning Notes",
+      "type": "LARGE_TEXT",
+      "key": "contact.abn_engine_positioning_notes"
+    },
+    "basis_summary": {
+      "id": "MChuJxvDxfoQiRZdRBqV",
+      "name": "ABN Engine Basis Summary",
+      "type": "LARGE_TEXT",
+      "key": "contact.abn_engine_basis_summary"
+    }
+  },
+  "workflows": [
+    {
+      "id": "3861918b-4af9-48ba-80e4-11242a971236",
+      "locationId": "xHZFHMOE476t5CxY9vCG",
+      "status": "draft",
+      "version": 2,
+      "updatedAt": "2026-09-10T04:20:10.565Z"
+    },
+    {
+      "id": "f850f356-b093-4c02-8b5e-e324728ba0e3",
+      "locationId": "xHZFHMOE476t5CxY9vCG",
+      "status": "draft",
+      "version": 2,
+      "updatedAt": "2026-09-10T04:20:10.535Z"
+    },
+    {
+      "id": "0deda9c7-d4c2-438e-9a3c-02fe428ba92a",
+      "locationId": "xHZFHMOE476t5CxY9vCG",
+      "status": "draft",
+      "version": 2,
+      "updatedAt": "2026-09-10T04:20:10.620Z"
+    },
+    {
+      "id": "de027552-23e9-4569-8e6c-73e08e61097f",
+      "locationId": "xHZFHMOE476t5CxY9vCG",
+      "status": "draft",
+      "version": 2,
+      "updatedAt": "2026-09-10T04:20:10.587Z"
+    },
+    {
+      "id": "66a7eb06-baf8-470f-b014-4123a860f8db",
+      "locationId": "xHZFHMOE476t5CxY9vCG",
+      "status": "draft",
+      "version": 2,
+      "updatedAt": "2026-09-10T04:20:10.335Z"
+    },
+    {
+      "id": "40b4da5c-6aa9-4c3a-9082-f6562ee4da60",
+      "locationId": "xHZFHMOE476t5CxY9vCG",
+      "status": "draft",
+      "version": 2,
+      "updatedAt": "2026-09-10T04:20:10.564Z"
+    }
+  ],
+  "workflow_inventory_sha256": "e30e1d90e03a629a82b04bf0d552322e9e8f47add0fe2967e81f3fbac72291e8",
+  "contact_writes": 0,
+  "messages_sent": 0
+}

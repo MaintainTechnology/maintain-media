@@ -1,0 +1,30 @@
+{
+  "checked_at": "2026-09-10T23:52:03.6756331Z",
+  "deployment_id": "dpl_DXLBGo8BxFmaQfzpoWzMtQBdhsYj",
+  "url": "website-5cddaau6t-maintain-technology.vercel.app",
+  "state": "READY",
+  "aliases": [
+    "www.maintainmedia.com.au",
+    "website-iota-ruddy-35.vercel.app",
+    "maintainmedia.com.au",
+    "website-maintain-technology.vercel.app"
+  ],
+  "function_regions": [
+    {
+      "Name": "arn1,bom1,cdg1,cle1,cpt1,dub1,fra1,gru1,hkg1,hnd1,iad1,icn1,kix1,lhr1,pdx1,sfo1,sin1,syd1,yul1",
+      "Count": 1
+    },
+    {
+      "Name": "syd1",
+      "Count": 59
+    }
+  ],
+  "source_digest": "86a8bb1ea99475e3446209eb8c918b62134c065db80331a0032ab46578de166c",
+  "source_files": 73,
+  "changes": "Role-based QBCC approval guidance, source attribution and accurate held-run explanation",
+  "tests": 24,
+  "eslint": "passed",
+  "cloud_next_build_and_typecheck": "passed",
+  "signed_out_http_checks": 12,
+  "browser_login_verified": false
+}

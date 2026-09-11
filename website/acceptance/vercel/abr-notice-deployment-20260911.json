@@ -1,0 +1,453 @@
+{
+  "checked_at": "2026-09-11T02:49:29.511Z",
+  "deployment_id": "dpl_64YdrjBDNwaqKZEHa6zHrMTEkMXo",
+  "url": "https://website-ea70a2ghd-maintain-technology.vercel.app",
+  "http_status": 200,
+  "body_bytes": 41044,
+  "body_sha256": "64f7819cbe5b8c92771941cb77236e7c47d05888940b5aefba2883e1479755c0",
+  "checks_passed": 21,
+  "source_sha256": "43d0747bc65c304861bd0d244dfe30bd0c8cf37550fde257227d0f0475bcc8ad",
+  "source_manifest_sha256": "13149a8b61edd8463fd90da3c0c67f54813d80ccaf35641c06880566d8d72c47",
+  "scope": "maintain-technology",
+  "id": "dpl_64YdrjBDNwaqKZEHa6zHrMTEkMXo",
+  "ready_state": "READY",
+  "project_id": "prj_0jiFRBJLqKpgwyClzI4bl1qn1a12",
+  "target": "production",
+  "aliases": [
+    "www.maintainmedia.com.au",
+    "website-iota-ruddy-35.vercel.app",
+    "maintainmedia.com.au",
+    "website-maintain-technology.vercel.app"
+  ],
+  "alias_identity_verified": true,
+  "source_digest": "37d049f5a48014544975b9b69250bc4cac58dd067f4d4aea3aee866634e69108",
+  "file_count": 74,
+  "runtime_files_changed": [
+    "src/app/business-research-notice/page.tsx"
+  ],
+  "focused_tests_passed": 8,
+  "scoped_lint": "passed",
+  "build_and_types": "passed",
+  "build_seconds": 10,
+  "build_region": "iad1",
+  "sydney_function_count": 65,
+  "global_middleware_count": 1,
+  "functions": [
+    {
+      "path": "index",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "_global-error",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "_global-error.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "_global-error.segments/__PAGE__.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "_global-error.segments/_full.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "_global-error.segments/_tree.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen.segments/_full.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen.segments/_index.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen.segments/_tree.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen.segments/abn-lead-gen/__PAGE__.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen/sign-in",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen/sign-in.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen/sign-in.segments/_full.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen/sign-in.segments/_index.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen/sign-in.segments/_tree.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen/sign-in.segments/abn-lead-gen/sign-in/__PAGE__.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "about",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "about.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "about.segments/_full.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "about.segments/_index.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "about.segments/_tree.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "about.segments/about/__PAGE__.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "business-research-notice",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "business-research-notice.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "business-research-notice.segments/_full.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "business-research-notice.segments/_index.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "business-research-notice.segments/_tree.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "business-research-notice.segments/business-research-notice/__PAGE__.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "contact",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "contact.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "contact.segments/_full.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "contact.segments/_index.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "contact.segments/_tree.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "contact.segments/contact/__PAGE__.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "index.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "index.segments/_full.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "index.segments/__PAGE__.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "index.segments/_index.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "index.segments/_tree.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "services",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "services.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "services.segments/_full.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "services.segments/_index.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "services.segments/_tree.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "services.segments/services/__PAGE__.segment.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "_middleware",
+      "regions": [
+        "arn1",
+        "bom1",
+        "cdg1",
+        "cle1",
+        "cpt1",
+        "dub1",
+        "fra1",
+        "gru1",
+        "hkg1",
+        "hnd1",
+        "iad1",
+        "icn1",
+        "kix1",
+        "lhr1",
+        "pdx1",
+        "sfo1",
+        "sin1",
+        "syd1",
+        "yul1"
+      ]
+    },
+    {
+      "path": "_not-found",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "_not-found.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen/access",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen/access.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen/dashboard",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "abn-lead-gen/dashboard.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "sign-in/[[...sign-in]]",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "sign-in/[[...sign-in]].rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "sign-up/[[...sign-up]]",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "sign-up/[[...sign-up]].rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "api/abn-lead-gen/[...path]",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "api/abn-lead-gen/[...path].rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "api/abn-lead-gen/auth/login",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "api/abn-lead-gen/auth/login.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "api/abn-lead-gen/auth/logout",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "api/abn-lead-gen/auth/logout.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "opengraph-image.rsc",
+      "regions": [
+        "syd1"
+      ]
+    },
+    {
+      "path": "opengraph-image",
+      "regions": [
+        "syd1"
+      ]
+    }
+  ],
+  "browser_login_verified": false,
+  "http_checks": "dpl_64YdrjBDNwaqKZEHa6zHrMTEkMXo-http.json"
+}

@@ -1,0 +1,43 @@
+{
+  "actor_id": "delegated-owner:jeph@quotemax.com.au",
+  "approved_at": "2026-09-10T23:28:23.1101827+00:00",
+  "collection_expires_at": "2026-09-25T07:18:20+08:00",
+  "retention_expires_at": "2027-09-11T07:18:20+08:00",
+  "adviser_status": "not_obtained",
+  "production_backup_accepted": false,
+  "full_production_release": false,
+  "gates": {
+    "retention": {
+      "G3": {
+        "sha256": "d443a83b36c555445f8cefea10d85f064e8cffe033bac15b8e60939feb896b37",
+        "file": "qbcc-pilot-technical-decision-20260911.md"
+      },
+      "G7": {
+        "sha256": "d443a83b36c555445f8cefea10d85f064e8cffe033bac15b8e60939feb896b37",
+        "file": "qbcc-pilot-technical-decision-20260911.md"
+      },
+      "G1": {
+        "sha256": "d443a83b36c555445f8cefea10d85f064e8cffe033bac15b8e60939feb896b37",
+        "file": "qbcc-pilot-technical-decision-20260911.md"
+      }
+    },
+    "collection": {
+      "G2": {
+        "sha256": "d443a83b36c555445f8cefea10d85f064e8cffe033bac15b8e60939feb896b37",
+        "file": "qbcc-pilot-technical-decision-20260911.md"
+      },
+      "G7": {
+        "sha256": "d443a83b36c555445f8cefea10d85f064e8cffe033bac15b8e60939feb896b37",
+        "file": "qbcc-pilot-technical-decision-20260911.md"
+      },
+      "G3": {
+        "sha256": "d443a83b36c555445f8cefea10d85f064e8cffe033bac15b8e60939feb896b37",
+        "file": "qbcc-pilot-technical-decision-20260911.md"
+      },
+      "G1": {
+        "sha256": "372b03d6c1dc77f878d922510434400721b72f95aa598f574f025e1bd5416da2",
+        "file": "qbcc-pilot-delegated-owner-20260911.json"
+      }
+    }
+  }
+}

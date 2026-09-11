@@ -12,6 +12,7 @@ import itertools
 import json
 from datetime import datetime, timedelta
 from pathlib import Path
+from time import monotonic
 from uuid import UUID, uuid4, uuid5
 
 import duckdb
@@ -57,13 +58,16 @@ def declare_artifact(conn, run_id, source: str, path: Path, *, artifact_class: s
     return conn.execute("SELECT * FROM artifact_manifest WHERE object_key=%s", (key,)).fetchone()
 
 
-def verify_artifact(conn, run_id, source: str, path: Path) -> dict:
+def verify_artifact(conn, run_id, source: str, path: Path, *, check=None) -> dict:
     """Verify local writer bytes; upload adapters must also verify remote bytes."""
+    # Checked live hashing may obtain current authority on another connection.
+    # Do it before taking an artifact row lock, preserving control->artifact order.
+    checked_digest = digest_file(path, check=check) if check is not None else None
     key = _object_key(run_id, source, path)
     row = conn.execute("SELECT * FROM artifact_manifest WHERE object_key=%s FOR UPDATE", (key,)).fetchone()
     if not row or row["state"] in ("deleting", "deleted", "orphan") or row["source"] != source:
         raise SourceError("ARTIFACT_NOT_OWNED")
-    digest, size = digest_file(path), path.stat().st_size
+    digest, size = checked_digest or digest_file(path), path.stat().st_size
     if row["state"] in ("verified", "referenced"):
         if row["content_digest"] != digest or row["byte_count"] != size:
             raise SourceError("VERIFIED_ARTIFACT_CHANGED")
@@ -88,20 +92,20 @@ def register_artifacts(conn, run_id, source: str, paths: list[Path]) -> list[dic
     return result
 
 
-def _verified(conn, run_id, source, paths):
+def _verified(conn, run_id, source, paths, analysis=None):
     if len({str(p.resolve()) for p in paths}) != len(paths):
         raise SourceError("DUPLICATE_ARTIFACT_PATH")
     rows = []
     for path in paths:
         row = conn.execute(
-            "SELECT * FROM artifact_manifest WHERE object_key=%s FOR UPDATE",
+            "SELECT * FROM artifact_manifest WHERE object_key=%s" + ("" if analysis else " FOR UPDATE"),
             (_object_key(run_id, source, path),),
         ).fetchone()
         if (
             not row
             or row["state"] != "verified"
             or not row["verified_at"]
-            or row["content_digest"] != digest_file(path)
+            or row["content_digest"] != (analysis.file_digest(path) if analysis else digest_file(path))
             or row["byte_count"] != path.stat().st_size
         ):
             raise SourceError("ARTIFACT_NOT_VERIFIED")
@@ -187,14 +191,21 @@ def _manifest_check(conn, service, source: str, manifest: dict, run: dict):
     return observed
 
 
-def _validate_event_set(previous: list[str], current: list[Path], events_path: Path) -> None:
+def _validate_event_set(previous: list[str], current: list[Path], events_path: Path, *, check=None) -> None:
     """Reject omitted/forged event payloads even when their bytes were staged.
 
     This bounded analytical check compares the complete expected event relation
     in both directions. It supplements artifact integrity with semantic binding.
     """
+    from contextlib import ExitStack
+    from sys import exc_info
+
+    from abr_engine.ops.analytical import analytical_guard
+
     con = duckdb.connect()
+    guard = ExitStack()
     try:
+        guard.enter_context(analytical_guard(con, check))
         con.execute("SET memory_limit='512MB'")
         con.execute("SET threads=2")
         con.execute("SET max_temp_directory_size='8GB'")
@@ -225,7 +236,10 @@ def _validate_event_set(previous: list[str], current: list[Path], events_path: P
             ).fetchone():
                 raise SourceError("DIFF_EVENT_SET_MISMATCH")
     finally:
-        con.close()
+        try:
+            guard.__exit__(*exc_info())
+        finally:
+            con.close()
 
 
 def _matching_alias_groups(conn, service, kind: str, value: str):
@@ -508,13 +522,28 @@ def promote(
     expected_version: int = 0,
     rebaseline: bool = False,
     fault=None,
+    candidate_mode: str = "qualify",
+    analysis=None,
+    final_authority=None,
+    analysis_check=None,
+    local_check=None,
 ) -> dict:
     """Returns staged result; outer caller commit makes it visible atomically.
 
     Fault hooks: after_artifacts, after_snapshot, after_events, before_cursor,
     after_cursor, before_commit. A crash after outer commit is replayed by run_id.
     """
+    if candidate_mode not in {"qualify", "observe_only"} or (source != "abr" and candidate_mode != "qualify"):
+        raise SourceError("INVALID_CANDIDATE_MODE")
     paths = [Path(p) for p in parquet_paths]
+    if analysis is not None:
+        from abr_engine.ops.abr_analysis import ABRAnalysis
+
+        if (type(analysis) is not ABRAnalysis or source != "abr" or candidate_mode != "observe_only"
+                or not callable(final_authority) or not callable(analysis_check) or not callable(local_check)):
+            raise SourceError("ABR_ANALYSIS_REQUIRED")
+        analysis.validate(run_id, manifest, paths, events_path, expected_version)
+    commit_started = None
     if not paths or expected_version < 0:
         raise SourceError("INVALID_PROMOTION_INPUT")
     snapshot_id = UUID(str(manifest.get("snapshot_id")))
@@ -557,11 +586,11 @@ def promote(
             and (not rebaseline or not manifest.get("rebaseline_reason"))
         ):
             raise SourceError("PARSER_SCHEMA_REBASELINE_REQUIRED")
-        artifacts = _verified(conn, run_id, source, paths + ([Path(events_path)] if events_path else []))
+        artifacts = _verified(conn, run_id, source, paths + ([Path(events_path)] if events_path else []), analysis)
         if source == "abr":
-            current_quality = parquet_fill(paths)
+            current_quality = analysis.quality if analysis else parquet_fill(paths)
             previous_quality = None
-            if prior and not rebaseline:
+            if prior and not rebaseline and analysis is None:
                 previous_paths = [Path(path) for path in prior["manifest"]["parquet_paths"]]
                 for path in previous_paths:
                     recorded = conn.execute(
@@ -576,7 +605,8 @@ def promote(
                     ):
                         raise SourceError("PREVIOUS_ARTIFACT_UNAVAILABLE")
                 previous_quality = parquet_fill(previous_paths)
-            validate_fill(current_quality, manifest, previous_quality)
+            if analysis is None:
+                validate_fill(current_quality, manifest, previous_quality)
             manifest = {**manifest, **current_quality}
         _fault(fault, "after_artifacts")
         is_noop = bool(
@@ -635,11 +665,13 @@ def promote(
             )
             _fault(fault, "after_snapshot")
             event_count = candidate_count = 0
+            restrictions = []
             if source == "abr":
-                _refresh_known_abr(conn, service, paths, snapshot_id)
+                if candidate_mode == "qualify":
+                    _refresh_known_abr(conn, service, paths, snapshot_id)
                 if prior and not rebaseline and events_path is None:
                     raise SourceError("FULL_DIFF_OUTPUT_REQUIRED")
-                if prior and not rebaseline:
+                if prior and not rebaseline and analysis is None:
                     prior_paths = prior["manifest"]["parquet_paths"]
                     for path in prior_paths:
                         owned = conn.execute(
@@ -658,6 +690,8 @@ def promote(
                         if (not prior or rebaseline) and business_events:
                             raise SourceError("BASELINE_EVENTS_FORBIDDEN")
                         for event in business_events:
+                            if analysis is not None and event_count % 1000 == 0:
+                                analysis_check()
                             if event["snapshot_id"] != str(snapshot_id) or event.get(
                                 "previous_snapshot_id"
                             ) != (str(cursor["snapshot_id"]) if cursor["snapshot_id"] else None):
@@ -675,10 +709,13 @@ def promote(
                             )
                             event_count += 1
                             if event["event_type"] in ("abn_cancelled", "abn_disappeared"):
-                                _source_restriction(
-                                    conn, service, abn, event["event_type"], event["event_id"]
-                                )
-                        candidate_count += _abr_candidates(conn, service, business_events, manifest)
+                                if analysis is not None:
+                                    if abn in analysis.known_abns:
+                                        restrictions.append((abn, event["event_type"], event["event_id"]))
+                                else:
+                                    _source_restriction(conn, service, abn, event["event_type"], event["event_id"])
+                        if candidate_mode == "qualify":
+                            candidate_count += _abr_candidates(conn, service, business_events, manifest)
             else:
                 event_count, candidate_count = _qbcc_promote(
                     conn,
@@ -691,6 +728,12 @@ def promote(
                     rebaseline,
                 )
             _fault(fault, "after_events")
+            if analysis is not None:
+                commit_started = analysis.finalize(conn, service, snapshot_id, final_authority, local_check)
+                for abn, event_type, event_id in restrictions:
+                    if monotonic() - commit_started > 2:
+                        raise SourceError("ABR_CONTROL_COMMIT_DEADLINE")
+                    _source_restriction(conn, service, abn, event_type, event_id)
             _fault(fault, "before_cursor")
             updated = conn.execute(
                 "UPDATE source_cursor SET snapshot_id=%s,version=version+1,last_success_at=clock_timestamp() WHERE source=%s AND version=%s RETURNING version",
@@ -720,10 +763,14 @@ def promote(
                 "candidates": candidate_count,
             }
         run_manifest = run["manifest"] or {}
+        if analysis is not None and commit_started is None:
+            commit_started = analysis.finalize(conn, service, snapshot_id, final_authority, local_check)
         run_manifest.setdefault("promotion_results", {})[source] = result
         conn.execute(
             "UPDATE pipeline_run SET manifest=%s,heartbeat_at=clock_timestamp() WHERE run_id=%s",
             (Jsonb(run_manifest), run_id),
         )
         _fault(fault, "before_commit")
+        if commit_started is not None and monotonic() - commit_started > 3:
+            raise SourceError("ABR_CONTROL_COMMIT_DEADLINE")
         return result

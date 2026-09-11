@@ -6,6 +6,12 @@ mapping_version: maintain-media-ghl-v1
 api_version: '2023-02-21'
 token_env: ABR_GHL_TOKEN
 allow_writes: false
+# Exact reviewed channels; the current pilot permits phone only.
+allowed_channels: ['phone']
+# Canonical digest from the complete, verified all-draft GET /workflows/ inventory.
+# A changed/published inventory blocks every contact/tag write, including removal,
+# until the new configuration and installation receive a current G5 approval.
+workflow_inventory_sha256: null
 group_search_field: customFields.REPLACE_GROUP_ID_FIELD
 field_ids:
   group_id: REPLACE_GROUP_ID_FIELD

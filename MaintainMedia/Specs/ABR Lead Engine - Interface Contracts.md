@@ -4,7 +4,7 @@ project: Maintain Media
 version: "4.0"
 synced: 2026-09-09
 source: "specs/001-abr-lead-engine/contracts/interfaces.md"
-source_sha256: a6d8dedb1b170c3a9ceaaa8a4ab56efc477d9714b0e80a814616fb3d103c0f34
+source_sha256: 194344fe53adf3356411954a8c52ec679867f0073d1002bfbedddad14d49cfec
 tags: [abr-lead-engine, maintain-media]
 ---
 > Synced from the repository; local document links adapted for Obsidian.
@@ -68,6 +68,22 @@ Scope `reviewer`; body `{row_id,expected_version,decision: approve|reject,reason
 `POST /cancellation-resolutions` requires reviewer scope and `{lead_id,cancellation_event_id,positive_reactivation_evidence_ref,reason}`. It may append resolution of that specific cancellation reason only. Return active remaining reasons; unsubscribe/complaint and endpoint opt-outs cannot be resolved through this route or ordinary reactivation.
 
 `POST /relevance-assessments` requires reviewer scope and `{contact_id,channel:email,campaign_id,template_id,content_sha256,policy_version,state:pass|fail|unknown,role_evidence_id,reason,expected_contact_revision}`. Server derives reviewer identity/time, validates evidence belongs to that exact contact, and appends assessment_seq/current pointer while holding group then endpoint locks. Return201 `{assessment_id,assessment_seq,expires_at}`; invalid evidence422/stale revision409. Expiry is earliest of24h or current basis/identity/policy expiry. Later fail/unknown supersedes prior pass and invalidates pending intents. Phone requests reject this email-only assessment route with422; phone uses approved script/calling policy.
+
+### Website collection admission (live dashboard)
+
+`POST /v1/website-collections` requires the assigned `reviewer` role and the
+existing dated site-terms and current exact-domain identity/licence evidence.
+Before loading private job inputs or contacting the website, both capabilities
+must be enabled: `collection` with its current G1/G2/G3/G7, and
+`website_collection` with separately scoped current G1/G3/G7. An omitted
+`website_collection` setting is false. Its G1 owner/qualified-adviser decision
+must expressly cover website source use and address harvesting under R27; the
+reviewer's `terms_permit` field cannot replace that decision or change policy.
+Admission is repeated before/after DNS and every HTTP request and before contact
+writes. A queued request whose approval is withdrawn is held, its encrypted
+request is removed, and no new contacts are saved. Read-only job receipts remain
+available to authorized staff so they can see the hold. A permitted collection
+creates unverified evidence only; it does not establish contact permission.
 
 ### POST /action-intents and POST /action-intents/{id}/consume
 

@@ -1,0 +1,15 @@
+{
+  "observed_at": "2026-09-11T03:48:02.907957+00:00",
+  "method": "Actual in-app browser accessibility readback after user completed Clerk sign-in",
+  "url": "https://www.maintainmedia.com.au/abn-lead-gen/dashboard#setup",
+  "user_reported_account": "jeph@quotemax.com.au",
+  "admin_workspace_rendered": true,
+  "user_menu_and_sign_out_visible": true,
+  "live_engine_connected": true,
+  "qbcc_source_accepted": true,
+  "website_collection_approvals_recorded": true,
+  "ghl_approvals_recorded": true,
+  "abr_capability_still_disabled_pending_011_install": true,
+  "source_release_at_observation": "010",
+  "scope": "Fresh staff sign-in and current protected setup page; not a claim of the pending011 deployment or source baseline."
+}

@@ -1,0 +1,69 @@
+{
+  "checked_at": "2026-09-11T03:07:52.128Z",
+  "status": "local_checks_passed_ui_not_deployed",
+  "source_digest": "2e615fea08c675bc4bd5bf1a5fa52c38a5fb012323e2fa2c47dde14a2c3a664e",
+  "file_count": 74,
+  "frozen_upload": "C:/Users/dalig/AppData/Local/Packages/OpenAI.Codex_2p2nqsd0c76g0/LocalCache/Local/MaintainMedia/vercel-releases/87500ef1-c397-4275-ba96-50bc9cc2cd83",
+  "source_manifest_sha256": "8bf0ce9cc0c2f339b2248af2fe32491675e7f23a320615aee75e97a40a10deb2",
+  "runtime_delta_from_published_notice": [
+    {
+      "path": "website/src/components/abn-lead-gen/dashboard.tsx",
+      "bytes": 33189,
+      "sha256": "31c04c6f818a45c0114d3d1987cd9b4e6e26e91e4309416f8c0e4213b000a830"
+    },
+    {
+      "path": "website/src/components/abn-lead-gen/readiness.ts",
+      "bytes": 13736,
+      "sha256": "bba2739e40d0c1eede4451b2b92fe3b85719f507366f06da29d6c1fc51886ec7"
+    },
+    {
+      "path": "website/src/components/abn-lead-gen/use-dashboard.ts",
+      "bytes": 29711,
+      "sha256": "1e848a89ba9d78498597d800307bf78e029abeac90bc4d82f69ffe0a478fed19"
+    },
+    {
+      "path": "website/src/lib/abn-lead-gen/types.ts",
+      "bytes": 13105,
+      "sha256": "88500e6c831f6c38a9af232f88565ea4510d619c2cc714ad28ddcb04a4142ca8"
+    }
+  ],
+  "validation_files": [
+    {
+      "path": "tests/dashboard-connection.test.mjs",
+      "sha256": "52d5defec71b46435dc8867b83e45752d47e4c5c9093dfb73b93688cd8485549"
+    },
+    {
+      "path": "tests/readiness-guidance.test.mjs",
+      "sha256": "ea4ae19cb9f90174d472f675b1a9194c85b850a43915c714e080d1e315ce081f"
+    },
+    {
+      "path": "tests/website-collection.test.mjs",
+      "sha256": "12687dcddc6289798247b1f0ea86c96beeadee6c8f29575d4b6c1e4c9eacc619"
+    },
+    {
+      "path": "tests/crm-handoff.test.mjs",
+      "sha256": "cac6acbea064b850b43bbf6d909f725daa8eec148825715be321cd64a78849f8"
+    },
+    {
+      "path": "specs/live-abn-dashboard.md",
+      "sha256": "3d1ea224a18a0fbe2767fa3666308165abe4cffe8fdb52d98457734d1b86939e"
+    }
+  ],
+  "tests": {
+    "distinct_passed": 48,
+    "failures": 0,
+    "errors": 0,
+    "report": "abr-ui-tests-20260911.xml",
+    "report_sha256": "547063f659a3953942d6384a2c851a0bac9b87d212da4abfb6c7307363f6f5c9"
+  },
+  "scoped_lint": "passed",
+  "types": "passed",
+  "diff_check": "passed",
+  "independent_review": "Passed: live_integrations final source and focused-test review found no blocking findings; actual backend and authenticated browser checks remain separate.",
+  "notice_deployment": "dpl_64YdrjBDNwaqKZEHa6zHrMTEkMXo",
+  "ui_deployed": false,
+  "backend_activated": false,
+  "browser_login_verified": false,
+  "contract": "Exact single-source durable run; can_run and empty reasons; phased committed baseline/diff result, genuine counts and raw publisher time; classification separate.",
+  "provider_mutations": false
+}

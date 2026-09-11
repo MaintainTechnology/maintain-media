@@ -7,7 +7,7 @@ import pytest
 import yaml
 
 from abr_engine.control.service import DomainError
-from abr_engine.export.gohighlevel import FIELD_NAMES
+from abr_engine.export.gohighlevel import FIELD_NAMES, workflow_inventory_digest
 from abr_engine.export.live_contract import CHECKS, read_installation
 
 
@@ -16,6 +16,8 @@ def packet(tmp_path):
     now = datetime.now(UTC)
     config = {"location_id": "syntheticLocation", "mapping_version": "synthetic-v1",
               "field_ids": {name: "live_" + name for name in FIELD_NAMES}, "allow_writes": True,
+              "allowed_channels": ["email", "phone"],
+              "workflow_inventory_sha256": workflow_inventory_digest({"workflows": []}, "syntheticLocation"),
               "group_search_field": "customFields.live_group_id"}
     config_file, installation_file = tmp_path / "config.yaml", tmp_path / "installation.yaml"
     config_file.write_text(yaml.safe_dump(config), encoding="utf-8")

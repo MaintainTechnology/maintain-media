@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-11",
+  "scope": "Phone-only reviewed website collection UI and public business research notice",
+  "source_manifest_sha256": "934d16342de3a1aa5a54150e9b47514ee941679cc8d641943513f8e8aa942318",
+  "source_manifest_encoding": "SHA256 of UTF-8 compact JSON array sorted by path, each entry with path followed by lowercase sha256",
+  "files": [
+    {"path": "src/app/business-research-notice/page.tsx", "sha256": "697399a44e186ffe7f5e236606f6071beec4e4625ec0fc622fef8ab5d5b18965"},
+    {"path": "src/components/abn-lead-gen/dashboard.tsx", "sha256": "206cedb4a1e49678bce2ac749bcfffae79ec4368c8c03ab83b45dc6cd91cbffe"},
+    {"path": "src/components/abn-lead-gen/live-workflow.tsx", "sha256": "03ad6231c26883226cc890a3b6963cd4abec0c2b7dcb89156b05e7efa1ee22c4"},
+    {"path": "src/components/abn-lead-gen/readiness.ts", "sha256": "7efa5f80c6f9ab2e4f80033150f0077655a15b1322c26799bba2ac18445b87e3"},
+    {"path": "src/components/abn-lead-gen/use-dashboard.ts", "sha256": "dd5ee68cbb4e6944b1cdb6e93ddcb6b0f5f22d038038672f48f020bc0bcb8869"},
+    {"path": "src/components/footer.tsx", "sha256": "6db7f945e1e9f1c142b8ab447dc0fe2b46da3b5d4266ac72717bddd09c4bb53f"},
+    {"path": "src/lib/abn-lead-gen/types.ts", "sha256": "46012f361123ffc41e6ebdba80e1bae7b45a8b25a45772b182194c73bee7585b"}
+  ],
+  "checks": {
+    "focused_ui_readiness_form_notice_tests": {"passed": 33, "failed": 0},
+    "bridge_transport_tests_with_react_server_condition": {"passed": 20, "failed": 0},
+    "scoped_eslint": {"exit_code": 0},
+    "independent_review": {"reviewer": "live_integrations", "blocking_findings_remaining": 0}
+  },
+  "test_run_notes": [
+    "An initial all-files Node test invocation lacked the required react-server condition for the two bridge test files; the correct isolated bridge invocation subsequently passed all 20 checks.",
+    "A test-harness variable name violated the Next.js lint rule; it was renamed and final scoped lint passed."
+  ],
+  "backend_contract_required": ["website_collection_policy", "reviewer-scoped per-lead website_job"],
+  "provider_mutations": false,
+  "deployment_verified": false,
+  "live_browser_collection_verified": false,
+  "source_authority_changed_by_ui": false
+}

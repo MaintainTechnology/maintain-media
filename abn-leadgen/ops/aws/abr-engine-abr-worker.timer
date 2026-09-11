@@ -1,0 +1,11 @@
+[Unit]
+Description=Resume requested ABR validation jobs without admitting new source runs
+
+[Timer]
+OnBootSec=1min
+OnUnitInactiveSec=1min
+AccuracySec=10s
+Unit=abr-engine-abr-worker.service
+
+[Install]
+WantedBy=timers.target

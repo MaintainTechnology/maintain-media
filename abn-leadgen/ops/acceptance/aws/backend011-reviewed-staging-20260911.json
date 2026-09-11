@@ -1,0 +1,20 @@
+{
+  "archive": "release.tar.gz",
+  "archive_sha256": "00ebbd4c488ec7fa289a0bb95142ee5be2433a86855459f2d0caebf16ebc8102",
+  "file_count": 164,
+  "manifest_sha256": "862d7c83255aa537eebce401e428729e273e2326e18b6b284f835bd930178313",
+  "output": "C:\\Users\\dalig\\AppData\\Local\\MaintainMedia\\aws\\releases\\abn-live-20260911-011-reviewed",
+  "prepare_sha256": "7d8832095a31e6f1239a3353b039a7d3fc738c6d529390bc8caa9020772902fe",
+  "runtime": "dormant",
+  "schema": "abr-dormant-release-v1",
+  "uv_lock_sha256": "c7c7a58208f93368d2050b3a75daed625e5bacda8a241b9be56213f6e9552b30",
+  "validation_archive_sha256": "9b7299f70324b6e232578533c046a4c8cb07ecb6aff496590b0ddc85cab67aa0",
+  "validation_files": 92,
+  "validation_manifest_sha256": "886f3ec8edd597e80ba2372d678f90d7451dd678738b321e85019c91d28e96e0",
+  "status": "staged_current010_unchanged",
+  "systemd_verify": "passed",
+  "syntax": "passed",
+  "native_validation": "running",
+  "services_changed": false,
+  "source_runs": 0
+}
