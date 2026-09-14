@@ -84,6 +84,29 @@ def test_empty_gst_is_not_active(tmp_path, gst):
     assert row["gst_status"] == "NONE" and row["gst_date"] is None
 
 
+@pytest.mark.parametrize(
+    ("gst", "status", "gst_date"),
+    [
+        # Actual 2026-09-09 publication values: every record carries a dated GST node and
+        # "NON" (not registered, sentinel date 1900-01-01) is the single most common value.
+        ('<GST status="NON" GSTStatusFromDate="19000101" />', "NON", date(1900, 1, 1)),
+        ('<GST status="CAN" GSTStatusFromDate="20190502" />', "CAN", date(2019, 5, 2)),
+        ('<GST status="ACT" GSTStatusFromDate="20000701" />', "ACT", date(2000, 7, 1)),
+    ],
+)
+def test_published_gst_states_are_preserved_and_never_active_unless_act(tmp_path, gst, status, gst_date):
+    result = parse(tmp_path, document(record(gst=gst)))
+    row = pq.read_table(result.parquet_path).to_pylist()[0]
+    assert row["gst_status"] == status and row["gst_date"] == gst_date
+
+
+def test_unknown_gst_state_or_undated_status_is_held(tmp_path):
+    for gst in ('<GST status="NON"/>', '<GST status="MAYBE" GSTStatusFromDate="19000101"/>'):
+        with pytest.raises(SourceError, match="UNKNOWN_GST_STATE"):
+            parse(tmp_path, document(record(gst=gst)))
+        assert not (tmp_path / "parsed" / "records.parquet").exists()
+
+
 def test_individual_legal_name_and_unknown_geography_are_preserved(tmp_path):
     result = parse(tmp_path, document(record(individual=True, postcode="FOREIGN-12345", state="")))
     row = pq.read_table(result.parquet_path).to_pylist()[0]

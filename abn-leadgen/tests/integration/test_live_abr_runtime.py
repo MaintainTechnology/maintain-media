@@ -122,6 +122,22 @@ def test_next_complete_gst_diff_never_qualifies_a_candidate(settings, prepared):
         assert conn.execute("SELECT count(*) n FROM candidate_queue").fetchone()['n'] == 0
 
 
+def test_published_not_registered_gst_state_baselines_and_later_registers(settings, prepared):
+    # The actual publication dates every GST node; "NON" is its most common status.
+    runtime, publisher, _, _ = prepared
+    publisher['bytes'] = archive_bytes(gst='<GST status="NON" GSTStatusFromDate="19000101" />')
+    receipt = run(runtime)
+    assert receipt['state'] == 'complete', receipt
+    assert receipt['result']['baseline'] is True and receipt['result']['record_count'] == 1
+    publisher['bytes'] = archive_bytes(gst='<GST status="ACT" GSTStatusFromDate="20260910" />', date='20260910')
+    publisher['etag'] = '"synthetic-two"'
+    result = run(runtime)
+    assert result['state'] == 'complete', result
+    assert result['result']['events'] == 1 and result['result']['candidates'] == 0
+    with transaction(settings) as conn:
+        assert conn.execute("SELECT event_type FROM abr_event").fetchone()['event_type'] == 'gst_registered'
+
+
 @pytest.mark.parametrize('gate', ['G1', 'G2', 'G3', 'G6', 'G7', 'retention', 'capability', 'policy'])
 def test_closed_scope_never_requests_or_loads_keys(settings, prepared, monkeypatch, gate):
     runtime, _, calls, _ = prepared

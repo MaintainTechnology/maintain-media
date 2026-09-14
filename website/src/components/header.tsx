@@ -7,7 +7,9 @@ import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { List, X } from "@phosphor-icons/react";
 import { navLinks } from "@/lib/site";
-import { Show, UserButton } from "@clerk/nextjs";
+import { ClerkLoading, Show, UserButton } from "@clerk/nextjs";
+
+const accountLink = "min-h-11 items-center whitespace-nowrap text-sm font-semibold text-ink-2 transition-colors hover:text-brand-300";
 
 export function Header() {
   const pathname = usePathname();
@@ -49,8 +51,24 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Show when="signed-out"><div className="hidden items-center gap-4 lg:flex"><Link href="/sign-in" className="inline-flex min-h-11 items-center text-sm font-semibold text-ink-2 hover:text-brand-300">Sign in</Link><Link href="/sign-up" className="btn btn-ghost">Sign up</Link></div></Show>
-          <Show when="signed-in"><Link href="/abn-lead-gen/dashboard" className="hidden min-h-11 items-center text-sm font-semibold text-ink-2 hover:text-brand-300 lg:inline-flex">Lead workspace</Link><UserButton /></Show>
+          <ClerkLoading>
+            <div aria-hidden="true" className="hidden items-center gap-4 lg:flex">
+              <span className="h-3.5 w-12 rounded-full bg-surface-2" />
+              <span className="h-12 w-28 rounded-full bg-surface-2" />
+            </div>
+          </ClerkLoading>
+          <Show when="signed-out">
+            <div className="hidden items-center gap-4 lg:flex">
+              <Link href="/sign-in" className={`inline-flex ${accountLink}`}>Sign in</Link>
+              <Link href="/sign-up" className="btn btn-ghost">Sign up</Link>
+            </div>
+          </Show>
+          <Show when="signed-in">
+            <div className="flex items-center gap-4">
+              <Link href="/abn-lead-gen/dashboard" className={`hidden lg:inline-flex ${accountLink}`}>Lead workspace</Link>
+              <UserButton fallback={<span aria-hidden="true" className="mx-1 block size-9 rounded-full bg-surface-2" />} />
+            </div>
+          </Show>
           <Link href="/contact" className="btn btn-primary hidden xl:inline-flex">Start a project</Link>
           <button
             type="button"
@@ -93,7 +111,11 @@ export function Header() {
                 );
               })}
               <Show when="signed-out"><div className="mt-3 grid grid-cols-2 gap-3 border-t border-line pt-4"><Link href="/sign-in" className="btn btn-ghost">Sign in</Link><Link href="/sign-up" className="btn btn-primary">Sign up</Link></div></Show>
-              <Show when="signed-in"><Link href="/abn-lead-gen/dashboard" className="mt-3 rounded-md border-t border-line px-3 py-3 text-lg font-medium text-brand-300">Lead workspace</Link></Show>
+              <Show when="signed-in">
+                <div className="mt-3 border-t border-line pt-3">
+                  <Link href="/abn-lead-gen/dashboard" className="block rounded-md px-3 py-3 text-lg font-medium text-brand-300">Lead workspace</Link>
+                </div>
+              </Show>
               <Link
                 href="/contact"
                 className="btn btn-primary mt-3 w-full"

@@ -90,7 +90,14 @@ export function readinessGuidance(item: SetupItem, mode: DashboardData["mode"]) 
 
 export function sourceJobGuidance(job: Job) {
   const active = ["queued", "running", "pending"].includes(job.state);
-  if (job.source !== "abr") return { title: active ? "The engine is working on your run." : job.state === "complete" ? "Your run is complete." : "Your run needs attention.", detail: "" };
+  if (job.source !== "abr") {
+    const result = job.result;
+    const detail = job.state !== "complete" || job.source !== "qbcc" ? ""
+      : result?.noop === true ? "The QBCC register is unchanged since the last accepted snapshot. No new businesses were added by this check."
+      : typeof result?.events === "number" ? `${result.events.toLocaleString("en-AU")} source records are available in QBCC source review. A business becomes a lead only after a reviewer records a current licence and identity check; nothing is qualified automatically.`
+      : "The accepted source records are available in QBCC source review. A business becomes a lead only after a reviewer records a current licence and identity check.";
+    return { title: active ? "The engine is working on your run." : job.state === "complete" ? "Your run is complete." : "Your run needs attention.", detail };
+  }
   if (active) return { title: "The engine is checking the ABR publication.", detail: "A complete, validated publication is needed before the accepted list changes. The first accepted list establishes a baseline; it does not create new-business events or leads." };
   if (job.state !== "complete") return { title: "This ABR run needs attention.", detail: "This run has not confirmed a new accepted result. Previously accepted data is not replaced by an incomplete publication." };
   const result = job.result;

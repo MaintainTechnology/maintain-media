@@ -1,6 +1,18 @@
 import type { ComponentProps } from "react";
 import type { ClerkProvider } from "@clerk/nextjs";
 
+/**
+ * Sign-in / sign-up cards fill their column. Scoped to those two widgets:
+ * `rootBox` wraps every Clerk component, and a 100%-wide root on `UserButton`
+ * squeezes the links beside it in the header and dashboard topbar.
+ */
+const authCard = {
+  elements: {
+    rootBox: { width: "100%", maxWidth: "100%" },
+    cardBox: { width: "100%", maxWidth: "100%" },
+  },
+};
+
 /** The same colours, type and shapes used by the Maintain Media website. */
 export const clerkAppearance = {
   variables: {
@@ -22,9 +34,8 @@ export const clerkAppearance = {
     borderRadius: "0.875rem",
   },
   elements: {
-    cardBox: { borderRadius: "20px", boxShadow: "none", width: "100%", maxWidth: "100%", border: "1px solid rgba(255,255,255,.12)" },
+    cardBox: { borderRadius: "20px", boxShadow: "none", border: "1px solid rgba(255,255,255,.12)" },
     card: { boxShadow: "none", padding: "clamp(1.25rem, 4vw, 2rem)" },
-    rootBox: { width: "100%", maxWidth: "100%" },
     formButtonPrimary: { minHeight: "48px", borderRadius: "999px", fontWeight: 700 },
     formFieldInput: { minHeight: "48px", borderRadius: "14px" },
     socialButtonsBlockButton: { minHeight: "48px", borderRadius: "999px" },
@@ -34,4 +45,6 @@ export const clerkAppearance = {
     userButtonAvatarBox: { width: "36px", height: "36px" },
     userButtonPopoverCard: { maxWidth: "calc(100vw - 32px)" },
   },
+  signIn: authCard,
+  signUp: authCard,
 } satisfies NonNullable<ComponentProps<typeof ClerkProvider>["appearance"]>;

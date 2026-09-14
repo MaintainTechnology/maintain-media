@@ -2,7 +2,9 @@
 
 The publisher's unmodified XSD is pinned separately. The parser makes one named
 R5 compatibility allowance: an absent or completely empty GST node means unknown
-registration, never active. All non-empty GST values remain strictly validated.
+registration, never active. All non-empty GST values remain strictly validated
+against the three published states ACT, CAN and NON (not registered), each of
+which the publisher always dates; NON carries the sentinel date 1900-01-01.
 """
 
 from __future__ import annotations
@@ -135,7 +137,9 @@ def _record(element, mapping, member_name):
     gst = element.find("GST")
     gst_status = gst.get("status", "") if gst is not None else ""
     gst_date = gst.get("GSTStatusFromDate", "") if gst is not None else ""
-    if gst_status not in {"", "ACT", "CAN"} or bool(gst_status) != bool(gst_date):
+    # Observed 2026-09-09 publication: every record has a dated GST node whose status is
+    # ACT, CAN or NON. NON is preserved verbatim; only ACT ever counts as registered.
+    if gst_status not in {"", "ACT", "CAN", "NON"} or bool(gst_status) != bool(gst_date):
         raise SourceError("UNKNOWN_GST_STATE")
     entity_type = _text(element, "EntityType/EntityTypeInd")
     if len(_text(element, "EntityType/EntityTypeText")) > 100:
