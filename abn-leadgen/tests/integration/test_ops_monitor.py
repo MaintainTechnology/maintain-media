@@ -133,6 +133,52 @@ def test_live_job_field_fill_is_read_from_the_promoted_snapshot(db, service):
     assert observed["field_fill_weighted"] == {"main_name": 0.9}
 
 
+def seed_abr_snapshot(db, snapshot, fill):
+    content = uuid4()
+    db.execute("INSERT INTO source_content(content_id,source,content_digest,schema_version,parser_version,artifact_ref) VALUES(%s,'abr','live-content','abr-v1','abr-public-v1','live')", (content,))
+    db.execute("INSERT INTO source_snapshot(snapshot_id,source,content_id,expected_cursor_version,manifest,state) VALUES(%s,'abr',%s,0,%s,'committed')",
+               (snapshot, content, Jsonb({"parser_version": "abr-public-v1", "schema_version": "abr-v1",
+                                          "source_rows": 250, "field_fill_weighted": {"main_name": fill}})))
+    db.execute("INSERT INTO source_cursor(source,snapshot_id,version) VALUES('abr',%s,1)", (snapshot,))
+
+
+def test_run_that_promoted_nothing_does_not_borrow_cursor_fill_evidence(db, service):
+    seed_abr_snapshot(db, uuid4(), 0.9)
+    run = run_row(db)
+    monitor_run(db, service, run, {})
+    observed = db.execute("SELECT payload FROM ops_observation WHERE run_id=%s AND source='abr'", (run,)).fetchone()["payload"]
+    assert observed["field_fill_weighted"] == {}
+    assert observed["source_rows"] is None
+
+
+def test_live_authority_hold_is_not_reported_as_source_integrity_failure(db, service):
+    run = run_row(db)
+    manifest = live_abr_manifest(uuid4(), phase="held", reason_codes=["GATE_G2_CLOSED"])
+    db.execute("UPDATE pipeline_run SET manifest=%s WHERE run_id=%s", (Jsonb(manifest), run))
+    result = monitor_run(db, service, run)
+    assert "integrity_failure" not in result["sources"][0]["alarms"]
+
+
+def test_qbcc_live_baseline_is_recognised_through_its_intake_run(db, service):
+    intake, run = run_row(db), run_row(db)
+    content, snapshot = uuid4(), uuid4()
+    db.execute("INSERT INTO source_content(content_id,source,content_digest,schema_version,parser_version,artifact_ref) VALUES(%s,'qbcc','live-qbcc','qbcc-v1','live-qbcc-v1','live')", (content,))
+    db.execute("INSERT INTO source_snapshot(snapshot_id,source,content_id,expected_cursor_version,manifest,state) VALUES(%s,'qbcc',%s,0,%s,'committed')",
+               (snapshot, content, Jsonb({"parser_version": "live-qbcc-v1", "schema_version": "qbcc-v1"})))
+    db.execute("INSERT INTO source_promotion(run_id,source,from_snapshot_id,to_snapshot_id) VALUES(%s,'qbcc',NULL,%s)", (intake, snapshot))
+    manifest = {"kind": "qbcc_live_job", "source": "qbcc", "phase": "complete", "reason_codes": [],
+                "intake_run_id": str(intake),
+                "result": {"snapshot_id": str(snapshot), "request_snapshot_id": str(snapshot),
+                           "content_digest": "c"*64, "cursor_version": 1, "noop": False, "replayed": False,
+                           "events": 2, "candidates": 40, "accepted": True, "source": "qbcc",
+                           "state": "complete", "expected_cursor_version": 0, "licence_review_required": True}}
+    db.execute("UPDATE pipeline_run SET manifest=%s WHERE run_id=%s", (Jsonb(manifest), run))
+    monitor_run(db, service, run)
+    observed = db.execute("SELECT payload FROM ops_observation WHERE run_id=%s AND source='qbcc'", (run,)).fetchone()["payload"]
+    assert observed["current_volume"] == 40
+    assert observed["baseline"] is True
+
+
 def test_held_live_job_reason_code_raises_a_source_failure(db, service):
     run = run_row(db)
     manifest = live_abr_manifest(uuid4(), phase="held", reason_codes=["ABR_RECORD_COUNT_MISMATCH"])

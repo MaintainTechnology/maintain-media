@@ -86,8 +86,17 @@ def persist_observation(conn, observation: Observation):
             "alarms": [alarm.code for alarm in alarms], "unknown_inputs": unknown}
 
 
+# A live job also holds on admission and gate refusals, which happen before any source data is
+# read. The control plane already reports those, and the catch-all below would otherwise launder
+# them into a critical source-data alarm pointing at the source-recovery runbook.
+_AUTHORITY_HOLDS = ("GATE_", "CAPABILITY_DISABLED", "POLICY", "APPROVAL", "EVIDENCE_BINDING", "CONFIGURATION_EXPIRED")
+
+
 def _source_failure(code):
-    """Map actual pipeline failure codes to the closed alarm inventory; discard error text."""
+    """Map actual pipeline failure codes to the closed alarm inventory; discard error text.
+
+    Returns None for a hold that never reached the source data, so no failure is invented.
+    """
     code = str(code).upper()
     if "SCHEMA" in code:
         return "schema_failure"
@@ -99,6 +108,8 @@ def _source_failure(code):
         return "field_fill_breach"
     if "SPILL" in code:
         return "spill_exhausted"
+    if any(marker in code for marker in _AUTHORITY_HOLDS):
+        return None
     return "integrity_failure"
 
 
@@ -133,6 +144,9 @@ def monitor_run(conn, service, run_id, result: dict | None = None):
     # Live runtimes seed the manifest with an explicit result=None until the job finishes.
     result = result if result is not None else (manifest.get("result") or {})
     sources = result.get("sources") or _live_sources(manifest)
+    # A QBCC live job promotes under a separate intake run, so its promotion row - the only
+    # evidence that an import was a baseline - is not keyed by the job being monitored.
+    promoted_by = [run_id] + ([UUID(manifest["intake_run_id"])] if manifest.get("intake_run_id") else [])
     flags = set()
     policy = service.current_policy(conn)
     if not policy or policy["state"] != "approved" or not policy["approved_at"] <= now < policy["expires_at"]:
@@ -158,10 +172,11 @@ def monitor_run(conn, service, run_id, result: dict | None = None):
         current = sources.get(source, {})
         latest = conn.execute("SELECT s.snapshot_id,s.manifest FROM source_cursor c JOIN source_snapshot s USING(snapshot_id) WHERE c.source=%s", (source,)).fetchone()
         snapshot = current.get("snapshot_id") or (latest["snapshot_id"] if latest else None)
-        # Live runs record fill evidence on the promoted snapshot, not in the job result; the
-        # snapshot manifest is only this run's evidence while the cursor still points at it.
-        quality = current.get("validation") or (latest["manifest"] if latest and str(snapshot) == str(latest["snapshot_id"]) else {})
-        promotion = conn.execute("SELECT from_snapshot_id FROM source_promotion WHERE run_id=%s AND source=%s", (run_id, source)).fetchone()
+        # Live runs record fill evidence on the promoted snapshot, not in the job result. Compare
+        # against the run's OWN snapshot id, never the `snapshot` fallback above: a run that
+        # promoted nothing for this source would otherwise borrow the cursor's evidence.
+        quality = current.get("validation") or (latest["manifest"] if latest and str(current.get("snapshot_id")) == str(latest["snapshot_id"]) else {})
+        promotion = conn.execute("SELECT from_snapshot_id FROM source_promotion WHERE run_id=ANY(%s) AND source=%s", (promoted_by, source)).fetchone()
         baseline = bool(promotion and promotion["from_snapshot_id"] is None)
         baseline = baseline or bool(manifest.get("request", {}).get("rebaseline"))
         observed = {"run_id": run_id, "source": source, "observed_at": now, "snapshot_id": snapshot,
@@ -223,14 +238,13 @@ def monitor_run(conn, service, run_id, result: dict | None = None):
         observed["comparable_volumes"] = list(reversed(volumes))
         if current.get("event_counts", {}).get("abn_disappeared"):
             observed["flags"].add("unexpected_disappearance")
-        if current.get("status") == "held":
-            failure = _source_failure(current.get("code"))
-            if failure == "field_fill_breach":
-                alarm = make_alarm(run_id, failure, "critical")
-                conn.execute("INSERT INTO alarm_outbox(alarm_id,run_id,code,subject_key,payload) VALUES(%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING",
-                             (uuid4(), run_id, failure, alarm.subject_key, Jsonb(alarm.model_dump(mode="json"))))
-            else:
-                observed["flags"].add(failure)
+        failure = _source_failure(current.get("code")) if current.get("status") == "held" else None
+        if failure == "field_fill_breach":
+            alarm = make_alarm(run_id, failure, "critical")
+            conn.execute("INSERT INTO alarm_outbox(alarm_id,run_id,code,subject_key,payload) VALUES(%s,%s,%s,%s,%s) ON CONFLICT DO NOTHING",
+                         (uuid4(), run_id, failure, alarm.subject_key, Jsonb(alarm.model_dump(mode="json"))))
+        elif failure:
+            observed["flags"].add(failure)
         output.append(persist_observation(conn, Observation.model_validate(observed)))
     return {"status": "observed", "sources": output, "notifications_sent": 0,
             "active_run_heartbeat_threshold_seconds": 300, "inventory": "Unknown external baselines and backup/timer receipts require explicit evidence observations"}
@@ -283,7 +297,7 @@ def drain_mock(settings, service, *, limit=60, fail=False):
                 try:
                     safe_code = make_alarm(row["run_id"], row["code"]).code
                 except ValueError:
-                    safe_code = _source_failure(row["code"])
+                    safe_code = _source_failure(row["code"]) or "integrity_failure"
                 safe = {"alarm_id": str(row["alarm_id"]), "run_id": str(row["run_id"]),
                         "code": safe_code,
                         "transport": "fixture_db_receipt", "notifications_sent": 0}
