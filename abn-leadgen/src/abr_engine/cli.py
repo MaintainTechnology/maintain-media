@@ -389,7 +389,13 @@ def alarms_check(run_id: UUID | None = None, observations: Path | None = None,
         with transaction(settings) as conn:
             selected = run_id
             if selected is None:
-                recent = conn.execute("SELECT run_id FROM pipeline_run ORDER BY started_at DESC LIMIT 1").fetchone()
+                # pipeline_run is shared: website/review jobs and backup drills also live here.
+                # Source runs are the live jobs, plus the fixture pipeline's bare 'request' manifest.
+                recent = conn.execute("SELECT run_id FROM pipeline_run WHERE mode=%s "
+                                      "AND (manifest->>'kind' IN ('abr_live_job','qbcc_live_job') "
+                                      "OR (manifest ? 'request' AND manifest->>'kind' IS NULL)) "
+                                      "ORDER BY started_at DESC,run_id DESC LIMIT 1",
+                                      (settings.mode,)).fetchone()
                 if not recent:
                     raise DomainError("RUN_NOT_FOUND", 404)
                 selected = recent["run_id"]
