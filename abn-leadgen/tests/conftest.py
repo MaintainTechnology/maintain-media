@@ -18,8 +18,9 @@ def settings():
     config = Settings(schema_name=schema)
     with connect(Settings()) as conn:
         conn.execute(sql.SQL("CREATE SCHEMA {}").format(sql.Identifier(schema)))
-    migrate(config)
     try:
+        # Inside the try: a failed migration must still drop the schema it created.
+        migrate(config)
         yield config
     finally:
         assert schema.startswith("abr_test_") and len(schema) == 41

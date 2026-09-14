@@ -700,8 +700,10 @@ def execute(
                     except Exception as exc:  # noqa: BLE001 - every source failure becomes a durable held result
                         code = getattr(exc, "code", "SOURCE_INTEGRITY_HELD")
                         _alarm(settings, run_id, selected, code)
-                        results[selected] = {"status": "held", "code": code}
-                        alarms.append({"source": selected, "code": code})
+                        # Exception type only, never its text: the catch-all code alone cannot
+                        # distinguish a source-integrity hold from a transient infrastructure one.
+                        results[selected] = {"status": "held", "code": code, "reason": type(exc).__name__}
+                        alarms.append({"source": selected, "code": code, "reason": type(exc).__name__})
                 enrichment = _fixture_enrichment(settings, service)
                 worklist, blocked, outputs, artifact_digests, report_authority_digest = _publish_report(
                     settings, service, root, run_id, fault

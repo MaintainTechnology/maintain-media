@@ -109,7 +109,9 @@ def monitor_run(conn, service, run_id, result: dict | None = None):
     if not run:
         raise DomainError("RUN_NOT_FOUND", 404)
     now = service.now(conn)
-    result = result if result is not None else (run["manifest"] or {}).get("result", {})
+    # Live job manifests carry an explicit "result": null until the job finishes, so a
+    # plain .get(...) default is not enough; every caller may hand us such a run.
+    result = result if result is not None else ((run["manifest"] or {}).get("result") or {})
     flags = set()
     policy = service.current_policy(conn)
     if not policy or policy["state"] != "approved" or not policy["approved_at"] <= now < policy["expires_at"]:
