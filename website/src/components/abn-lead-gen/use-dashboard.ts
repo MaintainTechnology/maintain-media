@@ -71,6 +71,7 @@ export function errorMessage(code: string, fallback: string) {
   if (code === "FORBIDDEN") return "Your account needs an explicitly assigned reviewer role for this action. Ask your administrator to update your access.";
   if (/GATE|CAPABILITY_DISABLED|POLICY_NOT_CURRENT/.test(code)) return "This action is switched off or its required approval evidence is not current. Open Setup & settings to check the engine's reported requirements.";
   if (code === "RUN_WORKER_UNAVAILABLE") return "The source run worker is not configured. Ask the administrator to complete the source worker setup.";
+  if (code === "ABR_WORKER_NOT_RUNNING") return "A broader ABR discovery request is waiting, but the separate ABR worker has not picked it up. Ask the administrator to check that the ABR worker service is running on the server. Starting another run will not help until it is.";
   if (code === "QBCC_PILOT_SOURCE_REQUIRED") return "This worker accepted only QBCC for this request. Choose QBCC in Setup and save, or ask the developer to check the separate ABR worker and its current source approvals.";
   return fallback;
 }

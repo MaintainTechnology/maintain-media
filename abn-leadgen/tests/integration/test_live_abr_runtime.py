@@ -377,3 +377,52 @@ def test_inflight_receipt_preserves_phase_and_normalises_running(prepared, phase
     runtime._record(job['job_id'], phase=phase)
     receipt = runtime.get_job(job['job_id'])
     assert receipt['state'] == 'running' and receipt['phase'] == phase and receipt['result'] is None
+
+
+def test_dashboard_reports_only_an_unclaimed_abr_job_as_a_stopped_worker(settings, prepared):
+    from abr_engine.live.dashboard import dashboard_state
+
+    runtime, _, calls, keys = prepared
+    service = Service(runtime.settings, keys)
+    actor = SimpleNamespace(actor_id='synthetic-operator', scopes={'admin'})
+
+    def state():
+        with transaction(settings) as conn:
+            return dashboard_state(conn, service, actor, worker_available=True)
+
+    def abr_source(data):
+        return next(item for item in data['sources'] if item['source'] == 'abr')
+
+    receipt = runtime.submit_run({'source': 'abr', 'request_id': str(uuid4())}, 'synthetic-operator')
+    assert receipt['state'] == 'queued', receipt
+    # The worker timer runs every minute, so a job inside the grace period is not yet evidence of a
+    # stopped lane. Two minutes must still stay silent: a late tick must never cry wolf.
+    fresh = state()
+    assert abr_source(fresh)['reason_codes'] == [] and abr_source(fresh)['can_run'] is True
+    assert fresh['operational_notices'] == []
+    with transaction(settings) as conn:
+        conn.execute("UPDATE pipeline_run SET started_at=clock_timestamp()-interval '2 minutes' WHERE run_id=%s",
+                     (receipt['job_id'],))
+    assert abr_source(state())['reason_codes'] == []
+
+    with transaction(settings) as conn:
+        conn.execute("UPDATE pipeline_run SET started_at=clock_timestamp()-interval '4 minutes' WHERE run_id=%s",
+                     (receipt['job_id'],))
+    stalled = state()
+    assert abr_source(stalled)['reason_codes'] == ['ABR_WORKER_NOT_RUNNING'], stalled['sources']
+    assert abr_source(stalled)['can_run'] is False
+    assert [notice['code'] for notice in stalled['operational_notices']] == ['ABR_WORKER_NOT_RUNNING']
+    # A stopped worker is an operational fact, never a withdrawal of the recorded ABR approval evidence.
+    assert next(item for item in stalled['setup'] if item['id'] == 'abr')['status'] == 'approved'
+    assert calls == []
+
+    # A healthy import heartbeats only on phase changes, and downloading, diffing and promoting each
+    # run for many minutes without one. A stale heartbeat is a job the next tick reclaims, not a
+    # stopped worker: reporting it would tell an operator to restart a live multi-hour import.
+    runtime._record(receipt['job_id'], phase='downloading')
+    with transaction(settings) as conn:
+        conn.execute("UPDATE pipeline_run SET started_at=clock_timestamp()-interval '90 minutes',"
+                     "heartbeat_at=clock_timestamp()-interval '30 minutes' WHERE run_id=%s", (receipt['job_id'],))
+    inflight = state()
+    assert abr_source(inflight)['reason_codes'] == [], inflight['sources']
+    assert abr_source(inflight)['can_run'] is True and inflight['operational_notices'] == []
