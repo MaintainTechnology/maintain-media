@@ -155,7 +155,10 @@ def test_interrupted_job_is_explicit_and_never_replayed(dashboard_app):
     value = {"job_id": str(job_id), "run_id": str(uuid4()), "state": "running", "source": "abr"}
     dashboard._write(dashboard._job_path(job_id), value)
     with transaction(dashboard.settings) as conn:
-        conn.execute("INSERT INTO pipeline_run(run_id,mode,code_version,config_digest,state) VALUES(%s,'fixture','test','test','running')", (value["run_id"],))
+        # Stand in for the row execute() would have written, request manifest included.
+        conn.execute("INSERT INTO pipeline_run(run_id,mode,code_version,config_digest,state,manifest) "
+                     "VALUES(%s,'fixture','test','test','running',%s)",
+                     (value["run_id"], Jsonb({"request": {"source": "abr"}})))
     with process_lock(dashboard.local / "run.lock"):
         assert dashboard.job(job_id)["state"] == "running"
     interrupted = dashboard.job(job_id)
@@ -165,6 +168,7 @@ def test_interrupted_job_is_explicit_and_never_replayed(dashboard_app):
     assert state["latest_job"]["state"] == "interrupted" and state["active_job"] is None
     assert state["runs"][0]["status"] == "interrupted"
     assert state["runs"][0]["pipeline_status"] == "running"
+    assert state["runs"][0]["source"] == "abr"
 
 
 @pytest.mark.parametrize("finished_state", ["complete", "failed"])
@@ -328,3 +332,25 @@ def test_dashboard_report_masks_allowed_contacts_without_changing_private_artifa
         assert actual["safe_contact_view"] == "Masked — contact hidden in dashboard"
         for field in ("business_name", "source", "row_id", "worklist_id", "lead_id", "group_id", "row_version"):
             assert actual[field] == str(expected[field])
+
+
+def test_backup_drills_never_crowd_out_real_fixture_runs(dashboard_app):
+    """`abr backup drill` writes a manifest-less pipeline_run; run history is for real runs only."""
+    dashboard = dashboard_app.state.dashboard
+    result = execute(dashboard.settings, dashboard.service, source="qbcc")
+    run_id = UUID(result["run_id"])
+    with transaction(dashboard.settings) as conn:
+        for _ in range(25):
+            conn.execute(
+                "INSERT INTO pipeline_run(run_id,mode,code_version,config_digest,state,started_at) "
+                "VALUES(%s,'fixture','native-backup-drill','synthetic-only','complete',clock_timestamp())",
+                (uuid4(),),
+            )
+        started_at = conn.execute(
+            "SELECT started_at FROM pipeline_run WHERE run_id=%s", (run_id,)
+        ).fetchone()["started_at"]
+    state = dashboard.state()
+    assert [run["run_id"] for run in state["runs"]] == [str(run_id)]
+    assert state["summary"]["last_run_at"] == str(started_at)
+    assert state["runs"][0]["source"] == "qbcc"
+    assert state["runs"][0]["reports"]["csv"] == f"/api/reports/{run_id}/csv"

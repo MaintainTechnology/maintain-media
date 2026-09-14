@@ -286,7 +286,11 @@ class Dashboard:
                               "postcode": row["postcode"], "location": " ".join(filter(None, [row["state"], row["postcode"]])) or None,
                               "reason_codes": sorted(set(reasons)),
                               "next_action": "Review current identity and contact restrictions"})
-            raw_runs = conn.execute("SELECT * FROM pipeline_run WHERE mode='fixture' ORDER BY started_at DESC LIMIT 20").fetchall()
+            # Only real pipeline runs carry a request manifest. `abr backup drill` writes a
+            # manifest-less fixture row (ops/backup.py) that nothing deletes, so discriminate
+            # before the limit or drills evict the runs this history exists to show.
+            raw_runs = conn.execute("SELECT * FROM pipeline_run WHERE mode='fixture' "
+                                    "AND manifest ? 'request' ORDER BY started_at DESC LIMIT 20").fetchall()
             runs = []
             for run in raw_runs:
                 manifest = run["manifest"] or {}
