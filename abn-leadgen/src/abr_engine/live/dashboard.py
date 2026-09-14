@@ -1,5 +1,6 @@
 """Private projections of actual PostgreSQL lead and run state; no fixture fallback."""
 
+from datetime import timedelta
 from zoneinfo import ZoneInfo
 
 from psycopg.types.json import Jsonb
@@ -192,6 +193,17 @@ def dashboard_state(conn, service, actor, *, worker_available=False):
     from abr_engine.live.abr import admission_reasons as abr_admission_reasons
 
     abr_reasons = abr_admission_reasons(conn, service.settings, now)
+    # The ABR lane runs only in `live-worker-tick --lane abr`; this process never executes it.
+    # Claiming a job moves its phase off 'queued' at once, so a job still queued after several of
+    # the worker's one-minute ticks is evidence that no tick is running. Deliberately NOT the
+    # worker's own heartbeat_at reclaim clause: a heartbeat is written only on a phase change, and
+    # downloading, diffing and promoting each run for many minutes without one, so a stale
+    # heartbeat is a healthy long stage the next tick would reclaim, not a stopped worker.
+    abr_stalled = conn.execute(
+        "SELECT count(*) AS n FROM pipeline_run WHERE mode=%s AND manifest->>'kind'='abr_live_job' "
+        "AND state='running' AND manifest->>'phase'='queued' AND started_at<%s",
+        (service.settings.mode, now - timedelta(minutes=3)),
+    ).fetchone()["n"]
     sources = []
     for source in ("qbcc", "abr"):
         row = (
@@ -205,6 +217,10 @@ def dashboard_state(conn, service, actor, *, worker_available=False):
         manifest = row.get("manifest") or {}
         capability = "abr" if source == "abr" else "collection"
         source_reasons = abr_reasons if source == "abr" else gate_reasons(conn, service.settings, capability, now)
+        if source == "abr" and abr_stalled:
+            # A new list: abr_reasons also reports recorded approval evidence in the setup card,
+            # and a stopped worker has withdrawn none of that evidence.
+            source_reasons = [*source_reasons, "ABR_WORKER_NOT_RUNNING"]
         sources.append(
             {
                 "source": source,
@@ -278,6 +294,15 @@ def dashboard_state(conn, service, actor, *, worker_available=False):
     ).fetchone()["n"]
     month = now.astimezone(ZoneInfo("Australia/Brisbane")).strftime("%Y-%m")
     budget = conn.execute("SELECT cap,frozen FROM budget_month WHERE month=%s", (month,)).fetchone()
+    notices = []
+    if total > len(leads):
+        notices.append({"code": "LATEST_RECORDS_LIMIT", "count": total - len(leads),
+                        "message": "The dashboard shows the 200 most recent businesses."})
+    if abr_stalled:
+        notices.append({"code": "ABR_WORKER_NOT_RUNNING", "count": abr_stalled,
+                        "message": "A broader ABR discovery request is waiting, but the separate ABR worker has not "
+                                   "picked it up. Ask the administrator to check that the ABR worker service is "
+                                   "running on the server. No source file has been collected for this request."})
     service.audit(conn, actor.actor_id, "dashboard_read", "workspace", {"record_count": len(leads)})
     return json_safe(
         {
@@ -307,14 +332,6 @@ def dashboard_state(conn, service, actor, *, worker_available=False):
             },
             "active_job": next((job for job in jobs if job["state"] in {"queued", "running"}), None),
             "latest_job": jobs[0] if jobs else None,
-            "operational_notices": [
-                {
-                    "code": "LATEST_RECORDS_LIMIT",
-                    "count": total - len(leads),
-                    "message": "The dashboard shows the 200 most recent businesses.",
-                }
-            ]
-            if total > len(leads)
-            else [],
+            "operational_notices": notices,
         }
     )
