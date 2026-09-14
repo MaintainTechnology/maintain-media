@@ -102,6 +102,26 @@ def _source_failure(code):
     return "integrity_failure"
 
 
+_LIVE_KINDS = {"abr_live_job": "abr", "qbcc_live_job": "qbcc"}
+
+
+def _live_sources(manifest):
+    """Project a live job manifest onto the per-source shape only the fixture pipeline writes.
+
+    Both live runtimes store promote()'s result flat - widened by ABRRuntime._result or the
+    QBCC acceptance receipt - so candidates/snapshot_id/noop exist at the top level, and a
+    hold or failure is carried by reason_codes instead of a per-source status/code pair.
+    """
+    source = _LIVE_KINDS.get(str(manifest.get("kind")))
+    if source is None:
+        return {}
+    current = dict(manifest.get("result") or {})
+    reasons = manifest.get("reason_codes") or []
+    if manifest.get("phase") in {"held", "failed"} and reasons:
+        current |= {"status": "held", "code": reasons[0]}
+    return {source: current}
+
+
 def monitor_run(conn, service, run_id, result: dict | None = None):
     """Project available actual DB/run facts, preserving unknown external inventory/baselines."""
     service.authority(conn)
@@ -109,7 +129,10 @@ def monitor_run(conn, service, run_id, result: dict | None = None):
     if not run:
         raise DomainError("RUN_NOT_FOUND", 404)
     now = service.now(conn)
-    result = result if result is not None else (run["manifest"] or {}).get("result", {})
+    manifest = run["manifest"] or {}
+    # Live runtimes seed the manifest with an explicit result=None until the job finishes.
+    result = result if result is not None else (manifest.get("result") or {})
+    sources = result.get("sources") or _live_sources(manifest)
     flags = set()
     policy = service.current_policy(conn)
     if not policy or policy["state"] != "approved" or not policy["approved_at"] <= now < policy["expires_at"]:
@@ -132,18 +155,21 @@ def monitor_run(conn, service, run_id, result: dict | None = None):
     restore = conn.execute("SELECT restore_id,state FROM restore_receipt ORDER BY restored_at DESC LIMIT 1").fetchone()
     output = []
     for source in ("abr", "qbcc"):
-        current = result.get("sources", {}).get(source, {})
+        current = sources.get(source, {})
         latest = conn.execute("SELECT s.snapshot_id,s.manifest FROM source_cursor c JOIN source_snapshot s USING(snapshot_id) WHERE c.source=%s", (source,)).fetchone()
         snapshot = current.get("snapshot_id") or (latest["snapshot_id"] if latest else None)
+        # Live runs record fill evidence on the promoted snapshot, not in the job result; the
+        # snapshot manifest is only this run's evidence while the cursor still points at it.
+        quality = current.get("validation") or (latest["manifest"] if latest and str(snapshot) == str(latest["snapshot_id"]) else {})
         promotion = conn.execute("SELECT from_snapshot_id FROM source_promotion WHERE run_id=%s AND source=%s", (run_id, source)).fetchone()
         baseline = bool(promotion and promotion["from_snapshot_id"] is None)
-        baseline = baseline or bool((run["manifest"] or {}).get("request", {}).get("rebaseline"))
+        baseline = baseline or bool(manifest.get("request", {}).get("rebaseline"))
         observed = {"run_id": run_id, "source": source, "observed_at": now, "snapshot_id": snapshot,
                     "baseline": baseline, "no_op": bool(current.get("noop", False)), "flags": set(flags),
                     "current_volume": current.get("candidates"),
-                    "member_count": current.get("validation", {}).get("members"),
-                    "source_rows": current.get("validation", {}).get("source_rows"),
-                    "field_fill_weighted": current.get("validation", {}).get("field_fill_weighted", {}),
+                    "member_count": quality.get("members"),
+                    "source_rows": quality.get("source_rows"),
+                    "field_fill_weighted": quality.get("field_fill_weighted") or {},
                     "rss_bytes": resources.get("sampled_peak_rss_bytes"), "free_disk_bytes": resources.get("disk_free_bytes"),
                     "required_free_disk_bytes": resources.get("required_free_disk_bytes"),
                     "suppression_propagation_seconds": max(0, float(delayed)) if delayed is not None else None,

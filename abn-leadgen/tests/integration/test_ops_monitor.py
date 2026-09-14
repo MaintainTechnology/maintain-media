@@ -25,6 +25,22 @@ def run_row(conn):
     return run
 
 
+def live_abr_manifest(snapshot, *, candidates=100, phase="complete", reason_codes=()):
+    """The manifest an actual ABR live job leaves behind: promote()'s flat result widened by
+    ABRRuntime._result. No per-source nesting is ever written outside the fixture pipeline."""
+    return {
+        "kind": "abr_live_job", "source": "abr", "actor": "ops-operator",
+        "phase": phase, "reason_codes": list(reason_codes),
+        "result": {
+            "snapshot_id": str(snapshot), "request_snapshot_id": str(snapshot),
+            "content_digest": "b"*64, "cursor_version": 1, "noop": False, "replayed": False,
+            "events": 7, "candidates": candidates, "baseline": False, "classification": "disabled",
+            "record_count": 250, "source_published_at": None,
+            "publisher_extract_time": "2026-09-01T00:00:00+00:00",
+        } if phase == "complete" else None,
+    }
+
+
 def test_closed_observation_rejects_personal_fields_and_unreferenced_inventory():
     base = {"run_id": uuid4(), "source": "abr", "observed_at": datetime.now(UTC)}
     for extra in ({"email": "personal@example.com"}, {"flags": ["personal@example.com"]},
@@ -83,6 +99,46 @@ def test_distinct_nonbaseline_publications_only_enter_volume_reference(db, servi
     assert "member_count_changed" in result["sources"][0]["alarms"]
     observation = db.execute("SELECT payload FROM ops_observation WHERE run_id=%s AND source='abr'", (run,)).fetchone()["payload"]
     assert observation["comparable_volumes"] == [10, 10, 10, 10]
+
+
+def test_live_job_volume_and_snapshot_are_observed_not_unknown(db, service):
+    run = run_row(db)
+    snapshot = uuid4()
+    db.execute("UPDATE pipeline_run SET manifest=%s WHERE run_id=%s", (Jsonb(live_abr_manifest(snapshot)), run))
+    monitor_run(db, service, run)
+    observed = db.execute("SELECT payload FROM ops_observation WHERE run_id=%s AND source='abr'", (run,)).fetchone()["payload"]
+    assert observed["current_volume"] == 100
+    assert observed["snapshot_id"] == str(snapshot)
+    assert observed["no_op"] is False
+
+
+def test_live_job_field_fill_is_read_from_the_promoted_snapshot(db, service):
+    prior_run = run_row(db)
+    now = service.now(db)
+    contract = {"parser_version": "abr-public-v1", "schema_version": "abr-v1"}
+    digest = hashlib.sha256(json.dumps(contract, sort_keys=True).encode()).hexdigest()
+    persist_observation(db, Observation(run_id=prior_run, source="abr", observed_at=now-timedelta(days=1),
+        snapshot_id=uuid4(), source_contract_digest=digest, field_fill_weighted={"main_name": 1.0}, source_rows=250))
+    run = run_row(db)
+    content, snapshot = uuid4(), uuid4()
+    db.execute("INSERT INTO source_content(content_id,source,content_digest,schema_version,parser_version,artifact_ref) VALUES(%s,'abr','live-content','abr-v1','abr-public-v1','live')", (content,))
+    db.execute("INSERT INTO source_snapshot(snapshot_id,source,content_id,expected_cursor_version,manifest,state) VALUES(%s,'abr',%s,0,%s,'committed')",
+               (snapshot, content, Jsonb({**contract, "source_rows": 250, "field_fill_weighted": {"main_name": 0.9}})))
+    db.execute("INSERT INTO source_cursor(source,snapshot_id,version) VALUES('abr',%s,1)", (snapshot,))
+    db.execute("UPDATE pipeline_run SET manifest=%s WHERE run_id=%s", (Jsonb(live_abr_manifest(snapshot)), run))
+    result = monitor_run(db, service, run)
+    assert "field_fill_breach" in result["sources"][0]["alarms"]
+    observed = db.execute("SELECT payload FROM ops_observation WHERE run_id=%s AND source='abr'", (run,)).fetchone()["payload"]
+    assert observed["source_rows"] == 250
+    assert observed["field_fill_weighted"] == {"main_name": 0.9}
+
+
+def test_held_live_job_reason_code_raises_a_source_failure(db, service):
+    run = run_row(db)
+    manifest = live_abr_manifest(uuid4(), phase="held", reason_codes=["ABR_RECORD_COUNT_MISMATCH"])
+    db.execute("UPDATE pipeline_run SET manifest=%s WHERE run_id=%s", (Jsonb(manifest), run))
+    result = monitor_run(db, service, run)
+    assert "count_failure" in result["sources"][0]["alarms"]
 
 
 def seed_delivery(settings, service):
