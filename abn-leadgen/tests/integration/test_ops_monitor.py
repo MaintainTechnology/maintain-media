@@ -7,7 +7,10 @@ from uuid import uuid4
 import pytest
 from psycopg.types.json import Jsonb
 from pydantic import ValidationError
+from typer.testing import CliRunner
 
+from abr_engine import cli
+from abr_engine.control.service import Service
 from abr_engine.db import transaction
 from abr_engine.fixture import seed_policy
 from abr_engine.ops.monitor import (
@@ -275,3 +278,90 @@ def test_weighted_fill_uses_distinct_matching_contract_publication(db, service, 
     assert observed["field_fill_weighted"] == {"main_name": fraction}
     if parser == "parser-v2":
         assert observed["field_fill_delta_pp"] is None
+
+
+SOURCE_MANIFEST = {"request": {"source": "all", "abr_fixture": "abr_baseline", "rebaseline": False},
+                   "result": {"sources": {"abr": {"candidates": 41}, "qbcc": {"candidates": 7}}}}
+
+
+def shared_table_run(conn, manifest, *, mode="fixture", age_seconds=0):
+    """Insert a pipeline_run row shaped like one of the writers sharing the table."""
+    run = uuid4()
+    conn.execute("INSERT INTO pipeline_run(run_id,mode,code_version,config_digest,state,started_at,manifest) "
+                 "VALUES(%s,%s,'monitor-test','test','complete',%s,%s)",
+                 (run, mode, datetime.now(UTC)-timedelta(seconds=age_seconds),
+                  Jsonb(manifest) if manifest is not None else None))
+    return run
+
+
+def observed_runs(settings, service, monkeypatch):
+    monkeypatch.setattr(cli, "context", lambda *args: (settings, service))
+    response = CliRunner().invoke(cli.app, ["alarms", "check"])
+    assert response.exit_code == 0, response.output
+    with transaction(settings) as conn:
+        return [row["run_id"] for row in
+                conn.execute("SELECT DISTINCT run_id FROM ops_observation").fetchall()]
+
+
+def test_alarms_check_default_run_skips_non_source_pipeline_runs(settings, service, monkeypatch):
+    """Website/review jobs and backup drills share pipeline_run but carry no source result."""
+    with transaction(settings) as conn:
+        seed_policy(conn, service)
+        source = shared_table_run(conn, SOURCE_MANIFEST, age_seconds=300)
+        shared_table_run(conn, {"kind": "website_collection_job", "phase": "queued",
+                                "lead_id": str(uuid4()), "request_encrypted": "opaque"}, age_seconds=200)
+        shared_table_run(conn, {"kind": "website_collection", "lead_id": str(uuid4())}, age_seconds=150)
+        shared_table_run(conn, {"kind": "qbcc_review_intake", "intake_state": "writing"}, age_seconds=100)
+        shared_table_run(conn, None, age_seconds=0)
+    assert observed_runs(settings, service, monkeypatch) == [source]
+
+
+def test_alarms_check_default_run_stays_within_the_configured_mode(settings, service, monkeypatch):
+    """A newer row from another mode must never be analysed while operating in fixture."""
+    with transaction(settings) as conn:
+        seed_policy(conn, service)
+        source = shared_table_run(conn, SOURCE_MANIFEST, age_seconds=300)
+        shared_table_run(conn, SOURCE_MANIFEST, mode="pilot", age_seconds=0)
+    assert observed_runs(settings, service, monkeypatch) == [source]
+
+
+def test_alarms_check_reports_run_not_found_when_no_source_run_exists(settings, service, monkeypatch):
+    with transaction(settings) as conn:
+        seed_policy(conn, service)
+        shared_table_run(conn, {"kind": "website_collection_job", "lead_id": str(uuid4())})
+    monkeypatch.setattr(cli, "context", lambda *args: (settings, service))
+    response = CliRunner().invoke(cli.app, ["alarms", "check"])
+    assert response.exit_code == 2, response.output
+    assert json.loads(response.output)["code"] == "RUN_NOT_FOUND"
+    with transaction(settings) as conn:
+        assert conn.execute("SELECT count(*) AS n FROM ops_observation").fetchone()["n"] == 0
+
+
+def pilot(settings, service):
+    """Live modes keep the same isolated test schema; only the mode discriminator changes."""
+    config = settings.model_copy(update={"mode": "pilot"})
+    return config, Service(config, service.keys)
+
+
+@pytest.mark.parametrize("kind", ["abr_live_job", "qbcc_live_job"])
+def test_alarms_check_observes_live_source_jobs_in_pilot_mode(settings, service, monkeypatch, kind):
+    """The shipped per-minute monitor runs `alarms check --mode pilot`; live jobs are its source runs."""
+    with transaction(settings) as conn:
+        seed_policy(conn, service)
+        live = shared_table_run(conn, {"kind": kind, "source": kind[:4].rstrip("_"), "phase": "complete",
+                                       "result": {"sources": {"abr": {"candidates": 12}}}},
+                                mode="pilot", age_seconds=60)
+        shared_table_run(conn, SOURCE_MANIFEST, age_seconds=0)
+        shared_table_run(conn, {"kind": "website_collection_job", "lead_id": str(uuid4())},
+                         mode="pilot", age_seconds=30)
+    assert observed_runs(*pilot(settings, service), monkeypatch) == [live]
+
+
+def test_monitor_run_tolerates_a_manifest_whose_result_is_null(db, service):
+    """Live job manifests carry result=None until the job finishes; that must not crash the monitor."""
+    run = uuid4()
+    db.execute("INSERT INTO pipeline_run(run_id,mode,code_version,config_digest,state,manifest) "
+               "VALUES(%s,'fixture','monitor-test','test','running',%s)",
+               (run, Jsonb({"kind": "abr_live_job", "source": "abr", "phase": "queued", "result": None})))
+    result = monitor_run(db, service, run)
+    assert [observation["source"] for observation in result["sources"]] == ["abr", "qbcc"]

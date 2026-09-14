@@ -19,6 +19,14 @@ def job_projection(receipt):
     return json_safe(result)
 
 
+def _run_projection(run):
+    manifest = run["manifest"] or {}
+    source = manifest.get("source") or manifest.get("request", {}).get("source", "qbcc")
+    return job_projection({"job_id": run["run_id"], "run_id": run["run_id"], "source": source,
+        "state": manifest.get("phase", run["state"]), "reason_codes": manifest.get("reason_codes", []),
+        "result": manifest.get("result"), "started_at": run["started_at"], "finished_at": run["finished_at"]})
+
+
 def preferences(conn, settings):
     row = conn.execute("SELECT value FROM system_state WHERE name='live_dashboard_settings'").fetchone()
     return (
@@ -165,20 +173,20 @@ def dashboard_state(conn, service, actor, *, worker_available=False):
     raw_runs = conn.execute(
         "SELECT * FROM pipeline_run WHERE mode=%s ORDER BY started_at DESC LIMIT 20", (service.settings.mode,)
     ).fetchall()
-    runs, jobs = [], []
+    # Live jobs need their own window: website collection shares pipeline_run and would evict them.
+    jobs = [_run_projection(run) for run in conn.execute(
+        "SELECT * FROM pipeline_run WHERE mode=%s AND manifest->>'kind' IN ('qbcc_live_job','abr_live_job') "
+        "ORDER BY started_at DESC LIMIT 20", (service.settings.mode,)
+    ).fetchall()]
+    runs = []
     for run in raw_runs:
         manifest = run["manifest"] or {}
         result = manifest.get("result") or {}
-        source = manifest.get("source") or manifest.get("request", {}).get("source", "qbcc")
-        projected = job_projection({"job_id": run["run_id"], "run_id": run["run_id"], "source": source,
-            "state": manifest.get("phase", run["state"]), "reason_codes": manifest.get("reason_codes", []),
-            "result": manifest.get("result"), "started_at": run["started_at"], "finished_at": run["finished_at"]})
-        if manifest.get("kind") in {"qbcc_live_job", "abr_live_job"}:
-            jobs.append(projected)
+        projected = _run_projection(run)
         runs.append(
             {
                 "run_id": run["run_id"],
-                "source": source,
+                "source": projected["source"],
                 "status": run["state"],
                 "started_at": run["started_at"],
                 "selected": result.get("counts", {}).get("selected"),

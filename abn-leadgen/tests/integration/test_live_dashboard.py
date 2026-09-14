@@ -84,6 +84,27 @@ def test_real_stored_business_is_visible_and_optout_commits_with_clerk_actor(liv
         assert conn.execute("SELECT lifecycle FROM lead_entity WHERE lead_id=%s", (lead["lead_id"],)).fetchone()["lifecycle"] == "suppressed"
 
 
+def test_queued_live_job_survives_twenty_newer_website_collection_runs(live_client):
+    client, settings = live_client
+    queued = uuid4()
+    with transaction(settings) as conn:
+        conn.execute("INSERT INTO pipeline_run(run_id,mode,code_version,config_digest,state,started_at,manifest) "
+                     "VALUES(%s,%s,'synthetic','synthetic','running',now()-interval '1 day',%s)",
+                     (queued, settings.mode, Jsonb({"kind": "abr_live_job", "source": "abr", "phase": "queued",
+                                                    "reason_codes": [], "result": None})))
+        # Website collection shares pipeline_run; newer rows of that kind must not evict the live job.
+        for minute in range(21):
+            conn.execute("INSERT INTO pipeline_run(run_id,mode,code_version,config_digest,state,started_at,manifest) "
+                         "VALUES(%s,%s,'synthetic','synthetic','running',now()-interval '1 minute'*%s,%s)",
+                         (uuid4(), settings.mode, minute,
+                          Jsonb({"kind": "website_collection_job", "phase": "queued", "lead_id": str(uuid4())})))
+    signed, _ = headers("/api/dashboard")
+    data = client.get("/api/dashboard", headers=signed).json()
+    assert data["active_job"] and str(data["active_job"]["job_id"]) == str(queued)
+    assert str(data["latest_job"]["job_id"]) == str(queued)
+    assert data["active_job"]["state"] == "queued" and data["active_job"]["source"] == "abr"
+
+
 def test_settings_are_real_persisted_idempotent_and_reviewer_cannot_administer(live_client):
     client, settings = live_client
     payload = {"default_source": "qbcc", "monthly_cap_micro_aud": 20_000_000}

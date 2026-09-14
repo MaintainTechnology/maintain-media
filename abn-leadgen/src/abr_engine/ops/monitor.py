@@ -141,7 +141,8 @@ def monitor_run(conn, service, run_id, result: dict | None = None):
         raise DomainError("RUN_NOT_FOUND", 404)
     now = service.now(conn)
     manifest = run["manifest"] or {}
-    # Live runtimes seed the manifest with an explicit result=None until the job finishes.
+    # Live job manifests carry an explicit "result": null until the job finishes, so a
+    # plain .get(...) default is not enough; every caller may hand us such a run.
     result = result if result is not None else (manifest.get("result") or {})
     sources = result.get("sources") or _live_sources(manifest)
     # A QBCC live job promotes under a separate intake run, so its promotion row - the only
