@@ -1,0 +1,1 @@
+{"status": "applied", "old_manifest_sha256": "03073e611e12e41c6790521858a907a7ab2c84f00a4757b50695889c9d39ca8a", "new_manifest_sha256": "a83a22bb686490333b01ca8f2bfd66a8bf966ac406596516d139202d71ae0f40", "source_files": 165, "rollback": "/opt/abn-source-browser-rollback-90d441bb", "services_changed": ["abr-engine-api.service"]}

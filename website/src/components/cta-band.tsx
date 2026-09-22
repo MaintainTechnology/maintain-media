@@ -11,11 +11,13 @@ export function CtaBand({
   body,
   secondaryHref,
   secondaryLabel,
+  primaryLabel = "Start a project",
 }: {
   title: ReactNode;
   body: string;
   secondaryHref: Route;
   secondaryLabel: string;
+  primaryLabel?: string;
 }) {
   return (
     <section className="shell pb-24 pt-8">
@@ -33,7 +35,7 @@ export function CtaBand({
             <p className="mt-5 max-w-xl text-lg text-ink-2">{body}</p>
             <div className="mt-9 flex flex-wrap items-center gap-4">
               <Link href="/contact" className="btn btn-primary">
-                Start a project
+                {primaryLabel}
               </Link>
               <Link
                 href={secondaryHref}

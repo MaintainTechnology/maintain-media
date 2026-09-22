@@ -1,0 +1,61 @@
+{
+  "checked_at": "2026-09-14T18:44:38.854Z",
+  "scope": "Signed-out public response metadata only; no cookies, credentials, response bodies, or source records stored.",
+  "deployment": "dpl_ANUr4Tk5pgAg9SDZicCUCmSGKtvK",
+  "observations": [
+    {
+      "url": "https://www.maintainmedia.com.au/abn-lead-gen/dashboard",
+      "status": 307,
+      "referrer_policy": "strict-origin",
+      "location": "/sign-in",
+      "cache_control": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "vercel_cache": "MISS",
+      "vercel_id": "sin1::syd1::7qh8j-1789411478041-54d6b919c191"
+    },
+    {
+      "url": "https://www.maintainmedia.com.au/sign-in",
+      "status": 200,
+      "referrer_policy": "no-referrer",
+      "location": null,
+      "cache_control": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "vercel_cache": "MISS",
+      "vercel_id": "sin1::syd1::klfwl-1789411478891-31131226869a"
+    },
+    {
+      "url": "https://www.maintainmedia.com.au/sign-up",
+      "status": 200,
+      "referrer_policy": "no-referrer",
+      "location": null,
+      "cache_control": "private, no-cache, no-store, max-age=0, must-revalidate",
+      "vercel_cache": "MISS",
+      "vercel_id": "sin1::syd1::fkqmw-1789411479239-ac7a014f411d"
+    },
+    {
+      "url": "https://maintainmedia.com.au/abn-lead-gen/dashboard",
+      "status": 308,
+      "referrer_policy": null,
+      "location": "https://www.maintainmedia.com.au/abn-lead-gen/dashboard",
+      "cache_control": "public, max-age=0, must-revalidate",
+      "vercel_cache": null,
+      "vercel_id": "sin1::ntvsx-1789411479887-0a08befb0a02"
+    },
+    {
+      "url": "https://maintainmedia.com.au/sign-in",
+      "status": 308,
+      "referrer_policy": null,
+      "location": "https://www.maintainmedia.com.au/sign-in",
+      "cache_control": "public, max-age=0, must-revalidate",
+      "vercel_cache": null,
+      "vercel_id": "sin1::l2vgt-1789411480192-66d88b8712b3"
+    },
+    {
+      "url": "https://maintainmedia.com.au/sign-up",
+      "status": 308,
+      "referrer_policy": null,
+      "location": "https://www.maintainmedia.com.au/sign-up",
+      "cache_control": "public, max-age=0, must-revalidate",
+      "vercel_cache": null,
+      "vercel_id": "sin1::2k7rp-1789411480266-a472fb8ef116"
+    }
+  ]
+}

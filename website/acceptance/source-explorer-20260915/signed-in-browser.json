@@ -1,0 +1,24 @@
+{
+  "checked_at_utc": "2026-09-14T18:49:42.337Z",
+  "url": "https://www.maintainmedia.com.au/abn-lead-gen/dashboard#sources",
+  "deployment_id": "dpl_ANUr4Tk5pgAg9SDZicCUCmSGKtvK",
+  "checks": {
+    "dedicated_source_records_tab": true,
+    "abr_automatic_load": {"publication_rows": 20510902, "page_rows": 50, "stored_columns": 14},
+    "qbcc_automatic_load": {"publication_rows": 108019, "page_rows": 50, "stored_columns": 17},
+    "formatted_abn_search": {"matches": 1},
+    "qbcc_financial_category_1_filter": {"matches": 5494},
+    "qbcc_exact_completed_run_link": {"run_id_prefix": "692faa4e", "publication_rows": 108019},
+    "latest_leads_source_buttons": ["All sources", "ABR", "QBCC"],
+    "source_reviews_removed_from_latest_leads": true,
+    "abr_current_registration_lookup_link": true,
+    "qbcc_current_licence_lookup_link": true,
+    "live_layout_reviewed": true
+  },
+  "browser_initiated_exports": [
+    {"source": "abr", "filtered": true, "export_id": "c39a74ac-96d4-4144-b479-f3d7f305c87d", "engine_completed_rows": 1, "engine_completed_bytes": 719},
+    {"source": "qbcc", "filtered": false, "table_filter_active": true, "export_id": "6b068c85-26c1-4a1f-adc8-50191e9d50e2", "engine_completed_rows": 108019, "engine_completed_bytes": 41332753}
+  ],
+  "download_observation": "Browser UI requested downloads; corresponding engine audits confirm complete CSV response streams. The attachment opened in a separate tab and the opener event observer timed out. Browser disk saving was not independently verified.",
+  "production_business_records_retained_in_this_receipt": false
+}

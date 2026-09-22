@@ -1,0 +1,42 @@
+{
+  "origin": "http://127.0.0.1:3118",
+  "checkedAt": "2026-09-22T05:50:53.370Z",
+  "checks": [
+    {
+      "device": "desktop",
+      "route": "/",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "device": "desktop",
+      "route": "/contact",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "device": "desktop",
+      "navigation": "mission anchor and partnership contact route",
+      "passed": true
+    },
+    {
+      "device": "mobile",
+      "route": "/",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "device": "mobile",
+      "route": "/contact",
+      "status": 200,
+      "horizontalOverflow": false
+    },
+    {
+      "device": "mobile",
+      "navigation": "mission anchor and partnership contact route",
+      "passed": true
+    }
+  ],
+  "pageErrors": [],
+  "passed": true
+}

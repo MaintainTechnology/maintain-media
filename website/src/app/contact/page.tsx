@@ -12,7 +12,7 @@ import { contactDetails } from "@/lib/site";
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Book a free strategy call with Maintain Media. Tell us about your brand and goals and we will show you the fastest path to growth.",
+    "Talk to Maintain Media about your new business and a lead generation partnership with zero cost to start. Call us or send an enquiry.",
 };
 
 const contactItems = [
@@ -53,9 +53,9 @@ export default function ContactPage() {
             Let&rsquo;s talk about your growth.
           </h1>
           <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-2 md:text-xl">
-            Tell us a little about your brand and where you want to go. We will
-            come back within one business day with clear next steps. No
-            pressure, no jargon.
+            Just registered your ABN? Tell us what you do and the customers you
+            want to reach. We can discuss our zero-cost-to-start lead generation
+            partnership and what you need to get established.
           </p>
         </div>
       </section>
@@ -63,8 +63,12 @@ export default function ContactPage() {
       <section className="shell grid gap-12 py-16 md:grid-cols-[0.85fr_1.15fr] md:gap-16 md:py-24">
         <Reveal>
           <h2 className="font-display text-2xl font-bold">
-            Prefer to reach out directly?
+            Let&rsquo;s start with a conversation.
           </h2>
+          <p className="mt-4 leading-relaxed text-ink-2">
+            You don&rsquo;t need a website or business email to get in touch.
+            Call us using the number below, or use a personal email for your enquiry.
+          </p>
           <ul className="mt-6">
             {contactItems.map((item) => (
               <li

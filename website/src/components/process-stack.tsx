@@ -11,32 +11,32 @@ gsap.registerPlugin(ScrollTrigger);
 const steps = [
   {
     numeral: "01",
-    title: "Discover",
-    body: "A strategy session that maps your goals, your audience and where the growth is hiding.",
+    title: "Understand your starting point",
+    body: "We learn about your new business, the work you do and the customers you want to reach.",
     points: [
-      "Goals and target metrics",
-      "Audience and positioning",
-      "Channel opportunities",
+      "Your services and local area",
+      "Website, business email and social presence",
+      "The customers you can serve now",
     ],
   },
   {
     numeral: "02",
-    title: "Build",
-    body: "Strategy, creative and campaigns designed and launched fast, with clear ownership at every step.",
+    title: "Connect with qualified leads",
+    body: "Together, we agree what makes a good lead and how to get those opportunities to you, with zero cost to start.",
     points: [
-      "Strategy and roadmap",
-      "Creative and assets",
-      "Campaign build and launch",
+      "A clear definition of a qualified lead",
+      "A way to receive and follow up enquiries",
+      "Support for the gaps in your digital presence",
     ],
   },
   {
     numeral: "03",
-    title: "Grow",
-    body: "We measure everything, optimise weekly and report in plain numbers you can act on.",
+    title: "Build customer relationships",
+    body: "Follow up the opportunities, win customers and learn what works. We grow the partnership around those results.",
     points: [
-      "Live performance dashboards",
-      "Weekly optimisation",
-      "Clear, jargon-free reporting",
+      "Leads followed up and customers won",
+      "Feedback that improves lead quality",
+      "Long-term support as your business grows",
     ],
   },
 ] as const;
@@ -75,11 +75,11 @@ export function ProcessStack() {
     <section className="shell py-24 md:py-32">
       <div className="max-w-2xl">
         <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-          From brief to results in days.
+          From a new ABN to your next customer.
         </h2>
         <p className="mt-5 text-lg text-ink-2">
-          A tight, transparent process that gets you to market fast. No bloated
-          retainers, no black boxes.
+          A clear starting point, useful opportunities and a shared focus on
+          turning leads into lasting customer relationships.
         </p>
       </div>
 
@@ -135,11 +135,11 @@ export function ProcessStack() {
                 {i === 2 && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <div className="text-center">
-                      <div className="font-display text-7xl font-extrabold text-ink">
-                        98<span className="text-brand">%</span>
+                      <div className="font-display text-5xl font-extrabold text-ink">
+                        Leads<span className="block text-brand-300">to customers.</span>
                       </div>
                       <div className="mt-2 text-mist">
-                        of clients stay with us
+                        The progress that matters
                       </div>
                     </div>
                   </div>

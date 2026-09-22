@@ -1,0 +1,156 @@
+{
+  "status": "passed",
+  "checked_at": "2026-09-14T18:46:08.130Z",
+  "scope": "Signed-out metadata-only checks. No authentication cookies, credentials, response bodies, tickets or source records stored.",
+  "deployment": "dpl_ANUr4Tk5pgAg9SDZicCUCmSGKtvK",
+  "observations": [
+    {
+      "requested_url": "https://www.maintainmedia.com.au/api/abn-lead-gen/dashboard",
+      "method": "GET",
+      "source": null,
+      "redirects": [],
+      "final": {
+        "url": "https://www.maintainmedia.com.au/api/abn-lead-gen/dashboard",
+        "status": 401,
+        "cache_control": "private, no-store, max-age=0",
+        "referrer_policy": "no-referrer",
+        "vercel_id": "sin1::syd1::d5ns7-1789411566466-9a2a9c0c010c"
+      },
+      "passed": true
+    },
+    {
+      "requested_url": "https://www.maintainmedia.com.au/api/abn-lead-gen/source-records/query",
+      "method": "POST",
+      "source": "abr",
+      "redirects": [],
+      "final": {
+        "url": "https://www.maintainmedia.com.au/api/abn-lead-gen/source-records/query",
+        "status": 401,
+        "cache_control": "private, no-store, max-age=0",
+        "referrer_policy": "no-referrer",
+        "vercel_id": "sin1::syd1::klb2v-1789411566870-835a10100829"
+      },
+      "passed": true
+    },
+    {
+      "requested_url": "https://www.maintainmedia.com.au/api/abn-lead-gen/source-records/query",
+      "method": "POST",
+      "source": "qbcc",
+      "redirects": [],
+      "final": {
+        "url": "https://www.maintainmedia.com.au/api/abn-lead-gen/source-records/query",
+        "status": 401,
+        "cache_control": "private, no-store, max-age=0",
+        "referrer_policy": "no-referrer",
+        "vercel_id": "sin1::syd1::h694x-1789411567144-94b16c6f6eb3"
+      },
+      "passed": true
+    },
+    {
+      "requested_url": "https://www.maintainmedia.com.au/api/abn-lead-gen/source-exports",
+      "method": "POST",
+      "source": "abr",
+      "redirects": [],
+      "final": {
+        "url": "https://www.maintainmedia.com.au/api/abn-lead-gen/source-exports",
+        "status": 401,
+        "cache_control": "private, no-store, max-age=0",
+        "referrer_policy": "no-referrer",
+        "vercel_id": "sin1::syd1::zgtpx-1789411567432-50ef6a845a05"
+      },
+      "passed": true
+    },
+    {
+      "requested_url": "https://maintainmedia.com.au/api/abn-lead-gen/dashboard",
+      "method": "GET",
+      "source": null,
+      "redirects": [
+        {
+          "url": "https://maintainmedia.com.au/api/abn-lead-gen/dashboard",
+          "status": 308,
+          "cache_control": "public, max-age=0, must-revalidate",
+          "referrer_policy": null,
+          "vercel_id": "sin1::2m9qp-1789411567925-b0c2ab598b5a",
+          "location": "https://www.maintainmedia.com.au/api/abn-lead-gen/dashboard"
+        }
+      ],
+      "final": {
+        "url": "https://www.maintainmedia.com.au/api/abn-lead-gen/dashboard",
+        "status": 401,
+        "cache_control": "private, no-store, max-age=0",
+        "referrer_policy": "no-referrer",
+        "vercel_id": "sin1::syd1::s82v5-1789411568004-2e050ef9b129"
+      },
+      "passed": true
+    },
+    {
+      "requested_url": "https://maintainmedia.com.au/api/abn-lead-gen/source-records/query",
+      "method": "POST",
+      "source": "abr",
+      "redirects": [
+        {
+          "url": "https://maintainmedia.com.au/api/abn-lead-gen/source-records/query",
+          "status": 308,
+          "cache_control": "public, max-age=0, must-revalidate",
+          "referrer_policy": null,
+          "vercel_id": "sin1::mczlg-1789411568491-46e4d4a9d3cd",
+          "location": "https://www.maintainmedia.com.au/api/abn-lead-gen/source-records/query"
+        }
+      ],
+      "final": {
+        "url": "https://www.maintainmedia.com.au/api/abn-lead-gen/source-records/query",
+        "status": 401,
+        "cache_control": "private, no-store, max-age=0",
+        "referrer_policy": "no-referrer",
+        "vercel_id": "sin1::syd1::d5ns7-1789411568567-5a2e7854eaf2"
+      },
+      "passed": true
+    },
+    {
+      "requested_url": "https://maintainmedia.com.au/api/abn-lead-gen/source-records/query",
+      "method": "POST",
+      "source": "qbcc",
+      "redirects": [
+        {
+          "url": "https://maintainmedia.com.au/api/abn-lead-gen/source-records/query",
+          "status": 308,
+          "cache_control": "public, max-age=0, must-revalidate",
+          "referrer_policy": null,
+          "vercel_id": "sin1::drtbq-1789411568841-bd125a31e476",
+          "location": "https://www.maintainmedia.com.au/api/abn-lead-gen/source-records/query"
+        }
+      ],
+      "final": {
+        "url": "https://www.maintainmedia.com.au/api/abn-lead-gen/source-records/query",
+        "status": 401,
+        "cache_control": "private, no-store, max-age=0",
+        "referrer_policy": "no-referrer",
+        "vercel_id": "sin1::syd1::4p77w-1789411568911-f84ec88f55ea"
+      },
+      "passed": true
+    },
+    {
+      "requested_url": "https://maintainmedia.com.au/api/abn-lead-gen/source-exports",
+      "method": "POST",
+      "source": "abr",
+      "redirects": [
+        {
+          "url": "https://maintainmedia.com.au/api/abn-lead-gen/source-exports",
+          "status": 308,
+          "cache_control": "public, max-age=0, must-revalidate",
+          "referrer_policy": null,
+          "vercel_id": "sin1::2k7rp-1789411569198-56a9bb9d3f95",
+          "location": "https://www.maintainmedia.com.au/api/abn-lead-gen/source-exports"
+        }
+      ],
+      "final": {
+        "url": "https://www.maintainmedia.com.au/api/abn-lead-gen/source-exports",
+        "status": 401,
+        "cache_control": "private, no-store, max-age=0",
+        "referrer_policy": "no-referrer",
+        "vercel_id": "sin1::syd1::tm78t-1789411569270-1ade0f28dc5e"
+      },
+      "passed": true
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "verification": "Actual production website browser clicks correlated with engine export audit events",
+  "audit_captured_at": "2026-09-14T18:47:47.714551Z",
+  "source_rows_or_credentials_retained": false,
+  "exports": [
+    {
+      "source": "abr",
+      "browser_click_at": "2026-09-14T18:44:46.813Z",
+      "export_id": "c39a74ac-96d4-4144-b479-f3d7f305c87d",
+      "run_id": "2f634182-66d6-4ff4-b5d7-07c8b3c0aa16",
+      "snapshot_id": "a5fe2481-988e-457d-8550-74628d979bf9",
+      "filtered": true,
+      "request_event_id": "afb706d2-d91f-43f3-965b-a37c242d94c7",
+      "requested_at": "2026-09-14T18:44:49.996927Z",
+      "completion_event_id": "86b8d548-bca6-4fa5-826c-bab7bfe2d4e4",
+      "completed_at": "2026-09-14T18:44:52.544076Z",
+      "rows": 1,
+      "bytes": 719,
+      "origin_bound_form_accepted": true,
+      "engine_generator_completed": true,
+      "browser_disk_save_verified": false
+    },
+    {
+      "source": "qbcc",
+      "browser_click_at": "2026-09-14T18:47:09.181Z",
+      "export_id": "6b068c85-26c1-4a1f-adc8-50191e9d50e2",
+      "run_id": "53660e22-188f-53a2-bb91-5c498439a5c1",
+      "snapshot_id": "f10d2ded-a3d1-56b8-8770-883998f33815",
+      "filtered": false,
+      "request_event_id": "9b64a197-36bc-48d1-805f-380ee415d1a2",
+      "requested_at": "2026-09-14T18:47:11.859899Z",
+      "completion_event_id": "c6c6a019-a07e-46be-a124-0d2b77e25071",
+      "completed_at": "2026-09-14T18:47:19.869499Z",
+      "rows": 108019,
+      "bytes": 41332753,
+      "origin_bound_form_accepted": true,
+      "engine_generator_completed": true,
+      "browser_disk_save_verified": false
+    }
+  ],
+  "interpretation": "Each matching completion audit confirms the engine finished generating and yielding its CSV after accepting the origin-bound form ticket. The QBCC ALL request used no filters while the table was filtered. Browser opener download-event observation did not independently verify a file saved to disk."
+}

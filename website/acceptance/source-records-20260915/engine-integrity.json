@@ -1,0 +1,1 @@
+{"source_manifest_sha256": "a83a22bb686490333b01ca8f2bfd66a8bf966ac406596516d139202d71ae0f40", "files_verified": 165, "mismatches": [], "service": "active", "rollback_files": {"api.py": "63039079848eb4502045a858ecc6f43911f9308616be8fccef49de2cef1ac5d5", "RELEASE-MANIFEST.json": "03073e611e12e41c6790521858a907a7ab2c84f00a4757b50695889c9d39ca8a"}}

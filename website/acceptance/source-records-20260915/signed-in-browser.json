@@ -1,0 +1,21 @@
+{
+  "checked_at": "2026-09-14T17:18:14.4216196Z",
+  "status": "passed",
+  "origin": "https://www.maintainmedia.com.au",
+  "authenticated_session": true,
+  "actions": [
+    "Visible All sources, ABR and QBCC controls",
+    "ABR Load source records renders stored baseline fields",
+    "ABR Next 50 shows records 51-100",
+    "QBCC Load source records renders stored register",
+    "Run history QBCC 692faa4e opens exact run table",
+    "Run history ABR 2f634182 opens exact baseline table"
+  ],
+  "abr_run": "2f634182-66d6-4ff4-b5d7-07c8b3c0aa16",
+  "abr_total": 20510902,
+  "qbcc_run": "692faa4e-854b-528d-9843-a388372ff7d0",
+  "qbcc_total": 108019,
+  "source_runs_started": 0,
+  "licence_decisions_changed": 0,
+  "qualification_changed": false
+}

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Metadata } from "next";
 import {
   ArrowRight,
   ChartLineUp,
@@ -9,24 +10,22 @@ import {
 } from "@phosphor-icons/react/dist/ssr";
 import { HomeHero } from "@/components/home-hero";
 import { ProcessStack } from "@/components/process-stack";
-import { StatCounter } from "@/components/stat-counter";
 import { IndustriesMarquee } from "@/components/marquee";
 import { CtaBand } from "@/components/cta-band";
 import { Reveal } from "@/components/reveal";
 import { Mark } from "@/components/mark";
 
-const stats = [
-  { value: 120, suffix: "+", label: "Brands grown" },
-  { value: 3.4, decimals: 1, suffix: "x", label: "Average return on ad spend" },
-  { value: 48, suffix: "hr", label: "Campaign turnaround" },
-  { value: 15, suffix: "+", label: "Years of combined expertise" },
-];
+export const metadata: Metadata = {
+  title: "Lead generation for new businesses",
+  description:
+    "New ABN and no digital presence yet? Maintain Media helps newly registered Australian businesses find qualified leads through a zero-cost-to-start growth partnership.",
+};
 
-const oneRoof = [
-  "One strategy across every channel",
-  "Creative sharpened by performance data",
-  "No handoffs between three different agencies",
-  "Reporting in plain numbers, tied to revenue",
+const partnershipBenefits = [
+  "Zero cost to start your lead generation partnership",
+  "Qualified leads matched to the work you do",
+  "Support to establish your digital presence",
+  "Progress measured by leads becoming customers",
 ];
 
 export default function Home() {
@@ -34,12 +33,39 @@ export default function Home() {
     <>
       <HomeHero />
 
-      {/* Proof strip */}
-      <section aria-label="Results at a glance" className="border-y border-line">
-        <div className="shell grid grid-cols-2 gap-y-10 py-14 md:grid-cols-4">
-          {stats.map((stat) => (
-            <StatCounter key={stat.label} {...stat} />
-          ))}
+      <section id="new-business" aria-labelledby="new-business-title" className="scroll-mt-24 border-y border-line bg-brand-dark/30">
+        <div className="shell grid gap-10 py-16 md:grid-cols-[1.15fr_0.85fr] md:gap-16 md:py-20">
+          <div>
+            <h2 id="new-business-title" className="max-w-xl font-display text-3xl font-bold tracking-tight md:text-4xl">
+              Built for the first days of your business.
+            </h2>
+            <p className="mt-5 max-w-xl text-lg leading-relaxed text-ink-2">
+              Registered your ABN in the last 7 days? Your next priority is
+              customers. We focus on early-stage businesses with a limited
+              budget and an online presence still to build.
+            </p>
+            <p className="mt-4 max-w-xl text-lg leading-relaxed text-ink-2">
+              We start by understanding your services and checking what you
+              need: a website, business email or social channels. Then we work
+              with you to reach people who need what you offer.
+            </p>
+          </div>
+          <dl className="grid content-center gap-7">
+            <div className="border-b border-line pb-7">
+              <dt className="text-base text-ink-2">Our focus</dt>
+              <dd className="mt-2">
+                <span className="block font-display text-3xl font-bold text-ink">Your first 7 days</span>
+                <span className="mt-2 block text-ink-2">A newly registered ABN and room to build your digital presence.</span>
+              </dd>
+            </div>
+            <div>
+              <dt className="text-base text-ink-2">The offer</dt>
+              <dd className="mt-2">
+                <span className="block font-display text-3xl font-bold text-brand-300">Zero cost to start</span>
+                <span className="mt-2 block text-ink-2">A lead generation partnership built around growing your customer base.</span>
+              </dd>
+            </div>
+          </dl>
         </div>
       </section>
 
@@ -48,12 +74,12 @@ export default function Home() {
         <div className="flex flex-wrap items-end justify-between gap-6">
           <div className="max-w-2xl">
             <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-              Full-funnel marketing, one team.
+              Build a presence that helps you grow.
             </h2>
             <p className="mt-5 text-lg text-ink-2">
-              Everything you need to build a brand, fill the funnel and
-              convert, delivered by specialists who actually talk to each
-              other.
+              As your business develops, our team can support your brand,
+              campaigns, content and website. Start with what your business
+              needs now and shape the next steps together.
             </p>
           </div>
           <Link
@@ -145,17 +171,18 @@ export default function Home() {
         <div className="shell grid items-center gap-14 py-24 md:grid-cols-2 md:py-32">
           <Reveal>
             <h2 className="font-display text-4xl font-bold tracking-tight md:text-5xl">
-              Not your typical marketing agency.
+              A partnership that grows with you.
             </h2>
             <p className="mt-6 text-lg leading-relaxed text-ink-2">
-              Most agencies sell you activity. We are obsessed with outcomes.
-              Every campaign ties back to the metrics that actually build your
-              business.
+              Getting established takes time and resources. Our purpose is to
+              help you build customer relationships from the start, with lead
+              generation that begins without an upfront investment.
             </p>
             <p className="mt-4 text-lg leading-relaxed text-ink-2">
-              Strategy, creative, media and web live under one roof, so nothing
-              gets lost in handoffs and everything pulls in the same direction.
-              Fewer meetings, sharper work, faster results.
+              We agree what a qualified lead looks like for your business,
+              connect you with opportunities and track which leads become
+              customers. That gives us a clear foundation for a long-term
+              partnership.
             </p>
             <Link
               href="/about"
@@ -177,7 +204,7 @@ export default function Home() {
                 className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-brand/15 blur-3xl"
               />
               <ul className="relative space-y-6">
-                {oneRoof.map((line) => (
+                {partnershipBenefits.map((line) => (
                   <li key={line} className="flex items-start gap-4">
                     <CheckCircle
                       size={26}
@@ -195,24 +222,18 @@ export default function Home() {
 
       <ProcessStack />
 
-      {/* Quote + industries */}
+      {/* Audience and industries */}
       <section className="border-y border-line bg-brand-dark/30 py-24 md:py-28">
         <div className="shell">
           <Reveal className="mx-auto max-w-3xl text-center">
-            <div
-              aria-hidden
-              className="font-display text-6xl font-extrabold leading-none text-brand"
-            >
-              &ldquo;
-            </div>
-            <blockquote className="mt-2 text-2xl font-medium leading-snug text-ink md:text-3xl">
-              Maintain Media rebuilt our funnel from the ground up and tripled
-              our qualified leads in a single quarter. The reporting is
-              refreshingly honest.
-            </blockquote>
-            <cite className="mt-6 block text-[0.95rem] not-italic text-mist">
-              Marketing Director, national retail brand
-            </cite>
+            <h2 className="font-display text-3xl font-bold tracking-tight text-ink md:text-4xl">
+              You bring the expertise. We help you find the customers.
+            </h2>
+            <p className="mt-5 text-lg leading-relaxed text-ink-2">
+              From local services to new professional practices, the first
+              customer relationships matter. Tell us who you serve and where
+              you work so we can understand the right opportunities for you.
+            </p>
           </Reveal>
           <div className="mt-16">
             <IndustriesMarquee />
@@ -222,8 +243,9 @@ export default function Home() {
 
       <div className="pt-16">
         <CtaBand
-          title="Ready to grow faster?"
-          body="Book a free strategy call. We will show you exactly where the opportunities are and what it takes to capture them."
+          title="New ABN. Your next step: customers."
+          body="Tell us about your new business and the customers you want to reach. Let’s discuss a lead generation partnership with zero cost to start."
+          primaryLabel="Discuss the partnership"
           secondaryHref="/services"
           secondaryLabel="Explore services"
         />

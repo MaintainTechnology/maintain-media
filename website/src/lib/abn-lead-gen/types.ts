@@ -1,6 +1,6 @@
 export type LeadSource = "all" | "abr" | "qbcc";
 export type ReportKind = "html" | "csv" | "markdown";
-export type DashboardView = "leads" | "runs" | "setup";
+export type DashboardView = "leads" | "sources" | "prospects" | "runs" | "setup";
 export interface DashboardAdmin { username: string; displayName: string; csrfToken: string }
 export interface RunSettings { default_source: LeadSource; monthly_cap_micro_aud: number }
 export interface CrmHandoff {
@@ -86,6 +86,9 @@ export function validMutationReceipt(endpoint: string, value: unknown): boolean 
   if (endpoint === "settings") return validSettings(value);
   if (endpoint === "runs" || endpoint === "website-collections") return validJob(value);
   if (!record(value)) return false;
+  if (endpoint === "prospects") return uuid(value.prospect_id) && count(value.revision) && Number(value.revision) > 0
+    && typeof value.saved_at === "string" && Number.isFinite(Date.parse(value.saved_at))
+    && typeof value.expires_at === "string" && Number.isFinite(Date.parse(value.expires_at)) && Date.parse(value.expires_at) > Date.parse(value.saved_at);
   if (endpoint === "suppressions") return uuid(value.receipt_id) && uuid(value.suppression_id) && typeof value.committed_at === "string" && Number.isFinite(Date.parse(value.committed_at));
   if (endpoint.startsWith("worklist-rows/")) return uuid(value.row_id) && count(value.version) && Number(value.version) > 0 && typeof value.saved_at === "string" && typeof value.status === "string";
   if (endpoint === "qbcc-reviews") return uuid(value.review_id) && typeof value.state === "string";

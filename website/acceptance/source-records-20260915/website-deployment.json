@@ -1,0 +1,15 @@
+{
+  "id": "dpl_8xtKJfc1zVWPVYjzRrE5wDRyxT2m",
+  "status": "READY",
+  "url": "website-ntr0099zk-maintain-technology.vercel.app",
+  "aliases": [
+    "website-maintain-technology.vercel.app"
+  ],
+  "function_count": 66,
+  "all_functions_sydney": false,
+  "checked_at": "2026-09-14T17:16:18.0922334Z",
+  "resolved_from": "https://www.maintainmedia.com.au",
+  "non_middleware_function_count": 65,
+  "all_non_middleware_functions_sydney": true,
+  "middleware_region_note": "Existing authentication middleware is global; all 65 other functions including dashboard and source API are in syd1."
+}

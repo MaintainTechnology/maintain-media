@@ -1,0 +1,24 @@
+{"check": "abr_all_fields_page", "http_status": 200, "seconds": 0.229, "source": "abr", "total": 20510902, "source_total": 20510902, "offset": 0, "next_offset": 50, "run_id": "2f634182-66d6-4ff4-b5d7-07c8b3c0aa16", "page_rows": 50, "columns": 14}
+{"check": "abr_export_ticket", "http_status": 200, "seconds": 0.089, "source": "abr", "run_id": "2f634182-66d6-4ff4-b5d7-07c8b3c0aa16"}
+{"check": "abr_full_csv_progress", "rows": 1000000, "bytes": 351267250, "seconds": 17.8, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 2000000, "bytes": 702136400, "seconds": 36.37, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 3000000, "bytes": 1053085200, "seconds": 53.9, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 4000000, "bytes": 1404017350, "seconds": 73.95, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 5000000, "bytes": 1754943841, "seconds": 92.04, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 6000000, "bytes": 2105887640, "seconds": 108.68, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 7000000, "bytes": 2456940517, "seconds": 125.2, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 8000000, "bytes": 2807729468, "seconds": 143.74, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 9000000, "bytes": 3158733323, "seconds": 160.11, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 10000000, "bytes": 3509901917, "seconds": 175.59, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 11000000, "bytes": 3860728308, "seconds": 191.56, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 12000000, "bytes": 4211635644, "seconds": 208.61, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 13000000, "bytes": 4562793981, "seconds": 224.54, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 14000000, "bytes": 4913727734, "seconds": 240.35, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 15000000, "bytes": 5264558868, "seconds": 255.9, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 16000000, "bytes": 5615701137, "seconds": 272.25, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 17000000, "bytes": 5966682961, "seconds": 290.68, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 18000000, "bytes": 6317774444, "seconds": 304.43, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 19000000, "bytes": 6668638018, "seconds": 320.8, "retained_csv_copy": false}
+{"check": "abr_full_csv_progress", "rows": 20000000, "bytes": 7019458002, "seconds": 337.0, "retained_csv_copy": false}
+{"check": "abr_csv_stream", "rows": 20510902, "bytes": 7198717434, "chunks": 2053, "seconds": 345.498, "full_export": true, "csv_valid": true, "source_total": 20510902, "columns": 14, "sha256": "b043d15c55c607aa6cbfe0c595e0fcde8b210ade6aa32c6e8bacde01f3446fb5", "retained_csv_copy": false, "estimated_full_processing_seconds": 345.5, "network_transfer_excluded": true}
+{"status": "passed", "active_source_changed": false, "results": [{"check": "abr_all_fields_page", "http_status": 200, "seconds": 0.229, "source": "abr", "total": 20510902, "source_total": 20510902, "offset": 0, "next_offset": 50, "run_id": "2f634182-66d6-4ff4-b5d7-07c8b3c0aa16", "page_rows": 50, "columns": 14}, {"check": "abr_export_ticket", "http_status": 200, "seconds": 0.089, "source": "abr", "run_id": "2f634182-66d6-4ff4-b5d7-07c8b3c0aa16"}, {"check": "abr_csv_stream", "rows": 20510902, "bytes": 7198717434, "chunks": 2053, "seconds": 345.498, "full_export": true, "csv_valid": true, "source_total": 20510902, "columns": 14, "sha256": "b043d15c55c607aa6cbfe0c595e0fcde8b210ade6aa32c6e8bacde01f3446fb5", "retained_csv_copy": false, "estimated_full_processing_seconds": 345.5, "network_transfer_excluded": true}]}

@@ -9,6 +9,8 @@ import psycopg
 import pytest
 from psycopg import sql
 
+from abr_engine.config import Settings
+
 SPEC = importlib.util.spec_from_file_location("provision_database", Path(__file__).with_name("provision_database.py"))
 installer = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(installer)
@@ -36,8 +38,8 @@ def test_inventory_rejects_untrusted_inputs(tmp_path, filename, contents, code):
 
 def test_real_migration_inventory_contains_no_client_commands():
     inventory = installer.migration_inventory(Path(__file__).resolve().parents[2])
-    assert len(inventory) >= 26
-    assert inventory[-1][0] == "026_backup_ledger_queue.sql"
+    assert len(inventory) >= 27
+    assert inventory[-1][0] == "027_prospect_research.sql"
     assert len({name for name, _, _ in inventory}) == len(inventory)
 
 
@@ -59,7 +61,7 @@ def test_migration_sql_rejects_interpolated_identifiers(name, digest):
 @pytest.fixture
 def pg():
     # Fixed synthetic local database only. Never resolve a live config or secret.
-    connection = psycopg.connect("postgresql://abr_fixture:abr_fixture@127.0.0.1:55432/abr_fixture", autocommit=True)
+    connection = psycopg.connect(Settings().database_url, autocommit=True)
     schema = "abr_install_test_" + uuid4().hex
     connection.execute(sql.SQL("CREATE SCHEMA {}").format(sql.Identifier(schema)))
     connection.execute(sql.SQL("SET search_path TO {}").format(sql.Identifier(schema)))
@@ -96,6 +98,13 @@ def test_real_restricted_runtime_commits_dirty_trigger_without_queue_delete_or_g
             "has_table_privilege(%s,'backup_ledger_state','INSERT,DELETE,TRUNCATE,REFERENCES,TRIGGER'),"
             "has_table_privilege(%s,'release_gate','INSERT,UPDATE,DELETE')", (role, role, role, role)).fetchone()
         assert privileges == (True, True, False, False)
+        assert connection.execute(
+            "SELECT has_table_privilege(%s,'prospect_research','SELECT') "
+            "AND has_table_privilege(%s,'prospect_research','INSERT') "
+            "AND has_table_privilege(%s,'prospect_research','UPDATE') "
+            "AND has_table_privilege(%s,'prospect_research','DELETE')",
+            (role, role, role, role),
+        ).fetchone()[0]
         connection.execute(sql.SQL("SET ROLE {}").format(sql.Identifier(role)))
         connection.execute("BEGIN")
         connection.execute("INSERT INTO business_group(group_id) VALUES(%s)", (uuid4(),))

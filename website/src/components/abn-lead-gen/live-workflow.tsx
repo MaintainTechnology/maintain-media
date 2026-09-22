@@ -257,7 +257,7 @@ export function SourceReviews({ engine }: { engine: DashboardController }) {
     finally { if (mounted.current) setBusy(false); }
   }
   return <section className={cls("settings-section", "source-review-section")} aria-labelledby="source-review-title">
-    <div className={cls("section-heading")}><div><h2 id="source-review-title">QBCC source review</h2><p>A bulk record is a discovery clue. Check the current licence before qualifying a business.</p></div><button type="button" className={cls("button", "secondary")} disabled={busy || !engine.connected} onClick={() => void load(offset)}>{busy ? "Loading…" : data ? "Refresh source records" : "Load source records"}</button></div>
+    <div className={cls("section-heading")}><div><h2 id="source-review-title">QBCC licence checks</h2><p>Category 1–2 records eligible for the current review scope. Check the current licence before qualifying a business.</p></div><button type="button" className={cls("button", "secondary")} disabled={busy || !engine.connected || engine.signingOut} onClick={() => void load(offset)}>{busy ? "Loading…" : data ? "Refresh licence checks" : "Load licence checks"}</button></div>
     {error && <p role="alert" className={cls("field-error")}>{error}</p>}{receipt && <p role="status">{receipt}</p>}
     {data && <><p>{data.total} stored source records. Publisher date: {dateLabel(data.publisher_modified_at)}. Imported: {dateLabel(data.source_observed_at)}.</p>
       {!data.rows.length ? <p>No accepted source records are available. Check Setup for required source approvals and run status.</p> : <div className={cls("source-review-grid")}>

@@ -5,6 +5,7 @@ from uuid import UUID
 
 from fastapi import BackgroundTasks, Request
 from fastapi.responses import Response
+from pydantic import BaseModel, ConfigDict, Field
 
 from abr_engine.control.api import create_app
 from abr_engine.control.service import DomainError, json_safe
@@ -16,6 +17,15 @@ from abr_engine.live.dashboard import dashboard_state, job_projection, save_pref
 
 class LiveRunRequest(RunRequest):
     source: Literal["qbcc", "abr"] | None = None
+
+
+class SourceRecordQuery(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+    source: Literal["abr", "qbcc"]
+    run_id: str = "latest"
+    offset: int = Field(default=0, ge=0, le=100_000_000, strict=True)
+    filters: dict = Field(default_factory=dict)
+    sort: Literal["source_order", "status_date_desc"] = "source_order"
 
 
 def create_live_app(settings, *, authority: WebsiteAuthority, submit_run=None, get_job=None,
@@ -134,6 +144,30 @@ def create_live_app(settings, *, authority: WebsiteAuthority, submit_run=None, g
             result = list_qbcc_reviews(conn, service, limit=100, offset=offset)
             service.audit(conn, actor.actor_id, "qbcc_source_review_read", "source", {"offset": offset})
         return json_safe(result)
+
+    @app.get("/api/source-records/{source}/{requested_run}/{offset}")
+    def source_records(source: Literal["abr", "qbcc"], requested_run: str, offset: int, request: Request):
+        from abr_engine.live.source_records import list_source_records
+
+        actor = actor_for(request, ("admin", "reviewer", "compliance"))
+        return list_source_records(settings, service, source=source, requested_run=requested_run,
+                                   offset=offset, actor=actor.actor_id)
+
+    @app.post("/api/source-records/query")
+    def query_source_records(body: SourceRecordQuery, request: Request):
+        from abr_engine.live.source_records import list_source_records
+
+        actor = actor_for(request, ("admin", "reviewer", "compliance"))
+        return list_source_records(settings, service, source=body.source, requested_run=body.run_id,
+                                   offset=body.offset, filters=body.filters, sort=body.sort, actor=actor.actor_id)
+
+    from abr_engine.live.source_exports import register_export_routes
+
+    register_export_routes(app, settings, service, actor_for)
+
+    from abr_engine.live.prospects import register_prospect_routes
+
+    register_prospect_routes(app, settings, service, actor_for, mutate)
 
     @app.post("/v1/qbcc-reviews")
     def source_review(data: QBCCLicenceReview, request: Request):

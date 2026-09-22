@@ -1,0 +1,15 @@
+{
+  "status": "promoted",
+  "deployment_id": "dpl_8xtKJfc1zVWPVYjzRrE5wDRyxT2m",
+  "deployment_url": "https://website-ntr0099zk-maintain-technology.vercel.app",
+  "rollback_deployment_id": "dpl_AsyYHpbXLtuqoxaE6NTM6FgAqgvL",
+  "file_count": 75,
+  "source_digest": "7422f4769b29ca490ac7ce1a062cee8794c904f03dbe9548224adfb86124733d",
+  "hosted_build": "passed",
+  "hosted_typescript": "passed",
+  "requested_function_region": "syd1",
+  "final_browser_interactions_passed": 14,
+  "website_tests_passed": 60,
+  "signed_in_production_browser_checked": true,
+  "current_git_head": "c58b9ba7439e79ed0fae7ba60dc21f6ee4e4a953"
+}

@@ -29,6 +29,18 @@ const dashboardHook = compile("../src/components/abn-lead-gen/use-dashboard.ts",
 const workflow = compile("../src/components/abn-lead-gen/live-workflow.tsx", {
   "@/lib/abn-lead-gen/types": types, "./dashboard.module.css": {}, "./use-dashboard": dashboardHook, "./readiness": readiness,
 });
+const prospectModel = compile("../src/lib/abn-lead-gen/prospects.ts");
+const prospects = compile("../src/components/abn-lead-gen/prospects.tsx", {
+  "@/lib/abn-lead-gen/types": types, "@/lib/abn-lead-gen/prospects": prospectModel, "./dashboard.module.css": {},
+});
+const sourceRecords = compile("../src/components/abn-lead-gen/source-records.tsx", {
+  "@/lib/abn-lead-gen/types": types, "@/lib/abn-lead-gen/prospects": prospectModel, "./prospects": prospects, "./dashboard.module.css": {},
+});
+const latestLeadsModel = compile("../src/lib/abn-lead-gen/latest-leads.ts", { "./prospects.ts": prospectModel });
+const latestLeads = compile("../src/components/abn-lead-gen/latest-leads.tsx", {
+  "@/lib/abn-lead-gen/types": types, "@/lib/abn-lead-gen/prospects": prospectModel,
+  "@/lib/abn-lead-gen/latest-leads": latestLeadsModel, "./source-records": sourceRecords, "./prospects": prospects, "./dashboard.module.css": {},
+});
 const UserButton = ({ children }) => React.createElement("div", null, children);
 UserButton.MenuItems = function TestUserMenu({ children }) { return React.createElement("div", null, children); };
 UserButton.Action = function TestUserAction({ label }) { return React.createElement("button", null, label); };
@@ -49,6 +61,9 @@ const { LeadGenDashboard } = compile("../src/components/abn-lead-gen/dashboard.t
   "@/lib/abn-lead-gen/types": types,
   "./use-dashboard": { useDashboard: () => state, errorMessage: dashboardHook.errorMessage },
   "./live-workflow": workflow,
+  "./source-records": sourceRecords,
+  "./prospects": prospects,
+  "./latest-leads": latestLeads,
   "./readiness": readiness,
   "./dashboard.module.css": {},
 });
@@ -59,7 +74,8 @@ test("live empty workspace preserves zero and blocked worker without demo claims
   assert.doesNotMatch(html, /Run demo|Sample data|sample businesses|Demo runs/);
   assert.match(html, /No businesses have been qualified yet/);
   for (const button of html.match(/<button[^>]+run-button[^>]*>/g)) assert.match(button, /disabled/);
-  assert.match(html, /explicitly assigned reviewer role/);
+  const review = renderToStaticMarkup(React.createElement(workflow.SourceReviews, { engine: state }));
+  assert.match(review, /explicitly assigned reviewer role/);
 });
 
 test("live reviewer can see actual worklist and optout controls with explicit evidence fields", () => {
@@ -71,7 +87,7 @@ test("live reviewer can see actual worklist and optout controls with explicit ev
   assert.match(html, /Save outcome/);
   assert.match(html, /Save identity review/);
   assert.match(html, /Save CRM decision/);
-  assert.match(html, /Load source records/);
+  assert.match(html, /Open Source records/);
   assert.doesNotMatch(html, /Run demo|Sample data/);
 });
 
@@ -216,6 +232,98 @@ const fixture = {
 const abrSource = { source: "abr", status: "accepted", can_run: true, reason_codes: [], capability: "abr", record_count: 12345, baseline: true, classification: "disabled", source_published_at: null, publisher_extract_time: "20260910010000" };
 const abrJob = { job_id: runId, run_id: runId, source: "abr", state: "complete", phase: "complete", reason_codes: [], result: { snapshot_id: runId, baseline: true, noop: false, events: 0, candidates: 0, classification: "disabled", record_count: 12345, source_published_at: null, publisher_extract_time: "20260910010000" } };
 const abrData = () => ({ ...fixture, outreach: "disabled", mode: "pilot", run_enabled: true, scopes: ["admin"], settings: { ...fixture.settings, default_source: "abr" }, sources: [abrSource], latest_job: abrJob, runs: [{ ...abrJob, status: "complete" }] });
+
+const abrRecordPage = () => ({
+  source: "abr", run_id: runId, snapshot_id: runId, source_state: "available",
+  source_observed_at: "2026-09-14T10:48:00Z", publisher_modified_at: "2026-09-14T00:00:00Z",
+  baseline: true, total: 1, source_total: 1, publisher_extract_time: "20260914180000", filters: {},
+  columns: ["abn", "status", "status_date", "gst_status", "gst_date", "entity_type", "entity_class", "main_name", "names_json", "state", "postcode", "name_hash", "semantic_hash", "source_member"],
+  limit: 50, offset: 0, next_offset: null,
+  records: [{ abn: "12345678901", main_name: "<script>untrusted()</script>", status: "ACT",
+    status_date: "2025-01-02", gst_status: "ACT", gst_date: "2025-01-03",
+    entity_type: "PRV", entity_class: "company", state: "QLD", postcode: "4000",
+    names_json: JSON.stringify({ MAIN: ["<script>untrusted()</script>"], BN: ["Synthetic alias"], TRD: [], OTN: [] }),
+    source_member: "20260914_Public01.xml", name_hash: "a".repeat(64), semantic_hash: "b".repeat(64) }],
+});
+
+test("ABR and QBCC source tables expose publisher fields and escape names and addresses", () => {
+  const abr = renderToStaticMarkup(React.createElement(sourceRecords.SourceRecordTable, { data: abrRecordPage() }));
+  assert.match(abr, /ABR source records table/);
+  assert.match(abr, /<th scope="row">/);
+  assert.equal((abr.match(/scope="col"/g) || []).length, 14);
+  assert.match(abr, /ABN status/);
+  assert.match(abr, /GST status/);
+  assert.match(abr, /Entity type/);
+  assert.match(abr, /20260914_Public01.xml/);
+  assert.match(abr, /Synthetic alias/);
+  assert.match(abr, /12 345 678 901/);
+  assert.match(abr, /&lt;script&gt;untrusted\(\)&lt;\/script&gt;/);
+  assert.doesNotMatch(abr, /<script>/);
+  const qbcc = renderToStaticMarkup(React.createElement(sourceRecords.SourceRecordTable, { data: {
+    ...abrRecordPage(), source: "qbcc", baseline: false,
+    columns: ["licence_number", "licensee_name", "abn", "financial_category", "original_address", "status", "entity_class", "state", "postcode", "row_digest", "class_types", "geography_review_required", "acn", "financial_category_description", "licence_review_required", "licence_grades", "licence_types"],
+    records: [{ licence_number: "1234567",
+      licensee_name: "Synthetic contractor", abn: "12345678901", financial_category: "2",
+      status: "UNKNOWN", original_address: "<img onerror='unsafe()'>", acn: "123456789",
+      financial_category_description: "Category 2", state: "QLD", postcode: "4000", entity_class: "unknown",
+      row_digest: "c".repeat(64), class_types: ["Builder - Low Rise"], geography_review_required: false,
+      licence_review_required: true, licence_grades: ["Contractor"], licence_types: [{ code: "B", description: "Builder" }] }],
+  } }));
+  assert.match(qbcc, /QBCC source records table/);
+  assert.equal((qbcc.match(/scope="col"/g) || []).length, 17);
+  assert.match(qbcc, /1234567/);
+  assert.match(qbcc, /Builder - Low Rise/);
+  assert.match(qbcc, /Financial category/);
+  assert.match(qbcc, /Publisher status/);
+  assert.match(qbcc, /&lt;img/);
+  assert.doesNotMatch(qbcc, /<img/);
+});
+
+test("source page acceptance binds requested source, run and offset and rejects malformed rows", () => {
+  const valid = sourceRecords.validSourceRecordPage;
+  const page = abrRecordPage();
+  assert.equal(valid(page, "abr", "latest", 0), true);
+  assert.equal(valid(page, "abr", runId, 0), true);
+  for (const patch of [
+    { source: "qbcc" }, { run_id: "not-a-run" }, { run_id: "00000000-0000-4000-8000-000000000002" },
+    { offset: 50 }, { limit: 5000 }, { next_offset: 25 }, { total: -1 },
+    { columns: page.columns.slice(1) },
+    { columns: [...page.columns.slice(1), page.columns[1]] },
+    { columns: [...page.columns.slice(1), "unexpected_field"] },
+    { records: [{ ...page.records[0], unexpected_field: "unsupported" }] },
+    { records: [{ ...page.records[0], source_member: undefined }] },
+    { records: [{ abn: "12345678901", main_name: { name: "Wrong shape" } }] },
+    { records: [{ licence_number: "1234567", licensee_name: "Wrong source" }] },
+    { records: [{ abn: "12345678901", main_name: "Synthetic", extra: [] }] },
+  ]) assert.equal(valid({ ...page, ...patch }, "abr", runId, 0), false, JSON.stringify(patch));
+});
+
+test("ABR missing GST uses the stored NONE value in its table and filter", () => {
+  const page = abrRecordPage();
+  page.records[0].gst_status = "NONE";
+  const table = renderToStaticMarkup(React.createElement(sourceRecords.SourceRecordTable, { data: page }));
+  assert.match(table, /Not supplied/);
+  assert.match(table, /NONE/);
+  const controls = renderToStaticMarkup(React.createElement(sourceRecords.SourceRecords, {
+    source: "abr", engine: { data: abrData(), connected: true, signingOut: false, request: async () => page },
+  }));
+  const gst = controls.match(/<select id="abr-filter-gst_status"[\s\S]*?<\/select>/)?.[0];
+  assert.match(gst, /<option value="NONE">Not supplied<\/option>/);
+  assert.doesNotMatch(gst, /value="UNKNOWN"/);
+});
+
+test("zero-lead ABR baseline keeps qualified-source filters and a separate source-records destination", () => {
+  const html = render(abrData(), true);
+  assert.match(html, /role="group" aria-label="Filter leads by source"/);
+  assert.match(html, />All sources<\/button>/);
+  assert.match(html, />ABR<\/button>/);
+  assert.match(html, />QBCC<\/button>/);
+  assert.match(html, /href="#sources" data-view="sources"/);
+  assert.doesNotMatch(html, /id="abr-source-records"|id="qbcc-source-records"/);
+  assert.match(html, /View source records/);
+  assert.match(html, /Source receipt only/);
+  assert.match(html, /zero new-business events and zero leads/);
+});
 
 test("accepted ABR baseline displays actual source counts and zero events, not newly formed leads", () => {
   const html = render(abrData(), true);

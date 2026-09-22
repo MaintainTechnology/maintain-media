@@ -6,7 +6,7 @@
       {
         "id": "a748df96bdcaba6b",
         "type": "tabs",
-        "dimension": 38.746630727762806,
+        "dimension": 38.7466307277628,
         "children": [
           {
             "id": "64cbd9ea6fd65f0f",
@@ -27,7 +27,7 @@
       {
         "id": "58b479b6c85ba757",
         "type": "tabs",
-        "dimension": 61.2533692722372,
+        "dimension": 61.253369272237194,
         "children": [
           {
             "id": "fce86470e2f2d7c7",
@@ -212,12 +212,12 @@
   },
   "active": "fce86470e2f2d7c7",
   "lastOpenFiles": [
+    "Specs/ABR Lead Engine.md",
+    "Specs/ABR Lead Engine - Final Judge.md",
     "Specs/ABR Lead Engine - Explained Simply.md",
     "Specs/ABR Lead Engine - Developer Quickstart.md",
     "Specs/ABR Lead Engine - Build Tasks.md",
-    "Specs/ABR Lead Engine.md",
     "Specs/ABR Lead Engine - Final Review Plan.md",
-    "Specs/ABR Lead Engine - Final Judge.md",
     "Specs/ABR Lead Engine - Build Contract Precision.md",
     "Specs/ABR Lead Engine - Security and Readiness Checklist.md",
     "Specs/ABR Lead Engine - Specification Checklist.md",

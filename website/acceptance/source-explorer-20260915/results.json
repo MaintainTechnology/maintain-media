@@ -1,0 +1,81 @@
+{
+  "status": "passed",
+  "checked_at": "2026-09-14T18:10:38.107Z",
+  "scope": "Local actual React dashboard with synthetic engine responses; excludes Clerk, hosted UI, engine integration, real source records and actual exported CSV contents.",
+  "checks": [
+    {
+      "name": "Source records has its own tab and does not load while Latest leads is open",
+      "status": "passed"
+    },
+    {
+      "name": "ABR table displays all 14 parsed columns and links its ABN to current ABN Lookup",
+      "status": "passed"
+    },
+    {
+      "name": "Source pagination remains pinned to the accepted run",
+      "status": "passed"
+    },
+    {
+      "name": "Name and ABN searches apply to the source publication and reset pagination",
+      "status": "passed"
+    },
+    {
+      "name": "Missing GST filter submits the stored NONE value and displays Not supplied",
+      "status": "passed"
+    },
+    {
+      "name": "Stored field filters and full versus filtered CSV keep distinct request bodies",
+      "status": "passed"
+    },
+    {
+      "name": "QBCC autoloads with all 17 parsed columns, nested licence data and unknown status",
+      "status": "passed"
+    },
+    {
+      "name": "Completed runs open their corresponding source and exact run on Source records",
+      "status": "passed"
+    },
+    {
+      "name": "Source navigation, filters and bounded table fit 375px",
+      "status": "passed"
+    },
+    {
+      "name": "Source navigation, filters and bounded table fit 768px",
+      "status": "passed"
+    },
+    {
+      "name": "Source navigation, filters and bounded table fit 1024px",
+      "status": "passed"
+    },
+    {
+      "name": "Source navigation, filters and bounded table fit 1440px",
+      "status": "passed"
+    },
+    {
+      "name": "A late ABR query cannot overwrite the selected QBCC source",
+      "status": "passed"
+    },
+    {
+      "name": "Pending source queries disable filter edits and allow the next search after completion",
+      "status": "passed"
+    },
+    {
+      "name": "A late run response cannot replace the newly selected latest publication",
+      "status": "passed"
+    },
+    {
+      "name": "expired publication has an honest empty state",
+      "status": "passed"
+    },
+    {
+      "name": "not_collected publication has an honest empty state",
+      "status": "passed"
+    },
+    {
+      "name": "Source page failures preserve the last successful table",
+      "status": "passed"
+    }
+  ],
+  "browser_errors": [],
+  "artifacts": "C:\\Users\\dalig\\AppData\\Local\\Temp\\maintain-source-records-ui-YIS281"
+}

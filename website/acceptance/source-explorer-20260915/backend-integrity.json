@@ -1,0 +1,1 @@
+{"status": "verified", "manifest_sha256": "4c7439686d5bc65f6c009ff4e1184e163fbab5985179a8a1c21663a293641c5f", "source_files": 167, "mismatches": [], "api_service": "active", "rollback_verified": true, "rollback": "/opt/abn-source-query-rollback-b345ba43"}

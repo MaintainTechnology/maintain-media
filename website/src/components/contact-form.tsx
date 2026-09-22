@@ -82,7 +82,7 @@ export function ContactForm() {
         </div>
         <div>
           <label htmlFor="email" className="mb-2 block text-sm font-semibold text-ink">
-            Work email
+            Email address
           </label>
           <input
             id="email"
@@ -134,6 +134,7 @@ export function ContactForm() {
           <option value="" disabled>
             Select an option
           </option>
+          <option>New business lead generation partnership</option>
           <option>Brand &amp; Creative</option>
           <option>Digital &amp; Performance</option>
           <option>Content &amp; Social</option>
@@ -144,14 +145,14 @@ export function ContactForm() {
 
       <div className="mt-5">
         <label htmlFor="message" className="mb-2 block text-sm font-semibold text-ink">
-          Tell us about your project
+          Tell us about your business
         </label>
         <textarea
           id="message"
           name="message"
           rows={5}
           required
-          placeholder="Goals, timeline, budget range, anything useful."
+          placeholder="What do you do, where do you work, and who would you like to reach? Let us know if you’re still setting up your website, email or social channels."
           aria-invalid={errors.message ? true : undefined}
           aria-describedby={errors.message ? "message-error" : undefined}
           className={`${inputClasses} resize-y`}

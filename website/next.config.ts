@@ -23,7 +23,7 @@ const nextConfig: NextConfig = {
   // otherwise proxies the request back into itself (vercel/next.js#94745).
   skipProxyUrlNormalize: true,
   async headers() {
-    return [
+    const protectedPages = [
       { source: "/abn-lead-gen/:path*", workspace: "abn-lead-gen" },
       { source: "/sign-in/:path*", workspace: "maintain-media-auth" },
       { source: "/sign-up/:path*", workspace: "maintain-media-auth" },
@@ -34,6 +34,12 @@ const nextConfig: NextConfig = {
       { key: "X-Frame-Options", value: "DENY" },
       { key: "Referrer-Policy", value: "no-referrer" },
     ] }));
+    return [...protectedPages, {
+      source: "/abn-lead-gen/dashboard",
+      // Direct CSV POSTs authenticate the originating website. no-referrer
+      // turns their Origin into null; strict-origin sends only the site origin.
+      headers: [{ key: "Referrer-Policy", value: "strict-origin" }],
+    }];
   },
   // The brand-asset repo has its own lockfile one level up; pin the root here.
   turbopack: {

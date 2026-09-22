@@ -17,6 +17,7 @@ export class BridgeError extends Error {
 
 const uuid = "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}";
 const reportPath = new RegExp(`^/api/reports/(${uuid})/(html|csv|markdown)$`, "i");
+const sourceRecordsPath = new RegExp(`^source-records/(abr|qbcc)/(latest|${uuid})/(0|[1-9][0-9]{0,7}|100000000)$`);
 const sitePrefix = "/api/abn-lead-gen";
 export const privateHeaders = {
   "Cache-Control": "private, no-store, max-age=0",
@@ -30,11 +31,16 @@ export const privateHeaders = {
 export function parseBridgePath(parts: string[], method: string, live = false): string {
   const joined = parts.join("/");
   if (live) {
+    if (method === "GET" && /^prospects\/\d{11}$/.test(joined)) return `/api/${joined}`;
+    if (method === "POST" && joined === "prospects/query") return "/api/prospects/query";
+    if (method === "POST" && joined === "prospects") return "/v1/prospects";
+    if (method === "POST" && ["source-records/query", "source-exports"].includes(joined)) return `/api/${joined}`;
     if (method === "POST" && joined === "website-collections") return "/v1/website-collections";
     if (method === "GET" && new RegExp(`^website-jobs/${uuid}$`, "i").test(joined)) return `/api/${joined}`;
     if (["GET", "HEAD"].includes(method) && joined === "worklist.csv") return "/api/worklist.csv";
     if (method === "GET" && new RegExp(`^evidence/${uuid}$`, "i").test(joined)) return `/v1/${joined}`;
     if (method === "GET" && /^qbcc-reviews(?:\/(?:0|[1-9][0-9]{0,5}))?$/.test(joined)) return `/api/${joined}`;
+    if (method === "GET" && sourceRecordsPath.test(joined)) return `/api/${joined}`;
     if (method === "POST" && ["suppressions", "crm-approvals", "identity-assessments", "licence-reviews", "basis-assessments", "qbcc-reviews", "operator-activities"].includes(joined)) return `/v1/${joined}`;
     if (method === "PATCH" && new RegExp(`^worklist-rows/${uuid}$`, "i").test(joined)) return `/v1/${joined}`;
   }
@@ -153,8 +159,15 @@ export async function forwardLeadGen(request: Request, parts: string[], admin: B
   const { origin, token, mode } = engineConnection();
   const live = mode !== "fixture";
   const path = parseBridgePath(parts, request.method, live);
+  // Keep pagination in the signed path; the engine rejects unsigned query parameters.
+  if ((path.startsWith("/api/source-records/") || path.startsWith("/api/prospects/") || path === "/v1/prospects" || path === "/api/source-exports") && new URL(request.url).search) throw new BridgeError("INVALID_INPUT", 422);
   const mutation = request.method === "POST" || request.method === "PATCH";
-  const body = mutation ? await readJsonBody(request, live ? 65536 : 4096) : undefined;
+  let body = mutation ? await readJsonBody(request, live ? 65536 : 4096) : undefined;
+  if (path === "/api/source-exports") {
+    const clientOrigin = new URL(request.url).origin;
+    if (!["https://www.maintainmedia.com.au", "https://maintainmedia.com.au"].includes(clientOrigin)) throw new BridgeError("SOURCE_EXPORT_ORIGIN_REQUIRED", 403);
+    body = JSON.stringify({ ...JSON.parse(body!), client_origin: clientOrigin });
+  }
   const secrets = token ? [token] : [];
   const requestId = randomUUID();
   const idempotencyKey = live && mutation ? request.headers.get("idempotency-key") ?? "" : "";
@@ -170,7 +183,7 @@ export async function forwardLeadGen(request: Request, parts: string[], admin: B
         upstreamHeaders.set("X-Request-ID", requestId);
         if (idempotencyKey) upstreamHeaders.set("Idempotency-Key", idempotencyKey);
       } else if (token) upstreamHeaders.set("Authorization", `Bearer ${token}`);
-      return await fetcher(origin + url, { ...init, headers: upstreamHeaders, cache: "no-store", redirect: "error", signal: AbortSignal.timeout(8000) });
+      return await fetcher(origin + url, { ...init, headers: upstreamHeaders, cache: "no-store", redirect: "error", signal: AbortSignal.timeout(path === "/api/source-records/query" || path === "/v1/prospects" ? 40000 : 8000) });
     } catch { throw new BridgeError("ENGINE_UNAVAILABLE", 503); }
   };
   if (mutation && !live) {
@@ -211,6 +224,13 @@ export async function forwardLeadGen(request: Request, parts: string[], admin: B
   }
   const data = await engineJson(upstream, secrets);
   delete data.csrf_token;
+  if (path === "/api/source-exports") {
+    if (typeof data.download_token !== "string" || !/^[A-Za-z0-9_-]{43}$/.test(data.download_token)
+      || typeof data.expires_at !== "string" || !Number.isFinite(Date.parse(data.expires_at))) throw new BridgeError("ENGINE_INVALID_RESPONSE", 502);
+    // The browser submits this short-lived ticket in a POST body directly to the
+    // engine. Large CSV files never pass through a Vercel function or JS Blob.
+    data.download_url = `${origin}/api/source-exports/download`;
+  }
   if (path === "/api/dashboard") {
     if (data.mode !== mode || data.outreach !== "disabled" || !Array.isArray(data.runs)) throw new BridgeError("ENGINE_INVALID_RESPONSE", 502);
     for (const run of data.runs) {

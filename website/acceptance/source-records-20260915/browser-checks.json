@@ -1,0 +1,65 @@
+{
+  "status": "passed",
+  "checked_at": "2026-09-14T17:08:33.302Z",
+  "scope": "Local actual React dashboard with synthetic engine responses; excludes Clerk, hosted UI, engine integration and real source records.",
+  "checks": [
+    {
+      "name": "Visible source switches and both source reviews with zero qualified leads",
+      "status": "passed"
+    },
+    {
+      "name": "ABR loaded records and run-pinned pagination",
+      "status": "passed"
+    },
+    {
+      "name": "Refreshing the latest publication returns to its first page",
+      "status": "passed"
+    },
+    {
+      "name": "QBCC source switch and loaded records",
+      "status": "passed"
+    },
+    {
+      "name": "Completed run opens its corresponding source and exact run",
+      "status": "passed"
+    },
+    {
+      "name": "Controls and source table fit 375px",
+      "status": "passed"
+    },
+    {
+      "name": "Controls and source table fit 768px",
+      "status": "passed"
+    },
+    {
+      "name": "Controls and source table fit 1024px",
+      "status": "passed"
+    },
+    {
+      "name": "Controls and source table fit 1440px",
+      "status": "passed"
+    },
+    {
+      "name": "A late ABR response cannot populate the newly selected QBCC view",
+      "status": "passed"
+    },
+    {
+      "name": "Source switches filter the qualified-lead list",
+      "status": "passed"
+    },
+    {
+      "name": "expired publication shows honest source state without a table",
+      "status": "passed"
+    },
+    {
+      "name": "not_collected publication shows honest source state without a table",
+      "status": "passed"
+    },
+    {
+      "name": "A failed page request retains the last successful source table",
+      "status": "passed"
+    }
+  ],
+  "browser_errors": [],
+  "artifacts": "C:\\Users\\dalig\\AppData\\Local\\Temp\\maintain-source-records-ui-32eCOn"
+}

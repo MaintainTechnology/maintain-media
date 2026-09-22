@@ -183,7 +183,10 @@ def preview(conn, service, now):
 
 
 def _profile_held(conn, group_id):
-    return _held(conn, "group", group_id) or bool(conn.execute("""SELECT 1 FROM retention_hold h WHERE
+    return _held(conn, "group", group_id) or bool(conn.execute(
+        "SELECT 1 FROM retention_hold h JOIN prospect_research p ON h.object_id=p.prospect_id::text "
+        "WHERE h.object_type='prospect' AND p.group_id=%s LIMIT 1", (group_id,)
+    ).fetchone()) or bool(conn.execute("""SELECT 1 FROM retention_hold h WHERE
       (h.object_type='provenance' AND h.object_id IN(SELECT p.provenance_id::text FROM collection_provenance p JOIN lead_entity l USING(lead_id) WHERE l.group_id=%s))
       OR (h.object_type='contact' AND h.object_id IN(SELECT c.contact_id::text FROM contact_record c JOIN lead_entity l USING(lead_id) WHERE l.group_id=%s))
       OR (h.object_type='enrichment_operation' AND h.object_id IN(SELECT o.operation_id::text FROM enrichment_operation o JOIN enrichment_attempt a USING(attempt_id) JOIN lead_entity l USING(lead_id) WHERE l.group_id=%s))
@@ -253,6 +256,7 @@ def erase_profile(conn, service, group_id, *, actor="compliance", now=None):
         conn.execute("UPDATE enrichment_attempt SET lead_id=NULL,candidate_id=NULL,erased_at=%s,lease_owner=NULL,lease_until=NULL WHERE lead_id=%s", (now, lead_id))
         conn.execute("DELETE FROM candidate_queue WHERE lead_id=%s", (lead_id,))
         conn.execute("DELETE FROM lead_entity WHERE lead_id=%s", (lead_id,))
+    conn.execute("DELETE FROM prospect_research WHERE group_id=%s", (group_id,))
     conn.execute("DELETE FROM lead_source_link WHERE group_id=%s", (group_id,))
     # External identity remains until verified external deletion; job never falsely says complete.
     conn.execute(
@@ -306,6 +310,16 @@ def minimise_database_evidence(conn, service, *, now, execute=False):
     from abr_engine.ops.pilot_facts import expire_metrics
     pilot_metrics = expire_metrics(conn, now=now, execute=execute)
     website_requests = _expire_website_requests(conn, service, now=now, execute=execute)
+    prospect_predicate = """(p.expires_at<=%s OR EXISTS(SELECT 1 FROM deletion_job d
+      WHERE d.group_id=p.group_id AND d.requested_at<=%s))
+      AND NOT EXISTS(SELECT 1 FROM retention_hold h WHERE
+        (h.object_type='group' AND h.object_id=p.group_id::text)
+        OR (h.object_type='prospect' AND h.object_id=p.prospect_id::text))"""
+    prospect_params = (now, now - timedelta(days=30))
+    prospects = conn.execute("SELECT count(*) n FROM prospect_research p WHERE " + prospect_predicate,
+                             prospect_params).fetchone()["n"]
+    if execute:
+        conn.execute("DELETE FROM prospect_research p WHERE " + prospect_predicate, prospect_params)
     page_predicate = """p.capture_erased_at IS NULL AND p.collected_at<=%s
       AND NOT EXISTS(SELECT 1 FROM retention_hold h JOIN lead_entity l ON l.lead_id=p.lead_id
         WHERE (h.object_type='group' AND h.object_id=l.group_id::text)
@@ -420,6 +434,7 @@ def minimise_database_evidence(conn, service, *, now, execute=False):
     return {
         "page_bodies": pages,
         "website_requests": website_requests,
+        "prospect_research": prospects,
         "qbcc_source_reviews": qbcc_reviews,
         "expired_pilot_metrics": pilot_metrics,
         "enrichment_results": operations,

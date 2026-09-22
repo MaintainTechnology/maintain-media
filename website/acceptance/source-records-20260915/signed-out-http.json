@@ -1,0 +1,35 @@
+{
+  "checked_at": "2026-09-14T17:17:25.827Z",
+  "origin": "https://www.maintainmedia.com.au",
+  "status": "passed",
+  "checks": [
+    {
+      "path": "/",
+      "status": 200,
+      "expected": 200,
+      "private_cache": true,
+      "passed": true
+    },
+    {
+      "path": "/abn-lead-gen/dashboard",
+      "status": 307,
+      "expected": 307,
+      "private_cache": true,
+      "passed": true
+    },
+    {
+      "path": "/api/abn-lead-gen/source-records/abr/2f634182-66d6-4ff4-b5d7-07c8b3c0aa16/0",
+      "status": 401,
+      "expected": 401,
+      "private_cache": true,
+      "passed": true
+    },
+    {
+      "path": "/api/abn-lead-gen/source-records/qbcc/692faa4e-854b-528d-9843-a388372ff7d0/0",
+      "status": 401,
+      "expected": 401,
+      "private_cache": true,
+      "passed": true
+    }
+  ]
+}

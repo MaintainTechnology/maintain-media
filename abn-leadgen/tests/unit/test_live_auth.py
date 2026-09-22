@@ -13,17 +13,17 @@ from abr_engine.live.auth import WebsiteAuthority
 KEY = "synthetic-website-key-" + "x" * 43
 
 
-def signed(*, change=None, method="POST", body=b'{"lead_id":"opaque"}'):
+def signed(*, change=None, method="POST", body=b'{"lead_id":"opaque"}', path="/v1/suppressions"):
     request_id, key = str(uuid4()), str(uuid4()) if method == "POST" else ""
     now = int(time.time())
     claims = {"iss": "maintain-media-website", "aud": "abr-engine-live", "sub": "user_Human123",
               "iat": now, "exp": now + 60, "jti": str(uuid4()), "scopes": ["operator"],
-              "method": method, "path": "/v1/suppressions", "request_id": request_id,
+              "method": method, "path": path, "request_id": request_id,
               "idempotency_key": key, "body_sha256": hashlib.sha256(body).hexdigest()}
     claims.update(change or {})
     request = SimpleNamespace(headers={"authorization": "Bearer " + jwt.encode(claims, KEY, algorithm="HS256"),
         "idempotency-key": key, "x-request-id": request_id}, method=method,
-        url=SimpleNamespace(path="/v1/suppressions", query=""), state=SimpleNamespace(raw_body=body))
+        url=SimpleNamespace(path=path, query=""), state=SimpleNamespace(raw_body=body))
     return request
 
 
@@ -66,3 +66,16 @@ def test_fixture_or_other_service_key_cannot_authenticate():
 
 def test_read_token_needs_no_idempotency_key_but_still_binds_request():
     assert WebsiteAuthority(KEY)(signed(method="GET", body=b"")).actor_id == "user_Human123"
+
+
+@pytest.mark.parametrize("path,method,body", [
+    ("/api/prospects/51824753556", "GET", b""),
+    ("/api/prospects/query", "POST", b'{"filters":{"website_presence":"absent"}}'),
+    ("/v1/prospects", "POST", b'{"abn":"51824753556","expected_revision":0}'),
+])
+def test_prospect_routes_require_their_own_exact_request_signature(path, method, body):
+    request = signed(path=path, method=method, body=body, change={"scopes": ["reviewer"]})
+    assert WebsiteAuthority(KEY)(request).scopes == {"reviewer"}
+    request.url.path = "/api/dashboard"
+    with pytest.raises(DomainError, match="UNAUTHENTICATED"):
+        WebsiteAuthority(KEY)(request)

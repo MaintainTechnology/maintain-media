@@ -30,6 +30,15 @@ export function validationMessage(path: string) {
   return "Check the required form values and evidence, then try again. No change was confirmed.";
 }
 export function errorMessage(code: string, fallback: string) {
+  if (code === "SOURCE_QUERY_TOO_LARGE") return "This source query is too broad to sort. Use a shorter date window or add a state or business name.";
+  if (code === "PROSPECT_QUERY_TOO_BROAD") return "This prospect search is too broad. Add a business name, presence filter or contact stage and try again.";
+  if (code === "PROSPECT_SOURCE_MISMATCH") return "The business no longer matches the selected source publication. Reload its source record before saving research.";
+  if (code === "SUPPRESSED_SOURCE_IDENTITY") return "This business is restricted. Its prospect research cannot be opened or changed.";
+  if (code === "SOURCE_QUERY_TIMEOUT") return "This search covered too many records to finish. Try an exact ABN or add a state, postcode or entity filter.";
+  if (["SOURCE_QUERY_BUSY", "SOURCE_EXPORT_BUSY"].includes(code)) return "Another source search or download is still running. Let it finish, then try again.";
+  if (code === "SOURCE_RUN_NOT_FOUND") return "The selected run has no accepted publication for this source. Choose another completed run or the latest accepted publication.";
+  if (code === "SOURCE_RUN_NOT_COMPLETE") return "This source run has not completed yet. Follow its progress in Run history, or choose an earlier completed run.";
+  if (["SOURCE_RECORDS_UNAVAILABLE", "SOURCE_ARTIFACT_CHANGED", "SOURCE_SCHEMA_UNAVAILABLE", "SOURCE_RECORD_COUNT_CHANGED", "SOURCE_ROW_GROUP_TOO_LARGE"].includes(code)) return "The engine could not verify the stored source file for this table. Choose another accepted publication or ask the administrator to check the stored file. No new source run is needed to retry loading it.";
   if (code === "PRIOR_ARTIFACT_EXPIRED_REBASELINE_REQUIRED") return "The earlier ABR comparison file has expired. An authorised operator must review and explicitly establish a new baseline. This run has not treated old businesses as new leads.";
   if (code === "ABR_SOURCE_HTTP_REJECTED") return "The publisher did not return a usable ABR source file for this run. No new publication from this run was accepted. Try again after checking the source status.";
   if (code === "ABR_CLASSIFICATION_DISABLED") return "ABR source validation can run separately, but matching is still disabled until the 100-record accuracy review passes. Source records are not yet matched leads.";
@@ -139,7 +148,7 @@ export function useDashboard(admin: DashboardAdmin) {
     const epoch = rt.epoch;
     const controller = new AbortController();
     rt.controllers.add(controller);
-    const timeout = setTimeout(() => controller.abort(), 20000);
+    const timeout = setTimeout(() => controller.abort(), path.endsWith("/source-records/query") || path.endsWith("/prospects") ? 45000 : 20000);
     try {
       const response = await fetch(path, {
         ...options, credentials: "same-origin", cache: "no-store", signal: controller.signal,
@@ -175,9 +184,11 @@ export function useDashboard(admin: DashboardAdmin) {
     const rt = runtime.current;
     const epoch = rt.epoch;
     const mutation = options?.method && !["GET", "HEAD"].includes(options.method);
+    const sourceRead = options?.method === "POST" && ["source-records/query", "source-exports", "prospects/query"].includes(endpoint);
     const live = rt.state.data && rt.state.data.mode !== "fixture";
     let cacheKey: string | undefined;
-    if (mutation && live && options) {
+    if (sourceRead && live && options) options = { ...options, headers: { ...options.headers, "Idempotency-Key": crypto.randomUUID() } };
+    if (mutation && !sourceRead && live && options) {
       cacheKey = `${endpoint}:${options.body ?? ""}`;
       let key = rt.pendingWrites.get(cacheKey);
       if (!key) {

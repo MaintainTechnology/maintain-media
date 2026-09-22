@@ -1,0 +1,7 @@
+/opt/abn-leadgen/.venv/lib/python3.12/site-packages/fastapi/testclient.py:1: StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+  from starlette.testclient import TestClient as TestClient  # noqa
+{"check": "abr_name_construction_0", "http_status": 200, "seconds": 23.913, "total": 108908, "source_total": 20510902, "page_rows": 50}
+{"check": "abr_name_construction_50", "http_status": 200, "seconds": 0.3, "total": 108908, "source_total": 20510902, "page_rows": 50}
+{"check": "abr_name_bn_0", "http_status": 200, "seconds": 16.358, "total": 11982, "source_total": 20510902, "page_rows": 50}
+{"check": "abr_name_bn_50", "http_status": 200, "seconds": 0.329, "total": 11982, "source_total": 20510902, "page_rows": 50}
+{"status": "passed", "checks": 4, "active_source_changed": false}
