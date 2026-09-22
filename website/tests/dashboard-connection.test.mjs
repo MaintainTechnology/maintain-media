@@ -395,6 +395,34 @@ function SourceHook(t, data) {
   return { controller, runtime };
 }
 
+test("source and saved-prospect search failures explain the read problem without blaming form evidence", async t => {
+  const { controller, runtime } = SourceHook(t, abrData());
+  t.mock.method(globalThis, "fetch", async () => Response.json({ code: "INVALID_INPUT" }, { status: 422 }));
+  for (const endpoint of ["source-records/query", "prospects/query"]) {
+    await assert.rejects(() => controller.request(endpoint, { method: "POST", body: "{}" }), error => {
+      assert.match(error.message, /engine rejected this .*search/);
+      assert.match(error.message, /website and engine search versions/);
+      assert.doesNotMatch(error.message, /required form values|evidence|No change was confirmed/);
+      assert.equal(error.code, "INVALID_INPUT");
+      return true;
+    });
+  }
+  assert.equal(runtime.state.expired, false);
+  assert.equal(runtime.state.connected, true);
+});
+
+test("a missing prospect API explains the engine update and preserves staff sign-in", async t => {
+  const { controller, runtime } = SourceHook(t, abrData());
+  t.mock.method(globalThis, "fetch", async () => Response.json({ code: "ENGINE_FEATURE_UNAVAILABLE" }, { status: 503 }));
+  await assert.rejects(() => controller.request("prospects/query", { method: "POST", body: "{}" }), error => {
+    assert.match(error.message, /engine needs the matching update/);
+    assert.match(error.message, /not an empty result/);
+    assert.equal(error.code, "ENGINE_FEATURE_UNAVAILABLE");
+    return true;
+  });
+  assert.equal(runtime.state.expired, false);
+});
+
 test("uncertain requests retain their original source and identifier when a different default is chosen", async t => {
   const { controller, runtime } = SourceHook(t, abrData());
   const pending = { request_id: "00000000-0000-4000-8000-000000000003", source: "qbcc" };

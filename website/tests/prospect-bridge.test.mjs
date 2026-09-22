@@ -89,3 +89,28 @@ test("prospect restrictions retain the engine error code without private upstrea
   assert.deepEqual(await response.json(), { code: "SUPPRESSED_SOURCE_IDENTITY" });
   assert.match(response.headers.get("cache-control"), /private, no-store/);
 });
+
+test("missing engine feature routes are reported as unavailable, never as empty research", async () => {
+  for (const [parts, method] of [...routes.map((parts, index) => [parts, methods[index]]), [["source-records", "query"], "POST"]]) {
+    for (const payload of [{ detail: "Not Found" }, { code: "ROUTE_NOT_FOUND", detail: "Private upstream detail" }]) {
+      let failure;
+      try {
+        await forwardLeadGen(new Request(origin + parts.join("/"), {
+          method, headers: { "Content-Type": "application/json", "Idempotency-Key": randomUUID() }, body: method === "POST" ? "{}" : undefined,
+        }), parts, admin, async () => Response.json(payload, { status: 404 }));
+      } catch (error) { failure = error; }
+      const response = bridgeFailure(failure);
+      assert.equal(response.status, 503);
+      assert.deepEqual(await response.json(), { code: "ENGINE_FEATURE_UNAVAILABLE" });
+      assert.match(response.headers.get("cache-control"), /private, no-store/);
+    }
+  }
+});
+
+test("record-level not-found and invalid filters retain their specific error semantics", async () => {
+  for (const [status, code] of [[404, "SOURCE_RUN_NOT_FOUND"], [422, "INVALID_INPUT"], [404, "UNKNOWN_RESOURCE"]]) {
+    await assert.rejects(() => forwardLeadGen(new Request(origin + "source-records/query", {
+      method: "POST", headers: { "Content-Type": "application/json", "Idempotency-Key": randomUUID() }, body: "{}",
+    }), ["source-records", "query"], admin, async () => Response.json({ code, detail: "Private upstream detail" }, { status })), { code, status });
+  }
+});

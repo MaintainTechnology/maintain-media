@@ -1,0 +1,34 @@
+{
+  "date": "2026-09-22",
+  "evidence_source": "Aggregate results recorded from executed SSH probes, provider CLI and authenticated browser observations",
+  "before": {"recent_source_query_http": 422, "recent_source_query_code": "INVALID_INPUT", "saved_prospects_http": 404, "saved_prospects_detail": "Not Found"},
+  "after": {
+    "signed_https_checks_passed": 8,
+    "recent_30_days": {"http": 200, "total": 56859, "page_rows": 50, "cold_seconds": 7.28, "sort": "status_date_desc"},
+    "recent_30_days_page_2": {"http": 200, "offset": 50, "page_rows": 50, "seconds": 3.965},
+    "recent_7_days": {"http": 200, "total": 24, "page_rows": 24, "seconds": 4.823},
+    "saved_prospects": {"http": 200, "total": 0},
+    "website_absent": {"http": 200, "total": 0},
+    "website_unknown": {"http": 200, "total": 0},
+    "displayed_abn_batch": {"http": 200, "total": 0},
+    "operator_scope_denied": {"http": 403},
+    "source_total": 20510902
+  },
+  "production_transaction_probe": {
+    "save_readback": true, "query_readback": true, "encryption_readback": true,
+    "contact_permission": "not_assessed", "saved_count_before": 0, "saved_count_after": 0,
+    "test_record_retained": false, "method": "Runtime identity; explicit transaction rollback after assertions"
+  },
+  "website": {
+    "deployment_id": "dpl_7zjQkFme8F6dirP3s2GJawHnAZ6X",
+    "deployment_url": "https://website-fluo90pjh-maintain-technology.vercel.app",
+    "production_url": "https://www.maintainmedia.com.au",
+    "rollback_deployment_id": "dpl_7cA9HQbtXW8VBbinWwWNapXbgVgn",
+    "ready_state": "READY", "function_region": "syd1",
+    "upload_source_digest": "59b7f7d3d5bbe029e81053e48c6f50861f349d72948c19ff9ebdcf3edcc1b2a3",
+    "upload_files": 79, "environment_files_uploaded": false
+  },
+  "authenticated_browser": {"recent_30_days_rendered": true, "recent_7_days_rendered": true, "saved_prospects_loaded": true, "saved_no_website_filter_applied": true, "research_fields_enabled_after_load": true, "latest_leads_left_open": true},
+  "tests": {"source_and_prospect_units_passed": 88, "bridge_passed": 34, "dashboard_connection_passed": 28, "postgres_integration_passed": 31, "local_production_build": "passed", "hosted_production_build": "passed"},
+  "limits": "Recent counts use source status dates, not independently verified first registration. Publication was imported 14 September 2026; publisher modification time is unavailable. No new source collection, outreach, real prospect edit or qualification change. Live write verification was rolled back, not retained."
+}

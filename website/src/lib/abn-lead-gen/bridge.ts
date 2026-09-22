@@ -141,13 +141,21 @@ async function engineJson(response: Response, token?: Sensitive): Promise<Record
   } catch { throw new BridgeError("ENGINE_INVALID_RESPONSE", 502); }
 }
 
-async function checkEngineError(response: Response, token?: Sensitive) {
+async function checkEngineError(response: Response, token?: Sensitive, path = "") {
   if (response.ok) return;
   // A failed service credential does not mean the browser's Clerk session expired.
   if (token && response.status === 401) throw new BridgeError("ENGINE_AUTHENTICATION_FAILED", 503);
   const value = await engineJson(response, token);
   const code = typeof value.code === "string" && /^[A-Z][A-Z0-9_]{1,95}$/.test(value.code)
     ? value.code : "ENGINE_REQUEST_FAILED";
+  const featurePath = path === "/api/source-records/query" || path === "/api/prospects/query"
+    || path === "/v1/prospects" || /^\/api\/prospects\/[0-9]{11}$/.test(path);
+  // A website can be released before its engine. Do not turn a missing API route
+  // into an empty prospect list or silently retry without the requested filters.
+  if (featurePath && response.status === 404 && (code === "ROUTE_NOT_FOUND"
+    || (code === "ENGINE_REQUEST_FAILED" && value.detail === "Not Found"))) {
+    throw new BridgeError("ENGINE_FEATURE_UNAVAILABLE", 503);
+  }
   if (token && response.status === 403 && (code.startsWith("GATEWAY_")
     || code === "SAME_ORIGIN_REQUIRED" || code === "DASHBOARD_CSRF_REQUIRED")) {
     throw new BridgeError("ENGINE_AUTHENTICATION_FAILED", 503);
@@ -199,7 +207,7 @@ export async function forwardLeadGen(request: Request, parts: string[], admin: B
   if (mutation && live) headers["Content-Type"] = "application/json";
   // Deliberately do not forward browser cookies, authorization, host or origin.
   const upstream = await invoke(path, { method: request.method === "HEAD" ? "GET" : request.method, headers, body });
-  await checkEngineError(upstream, secrets.length ? secrets : undefined);
+  await checkEngineError(upstream, secrets.length ? secrets : undefined, path);
   if (path === "/api/worklist.csv") {
     if (!upstream.headers.get("content-type")?.startsWith("text/csv")) throw new BridgeError("ENGINE_INVALID_RESPONSE", 502);
     const payload = await engineText(upstream, 3_000_000, secrets);

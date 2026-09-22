@@ -27,6 +27,8 @@ class Cancelled extends Error {}
 export function validationMessage(path: string) {
   if (path.endsWith("/settings")) return "Check the settings and try again. The usage limit must be between A$0 and A$150.";
   if (path.endsWith("/website-collections")) return "Check the HTTPS homepage, your site-terms evidence and its review date, then try again. Use a homepage ending in / without query parameters or a fragment.";
+  if (path.endsWith("/source-records/query")) return "The lead engine rejected this source search. Reload the page and try again. If it continues, the website and engine search versions need to be checked.";
+  if (path.endsWith("/prospects/query")) return "The lead engine rejected this saved-prospect search. Reload the page and try again. If it continues, the website and engine search versions need to be checked.";
   return "Check the required form values and evidence, then try again. No change was confirmed.";
 }
 export function errorMessage(code: string, fallback: string) {
@@ -68,6 +70,7 @@ export function errorMessage(code: string, fallback: string) {
   if (/^CRM_(MAPPING|PROJECTION|FIELDS|REQUIRED_FIELD|FIELD_|WEBSITE|PROVIDER_CONFIG|ENVIRONMENT)/.test(code)) return "The GoHighLevel field or account configuration does not match the approved setup. The developer must correct and verify the mapping before this hand-off can proceed.";
   if (code === "QBCC_SOURCE_HTTP_REJECTED") return "The QBCC publisher did not return a usable source file for this run. No records from this run were accepted. The developer can check the source download before retrying.";
   if (code === "ENGINE_UNAVAILABLE") return "The lead engine is unavailable. Check your connection and try again. If this continues, ask the administrator to start the engine.";
+  if (code === "ENGINE_FEATURE_UNAVAILABLE") return "This feature is not available on the connected lead engine yet. The engine needs the matching update before these records can load. This is not an empty result.";
   if (code === "ENGINE_CONFIGURATION_INVALID") return "The lead engine is not connected to this website yet. Open Setup & settings to see what is needed. Runs, settings and reports will become available after the engine connection is configured.";
   if (code === "ENGINE_AUTHENTICATION_FAILED") return "The website could not verify its private connection to the lead engine. Your staff sign-in is still active. Ask the administrator to check the engine connection, then choose Try again.";
   if (code === "ENGINE_INVALID_RESPONSE") return "The engine returned an incomplete response. Your loaded data and unsaved changes are still available. Try again.";
