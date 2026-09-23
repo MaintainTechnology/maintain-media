@@ -72,6 +72,13 @@ const lastRequest = () => page.evaluate(() => {
 const search = source => sourceReview(source).getByRole('searchbox');
 const apply = source => sourceReview(source).getByRole('button', { name: 'Apply filters', exact: true });
 const reset = source => sourceReview(source).getByRole('button', { name: /Reset|Clear filters/ });
+const leadsList = () => page.getByRole('region', { name: 'Leads list.', exact: true });
+const listSource = source => leadsList().getByRole('region', { name: `${source} businesses`, exact: true });
+const listRows = source => listSource(source).getByRole('button', { name: /^Synthetic (ABR|QBCC) business / });
+const openLeadsList = async () => {
+  await page.getByRole('button', { name: /^Leads list/ }).click();
+  await leadsList().getByRole('button', { name: 'All businesses', exact: true }).waitFor();
+};
 try {
   await page.goto(origin);
   await check('Latest leads discovers candidates automatically while full Source records stays separate', async () => {
@@ -351,7 +358,8 @@ try {
     assert.equal(await page.locator('#view-leads article h3').first().innerText(), 'Synthetic ABR business 3');
     assert.equal(await page.getByText('100/100', { exact: true }).isVisible(), false);
     assert.equal(await page.locator('#nav-count').count(), 0);
-    await page.getByRole('button', { name: /^Reviewed leads \(1\)/ }).click();
+    await openLeadsList();
+    await leadsList().getByRole('button', { name: 'Qualification reviews', exact: true }).click();
     await page.getByText('100/100', { exact: true }).waitFor();
     assert.equal(await page.getByText('Previously reviewed business', { exact: true }).first().isVisible(), true);
     await page.getByRole('button', { name: /^New · 7 days/ }).click();
@@ -436,14 +444,180 @@ try {
     assert.equal(await page.getByRole('heading', { name: '2 saved businesses' }).isVisible(), true);
     assert.equal(await page.getByRole('button', { name: /^No website/ }).getAttribute('aria-pressed'), 'true');
   });
-  await check('Operator access keeps Reviewed leads available without requesting restricted discovery', async () => {
+  await check('Leads list shows 100 unscored publication rows even when only one Tier A business was qualified', async () => {
+    await page.goto(origin);
+    await page.getByRole('heading', { name: '3 recent candidates' }).waitFor();
+    await page.evaluate(() => { globalThis.sourceHarness.requests = []; });
+    await openLeadsList();
+    await listRows('ABR').nth(49).waitFor();
+    await listRows('QBCC').nth(49).waitFor();
+    assert.equal(await leadsList().getByRole('button', { name: 'All businesses', exact: true }).getAttribute('aria-pressed'), 'true');
+    assert.equal(await listRows('ABR').count() + await listRows('QBCC').count(), 100);
+    assert.equal(await page.evaluate(() => globalThis.sourceHarness.engine.data.leads.length), 1);
+    assert.equal(await leadsList().getByText('100/100', { exact: true }).isVisible(), false);
+    const queries = await page.evaluate(() => globalThis.sourceHarness.requests.filter(item => item.path === 'source-records/query').map(item => JSON.parse(item.options.body)));
+    assert.deepEqual(queries.map(query => query.source).sort(), ['abr', 'qbcc']);
+    for (const query of queries) { assert.deepEqual(query.filters, {}); assert.equal(query.sort || 'source_order', 'source_order'); assert.equal(query.offset, 0); }
+    await page.screenshot({ path: path.join(output, 'leads-list-desktop.png'), fullPage: true });
+  });
+  await check('ABR and QBCC list pagination use independent offsets pinned to the accepted publications', async () => {
+    await leadsList().getByRole('button', { name: 'Next ABR 50', exact: true }).click();
+    await listSource('ABR').getByText('Synthetic ABR business 51', { exact: true }).waitFor();
+    assert.equal(await listRows('ABR').count(), 2);
+    assert.equal(await listRows('QBCC').count(), 50);
+    let request = await lastRequest();
+    assert.equal(request.source, 'abr'); assert.equal(request.offset, 50); assert.equal(request.run_id, '2f634182-1111-4111-8111-111111111111');
+    await leadsList().getByRole('button', { name: 'Next QBCC 50', exact: true }).click();
+    await listSource('QBCC').getByText('Synthetic QBCC business 51', { exact: true }).waitFor();
+    assert.equal(await listRows('ABR').count(), 2);
+    assert.equal(await listRows('QBCC').count(), 2);
+    request = await lastRequest();
+    assert.equal(request.source, 'qbcc'); assert.equal(request.offset, 50); assert.equal(request.run_id, '692faa4e-2222-4222-8222-222222222222');
+    await leadsList().getByRole('button', { name: 'Previous ABR 50', exact: true }).click();
+    await listRows('ABR').nth(49).waitFor();
+    assert.equal(await listRows('QBCC').count(), 2);
+  });
+  await check('Leads list search queries both full publications and resets each source page', async () => {
+    await leadsList().getByLabel('Search lead list', { exact: true }).fill('business 52');
+    await leadsList().getByRole('button', { name: 'Search businesses', exact: true }).click();
+    await listSource('ABR').getByText('Synthetic ABR business 52', { exact: true }).waitFor();
+    await listSource('QBCC').getByText('Synthetic QBCC business 52', { exact: true }).waitFor();
+    assert.equal(await listRows('ABR').count(), 1);
+    assert.equal(await listRows('QBCC').count(), 1);
+    const queries = await page.evaluate(() => globalThis.sourceHarness.requests.filter(item => item.path === 'source-records/query').slice(-2).map(item => JSON.parse(item.options.body)));
+    assert.deepEqual(queries.map(query => query.source).sort(), ['abr', 'qbcc']);
+    for (const query of queries) { assert.equal(query.filters.query, 'business 52'); assert.equal(query.offset, 0); }
+    await leadsList().getByLabel('Search lead list', { exact: true }).fill('10 000 000 001');
+    await leadsList().getByLabel('Search lead list', { exact: true }).press('Enter');
+    await listSource('ABR').getByText('Synthetic ABR business 2', { exact: true }).waitFor();
+    assert.equal(await listRows('ABR').count(), 1);
+    assert.equal(await listRows('QBCC').count(), 0);
+    assert.ok(['10 000 000 001', '10000000001'].includes((await lastRequest()).filters.query));
+    await leadsList().getByLabel('Search lead list', { exact: true }).fill('');
+    await leadsList().getByRole('button', { name: 'Search businesses', exact: true }).click();
+    await listRows('ABR').nth(49).waitFor(); await listRows('QBCC').nth(49).waitFor();
+  });
+  await check('Lead list source controls select ABR and QBCC without qualification or recency requirements', async () => {
+    const sourceButtons = leadsList().getByRole('group', { name: 'Lead list sources', exact: true });
+    await sourceButtons.getByRole('button', { name: 'QBCC', exact: true }).click();
+    await listRows('QBCC').nth(49).waitFor();
+    assert.equal(await listSource('ABR').isVisible(), false);
+    await sourceButtons.getByRole('button', { name: 'ABR', exact: true }).click();
+    await listRows('ABR').nth(49).waitFor();
+    assert.equal(await listSource('QBCC').isVisible(), false);
+    await sourceButtons.getByRole('button', { name: 'All sources', exact: true }).click();
+    await listRows('ABR').nth(49).waitFor(); await listRows('QBCC').nth(49).waitFor();
+  });
+  await check('An unscored business opens editable research and is saved to Saved prospects', async () => {
+    await listRows('ABR').filter({ hasText: 'Synthetic ABR business 2' }).first().click();
+    await leadsList().getByRole('button', { name: 'Research selected business', exact: true }).click();
+    const dialog = page.getByRole('dialog');
+    await dialog.getByLabel('Website presence').waitFor();
+    assert.equal(await dialog.getByLabel('Website presence').inputValue(), 'unknown');
+    await dialog.getByLabel('Website presence').selectOption('absent');
+    await dialog.getByLabel('Research evidence / source reference').fill('Synthetic business-owner confirmation for unscored source record');
+    await dialog.getByLabel('Research & conversation notes').fill('New conversation from the broad leads list');
+    await dialog.getByRole('button', { name: 'Save research', exact: true }).click();
+    await dialog.getByText('Research saved. Find this business in Saved prospects.').waitFor();
+    await dialog.getByRole('button', { name: 'Close research' }).click();
+    assert.equal(await page.evaluate(() => globalThis.sourceHarness.prospects['10000000001'].website_presence), 'absent');
+    await page.getByRole('link', { name: 'Saved prospects', exact: true }).click();
+    await page.getByRole('heading', { name: '1 matching prospects' }).waitFor();
+    await page.getByRole('button', { name: /Synthetic ABR business 2/ }).waitFor();
+    await page.getByRole('link', { name: 'Latest leads', exact: true }).click();
+    await openLeadsList();
+  });
+  await check('Qualification reviews accepts Tier B and C scores while every source business stays browsable', async () => {
+    await page.evaluate(() => {
+      const dashboard = globalThis.sourceHarness.engine.data;
+      dashboard.leads.push(
+        { lead_id: 'bbbbbbbb-bbbb-4bbb-8bbb-bbbbbbbbbbbb', abn: '10000000001', business_name: 'Lower-score Tier B business', source: 'abr', score: 62, tier: 'B' },
+        { lead_id: 'cccccccc-cccc-4ccc-8ccc-cccccccccccc', abn: '20000000001', business_name: 'Lower-score Tier C business', source: 'qbcc', score: 25, tier: 'C' },
+      );
+      dashboard.summary.total_leads = 3;
+    });
+    await page.getByRole('link', { name: 'Setup and settings', exact: true }).click();
+    await page.getByRole('link', { name: 'Latest leads', exact: true }).click();
+    await openLeadsList();
+    await leadsList().getByRole('button', { name: 'Qualification reviews', exact: true }).click();
+    await page.getByText('62/100', { exact: true }).waitFor();
+    await page.getByText('25/100', { exact: true }).waitFor();
+    assert.equal(await page.locator('#lead-list > button').count(), 3);
+    await page.locator('#tier-filter').selectOption('B');
+    assert.equal(await page.locator('#lead-list > button').count(), 1);
+    await page.locator('#lead-list').getByText('Lower-score Tier B business', { exact: true }).waitFor();
+    await page.locator('#tier-filter').selectOption('C');
+    await page.locator('#lead-list').getByText('Lower-score Tier C business', { exact: true }).waitFor();
+    await page.locator('#tier-filter').selectOption('all');
+    await leadsList().getByRole('button', { name: 'All businesses', exact: true }).click();
+    await listRows('ABR').nth(49).waitFor(); await listRows('QBCC').nth(49).waitFor();
+  });
+  await check('A QBCC record without an ABN cannot inherit another unlinked business score or open research', async () => {
+    await page.goto(origin);
+    await page.getByRole('heading', { name: '3 recent candidates' }).waitFor();
+    await page.evaluate(() => {
+      const h = globalThis.sourceHarness;
+      h.qbccMissingAbn = true;
+      h.engine.data.leads.push({ lead_id: 'dddddddd-dddd-4ddd-8ddd-dddddddddddd', abn: null, business_name: 'Unrelated business without ABN', source: 'qbcc', score: 100, tier: 'A' });
+    });
+    await openLeadsList();
+    const row = listRows('QBCC').first();
+    await row.waitFor();
+    assert.match(await row.innerText(), /Source candidate/);
+    assert.doesNotMatch(await row.innerText(), /Tier A|100\/100/);
+    await row.click();
+    const detail = leadsList().getByRole('region', { name: 'Selected business details', exact: true });
+    await detail.getByText('ABN not supplied', { exact: true }).waitFor();
+    await detail.getByText('1000000', { exact: true }).waitFor();
+    assert.equal(await detail.getByRole('button', { name: 'Research selected business', exact: true }).isDisabled(), true);
+    assert.doesNotMatch(await detail.innerText(), /Tier A|100\/100/);
+  });
+  await check('Late broad-list responses cannot overwrite a newly selected recent-lead focus', async () => {
+    await page.goto(origin);
+    await page.getByRole('heading', { name: '3 recent candidates' }).waitFor();
+    await page.evaluate(() => { globalThis.sourceHarness.delay = true; });
+    await openLeadsList();
+    await page.waitForFunction(() => globalThis.sourceHarness.pending.length === 2);
+    await page.evaluate(() => { globalThis.sourceHarness.delay = false; });
+    await page.getByRole('button', { name: /^New · 7 days/ }).click();
+    await page.getByRole('heading', { name: '3 recent candidates' }).waitFor();
+    await page.evaluate(() => globalThis.sourceHarness.release());
+    assert.equal(await page.locator('#view-leads article').count(), 3);
+    assert.equal(await page.getByRole('button', { name: /^New · 7 days/ }).getAttribute('aria-pressed'), 'true');
+    assert.equal(await listSource('ABR').isVisible(), false);
+  });
+  await check('One failed source does not hide businesses returned by the other publication', async () => {
+    await page.goto(origin);
+    await page.getByRole('heading', { name: '3 recent candidates' }).waitFor();
+    await page.evaluate(() => { globalThis.sourceHarness.sourceErrors.qbcc = 'Synthetic QBCC interruption'; });
+    await openLeadsList();
+    await listRows('ABR').nth(49).waitFor();
+    await listSource('QBCC').getByRole('alert').waitFor();
+    assert.equal(await listRows('ABR').count(), 50);
+    assert.equal(await listRows('QBCC').count(), 0);
+  });
+  await check('Lead list rows, filters and selected-business details fit desktop and small phones', async () => {
+    await page.goto(origin);
+    await page.getByRole('heading', { name: '3 recent candidates' }).waitFor();
+    await openLeadsList(); await listRows('ABR').nth(49).waitFor(); await listRows('QBCC').nth(49).waitFor();
+    for (const width of [1440, 820, 390, 320]) {
+      await page.setViewportSize({ width, height: 1000 });
+      assert.equal(await page.evaluate(() => document.documentElement.scrollWidth <= window.innerWidth), true);
+      assert.equal(await leadsList().getByLabel('Search lead list', { exact: true }).isVisible(), true);
+      await leadsList().getByRole('button', { name: 'Research selected business', exact: true }).waitFor();
+      await page.screenshot({ path: path.join(output, `leads-list-${width}.png`), fullPage: true });
+    }
+  });
+  await check('Operator access keeps qualification reviews available without requesting restricted discovery', async () => {
+    await page.getByRole('button', { name: /^New · 30 days/ }).click();
     await page.getByRole('link', { name: 'Setup and settings', exact: true }).click();
     await page.evaluate(() => { globalThis.sourceHarness.engine.data.scopes = ['operator']; globalThis.sourceHarness.requests = []; });
     await page.getByRole('link', { name: 'Latest leads', exact: true }).click();
-    await page.getByText('A reviewer account is needed to browse source records and saved website research. Your existing reviewed leads remain available above.').waitFor();
+    await page.getByText(/A reviewer account is needed to browse source records and saved website research/).waitFor();
     assert.equal(await page.getByRole('button', { name: 'Search leads', exact: true }).isDisabled(), true);
     assert.equal(await page.evaluate(() => globalThis.sourceHarness.requests.length), 0);
-    await page.getByRole('button', { name: /^Reviewed leads \(1\)/ }).click();
+    await openLeadsList();
+    await leadsList().getByRole('button', { name: 'Qualification reviews', exact: true }).click();
     await page.getByText('100/100', { exact: true }).waitFor();
   });
   assert.deepEqual(errors, []);

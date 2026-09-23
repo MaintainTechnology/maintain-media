@@ -8,7 +8,7 @@ export const discoveryModes: { id: DiscoveryMode; label: string; description: st
   { id: "recent30", label: "New · 30 days", description: "A wider starting point" },
   { id: "no_website", label: "No website", description: "Confirmed in saved research" },
   { id: "needs_research", label: "Website unchecked", description: "Saved businesses to investigate" },
-  { id: "reviewed", label: "Reviewed leads", description: "Existing qualification & hand-off" },
+  { id: "reviewed", label: "Leads list", description: "Browse every score level" },
 ];
 export function discoveryRequest(mode: DiscoveryMode, search: DiscoverySearch, offset = 0, run = "latest", now = new Date()) {
   if (mode === "reviewed") return null;

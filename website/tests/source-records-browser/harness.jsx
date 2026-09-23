@@ -26,7 +26,7 @@ const qbccRecord = index => ({
 });
 const runFor = source => source === "abr" ? ABR_RUN : QBCC_RUN;
 const harness = globalThis.sourceHarness = {
-  requests: [], pending: [], downloads: [], delay: false, mode: "available", error: null, prospects: {}, saveError: null, researchError: null, freshAll: false,
+  requests: [], pending: [], downloads: [], delay: false, mode: "available", error: null, sourceErrors: {}, sourceModes: {}, qbccMissingAbn: false, prospects: {}, saveError: null, researchError: null, freshAll: false,
   release() { for (const complete of this.pending.splice(0)) complete(); },
 };
 HTMLFormElement.prototype.submit = function captureLocalDownload() {
@@ -87,9 +87,10 @@ harness.engine = {
     };
     if (path !== "source-records/query") throw new Error(`Unexpected mock read: ${path}`);
     const { source, run_id: run = "latest", offset = 0, filters = {}, sort = "source_order" } = body;
-    const state = harness.mode;
-    const failure = harness.error;
+    const state = harness.sourceModes[source] || harness.mode;
+    const failure = harness.sourceErrors[source] || harness.error;
     const all = Array.from({ length: 52 }, (_, index) => (source === "abr" ? abrRecord : qbccRecord)(index));
+    if (source === "qbcc" && harness.qbccMissingAbn) all[0].abn = null;
     if (source === "abr" && harness.freshAll) for (const [index, row] of all.entries()) { if (index > 2) row.status_date = recentDates(20).from; }
     const enteredQuery = (filters.query || "").trim().toLowerCase();
     const query = /^[\d\s]+$/.test(enteredQuery) ? enteredQuery.replace(/\s/g, "") : enteredQuery;

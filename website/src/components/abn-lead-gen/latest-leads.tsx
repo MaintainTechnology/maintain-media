@@ -15,7 +15,7 @@ type Results = { kind: "source"; page: SourceRecordPage; research: Prospect[]; r
 const emptySearch = { query: "", state: "" };
 const failureText = (failure: unknown) => failure instanceof Error ? failure.message : "These businesses could not be loaded. Please try again.";
 
-export function LatestLeadsView({ engine, reviewed, active = true }: { engine: DashboardController; reviewed: ReactNode; active?: boolean }) {
+export function LatestLeadsView({ engine, reviewed, active = true }: { engine: DashboardController; reviewed: (active: boolean) => ReactNode; active?: boolean }) {
   const [mode, setMode] = useState<DiscoveryMode>(defaultDiscoveryMode);
   const [draft, setDraft] = useState<DiscoverySearch>(emptySearch);
   const [applied, setApplied] = useState<DiscoverySearch>(emptySearch);
@@ -89,8 +89,8 @@ export function LatestLeadsView({ engine, reviewed, active = true }: { engine: D
 
   return <section id="view-leads" className={cls("view")} hidden={!active} aria-labelledby="discovery-title">
     <div className={cls("page-heading")}><div><span className={cls("prospect-eyebrow")}>Find your next conversation</span><h1 id="discovery-title">Latest leads.</h1><p>Start with a new business or a gap in their website presence. Research comes before a score.</p></div><div className={cls("heading-actions")}><button className={cls("button", "secondary")} disabled={!connected || busy || mode === "reviewed" || forbidden} onClick={() => void load(mode, applied)}>{busy ? "Loading…" : "Refresh leads"}</button></div></div>
-    <div className={cls("discovery-focus")} role="group" aria-label="Choose lead focus">{discoveryModes.map(item => <button key={item.id} type="button" className={cls("discovery-focus-button")} aria-pressed={mode === item.id} onClick={() => changeMode(item.id)}><strong>{item.label}{item.id === "reviewed" && engine.data ? ` (${engine.data.leads.length})` : ""}</strong><span>{item.description}</span></button>)}</div>
-    <div hidden={mode !== "reviewed"}>{reviewed}</div>
+    <div className={cls("discovery-focus")} role="group" aria-label="Choose lead focus">{discoveryModes.map(item => <button key={item.id} type="button" className={cls("discovery-focus-button")} aria-pressed={mode === item.id} onClick={() => changeMode(item.id)}><strong>{item.label}</strong><span>{item.description}</span></button>)}</div>
+    <div hidden={mode !== "reviewed"}>{reviewed(active && mode === "reviewed")}</div>
     {active && mode !== "reviewed" && <>
       <div className={cls("discovery-context")}><p>{recent ? <>Active ABNs with a status date in the last {mode === "recent7" ? 7 : 30} days. No minimum score, tier, email or social requirement.</> : mode === "no_website" ? <>Businesses with a confirmed missing website in saved research, at any age. Having email or social media does not exclude them.</> : <>Saved businesses whose website presence is still unknown. Recent ABNs that have not been researched are also available under New · 7 days.</>}</p><a href="#sources">Browse all source records ↗</a></div>
       {!connected && <p role="status" className={cls("notice")}>{engine.loading ? "Connecting to the engine…" : "The engine is not connected. No new business data has been loaded. Refresh the workspace or check Setup."}</p>}

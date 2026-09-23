@@ -37,6 +37,9 @@ const sourceRecords = compile("../src/components/abn-lead-gen/source-records.tsx
   "@/lib/abn-lead-gen/types": types, "@/lib/abn-lead-gen/prospects": prospectModel, "./prospects": prospects, "./dashboard.module.css": {},
 });
 const latestLeadsModel = compile("../src/lib/abn-lead-gen/latest-leads.ts", { "./prospects.ts": prospectModel });
+const leadsList = compile("../src/components/abn-lead-gen/leads-list.tsx", {
+  "@/lib/abn-lead-gen/types": types, "./source-records": sourceRecords, "./prospects": prospects, "./dashboard.module.css": {},
+});
 const latestLeads = compile("../src/components/abn-lead-gen/latest-leads.tsx", {
   "@/lib/abn-lead-gen/types": types, "@/lib/abn-lead-gen/prospects": prospectModel,
   "@/lib/abn-lead-gen/latest-leads": latestLeadsModel, "./source-records": sourceRecords, "./prospects": prospects, "./dashboard.module.css": {},
@@ -64,6 +67,7 @@ const { LeadGenDashboard } = compile("../src/components/abn-lead-gen/dashboard.t
   "./source-records": sourceRecords,
   "./prospects": prospects,
   "./latest-leads": latestLeads,
+  "./leads-list": leadsList,
   "./readiness": readiness,
   "./dashboard.module.css": {},
 });
