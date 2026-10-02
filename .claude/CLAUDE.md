@@ -21,6 +21,9 @@ media/
 └── README.md       Human-readable asset index
 ```
 
+**Video:** `video/` is the Remotion project for video edits and motion graphics. Start
+Claude Code or Codex inside `video/` so its Remotion skills load; see `video/README.md`.
+
 ## Naming convention
 
 `maintain-media-<role>[-variant].<ext>`

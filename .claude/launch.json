@@ -6,6 +6,12 @@
       "runtimeExecutable": "npm",
       "runtimeArgs": ["--prefix", "website", "run", "dev"],
       "port": 3000
+    },
+    {
+      "name": "video",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["--prefix", "video", "run", "dev", "--", "--port=3100", "--no-open"],
+      "port": 3100
     }
   ]
 }

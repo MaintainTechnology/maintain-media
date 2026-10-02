@@ -19,6 +19,8 @@
   --color-brand-600: #8a34f0;
   --color-brand-deep: #3a1f6b;
   --color-brand-dark: #08282d;
+  /* Calculator invalid / negative-return state, from the v0.01 landing HTML. */
+  --color-danger: #ffb9a6;
 
   --font-sans: var(--font-albert), "Albert Sans", ui-sans-serif, system-ui,
     sans-serif;
@@ -30,6 +32,30 @@
   --radius-lg: 20px;
 
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* CSS entrances run from first paint, before hydration. Stagger with [--delay:…]. */
+  --animate-rise: rise 0.9s var(--ease-out-expo) var(--delay, 0s) both;
+  --animate-fade: fade 0.2s var(--ease-out-expo) var(--delay, 0s) both;
+  --animate-wipe: wipe 0.36s var(--ease-out-expo) var(--delay, 0s) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(var(--rise, 34px));
+    }
+  }
+
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+  }
+
+  @keyframes wipe {
+    from {
+      clip-path: inset(0 100% 0 0);
+    }
+  }
 }
 
 @layer base {
@@ -121,30 +147,80 @@
   }
 }
 
-/* Industries marquee (home page only) */
-@keyframes marquee {
-  from {
-    transform: translateX(0);
-  }
-  to {
-    transform: translateX(-50%);
-  }
+/*
+  Scroll reveal + stagger (home page lists). Server HTML stays fully visible;
+  <ScrollReveal> arms groups still below the fold, then flips each to "in"
+  once 20% is on screen. Items set --i; groups may override --stagger.
+*/
+[data-reveal="armed"] > * {
+  opacity: 0;
+  transform: translateY(24px);
 }
 
-.marquee-track {
-  animation: marquee 38s linear infinite;
+[data-reveal="in"] > * {
+  transition:
+    opacity 0.7s var(--ease-out-expo),
+    transform 0.7s var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * var(--stagger, 80ms));
 }
 
-.marquee:hover .marquee-track {
-  animation-play-state: paused;
+/* "How it works": each step's hairline draws left to right, reading as one path. */
+.reveal-line {
+  transform-origin: left;
 }
 
+[data-reveal="armed"] .reveal-line {
+  transform: scaleX(0);
+}
+
+[data-reveal="in"] .reveal-line {
+  transition: transform 0.52s var(--ease-out-expo);
+  transition-delay: calc(var(--i, 0) * var(--stagger, 80ms) + 120ms);
+}
+
+/* Accordion for <details class="disclosure">. Browsers without ::details-content
+   or interpolate-size keep the native instant toggle. */
+.disclosure {
+  interpolate-size: allow-keywords;
+}
+
+.disclosure::details-content {
+  block-size: 0;
+  opacity: 0;
+  overflow-y: clip;
+  transition:
+    block-size 0.26s var(--ease-out-expo),
+    opacity 0.2s var(--ease-out-expo),
+    content-visibility 0.26s allow-discrete;
+}
+
+.disclosure[open]::details-content {
+  block-size: auto;
+  opacity: 1;
+}
+
+/* Reduced motion: keep the fades that aid comprehension, drop all movement. */
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
   }
 
-  .marquee-track {
-    animation: none;
+  [data-reveal="armed"] > *,
+  [data-reveal="armed"] .reveal-line {
+    transform: none;
+  }
+
+  [data-reveal="in"] > * {
+    transition: opacity 0.2s var(--ease-out-expo);
+  }
+
+  [data-reveal="in"] .reveal-line {
+    transition: none;
+  }
+
+  .disclosure::details-content {
+    transition:
+      opacity 0.2s var(--ease-out-expo),
+      content-visibility 0.2s allow-discrete;
   }
 }
